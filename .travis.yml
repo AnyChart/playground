@@ -1,0 +1,32 @@
+language: clojure
+lein: lein2
+script: lein2 uberjar
+sudo: false
+branches:
+  only:
+  - staging
+  - master
+cache:
+  directories:
+  - $HOME/.m2
+before_install:
+- openssl aes-256-cbc -K $encrypted_134e2e7eeaf1_key -iv $encrypted_134e2e7eeaf1_iv
+  -in id_rsa.enc -out id_rsa -d
+- mv id_rsa .travis/id_rsa
+after_success:
+- if [ "$TRAVIS_BRANCH" == "master" ]; then export APP="pg-prod"; fi
+- if [ "$TRAVIS_BRANCH" == "staging" ]; then export APP="pg-stg"; fi
+- echo "Deploying to $SERVER"
+- cp .travis/known_hosts ~/.ssh/known_hosts
+- cp .travis/id_rsa.pub ~/.ssh/id_rsa.pub
+- cp .travis/id_rsa ~/.ssh/id_rsa
+- chmod 600 ~/.ssh/known_hosts
+- chmod 600 ~/.ssh/id_rsa
+- chmod 600 ~/.ssh/id_rsa.pub
+- chmod 600 .travis/id_rsa
+- chmod 600 .travis/id_rsa.pub
+- ssh-add ~/.ssh/id_rsa
+- scp -i .travis/id_rsa target/pg-standalone.jar root@104.236.250.75:/apps/$APP/pg-standalone.jar
+- ssh root@104.236.250.75 "supervisorctl restart $APP"
+notifications:
+  slack: anychart-team:sJRPhNn8Ur8yVdhvhgp6EbDM
