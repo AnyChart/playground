@@ -11,5 +11,5 @@
            (GET "/" [] handler)
            (route/not-found "Page not found."))
 
-(defn -main []
+(defn -main [& args]
   (web/run app))
