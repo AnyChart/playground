@@ -34,6 +34,7 @@
                                     (.setSshSessionFactory transport
                                                            (proxy [JschConfigSessionFactory] []
                                                              (configure [host session]
+                                                               (.setConfig session "StrictHostKeyChecking" "no")
                                                                (let [jsch (.getJSch this host FS/DETECTED)]
                                                                  (.addIdentity jsch "jgit-identity"
                                                                                (.getBytes (slurp secret-key-path))
