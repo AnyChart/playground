@@ -38,7 +38,7 @@
     (timbre/info conf)
     (timbre/info sys)
     (alter-var-root #'system (constantly (component/start-system sys)))
-    (generator/check-repositories (:generator system) (:db system))
+    (generator/check-repositories (:generator system) (:db system) (:notifier system))
     system))
 
 (defn stop []

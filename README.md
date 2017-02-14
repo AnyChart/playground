@@ -41,7 +41,7 @@ secret-key = "/apps/keys/id_rsa"
 public-key = "/apps/keys/id_rsa.pub"
 passphrase = ""
 
-# or you can use https
+# or you can use https, set type = https
 [repositories.https]
 https = "https://github.com/AnyChart/api.anychart.com.git"
 login = "login"
@@ -54,7 +54,7 @@ dir = "/apps/pg-stg/data/docs"
 url-prefex = "docs"
 generate-preview = false
 samples-format = "html"
-type = "https"
+type = "ssh"
 
 [repositories.ssh]
 ssh = "git@github.com:AnyChart/docs.anychart.com.git"

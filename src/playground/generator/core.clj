@@ -56,7 +56,8 @@
   (if (and db-repo (fs/exists? (:dir @repo)))
     (do
       (swap! repo (fn [repo] (merge db-repo repo {:git (git/get-git (git-path (repo-path repo)))})))
-      (info (str "Repository \"" (:name @repo) "\" - OK")))
+      (info (str "Repository \"" (:name @repo) "\" - OK"))
+      {:name (:name @repo)})
     (do
       (info (str "Repository \"" (:name @repo) "\" - sync..."))
       (try
@@ -64,18 +65,22 @@
         (swap! repo (fn [repo] (merge db-repo repo {:git (git/get-git (git-path (repo-path repo)))
                                                     :id  (db-req/add-project<! db {:name (:name repo)})})))
         (info (str "Repository \"" (:name @repo) "\" - OK"))
+        {:name (:name @repo)}
         (catch Exception e
-          (info (str "Repository \"" (:name @repo) "\" - ERROR, check repository's settings " e)))))))
+          (info (str "Repository \"" (:name @repo) "\" - ERROR, check repository's settings " e))
+          {:name (:name @repo) :e e})))))
 
-(defn check-repositories [generator db]
+(defn check-repositories [generator db notifier]
   (info "Synchronize repositories...")
   (let [repos (:repos generator)
         db-repos (db-req/projects db)
         get-repo-by-name-fn (fn [repo db-repos]
                               (first (filter #(= (:name repo) (:name %)) db-repos)))]
     (info (count db-repos) (pr-str db-repos))
-    (doseq [repo repos]
-      (check-repository db repo (get-repo-by-name-fn @repo db-repos)))))
+    (let [result (map #(check-repository db % (get-repo-by-name-fn @% db-repos)) repos)]
+      (slack/complete-sync notifier
+                           (filter (complement :e) result)
+                           (filter :e result)))))
 
 
 ;;============ remove branches
