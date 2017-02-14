@@ -166,6 +166,7 @@
         ;  (update-branch db repo branch db-branches generator @repo queue-index))
         (let [result (doall (map #(update-branch db repo % db-branches generator @repo queue-index) updated-branches))
               errors (filter some? result)]
+          (fs/delete-dir (versions-path @repo))
           (if (not-empty errors)
             (slack/complete-building-with-errors (:notifier generator) (:name @repo) (map :key updated-branches)
                                                  (map :key removed-branches) queue-index (-> errors first :e))

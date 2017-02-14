@@ -1,9 +1,11 @@
 [<img src="https://cdn.anychart.com/images/logo-transparent-segoe.png?2" width="234px" alt="AnyChart - Robust JavaScript/HTML5 Chart library for any project">](https://anychart.com)
 Playground
+
+[![Build Status](https://travis-ci.com/AnyChart/playground.svg?token=ERMLfyrvWdA8g6gi11Vp&branch=master)](https://travis-ci.com/AnyChart/playground)
 =========================
 
-# Usage
-## Config file
+## Usage
+Config file
 
 ```
 [web]
@@ -76,9 +78,7 @@ passphrase = ""
 
 ```
 
-## MySQL Scheme
-
-[here](https://github.com/AnyChart/playground/blob/staging/src/sql/scheme.sql)
+[MySQL Scheme](https://github.com/AnyChart/playground/blob/staging/src/sql/scheme.sql)
 
 
 AnyChart © 2017
