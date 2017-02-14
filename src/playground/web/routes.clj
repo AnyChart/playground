@@ -14,7 +14,6 @@
 
 (defn landing-page [request]
   (let [samples (db-req/top-samples (get-db request) {:count 9})]
-    (prn "samples: " samples)
     (render-file "templates/landing.selmer" {:samples samples})))
 
 (defn editor-page [request]
