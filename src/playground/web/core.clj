@@ -12,7 +12,7 @@
     (handler (assoc request :component web-component))))
 
 (defn create-web-handler [web-component]
-  (component-middleware web-component app-routes))
+  (component-middleware web-component #'app-routes))
 
 (defrecord Web [server conf db]
   component/Lifecycle

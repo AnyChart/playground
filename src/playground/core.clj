@@ -6,6 +6,7 @@
             [playground.db.core :as db]
             [playground.web.core :as web]
             [playground.generator.core :as generator]
+            [playground.notification.slack :as slack]
 
             [playground.repo.git :as git])
   (:gen-class))
@@ -24,8 +25,9 @@
 (defn get-system [conf]
   (component/system-map
     :db (db/new-jdbc (:db conf))
-    :generator (component/using (generator/new-generator {} (repositories-conf conf)) [:db])
+    :generator (component/using (generator/new-generator {} (repositories-conf conf)) [:db :notifier])
     :web (component/using (web/new-web (:web conf)) [:db :generator])
+    :notifier (slack/new-notifier (-> conf :notifications :slack))
     ))
 
 (def system nil)
@@ -42,9 +44,3 @@
 (defn stop []
   (when system
     (alter-var-root #'system component/stop-system)))
-
-(defn t []
-  (-main "/media/ssd/sibental/playground-data/conf.toml"))
-
-(defn t1 []
-  (toml/read (slurp "/media/ssd/sibental/playground-data/conf.toml") :keywordize))

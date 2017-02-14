@@ -4,11 +4,12 @@
             [me.raynes.fs :as fs]
 
             [playground-samples-parser.fs :as samples-fs]
-            ;[playground-samples-parser.sample-parser :as samples-parser]
+    ;[playground-samples-parser.sample-parser :as samples-parser]
 
             [playground.generator.parser.group-parser :as group-parser]
             [playground.generator.utils :refer [copy-dir]]
             [playground.db.request :as db-req]
+            [playground.notification.slack :as slack]
             [playground.repo.git :as git]))
 
 ;;============== component
@@ -24,7 +25,8 @@
     (dissoc this :conf)))
 
 (defn new-generator [conf repos]
-  (map->Generator {:conf conf :repos repos}))
+  (map->Generator {:conf  (assoc conf :queue-index (atom 0))
+                   :repos repos}))
 
 (defn get-repo-by-name [generator name]
   (let [repos (:repos generator)]
@@ -93,16 +95,12 @@
 ;;============ update branches
 
 (defn build-branch [db repo branch path versions]
-  (prn "Build branch: " branch path)
+  (info "Build branch: " path (:key branch))
   (let [groups (group-parser/groups path)
-        groups2 (samples-fs/groups path)
         version-id (db-req/add-version<! db {:key        (:key branch)
                                              :commit     (:commit branch)
                                              :project_id (:id @repo)
                                              :hidden     true})]
-    (prn "Path: " path)
-    (prn "Groups: " (map :name groups))
-    (prn "Groups2: " (map :name groups2))
     (doseq [group groups]
       (let [group-id (db-req/add-group<! db {:version_id  version-id
                                              :index       (:index group)
@@ -112,28 +110,32 @@
                                              :hidden      (:hidden group)
                                              :description (:description group)
                                              :cover       (:cover group)})]
-        (prn "Group: " group-id (:name group))
         (db-req/add-samples! db group-id version-id (:samples group))))
     (let [old-versions (filter #(and (= (:key %) (:key branch))
                                      (not= (:id %) version-id)) versions)]
-      (prn "Delete old versions: " old-versions)
+      (info "Delete old versions for" (:key branch) ": " (pr-str old-versions))
       (doseq [version old-versions]
         (remove-branch db version)))
     (db-req/show-version! db {:project_id (:id @repo) :id version-id})))
 
-(defn update-branch [db repo branch versions]
-  (prn)
-  (prn "Update branch: " branch)
-  (let [path (version-path @repo (:key branch))
-        git-path (git-path path)]
-    (fs/delete-dir path)
-    ;(fs/copy-dir (repo-path @repo) path)
-    (copy-dir (repo-path @repo) path)
-
-    (let [git-repo (git/get-git git-path)]
-      (git/checkout git-repo (:key branch))
-      (git/pull git-repo @repo)
-      (build-branch db repo branch path versions))))
+(defn update-branch [db repo branch versions generator project queue-index]
+  (try
+    (info "Update branch: " branch)
+    (let [path (version-path @repo (:key branch))
+          git-path (git-path path)]
+      (fs/delete-dir path)
+      ;(fs/copy-dir (repo-path @repo) path)
+      (copy-dir (repo-path @repo) path)
+      (let [git-repo (git/get-git git-path)]
+        (git/checkout git-repo (:key branch))
+        (git/pull git-repo @repo)
+        (build-branch db repo branch path versions)))
+    nil
+    (catch Exception e
+      (do (error e)
+          (error (.getMessage e))
+          ;(slack/build-failed (:notifier generator) (:name project) (:key branch) queue-index e)
+          {:branch branch :e e}))))
 
 (defn need-update-branch? [branch db-branches]
   (let [db-branch (first (filter #(= (:key branch) (:key %)) db-branches))]
@@ -143,19 +145,32 @@
   (let [update-branches (filter #(need-update-branch? % db-branches) actual-branches)]
     update-branches))
 
-(defn update-repository [db repo]
-  (info "update repo: " (:git @repo))
-  (git/fetch repo)
-  (fs/mkdirs (versions-path @repo))
-  (let [actual-branches (git/branch-list (:git @repo))
-        db-branches (db-req/versions db {:project_id (:id @repo)})
-        updated-branches (branches-for-update actual-branches db-branches)
-        removed-branches (branches-for-remove actual-branches db-branches)]
-    (info "Actual branches: " (pr-str (map :key actual-branches)))
-    (info "DB branches: " (pr-str (map :key db-branches)))
-    (info "Updated branches: " (pr-str (map :key updated-branches)))
-    (info "Removed branches: " (pr-str (map :key removed-branches)))
-    (doseq [branch removed-branches]
-      (remove-branch db branch))
-    (doseq [branch updated-branches]
-      (update-branch db repo branch db-branches))))
+(defn update-repository [generator db repo]
+  (let [queue-index (swap! (:queue-index (:conf generator)) inc)]
+    (try
+      (info "update repo: " (:git @repo))
+      (git/fetch repo)
+      (fs/mkdirs (versions-path @repo))
+      (let [actual-branches (git/branch-list (:git @repo))
+            db-branches (db-req/versions db {:project_id (:id @repo)})
+            updated-branches (branches-for-update actual-branches db-branches)
+            removed-branches (branches-for-remove actual-branches db-branches)]
+        (info "Actual branches: " (pr-str (map :key actual-branches)))
+        (info "DB branches: " (pr-str (map :key db-branches)))
+        (info "Updated branches: " (pr-str (map :key updated-branches)))
+        (info "Removed branches: " (pr-str (map :key removed-branches)))
+        (slack/start-build (:notifier generator) (:name @repo) (map :key updated-branches) (map :key removed-branches) queue-index)
+        (doseq [branch removed-branches]
+          (remove-branch db branch))
+        ;(doseq [branch updated-branches]
+        ;  (update-branch db repo branch db-branches generator @repo queue-index))
+        (let [result (doall (pmap #(update-branch db repo % db-branches generator @repo queue-index) updated-branches))
+              errors (filter some? result)]
+          (if (not-empty errors)
+            (slack/complete-building-with-errors (:notifier generator) (:name @repo) (map :key updated-branches)
+                                                 (map :key removed-branches) queue-index (-> errors first :e))
+            (slack/complete-building (:notifier generator) (:name @repo) (map :key updated-branches) (map :key removed-branches) queue-index))))
+      (catch Exception e
+        (do (error e)
+            (error (.getMessage e))
+            (slack/complete-building-with-errors (:notifier generator) (:name @repo) [] [] queue-index e))))))

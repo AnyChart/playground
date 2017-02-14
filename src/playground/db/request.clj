@@ -12,12 +12,12 @@
 ;generate for each request something like:
 ;(defn versions [db & [params]
 ;  (sql-versions params {:connection (:conn db)}))
-(defmacro defsql [fn-name]
+(defmacro defsql [fn-name & [opts]]
   (if (ends-with? fn-name "<!")
     `(defn ~fn-name [db# & [params#]]
-       (:generated_key (~(sql-sym fn-name) params# {:connection (:conn db#)})))
+       (:generated_key (~(sql-sym fn-name) params# (merge {:connection (:conn db#)} ~opts))))
     `(defn ~fn-name [db# & [params#]]
-       (~(sql-sym fn-name) params# {:connection (:conn db#)}))))
+       (~(sql-sym fn-name) params# (merge {:connection (:conn db#)} ~opts)))))
 
 ;; projects
 (defsql projects)
@@ -28,6 +28,8 @@
 
 ;; versions
 (defsql versions)
+
+(defsql version-by-name {:result-set-fn first})
 
 (defsql add-version<!)
 
@@ -41,7 +43,17 @@
 (defsql delete-groups!)
 
 ;; samples
+(defn parse-sample [sample]
+  (-> sample
+      (assoc :scripts (parse-string (:scripts sample)))
+      (assoc :styles (parse-string (:styles sample)))))
+
 (defsql samples)
+
+(defsql top-samples {:row-fn parse-sample})
+
+(defsql sample-by-url {:result-set-fn first
+                       :row-fn        parse-sample})
 
 ; TODO: wait until yesql has multiple insert
 ;(defsql add-samples!)
@@ -75,6 +87,5 @@
                                         :markup_type       (:markup_type sample)
 
                                         :style             (:style sample)
-                                        :style_type        (:style_type sample)
-                                        })
+                                        :style_type        (:style_type sample)})
                                      samples)))

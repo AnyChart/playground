@@ -15,6 +15,9 @@ INSERT INTO versions (`key`, project_id, commit, hidden) VALUES(:key, :project_i
 -- name: sql-versions
 SELECT * FROM versions WHERE project_id = :project_id;
 
+-- name: sql-version-by-name
+SELECT * FROM versions WHERE project_id = :project_id AND `key` = :key;
+
 -- name: sql-delete-version!
 DELETE FROM versions WHERE id = :id;
 
@@ -33,6 +36,13 @@ DELETE FROM groups WHERE version_id = :version_id;
 
 -- name: sql-samples
 SELECT * FROM samples;
+
+-- name: sql-top-samples
+SELECT samples.*, versions.id as version_id, versions.`key` as version_key, projects.name as project_name FROM samples
+  JOIN versions ON samples.version_id = versions.id JOIN projects ON versions.project_id = projects.id LIMIT :count;
+
+-- name: sql-sample-by-url
+SELECT * FROM samples WHERE version_id = :version_id AND url = :url;
 
 -- name: sql-add-samples!
 INSERT INTO samples (name, description, short_description, tags, `index`, is_new, export, scripts, local_scripts, styles, code_type, code, style_type, style, markup_type, markup) VALUES :values;

@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    {% if anychart-need %}<script src="{{anychart-url}}"></script>{% endif %}
+    {% if theme %}
+    <script src="{{theme|safe}}"></script>
+    {% endif %}
+    {% for script in scripts %}
+    <script src="{{script|safe}}"></script>
+    {% endfor %}
+    {% for css in styles %}
+    <link rel="stylesheet" href="{{css|safe}}"/>
+    {% endfor %}
+    <title>{{sample-name}}</title>
+    <style>
+        html, body, #container {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <script>
+        window.getJSONString = function() {
+            if (window.{{exports}}.toJson != undefined)
+            return JSON.stringify(window.{{exports}}.toJson(),null, 2);
+            else if (window.{{exports}}.data != undefined)
+            return JSON.stringify(window.{{exports}}.data(),null, 2);
+        };
+        window.getXML = function() {
+            return window.{{exports}}.toXml();
+        };
+        window.printChart = function() {
+            return window.{{exports}}.print();
+        };
+        window.saveAsPNG = function() {
+            return window.{{exports}}.saveAsPNG();
+        };
+        window.saveAsPDF = function() {
+            return window.{{exports}}.saveAsPDF();
+        };
+        window.saveAsJPG = function() {
+            return window.{{exports}}.saveAsJPG();
+        };
+        window.saveAsSVG = function() {
+            return window.{{exports}}.saveAsSVG();
+        };
+        window.getExport = function() {
+            return window.{{exports}};
+        };
+    </script>
+</head>
+<body>
+<div id="container"></div>
+<script type="text/javascript">
+    {{code|safe}}
+</script>
+</body>
+</html>
