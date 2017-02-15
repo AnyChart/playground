@@ -169,7 +169,7 @@
           (remove-branch db branch))
         ;(doseq [branch updated-branches]
         ;  (update-branch db repo branch db-branches generator @repo queue-index))
-        (let [result (doall (pmap #(update-branch db repo % db-branches generator @repo queue-index) updated-branches))
+        (let [result (doall (map #(update-branch db repo % db-branches generator @repo queue-index) updated-branches))
               errors (filter some? result)]
           (fs/delete-dir (versions-path @repo))
           (if (not-empty errors)
