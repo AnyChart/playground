@@ -84,24 +84,26 @@
      :style             nil}))
 
 
+(defn- parse-sample [path]
+  (let [raw-content (slurp path)
+        matches (re-matches #"(?s)(?m)(^\{[^\}]+\}).*" raw-content)
+        meta (if matches (try (read-string (last matches))
+                              (catch Exception e
+                                (println (.getMessage e))
+                                (error (str path "generation failed")))))]
+    {:tags    (:tags meta)
+     :is_new  (:is_new meta)
+     :index   (if (:index meta) (:index meta) 1000)
+     :exports (:exports meta)
 
-;(defn- parse-sample [path]
-;  (let [raw-content (slurp path)
-;        matches (re-matches #"(?s)(?m)(^\{[^\}]+\}).*" raw-content)
-;        meta (if matches (try (read-string (last matches))
-;                              (catch Exception e
-;                                (println (.getMessage e))
-;                                (error (str path "generation failed")))))]
-;    {:tags        (:tags meta)
-;     :is_new      (:is_new meta)
-;     :index       (if (:index meta) (:index meta) 1000)
-;     :exports     (:exports meta)
-;
-;     :scripts     (:scripts meta)
-;     :css_libs    (:css_libs meta)
-;     :code        (trim-code (clojure.string/replace raw-content #"(?s)(?m)(^\{[^\}]+\})" ""))
-;
-;     :libs        (:libs meta)   }))
+     :scripts (:scripts meta)
+     :styles  (:css_libs meta)
+
+     :code_type "js"
+     :code    (trim-code (clojure.string/replace raw-content #"(?s)(?m)(^\{[^\}]+\})" ""))
+
+     ;:libs    (:libs meta)
+     }))
 
 
 (defn parse-toml-sample [path]
@@ -137,10 +139,10 @@
   (let [path (sample-path base-path group sample)
         name (clojure.string/replace sample #"\.(html|sample|toml)$" "")
         base-info (cond (.endsWith path ".html") (parse-html-sample path)
-                        ;(.endsWith path ".sample") (parse-sample path)
+                        (.endsWith path ".sample") (parse-sample path)
                         (.endsWith path ".toml") (parse-toml-sample path))]
     (when base-info
-      (assoc base-info  ;TODO need fix exports?  ; (fix-exports base-info)
+      (assoc base-info                                      ;TODO need fix exports?  ; (fix-exports base-info)
         :name (clojure.string/replace name #"_" " ")
         :hidden (= name "Coming_Soon")
         :url (str (if (= group "/")
