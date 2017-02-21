@@ -63,7 +63,7 @@
       (try
         (download-repo repo)
         (swap! repo (fn [repo] (merge db-repo repo {:git (git/get-git (git-path (repo-path repo)))
-                                                    :id  (db-req/add-project<! db {:name (:name repo)})})))
+                                                    :id  (db-req/add-repo<! db {:name (:name repo)})})))
         (info (str "Repository \"" (:name @repo) "\" - OK"))
         {:name (:name @repo)}
         (catch Exception e
@@ -73,7 +73,7 @@
 (defn check-repositories [generator db notifier]
   (info "Synchronize repositories...")
   (let [repos (:repos generator)
-        db-repos (db-req/projects db)
+        db-repos (db-req/repos db)
         get-repo-by-name-fn (fn [repo db-repos]
                               (first (filter #(= (:name repo) (:name %)) db-repos)))]
     (info (count db-repos) (pr-str db-repos))
@@ -86,11 +86,10 @@
 ;;============ remove branches
 (defn- remove-branch [db branch]
   (db-req/delete-samples! db {:version_id (:id branch)})
-  (db-req/delete-groups! db {:version_id (:id branch)})
   (db-req/delete-version! db {:id (:id branch)}))
 
 (defn need-remove-branch? [db-branch actual-branches]
-  (every? #(not= (:key db-branch) (:key %)) actual-branches))
+  (every? #(not= (:name db-branch) (:name %)) actual-branches))
 
 (defn branches-for-remove [actual-branches db-branches]
   (let [removed-branches (filter #(need-remove-branch? % actual-branches) db-branches)]
@@ -100,50 +99,41 @@
 ;;============ update branches
 
 (defn build-branch [db repo branch path versions]
-  (info "Build branch: " path (:key branch))
-  (let [groups (group-parser/groups path)
-        version-id (db-req/add-version<! db {:key        (:key branch)
-                                             :commit     (:commit branch)
-                                             :project_id (:id @repo)
-                                             :hidden     true})]
-    (doseq [group groups]
-      (let [group-id (db-req/add-group<! db {:version_id  version-id
-                                             :index       (:index group)
-                                             :name        (:name group)
-                                             :url         (:path group)
-                                             :root        (:root group)
-                                             :hidden      (:hidden group)
-                                             :description (:description group)
-                                             :cover       (:cover group)})]
-        (db-req/add-samples! db group-id version-id (:samples group))))
-    (let [old-versions (filter #(and (= (:key %) (:key branch))
+  (info "Build branch: " path (:name branch))
+  (let [version-id (db-req/add-version<! db {:name    (:name branch)
+                                             :commit  (:commit branch)
+                                             :repo_id (:id @repo)
+                                             :hidden  true})
+        samples (group-parser/samples path)]
+    (db-req/add-samples! db version-id samples)
+    (let [old-versions (filter #(and (= (:name %) (:name branch))
                                      (not= (:id %) version-id)) versions)]
-      (info "Delete old versions for" (:key branch) ": " (pr-str old-versions))
+      (info "Delete old versions for" (:name branch) ": " (pr-str old-versions))
       (doseq [version old-versions]
         (remove-branch db version)))
-    (db-req/show-version! db {:project_id (:id @repo) :id version-id})))
+    (db-req/show-version! db {:repo_id (:id @repo) :id version-id})))
 
-(defn update-branch [db repo branch versions generator project queue-index]
+(defn update-branch [db repo branch versions generator queue-index]
   (try
     (info "Update branch: " branch)
-    (let [path (version-path @repo (:key branch))
+    (let [path (version-path @repo (:name branch))
           git-path (git-path path)]
       (fs/delete-dir path)
       ;(fs/copy-dir (repo-path @repo) path)
       (copy-dir (repo-path @repo) path)
       (let [git-repo (git/get-git git-path)]
-        (git/checkout git-repo (:key branch))
+        (git/checkout git-repo (:name branch))
         (git/pull git-repo @repo)
         (build-branch db repo branch path versions)))
     nil
     (catch Exception e
       (do (error e)
           (error (.getMessage e))
-          ;(slack/build-failed (:notifier generator) (:name project) (:key branch) queue-index e)
+          ;(slack/build-failed (:notifier generator) (:name project) (:name branch) queue-index e)
           {:branch branch :e e}))))
 
 (defn need-update-branch? [branch db-branches]
-  (let [db-branch (first (filter #(= (:key branch) (:key %)) db-branches))]
+  (let [db-branch (first (filter #(= (:name branch) (:name %)) db-branches))]
     (or (nil? db-branch) (not= (:commit branch) (:commit db-branch)))))
 
 (defn branches-for-update [actual-branches db-branches]
@@ -157,25 +147,25 @@
       (git/fetch repo)
       (fs/mkdirs (versions-path @repo))
       (let [actual-branches (git/branch-list (:git @repo))
-            db-branches (db-req/versions db {:project_id (:id @repo)})
+            db-branches (db-req/versions db {:repo_id (:id @repo)})
             updated-branches (branches-for-update actual-branches db-branches)
             removed-branches (branches-for-remove actual-branches db-branches)]
-        (info "Actual branches: " (pr-str (map :key actual-branches)))
-        (info "DB branches: " (pr-str (map :key db-branches)))
-        (info "Updated branches: " (pr-str (map :key updated-branches)))
-        (info "Removed branches: " (pr-str (map :key removed-branches)))
-        (slack/start-build (:notifier generator) (:name @repo) (map :key updated-branches) (map :key removed-branches) queue-index)
+        (info "Actual branches: " (pr-str (map :name actual-branches)))
+        (info "DB branches: " (pr-str (map :name db-branches)))
+        (info "Updated branches: " (pr-str (map :name updated-branches)))
+        (info "Removed branches: " (pr-str (map :name removed-branches)))
+        (slack/start-build (:notifier generator) (:name @repo) (map :name updated-branches) (map :name removed-branches) queue-index)
         (doseq [branch removed-branches]
           (remove-branch db branch))
         ;(doseq [branch updated-branches]
         ;  (update-branch db repo branch db-branches generator @repo queue-index))
-        (let [result (doall (map #(update-branch db repo % db-branches generator @repo queue-index) updated-branches))
+        (let [result (doall (map #(update-branch db repo % db-branches generator queue-index) updated-branches))
               errors (filter some? result)]
           (fs/delete-dir (versions-path @repo))
           (if (not-empty errors)
-            (slack/complete-building-with-errors (:notifier generator) (:name @repo) (map :key updated-branches)
-                                                 (map :key removed-branches) queue-index (-> errors first :e))
-            (slack/complete-building (:notifier generator) (:name @repo) (map :key updated-branches) (map :key removed-branches) queue-index))))
+            (slack/complete-building-with-errors (:notifier generator) (:name @repo) (map :name updated-branches)
+                                                 (map :name removed-branches) queue-index (-> errors first :e))
+            (slack/complete-building (:notifier generator) (:name @repo) (map :name updated-branches) (map :name removed-branches) queue-index))))
       (catch Exception e
         (do (error e)
             (error (.getMessage e))

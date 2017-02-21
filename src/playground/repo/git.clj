@@ -102,7 +102,7 @@
                      (.branchList)
                      (.setListMode org.eclipse.jgit.api.ListBranchCommand$ListMode/REMOTE)
                      (.call))]
-    (map #(hash-map :key (full-branch-name->branch-name (.getName %))
+    (map #(hash-map :name (full-branch-name->branch-name (.getName %))
                     :commit (.getName (.getObjectId %))) (seq branches))))
 
 

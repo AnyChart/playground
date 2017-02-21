@@ -19,12 +19,12 @@
     `(defn ~fn-name [db# & [params#]]
        (~(sql-sym fn-name) params# (merge {:connection (:conn db#)} ~opts)))))
 
-;; projects
-(defsql projects)
+;; repos
+(defsql add-repo<!)
 
-(defsql add-project<!)
+(defsql repos)
 
-(defsql project-by-name)
+(defsql repo-by-name)
 
 ;; versions
 (defsql versions)
@@ -36,11 +36,6 @@
 (defsql delete-version!)
 
 (defsql show-version!)
-
-;; groups
-(defsql add-group<!)
-
-(defsql delete-groups!)
 
 ;; samples
 (defn parse-sample [sample]
@@ -60,21 +55,17 @@
 
 (defsql delete-samples!)
 
-(defn add-samples! [db group-id version-id samples]
+(defn add-samples! [db version-id samples]
   (insert-multiple! db :samples (map (fn [sample]
-                                       {:group_id          group-id
-                                        :version_id        version-id
+                                       {:version_id        version-id
 
                                         :name              (:name sample)
                                         :description       (:description sample)
                                         :short_description (:short_description sample)
-                                        :hidden            (:hidden sample)
                                         :url               (:url sample)
 
                                         :tags              (generate-string (:tags sample))
-                                        :is_new            (:is_new sample)
                                         :exports           (:exports sample)
-                                        :index             (:index sample)
 
                                         :styles            (generate-string (:styles sample))
                                         :scripts           (generate-string (:scripts sample))

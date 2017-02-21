@@ -41,7 +41,7 @@
   ;(info "creating group:" group path (load-group-config path group))
   (let [group-path (str (to-folder-path path) (to-folder-path group))
         config-path (str group-path "group.cfg")
-        samples (get-group-samples group-path #{"sample" "html" "toml"})]
+        samples (get-group-samples group-path #{"sample" "html"})]
     (merge {:index        1000
             :gallery-name (prettify-name group)
             :gallery-url  (fix-url group)}
@@ -61,3 +61,6 @@
        (filter #(seq (:samples %)))
        (cons (create-group-info path ""))
        (sort-by (juxt :index :name))))
+
+(defn samples [path]
+  (filter some? (mapcat :samples (groups path))))

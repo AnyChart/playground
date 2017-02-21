@@ -91,7 +91,7 @@
             <div class="sample-box">
                 <div class="iframe-height-scaling">
                     <iframe class="iframe-preview"
-                            src="/{{sample.project_name}}/{{sample.version_key}}{{sample.url}}-iframe"></iframe>
+                            src="/{{sample.repo_name}}/{{sample.version_name}}{{sample.url}}-iframe"></iframe>
                 </div>
                 <p>Chart name</p>
                 <p>Chart Description</p>

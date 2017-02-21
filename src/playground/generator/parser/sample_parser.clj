@@ -66,9 +66,7 @@
      :short_description short-desc
 
      :tags              tags
-     :is_new            (or is-new false)
      :exports           (or exports "chart")
-     :index             (or index 1000)
 
      :scripts           scripts
      :local_scripts     local-scripts
@@ -84,51 +82,32 @@
      :style             nil}))
 
 
-(defn- parse-sample [path]
-  (let [raw-content (slurp path)
-        matches (re-matches #"(?s)(?m)(^\{[^\}]+\}).*" raw-content)
-        meta (if matches (try (read-string (last matches))
-                              (catch Exception e
-                                (println (.getMessage e))
-                                (error (str path "generation failed")))))]
-    {:tags    (:tags meta)
-     :is_new  (:is_new meta)
-     :index   (if (:index meta) (:index meta) 1000)
-     :exports (:exports meta)
-
-     :scripts (:scripts meta)
-     :styles  (:css_libs meta)
-
-     :code_type "js"
-     :code    (trim-code (clojure.string/replace raw-content #"(?s)(?m)(^\{[^\}]+\})" ""))
-
-     ;:libs    (:libs meta)
-     }))
-
 
 (defn parse-toml-sample [path]
-  (let [data (toml/read (slurp path) :keywordize)]
-    {:name              (-> data :name)
-     :description       (-> data :description)
-     :short_description (-> data :short_description)
+  (try
+    (let [data (toml/read (slurp path) :keywordize)]
+     {:name              (-> data :name)
+      :description       (-> data :description)
+      :short_description (-> data :short_description)
 
-     :tags              (-> data :meta :tags)
-     :is_new            (-> data :meta :is_new)
-     :index             (-> data :meta :index)
-     :exports           (-> data :meta :export)
+      :tags              (-> data :meta :tags)
+      :exports           (-> data :meta :export)
 
-     :scripts           (-> data :deps :scripts)
-     :local_scripts     (-> data :deps :local_scripts)
-     :styles            (-> data :deps :styles)
+      :scripts           (-> data :deps :scripts)
+      :local_scripts     (-> data :deps :local_scripts)
+      :styles            (-> data :deps :styles)
 
-     :code_type         (-> data :code :type)
-     :code              (-> data :code :code)
+      :code_type         (-> data :code :type)
+      :code              (-> data :code :code)
 
-     :markup_type       (-> data :markup :type)
-     :markup            (-> data :markup :code)
+      :markup_type       (-> data :markup :type)
+      :markup            (-> data :markup :code)
 
-     :style_type        (-> data :style :type)
-     :style             (-> data :style :code)}))
+      :style_type        (-> data :style :type)
+      :style             (-> data :style :code)})
+    (catch Exception e
+      (info "parse TOML error: " path e)
+      nil)))
 
 (defn- sample-path [base-path group sample]
   (if (.exists (file (str base-path group sample)))
@@ -137,10 +116,9 @@
 
 (defn parse [base-path group sample]
   (let [path (sample-path base-path group sample)
-        name (clojure.string/replace sample #"\.(html|sample|toml)$" "")
+        name (clojure.string/replace sample #"\.(html|sample)$" "")
         base-info (cond (.endsWith path ".html") (parse-html-sample path)
-                        (.endsWith path ".sample") (parse-sample path)
-                        (.endsWith path ".toml") (parse-toml-sample path))]
+                        (.endsWith path ".sample") (parse-toml-sample path))]
     (when base-info
       (assoc base-info                                      ;TODO need fix exports?  ; (fix-exports base-info)
         :name (clojure.string/replace name #"_" " ")
