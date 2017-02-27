@@ -25,6 +25,7 @@
                  [com.anychart/playground-samples-parser "0.1.2"]
                  [enlive "1.1.6"]
                  [selmer "1.10.6"]
+                 [clj-time "0.13.0"]
 
                  ;; db
                  [clojure.jdbc/clojure.jdbc-c3p0 "0.3.2"]

@@ -62,14 +62,20 @@
                                         :name              (:name sample)
                                         :description       (:description sample)
                                         :short_description (:short_description sample)
-                                        :url               (:url sample)
 
+                                        :url               (:url sample)
+                                        :show_on_landing   (:show_on_landing sample)
                                         :tags              (generate-string (:tags sample))
                                         :exports           (:exports sample)
 
-                                        :styles            (generate-string (:styles sample))
-                                        :scripts           (generate-string (:scripts sample))
-                                        :local_scripts     (generate-string (:local-scripts sample))
+                                        :styles            (when (seq (:styles sample))
+                                                             (generate-string (:styles sample)))
+
+                                        :scripts           (when (seq (:scripts sample))
+                                                             (generate-string (:scripts sample)))
+
+                                        :local_scripts     (when (seq (:local-scripts sample))
+                                                             (generate-string (:local-scripts sample)))
 
                                         :code              (:code sample)
                                         :code_type         (:code_type sample)

@@ -31,7 +31,7 @@ SELECT * FROM samples;
 
 -- name: sql-top-samples
 SELECT samples.*, versions.id as version_id, versions.`name` as version_name, repos.name as repo_name FROM samples
-  JOIN versions ON samples.version_id = versions.id JOIN repos ON versions.repo_id = repos.id LIMIT :count;
+  JOIN versions ON samples.version_id = versions.id JOIN repos ON versions.repo_id = repos.id WHERE samples.show_on_landing = TRUE LIMIT :count;
 
 -- name: sql-sample-by-url
 SELECT * FROM samples WHERE version_id = :version_id AND url = :url;

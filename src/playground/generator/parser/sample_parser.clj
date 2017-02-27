@@ -55,16 +55,13 @@
                           first :attrs :content)
         tags (if tags-content (clojure.string/replace tags-content #"'" "\"") [])
 
-        is-new (some->> (html/select page [:meta])
-                        (filter #(= "is-new" (:name (:attrs %))))
-                        first :attrs :content read-string)
-
-        index (some->> (html/select page [:meta])
-                       (filter #(= "index" (:name (:attrs %))))
-                       first :attrs :content read-string)]
+        show-on-landing (some->> (html/select page [:meta])
+                                 (filter #(= "show-on-landing" (:name (:attrs %))))
+                                 first :attrs :content read-string)]
     {:description       desc
      :short_description short-desc
 
+     :show_on_landing   show-on-landing
      :tags              tags
      :exports           (or exports "chart")
 
@@ -90,6 +87,7 @@
       :description       (-> data :description)
       :short_description (-> data :short_description)
 
+      :show_on_landing   (-> data :meta :show_on_landing)
       :tags              (-> data :meta :tags)
       :exports           (-> data :meta :export)
 
@@ -121,7 +119,7 @@
                         (.endsWith path ".sample") (parse-toml-sample path))]
     (when base-info
       (assoc base-info                                      ;TODO need fix exports?  ; (fix-exports base-info)
-        :name (clojure.string/replace name #"_" " ")
+        :name (or (:name base-info) (clojure.string/replace name #"_" " "))
         :hidden (= name "Coming_Soon")
         :url (str (if (= group "/")
                     group

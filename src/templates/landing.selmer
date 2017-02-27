@@ -87,8 +87,11 @@
                     <iframe class="iframe-preview"
                             src="/{{sample.repo_name}}/{{sample.version_name}}{{sample.url}}-iframe"></iframe>
                 </div>
-                <p>Chart name</p>
-                <p>Chart Description</p>
+                <p>{{sample.name}}</p>
+                <p class="text-muted">{{sample.short_description}}</p>
+                <p><b>Views: </b>{{sample.views}} <b>, Likes: </b>{{sample.likes}}</p>
+                <p><b>Author: </b>{{sample.author}}</p>
+                <p><b>Date: </b>{{sample.create_date|date:mediumDate}}</p>
             </div>
         </div>
         {% endfor %}
