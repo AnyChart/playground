@@ -6,78 +6,134 @@
 =========================
 
 ## Usage
-Config file
+Config file format:
 
 ```
 [web]
+# Web settings
 port = 8080
 
 [db]
+# MySQL settings
 port = 3306
-name = "pg_stg"
-user = "pg_stg_user"
-password = "pg_stg_pass"
+name = "playground_db"
+user = "playground_user"
+password = "playground_password"
 
 [notifications.slack]
-token = "P8Z59E0kpaOqTcOxner4P5jb"
-channel = "#notifications"
-samples-channel = "#samples"
-username = "playground-engine"
-domain = "http://pg.anychart.stg/"
-tag  = "stg"
+# Slack notification settings
+token = "token"
+channel = "#playground_notifications"
+username = "playground_bot"
+# tag and domain are used in slack messages
+domain = "http://playground.example.com/"
+tag  = "playground"
 
+# Next you should describe you repositories
 
 [[repositories]]
-name = "api"
-dir = "/apps/pg-stg/data/api"
-url-prefex = "api"
+# Main info
+name = "first_repository"
+# Folder where the repo will locate
+dir = "/playground/data/first_repository"
+# Prefix will be used in repository's sample path
+url-prefex = "first-repo"
+# either generate preview or not
 generate-preview = true
-samples-format = "html"
+# connection type, may be ssh or https
 type = "ssh"
 
+# if you choose ssh connection type, describe it
 [repositories.ssh]
-ssh = "git@github.com:AnyChart/api.anychart.com.git"
-secret-key = "/apps/keys/id_rsa"
-public-key = "/apps/keys/id_rsa.pub"
-passphrase = ""
+ssh = "git@github.com:YourCompany/your-repo.git"
+secret-key = "/path-to-id_rsa"
+public-key = "/path-to-id_rsa.pub"
+passphrase = "passphraze"
 
-# or you can use https, set type = https
+# or if you choose https
 [repositories.https]
-https = "https://github.com/AnyChart/api.anychart.com.git"
+https = "https://github.com/YourCompany/your-repo.git"
 login = "login"
 password = "password"
 
-
+# Second repository
 [[repositories]]
-name = "docs"
-dir = "/apps/pg-stg/data/docs"
-url-prefex = "docs"
-generate-preview = false
-samples-format = "html"
+name = "second_repository"
+dir = "/playground/data/second_repository"
+url-prefex = "second-repo"
+generate-preview = true
 type = "ssh"
 
 [repositories.ssh]
-ssh = "git@github.com:AnyChart/docs.anychart.com.git"
-secret-key = "/apps/keys/id_rsa"
-public-key = "/apps/keys/id_rsa.pub"
-passphrase = ""
-
-
-[[repositories]]
-name = "pg-samples"
-dir = "/apps/pg-stg/data/gallery"
-url-prefex = "pg-samples"
-generate-preview = false
-samples-format = "html"
-type = "ssh"
-
-[repositories.ssh]
-ssh = "git@github.com:AnyChart/ACDVF-playground-samples.git"
-secret-key = "/apps/keys/id_rsa"
-public-key = "/apps/keys/id_rsa.pub"
-passphrase = ""
-
+ssh = "git@github.com:YourCompany/your-repo2.git"
+secret-key = "/path-to-id_rsa"
+public-key = "/path-to-id_rsa.pub"
+passphrase = "passphraze"
 ```
+
+[TOML](https://github.com/toml-lang/toml) `.sample` sample format:
+```
+name = "Chart Name"
+description = "Chart description"
+short_description = "Short chart description" 
+
+[meta]
+tags = ["some" "tags"]
+export = "chart_name_for_exporting"
+show_on_landing = true
+
+[deps]
+scripts = ["http://remote-js-dependency.js"]
+local-scripts = ["../local-js-dependency.js"]
+styles = ["http://remote-css-dependency.css"]
+
+[code]
+type = "js"
+code = """
+// write your sample code here
+// anychart.onDocumentReady(function() {
+// ...
+// });
+"""
+
+[style]
+type = "css"
+code = """
+/* write your sample styles here */
+"""
+
+[markup]
+type = "html"
+code = """
+<!-- describe your markup here -->
+"""
+```
+
+HTML `.html` sample format:
+```
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="ac:name" content="Chart name"/>
+    <meta name="ac:description" content="Chart description"/>
+    <meta name="ac:short_description" content="Chart short description"/>
+    <meta name="ac:tags" content="some, tags"/>
+    <meta name="ac:show_on_landing" content="true"/>
+    <script src="../local-js-dependency.js"></script>
+    <script src="http://remote-js-dependency.js" data-export="true"></script>
+    <script x-export="chart">
+        // write your code here
+        // anychart.onDocumentReady(function () {
+        // ...
+        // });
+    </script>
+</head>
+<body>
+<div id="container" style="width: 100%; height: 100%"></div>
+</body>
+</html>
+```
+
 
 [MySQL Scheme](https://github.com/AnyChart/playground/blob/staging/src/sql/scheme.sql)
 
