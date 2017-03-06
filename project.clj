@@ -6,7 +6,7 @@
   :main ^:aot playground.core
   :uberjar-name "pg-standalone.jar"
   :source-paths ["src" "src-cljc"]
-  :dependencies [[org.clojure/clojure "1.8.0"]
+  :dependencies [[org.clojure/clojure "1.9.0-alpha14"]
 
                  [org.immutant/web "2.1.6"]
                  ;[org.immutant/caching "2.1.5"]
@@ -35,20 +35,20 @@
                  [mysql/mysql-connector-java "6.0.5"]
 
 
-                 [im.chit/gita "0.2.5"]
-                 ;[org.eclipse.jgit/org.eclipse.jgit "4.5.0.201609210915-r"]
+                 ;[im.chit/gita "0.2.5"]
+                 [org.eclipse.jgit/org.eclipse.jgit "4.5.0.201609210915-r"]
                  ;[clj-jgit "0.8.9"]
                  ;[ilevd/clj-jgit "0.8.8"]
                  [me.raynes/fs "1.4.6"]
 
 
                  ;; front-end
-                 [org.clojure/clojurescript "1.9.456"]
+                 [org.clojure/clojurescript "1.9.495"]
                  [reagent "0.6.0"]
                  [cljs-http "0.1.42"]
                  ]
   :plugins [[lein-ancient "0.6.10"]
-            [lein-cljsbuild "1.1.2"]]
+            [lein-cljsbuild "1.1.4"]]
   :cljsbuild {:builds [{:id           "dev"
                         :source-paths ["src-cljs" "src-cljc"]
                         :compiler     {:output-to     "resources/public/js/playground.js"

@@ -14,7 +14,7 @@
 
 (defn landing-page [request]
   (let [samples (db-req/top-samples (get-db request) {:count 9})]
-    (render-file "templates/landing.selmer" {:samples samples})))
+    (render-file "templates/landing-content.selmer" {:samples samples})))
 
 (defn editor-page [request]
   (render-file "templates/index.selmer" {}))
@@ -29,10 +29,22 @@
   (let [need-anychart-script (utils/need-anychart-script? (:scripts sample))
         styles (utils/csss (:styles sample) (:name version) need-anychart-script)]
     (response (render-file "templates/sample.selmer" (assoc sample
-                                                      :anychart-need true
-                                                      :anychart-url (utils/anychart-bundle-url (:name version))
-                                                      :styles styles)))))
+                                                       :anychart-need true
+                                                       :anychart-url (utils/anychart-bundle-url (:name version))
+                                                       :styles styles)))))
 
+(defn show-sample-standalone [repo version sample]
+  (render-file "templates/standalone-iframe-content.selmer" {:sample sample
+                                                             :url    (str "/" (:name @repo)
+                                                                          "/" (:name version)
+                                                                          (:url sample) "-iframe")}))
+
+(defn show-sample [repo version sample request]
+  (let [view (-> request :params :view)]
+    (case view
+      "standalone" (show-sample-standalone repo version sample)
+      nil (show-sample-iframe repo version sample request)
+      "Bad view type")))
 
 ;; middleware for getting repo, version, sample
 (defn- check-repo-middleware [handler]
@@ -47,7 +59,7 @@
   (fn [repo request]
     (let [version-name (-> request :route-params :version)
           version (db-req/version-by-name (get-db request) {:repo_id (:id @repo)
-                                                            :name        version-name})]
+                                                            :name    version-name})]
       (if version
         (handler repo version request)
         (route/not-found "version not found")))))
@@ -69,6 +81,9 @@
            (GET "/editor" [] editor-page)
            (GET "/:repo/_update_" [] (check-repo-middleware update-repo))
            (POST "/:repo/_update_" [] (check-repo-middleware update-repo))
-           (GET "/:repo/:version/*-iframe" [] (check-repo-middleware (check-version-middleware (check-sample-middleware show-sample-iframe))))
-           (GET "/sample/*-iframe" [] show-sample-iframe)
+           (GET "/:repo/:version/*-iframe" [] (check-repo-middleware
+                                                (check-version-middleware
+                                                  (check-sample-middleware
+                                                    show-sample))))
+           ;(GET "/sample/*-iframe" [] show-sample-iframe)
            (route/not-found "Page not found."))

@@ -5,7 +5,7 @@
            (java.io File))
   (:require [clojure.java.shell :refer [sh with-sh-env with-sh-dir]]
             [me.raynes.fs :as fs]
-            [gita.core :refer :all]
+    ;[gita.core :refer :all]
             [clojure.string :refer [split]]))
 
 

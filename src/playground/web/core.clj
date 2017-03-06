@@ -5,6 +5,8 @@
             [toml.core :as toml]
             [taoensso.timbre :as timbre]
             [com.stuartsierra.component :as component]
+            [ring.middleware.keyword-params :refer [wrap-keyword-params]]
+            [ring.middleware.params :refer [wrap-params]]
             [playground.web.routes :refer [app-routes]]))
 
 (defn- component-middleware [web-component handler]
@@ -20,7 +22,9 @@
   (start [component]
     (timbre/info "Web start")
     (assoc component :server (web/run
-                               (create-web-handler component)
+                               (wrap-params
+                                 (wrap-keyword-params
+                                   (create-web-handler component)))
                                conf)))
 
   (stop [component]

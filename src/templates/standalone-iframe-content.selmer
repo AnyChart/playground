@@ -1,0 +1,10 @@
+{% extends "templates/landing.selmer" %}
+{% block content %}
+<div class="iframe-standalone-box" >
+    <iframe class="iframe-standalone"
+            sandbox="allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"
+            allowtransparency="true"
+            allowfullscreen="true"
+            src="{{url}}"></iframe>
+</div>
+{% endblock %}

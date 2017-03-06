@@ -47,19 +47,29 @@
                                     (-> % :attrs :href some?)))
                       (map #(-> % :attrs :href)))
 
-        desc (tag-content page :description)
-        short-desc (tag-content page :short_description)
+        name (some->> (html/select page [:meta])
+                      (filter #(= "ac:name" (:name (:attrs %))))
+                      first :attrs :content)
+
+        description (some->> (html/select page [:meta])
+                             (filter #(= "ac:description" (:name (:attrs %))))
+                             first :attrs :content)
+
+        short-description (some->> (html/select page [:meta])
+                                   (filter #(= "ac:short_description" (:name (:attrs %))))
+                                   first :attrs :content)
 
         tags-content (->> (html/select page [:meta])
-                          (filter #(= "tags" (:name (:attrs %))))
+                          (filter #(= "ac:tags" (:name (:attrs %))))
                           first :attrs :content)
-        tags (if tags-content (clojure.string/replace tags-content #"'" "\"") [])
+        tags (if tags-content (clojure.string/split tags-content #"\s*,\s*") [])
 
         show-on-landing (some->> (html/select page [:meta])
-                                 (filter #(= "show-on-landing" (:name (:attrs %))))
+                                 (filter #(= "ac:show_on_landing" (:name (:attrs %))))
                                  first :attrs :content read-string)]
-    {:description       desc
-     :short_description short-desc
+    {:name              name
+     :description       description
+     :short_description short-description
 
      :show_on_landing   show-on-landing
      :tags              tags
@@ -83,26 +93,26 @@
 (defn parse-toml-sample [path]
   (try
     (let [data (toml/read (slurp path) :keywordize)]
-     {:name              (-> data :name)
-      :description       (-> data :description)
-      :short_description (-> data :short_description)
+      {:name              (-> data :name)
+       :description       (-> data :description)
+       :short_description (-> data :short_description)
 
-      :show_on_landing   (-> data :meta :show_on_landing)
-      :tags              (-> data :meta :tags)
-      :exports           (-> data :meta :export)
+       :show_on_landing   (-> data :meta :show_on_landing)
+       :tags              (-> data :meta :tags)
+       :exports           (-> data :meta :export)
 
-      :scripts           (-> data :deps :scripts)
-      :local_scripts     (-> data :deps :local_scripts)
-      :styles            (-> data :deps :styles)
+       :scripts           (-> data :deps :scripts)
+       :local_scripts     (-> data :deps :local_scripts)
+       :styles            (-> data :deps :styles)
 
-      :code_type         (-> data :code :type)
-      :code              (-> data :code :code)
+       :code_type         (-> data :code :type)
+       :code              (-> data :code :code)
 
-      :markup_type       (-> data :markup :type)
-      :markup            (-> data :markup :code)
+       :markup_type       (-> data :markup :type)
+       :markup            (-> data :markup :code)
 
-      :style_type        (-> data :style :type)
-      :style             (-> data :style :code)})
+       :style_type        (-> data :style :type)
+       :style             (-> data :style :code)})
     (catch Exception e
       (info "parse TOML error: " path e)
       nil)))
