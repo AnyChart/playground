@@ -26,7 +26,7 @@
   (car-mq/stop worker))
 
 (defn new-redis [config]
-  {:pre [(s/valid? ::redis-spec/config config)]
+  {:pre  [(s/valid? ::redis-spec/config config)]
    :post [(s/valid? ::redis-spec/redis %)]}
   (Redis. config
           {:spec (dissoc config :queue)

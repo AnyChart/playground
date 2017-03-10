@@ -57,8 +57,6 @@
                   "frontend" (get-web-system conf)
                   "backend" (get-worker-system conf)
                   (get-full-system conf))]
-        (timbre/info conf)
-        (timbre/info sys)
         (alter-var-root #'system (constantly (component/start-system sys)))
         (generator/check-repositories (:generator system) (:db system) (:notifier system))
         system))))
