@@ -37,7 +37,7 @@
 (defn create-db-spec [conf]
   {:classname   "com.mysql.cj.jdbc.Driver"
    :subprotocol "mysql"
-   :subname     (str "//localhost:" (:port conf) "/" (:name conf) "?characterEncoding=UTF-8&serverTimezone=UTC&useUnicode=true&useSSL=false")
+   :subname     (str "//" (:host conf) ":" (:port conf) "/" (:name conf) "?characterEncoding=UTF-8&serverTimezone=UTC&useUnicode=true&useSSL=false")
    :user        (:user conf)
    :password    (:password conf)
    :stringtype  "unspecified"})

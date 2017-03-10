@@ -11,9 +11,9 @@
 (s/def ::name string?)
 (s/def ::user string?)
 (s/def ::password string?)
-(s/def ::db (s/keys :req-un [::port ::name ::user ::password]))
-
 (s/def ::host string?)
+(s/def ::db (s/keys :req-un [::port ::host ::name ::user ::password]))
+
 (s/def :redis/db (s/and int? #(>= % 0)))
 (s/def ::redis (s/keys :req-un [::port ::host :redis/db]))
 
