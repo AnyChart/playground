@@ -2,13 +2,13 @@
   (:require [toml.core :as toml]
             [com.stuartsierra.component :as component]
             [taoensso.timbre :as timbre]
-
+            [clojure.spec :as s]
+            [playground.spec.app-config :as core-spec]
             [playground.db.core :as db]
             [playground.web.core :as web]
             [playground.generator.core :as generator]
             [playground.notification.slack :as slack]
-
-            [playground.repo.git :as git])
+            [playground.redis.core :as redis])
   (:gen-class))
 
 ; disable some dirty logging
@@ -22,24 +22,46 @@
     #(atom (update % :type keyword))
     (:repositories conf)))
 
-(defn get-system [conf]
+(defn get-full-system [conf]
   (component/system-map
     :db (db/new-jdbc (:db conf))
-    :generator (component/using (generator/new-generator {} (repositories-conf conf)) [:db :notifier])
-    :web (component/using (web/new-web (:web conf)) [:db :generator])
+    :redis (redis/new-redis (:redis conf))
     :notifier (slack/new-notifier (-> conf :notifications :slack))
-    ))
+    :generator (component/using (generator/new-generator {} (repositories-conf conf)) [:db :notifier :redis])
+    :web (component/using (web/new-web (:web conf)) [:db :generator :redis])))
+
+(defn get-worker-system [conf]
+  (component/system-map
+    :db (db/new-jdbc (:db conf))
+    :redis (redis/new-redis (:redis conf))
+    :notifier (slack/new-notifier (-> conf :notifications :slack))
+    :generator (component/using (generator/new-generator {} (repositories-conf conf))
+                                [:db :notifier :redis])))
+
+(defn get-web-system [conf]
+  (component/system-map
+    :db (db/new-jdbc (:db conf))
+    :redis (redis/new-redis (:redis conf))
+    :web (component/using (web/new-web (:web conf)) [:db :generator :redis])))
 
 (def system nil)
 
-(defn -main [& args]
-  (let [conf (toml/read (slurp (first args)) :keywordize)
-        sys (get-system conf)]
-    (timbre/info conf)
-    (timbre/info sys)
-    (alter-var-root #'system (constantly (component/start-system sys)))
-    (generator/check-repositories (:generator system) (:db system) (:notifier system))
-    system))
+(defn read-config [path]
+  (toml/read (slurp path) :keywordize))
+
+(defn -main [conf-path & args]
+  (let [conf (read-config conf-path)]
+    (if (= (s/conform ::core-spec/config conf) ::s/invalid)
+      (timbre/info "Bad config file!\n" (s/explain-str ::core-spec/config conf))
+      (let [sys (case (:mode conf)
+                  "frontend" (get-web-system conf)
+                  "backend" (get-worker-system conf)
+                  (get-full-system conf))]
+        (timbre/info conf)
+        (timbre/info sys)
+        (alter-var-root #'system (constantly (component/start-system sys)))
+        (generator/check-repositories (:generator system) (:db system) (:notifier system))
+        system))))
 
 (defn stop []
   (when system

@@ -22,10 +22,11 @@
 
                  [com.stuartsierra/component "0.3.2"]
 
-                 [com.anychart/playground-samples-parser "0.1.2"]
+                 [com.anychart/playground-samples-parser "0.1.3"]
                  [enlive "1.1.6"]
                  [selmer "1.10.6"]
                  [clj-time "0.13.0"]
+                 [me.raynes/fs "1.4.6"]
 
                  ;; db
                  [clojure.jdbc/clojure.jdbc-c3p0 "0.3.2"]
@@ -33,18 +34,18 @@
                  ;[org.clojure/java.jdbc "0.6.1"]
                  [org.clojure/java.jdbc "0.7.0-alpha1"]
                  [mysql/mysql-connector-java "6.0.5"]
+                 [com.taoensso/carmine "2.15.1"]
 
-
+                 ;; git
                  ;[im.chit/gita "0.2.5"]
                  [org.eclipse.jgit/org.eclipse.jgit "4.5.0.201609210915-r"]
                  ;[clj-jgit "0.8.9"]
                  ;[ilevd/clj-jgit "0.8.8"]
-                 [me.raynes/fs "1.4.6"]
 
 
                  ;; front-end
                  [org.clojure/clojurescript "1.9.495"]
-                 [reagent "0.6.0"]
+                 [reagent "0.6.1"]
                  [cljs-http "0.1.42"]
                  ]
   :plugins [[lein-ancient "0.6.10"]

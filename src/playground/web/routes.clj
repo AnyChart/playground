@@ -6,11 +6,13 @@
             [selmer.parser :refer [render-file]]
             [playground.db.request :as db-req]
             [playground.generator.core :as worker]
+            [playground.redis.core :as redis]
             [playground.utils.utils :as utils]))
 
 (defn get-db [request] (-> request :component :db))
-
 (defn get-generator [request] (-> request :component :generator))
+(defn get-redis [request] (-> request :component :redis))
+(defn get-redis-queue [request] (-> (get-redis request) :config :queue))
 
 (defn landing-page [request]
   (let [samples (db-req/top-samples (get-db request) {:count 9})]
@@ -21,8 +23,10 @@
 
 (defn update-repo [repo request]
   (prn "Repo: " repo)
-  (future (worker/update-repository (get-generator request) (get-db request) repo))
-  (response (str "Start updating " (:name @repo))))
+  (redis/enqueue (get-redis request)
+                 (get-redis-queue request)
+                 (:name @repo))
+  (response (str "Start updating: " (:name @repo))))
 
 
 (defn show-sample-iframe [repo version sample request]

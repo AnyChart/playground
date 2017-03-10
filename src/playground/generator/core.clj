@@ -2,26 +2,33 @@
   (:require [com.stuartsierra.component :as component]
             [taoensso.timbre :as timbre :refer [info error]]
             [me.raynes.fs :as fs]
-
             [playground-samples-parser.fs :as samples-fs]
-    ;[playground-samples-parser.sample-parser :as samples-parser]
-
             [playground.generator.parser.group-parser :as group-parser]
             [playground.generator.utils :refer [copy-dir]]
             [playground.db.request :as db-req]
             [playground.notification.slack :as slack]
+            [playground.redis.core :as redis]
             [playground.repo.git :as git]))
 
-;;============== component
-(defrecord Generator [conf repos db notifier]
+;;============== component ==============
+(declare update-repository-by-repo-name)
+
+(defn message-handler [generator]
+  (fn [{:keys [message attemp]}]
+    (update-repository-by-repo-name generator (:db generator) message)
+    {:status :success}))
+
+(defrecord Generator [conf repos db redis notifier]
   component/Lifecycle
 
   (start [this]
     (timbre/info "Generator start")
-    (assoc this :conf conf :repos repos))
+    (assoc this
+      :redis-worker (redis/create-worker redis (-> redis :config :queue) (message-handler this))))
 
   (stop [this]
     (timbre/info "Generator stop")
+    (redis/delete-worker (:redis-worker this))
     (dissoc this :conf)))
 
 (defn new-generator [conf repos]
@@ -97,7 +104,6 @@
 
 
 ;;============ update branches
-
 (defn build-branch [db repo branch path versions]
   (info "Build branch: " path (:name branch))
   (let [version-id (db-req/add-version<! db {:name    (:name branch)
@@ -170,3 +176,6 @@
         (do (error e)
             (error (.getMessage e))
             (slack/complete-building-with-errors (:notifier generator) (:name @repo) [] [] queue-index e))))))
+
+(defn update-repository-by-repo-name [generator db repo-name]
+  (update-repository generator db (get-repo-by-name generator repo-name)))

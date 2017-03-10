@@ -28,7 +28,7 @@
 (defn get-git [path]
   (Git/open (File. path)))
 
-(defn get-trasport-config-callback [secret-key-path public-key-path passphraze]
+(defn get-trasport-config-callback [secret-key-path public-key-path passphrase]
   (let [transportConfigCallback (proxy [TransportConfigCallback] []
                                   (configure [transport]
                                     (.setSshSessionFactory transport
@@ -39,7 +39,7 @@
                                                                  (.addIdentity jsch "jgit-identity"
                                                                                (.getBytes (slurp secret-key-path))
                                                                                (.getBytes (slurp public-key-path))
-                                                                               (.getBytes passphraze))))))))]
+                                                                               (.getBytes passphrase))))))))]
     transportConfigCallback))
 
 ;;============ clone
