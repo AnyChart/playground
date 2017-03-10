@@ -24,7 +24,7 @@
 
 (defsql repos)
 
-(defsql repo-by-name)
+(defsql repo-by-name {:result-set-fn first})
 
 ;; versions
 (defsql versions)

@@ -10,7 +10,6 @@
             [playground.utils.utils :as utils]))
 
 (defn get-db [request] (-> request :component :db))
-(defn get-generator [request] (-> request :component :generator))
 (defn get-redis [request] (-> request :component :redis))
 (defn get-redis-queue [request] (-> (get-redis request) :config :queue))
 
@@ -25,8 +24,8 @@
   (prn "Repo: " repo)
   (redis/enqueue (get-redis request)
                  (get-redis-queue request)
-                 (:name @repo))
-  (response (str "Start updating: " (:name @repo))))
+                 (:name repo))
+  (response (str "Start updating: " (:name repo))))
 
 
 (defn show-sample-iframe [repo version sample request]
@@ -39,7 +38,7 @@
 
 (defn show-sample-standalone [repo version sample]
   (render-file "templates/standalone-iframe-content.selmer" {:sample sample
-                                                             :url    (str "/" (:name @repo)
+                                                             :url    (str "/" (:name repo)
                                                                           "/" (:name version)
                                                                           (:url sample) "-iframe")}))
 
@@ -54,7 +53,7 @@
 (defn- check-repo-middleware [handler]
   (fn [request]
     (let [repo-name (-> request :route-params :repo)
-          repo (worker/get-repo-by-name (get-generator request) repo-name)]
+          repo (db-req/repo-by-name (get-db request) {:name repo-name})]
       (if repo
         (handler repo request)
         (route/not-found "repo not found")))))
@@ -62,7 +61,7 @@
 (defn- check-version-middleware [handler]
   (fn [repo request]
     (let [version-name (-> request :route-params :version)
-          version (db-req/version-by-name (get-db request) {:repo_id (:id @repo)
+          version (db-req/version-by-name (get-db request) {:repo_id (:id repo)
                                                             :name    version-name})]
       (if version
         (handler repo version request)
