@@ -12,9 +12,11 @@
 
 ;;============== component ==============
 (declare update-repository-by-repo-name)
+(declare check-repositories)
 
 (defn message-handler [generator]
   (fn [{:keys [message attemp]}]
+    (timbre/info "Redis message: " message)
     (update-repository-by-repo-name generator (:db generator) message)
     {:status :success}))
 
@@ -23,6 +25,7 @@
 
   (start [this]
     (timbre/info "Generator start")
+    (check-repositories this (:db this) (:notifier this))
     (assoc this
       :redis-worker (redis/create-worker redis (-> redis :config :queue) (message-handler this))))
 

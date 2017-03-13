@@ -9,13 +9,17 @@
             [playground.generator.core :as generator]
             [playground.notification.slack :as slack]
             [playground.redis.core :as redis])
-  (:gen-class))
+  (:gen-class)
+  (:import (org.slf4j LoggerFactory Logger)
+           (ch.qos.logback.classic Level)))
 
 ; disable some dirty logging
 (System/setProperties
   (doto (java.util.Properties. (System/getProperties))
     (.put "com.mchange.v2.log.MLog" "com.mchange.v2.log.FallbackMLog")
     (.put "com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL" "OFF")))
+
+(.setLevel (LoggerFactory/getLogger Logger/ROOT_LOGGER_NAME) Level/INFO)
 
 (defn repositories-conf [conf]
   (map
@@ -58,7 +62,6 @@
                   "backend" (get-worker-system conf)
                   (get-full-system conf))]
         (alter-var-root #'system (constantly (component/start-system sys)))
-        (generator/check-repositories (:generator system) (:db system) (:notifier system))
         system))))
 
 (defn stop []
