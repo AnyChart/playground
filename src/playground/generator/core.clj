@@ -114,7 +114,9 @@
                                              :repo_id (:id @repo)
                                              :hidden  true})
         samples (group-parser/samples path)]
+    (timbre/info "Insert samples: " (count samples))
     (db-req/add-samples! db version-id samples)
+    (timbre/info "Done samples inserting: " (count samples))
     (let [old-versions (filter #(and (= (:name %) (:name branch))
                                      (not= (:id %) version-id)) versions)]
       (info "Delete old versions for" (:name branch) ": " (pr-str old-versions))
@@ -173,7 +175,7 @@
           (fs/delete-dir (versions-path @repo))
           (if (not-empty errors)
             (slack/complete-building-with-errors (:notifier generator) (:name @repo) (map :name updated-branches)
-                                                 (pmap :name removed-branches) queue-index (-> errors first :e))
+                                                 (map :name removed-branches) queue-index (-> errors first :e))
             (slack/complete-building (:notifier generator) (:name @repo) (map :name updated-branches) (map :name removed-branches) queue-index))))
       (catch Exception e
         (do (error e)
