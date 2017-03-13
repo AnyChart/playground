@@ -173,7 +173,7 @@
           (fs/delete-dir (versions-path @repo))
           (if (not-empty errors)
             (slack/complete-building-with-errors (:notifier generator) (:name @repo) (map :name updated-branches)
-                                                 (map :name removed-branches) queue-index (-> errors first :e))
+                                                 (pmap :name removed-branches) queue-index (-> errors first :e))
             (slack/complete-building (:notifier generator) (:name @repo) (map :name updated-branches) (map :name removed-branches) queue-index))))
       (catch Exception e
         (do (error e)
