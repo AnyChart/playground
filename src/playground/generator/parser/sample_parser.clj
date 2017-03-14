@@ -14,8 +14,23 @@
           (recur (inc index))
           (.. s (subSequence index (.length s)) toString))))))
 
-(defn trim-code [code]
-  (-> code trim-newline trim-newline-left))
+(defn trim-trailing [s]
+  (clojure.string/replace s #"\s*$" ""))
+
+(defn space-count [s]
+  (loop [index 0]
+    (if (= (.charAt s index) \space)
+      (recur (inc index))
+      index)))
+
+(defn trim-code
+  "Delete so many spaces from string start as it have at first line"
+  [s]
+  (when s
+    (let [trailing-s (-> s trim-trailing trim-newline-left)
+          space-count (space-count trailing-s)
+          pattern (re-pattern (str "(?m)^[ ]{" space-count "}"))]
+      (clojure.string/replace trailing-s pattern ""))))
 
 ;(defn- fix-exports [sample]
 ;  (if (and (:exports sample) (:code sample))
@@ -25,23 +40,34 @@
 ;      (assoc sample :code new-code))
 ;    sample))
 
-
 (defn tag-content [envlive-page tag]
   (apply str (-> envlive-page (html/select [tag]) first :content html/emit*)))
 
 (defn parse-html-sample [path]
   (let [page (html/html-resource (file path))
         scripts (->> (html/select page [:script])
-                     (filter #(some? (:data-export (:attrs %))))
+                     (filter #(some? (:src (:attrs %))))
                      (map #(:src (:attrs %))))
         local-scripts (->> (html/select page [:script])
                            (filter #(nil? (:data-export (:attrs %))))
                            (map #(:src (:attrs %))))
-        script-node (->> (html/select page [:script])
-                         (filter #(not (:src (:attrs %))))
-                         first)
-        code (apply str (:content script-node))
-        exports (:x-export (:attrs script-node))
+
+        code (some->> (html/select page [:script])
+                      (filter #(not (:src (:attrs %))))
+                      first
+                      :content
+                      (apply str))
+
+        markup (some->> (html/select page [:div])
+                        first
+                        html/emit*
+                        (apply str))
+
+        style (some->> (html/select page [:style])
+                       first
+                       :content
+                       (apply str))
+
         css-libs (->> (html/select page [:link])
                       (filter #(and (= (-> % :attrs :rel) "stylesheet")
                                     (-> % :attrs :href some?)))
@@ -51,12 +77,16 @@
                       (filter #(= "ac:name" (:name (:attrs %))))
                       first :attrs :content)
 
+        exports (some->> (html/select page [:meta])
+                         (filter #(= "ac:export" (:name (:attrs %))))
+                         first :attrs :content)
+
         description (some->> (html/select page [:meta])
-                             (filter #(= "ac:description" (:name (:attrs %))))
+                             (filter #(= "ac:desc" (:name (:attrs %))))
                              first :attrs :content)
 
         short-description (some->> (html/select page [:meta])
-                                   (filter #(= "ac:short_description" (:name (:attrs %))))
+                                   (filter #(= "ac:short-desc" (:name (:attrs %))))
                                    first :attrs :content)
 
         tags-content (->> (html/select page [:meta])
@@ -65,7 +95,7 @@
         tags (if tags-content (clojure.string/split tags-content #"\s*,\s*") [])
 
         show-on-landing (some->> (html/select page [:meta])
-                                 (filter #(= "ac:show_on_landing" (:name (:attrs %))))
+                                 (filter #(= "ac:show-on-landing" (:name (:attrs %))))
                                  first :attrs :content read-string)]
     {:name              name
      :description       description
@@ -73,20 +103,20 @@
 
      :show_on_landing   show-on-landing
      :tags              tags
-     :exports           (or exports "chart")
+     :exports           exports
 
      :scripts           scripts
      :local_scripts     local-scripts
      :styles            css-libs
 
-     :code_type         "js"
-     :code              (trim-code (clojure.string/replace code #"(?m)^[ ]{8}" ""))
+     :code_type         (when code "js")
+     :code              (trim-code code)
 
-     :markup_type       nil
-     :markup            nil
+     :markup_type       (when markup "html")
+     :markup            (trim-code markup)
 
-     :style_type        nil
-     :style             nil}))
+     :style_type        (when style "css")
+     :style             (trim-code style)}))
 
 
 
@@ -95,24 +125,24 @@
     (let [data (toml/read (slurp path) :keywordize)]
       {:name              (-> data :name)
        :description       (-> data :description)
-       :short_description (-> data :short_description)
+       :short_description (-> data :short-description)
 
-       :show_on_landing   (-> data :meta :show_on_landing)
+       :show_on_landing   (-> data :meta :show-on-landing)
        :tags              (-> data :meta :tags)
        :exports           (-> data :meta :export)
 
        :scripts           (-> data :deps :scripts)
-       :local_scripts     (-> data :deps :local_scripts)
+       :local_scripts     (-> data :deps :local-scripts)
        :styles            (-> data :deps :styles)
 
        :code_type         (-> data :code :type)
-       :code              (-> data :code :code)
+       :code              (-> data :code :code trim-code)
 
        :markup_type       (-> data :markup :type)
-       :markup            (-> data :markup :code)
+       :markup            (-> data :markup :code trim-code)
 
        :style_type        (-> data :style :type)
-       :style             (-> data :style :code)})
+       :style             (-> data :style :code trim-code)})
     (catch Exception e
       (info "parse TOML error: " path e)
       nil)))

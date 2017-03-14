@@ -10,7 +10,7 @@ SELECT * FROM repos WHERE `name` = :name;
 
 
 -- name: sql-add-version<!
-INSERT INTO versions (`name`, repo_id, commit, hidden) VALUES(:name, :repo_id, :commit, :hidden);
+INSERT INTO versions (`name`, repo_id, commit, hidden, config) VALUES(:name, :repo_id, :commit, :hidden, :config);
 
 -- name: sql-versions
 SELECT * FROM versions WHERE repo_id = :repo_id;

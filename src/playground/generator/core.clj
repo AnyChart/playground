@@ -2,6 +2,9 @@
   (:require [com.stuartsierra.component :as component]
             [taoensso.timbre :as timbre :refer [info error]]
             [me.raynes.fs :as fs]
+            [clojure.java.io :refer [file]]
+            [toml.core :as toml]
+            [cheshire.core :as json]
             [playground-samples-parser.fs :as samples-fs]
             [playground.generator.parser.group-parser :as group-parser]
             [playground.generator.utils :refer [copy-dir]]
@@ -107,14 +110,20 @@
 
 
 ;;============ update branches
+(defn read-version-config [path]
+  (when (.exists (file path))
+    (some-> path slurp toml/read)))
+
 (defn build-branch [db repo branch path versions]
   (info "Build branch: " path (:name branch))
-  (let [version-id (db-req/add-version<! db {:name    (:name branch)
+  (let [version-config (read-version-config (str path "/config.toml"))
+        version-id (db-req/add-version<! db {:name    (:name branch)
                                              :commit  (:commit branch)
                                              :repo_id (:id @repo)
-                                             :hidden  true})
+                                             :hidden  true
+                                             :config  (json/generate-string version-config)})
         samples (group-parser/samples path)]
-    (timbre/info "Insert samples: " (count samples))
+    (timbre/info "Insert samples: " (count samples) version-config)
     (db-req/add-samples! db version-id samples)
     (timbre/info "Done samples inserting: " (count samples))
     (let [old-versions (filter #(and (= (:name %) (:name branch))

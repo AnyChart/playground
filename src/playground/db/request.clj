@@ -27,9 +27,13 @@
 (defsql repo-by-name {:result-set-fn first})
 
 ;; versions
+(defn parse-version [version]
+  (update version :config parse-string true))
+
 (defsql versions)
 
-(defsql version-by-name {:result-set-fn first})
+(defsql version-by-name {:result-set-fn first
+                         :row-fn        parse-version})
 
 (defsql add-version<!)
 
@@ -40,6 +44,7 @@
 ;; samples
 (defn parse-sample [sample]
   (-> sample
+      (assoc :tags (parse-string (:tags sample)))
       (assoc :scripts (parse-string (:scripts sample)))
       (assoc :styles (parse-string (:styles sample)))))
 
