@@ -37,7 +37,7 @@
          (map #(clojure.string/replace (.getAbsolutePath %)
                                        (re-quote-replacement (to-folder-path path)) "")))))
 
-(defn- create-group-info [path group]
+(defn- create-group-info [path config group]
   ;(info "creating group:" group path (load-group-config path group))
   (let [group-path (str (to-folder-path path) (to-folder-path group))
         config-path (str group-path "group.cfg")
@@ -51,16 +51,16 @@
                          (= group ""))
             :root    (= group "")
             :name    (prettify-name group)
-            :samples (map #(sample-parser/parse (to-folder-path path) (to-folder-path group) %)
+            :samples (map #(sample-parser/parse (to-folder-path path) (to-folder-path group) config %)
                           samples)})))
 
-(defn groups [path]
+(defn groups [path config]
   (info "Searching for samples in" path)
   (->> (get-groups-from-fs path)
-       (map #(create-group-info path %))
+       (map #(create-group-info path config %))
        (filter #(seq (:samples %)))
-       (cons (create-group-info path ""))
+       (cons (create-group-info path config ""))
        (sort-by (juxt :index :name))))
 
-(defn samples [path]
-  (filter some? (mapcat :samples (groups path))))
+(defn samples [path config]
+  (filter some? (mapcat :samples (groups path config))))

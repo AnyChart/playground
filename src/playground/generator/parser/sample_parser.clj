@@ -43,8 +43,8 @@
 (defn tag-content [envlive-page tag]
   (apply str (-> envlive-page (html/select [tag]) first :content html/emit*)))
 
-(defn parse-html-sample [path]
-  (let [page (html/html-resource (file path))
+(defn parse-html-sample [path s]
+  (let [page (html/html-snippet s)
         scripts (->> (html/select page [:script])
                      (filter #(some? (:src (:attrs %))))
                      (map #(:src (:attrs %))))
@@ -120,9 +120,9 @@
 
 
 
-(defn parse-toml-sample [path]
+(defn parse-toml-sample [path s]
   (try
-    (let [data (toml/read (slurp path) :keywordize)]
+    (let [data (toml/read s :keywordize)]
       {:name              (-> data :name)
        :description       (-> data :description)
        :short_description (-> data :short-description)
@@ -152,11 +152,19 @@
     (str base-path group sample)
     (str base-path group "_samples/" sample)))
 
-(defn parse [base-path group sample]
+(defn replace-vars [s vars]
+  (reduce (fn [s [key value]]
+            (clojure.string/replace s
+                                    (re-pattern (str "\\{\\{" (name key) "\\}\\}"))
+                                    value))
+          s vars))
+
+(defn parse [base-path group config sample]
   (let [path (sample-path base-path group sample)
         name (clojure.string/replace sample #"\.(html|sample)$" "")
-        base-info (cond (.endsWith path ".html") (parse-html-sample path)
-                        (.endsWith path ".sample") (parse-toml-sample path))]
+        sample-str (-> path slurp (replace-vars (:vars config)))
+        base-info (cond (.endsWith path ".html") (parse-html-sample path sample-str)
+                        (.endsWith path ".sample") (parse-toml-sample path sample-str))]
     (when base-info
       (assoc base-info                                      ;TODO need fix exports?  ; (fix-exports base-info)
         :name (or (:name base-info) (clojure.string/replace name #"_" " "))

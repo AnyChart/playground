@@ -15,14 +15,13 @@
     <![endif]-->
     {% if theme %}<script src="{{theme|safe}}"></script>{% endif %}
     {% for css in styles %}
-    <link rel="stylesheet" href="{{css|safe}}"/>{% endfor %}
+    <link rel="stylesheet" type="text/css" href="{{css|safe}}"/>{% endfor %}
     <style>
 {{style|safe}}
     </style>
 </head>
 <body>
-<div id="container"></div>
-{% for script in scripts %}
+{{markup|safe}}{% for script in scripts %}
 <script src="{{script|safe}}"></script>{% endfor %}
 <script type="text/javascript">
 {{code|safe}}

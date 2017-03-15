@@ -112,17 +112,18 @@
 ;;============ update branches
 (defn read-version-config [path]
   (when (.exists (file path))
-    (some-> path slurp toml/read)))
+    (some-> path slurp (toml/read :keywordize))))
 
 (defn build-branch [db repo branch path versions]
   (info "Build branch: " path (:name branch))
-  (let [version-config (read-version-config (str path "/config.toml"))
+  (let [version-config (-> (read-version-config (str path "/config.toml"))
+                           (assoc-in [:vars :branch-name] (:name branch)))
         version-id (db-req/add-version<! db {:name    (:name branch)
                                              :commit  (:commit branch)
                                              :repo_id (:id @repo)
                                              :hidden  true
                                              :config  (json/generate-string version-config)})
-        samples (group-parser/samples path)]
+        samples (group-parser/samples path version-config)]
     (timbre/info "Insert samples: " (count samples) version-config)
     (db-req/add-samples! db version-id samples)
     (timbre/info "Done samples inserting: " (count samples))

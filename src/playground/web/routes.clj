@@ -29,12 +29,7 @@
 
 
 (defn show-sample-iframe [repo version sample request]
-  (let [need-anychart-script (utils/need-anychart-script? (:scripts sample))
-        styles (utils/csss (:styles sample) (:name version) need-anychart-script)]
-    (response (render-file "templates/sample.selmer" (assoc sample
-                                                       :anychart-need true
-                                                       :anychart-url (utils/anychart-bundle-url (:name version))
-                                                       :styles styles)))))
+  (response (render-file "templates/sample.selmer" sample)))
 
 (defn show-sample-standalone [repo version sample]
   (render-file "templates/standalone-iframe-content.selmer" {:sample sample
