@@ -7,7 +7,8 @@
             [playground.db.request :as db-req]
             [playground.generator.core :as worker]
             [playground.redis.core :as redis]
-            [playground.utils.utils :as utils]))
+            [playground.utils.utils :as utils]
+            [playground.web.utils :as web-utils]))
 
 (defn get-db [request] (-> request :component :db))
 (defn get-redis [request] (-> request :component :redis))
@@ -16,9 +17,6 @@
 (defn landing-page [request]
   (let [samples (db-req/top-samples (get-db request) {:count 9})]
     (render-file "templates/landing-content.selmer" {:samples samples})))
-
-(defn editor-page [request]
-  (render-file "templates/index.selmer" {}))
 
 (defn update-repo [repo request]
   (prn "Repo: " repo)
@@ -35,13 +33,19 @@
   (render-file "templates/standalone-iframe-content.selmer" {:sample sample
                                                              :url    (str "/" (:name repo)
                                                                           "/" (:name version)
-                                                                          (:url sample) "-iframe")}))
+                                                                          (:url sample) "?view=iframe")}))
+
+(defn show-sample-editor [repo version sample request]
+  (prn (web-utils/pack sample))
+  (render-file "templates/editor.selmer" {:data (web-utils/pack sample)}))
 
 (defn show-sample [repo version sample request]
   (let [view (-> request :params :view)]
     (case view
       "standalone" (show-sample-standalone repo version sample)
-      nil (show-sample-iframe repo version sample request)
+      "iframe" (show-sample-iframe repo version sample request)
+      "editor" (show-sample-editor repo version sample request)
+      nil (show-sample-editor repo version sample request)
       "Bad view type")))
 
 ;; middleware for getting repo, version, sample
@@ -68,20 +72,39 @@
           sample (db-req/sample-by-url (get-db request) {:version_id (:id version)
                                                          :url        (str "/" sample-url)})]
       (if sample
-        (handler repo version sample request)
+        (handler repo version (assoc sample
+                                :repo-name (:name repo)
+                                :version-name (:name version)) request)
         (route/not-found "sample not found")))))
+
+(defn run [request]
+  ;(prn "run: " request)
+  (let [code (-> request :params :code)
+        style (-> request :params :style)
+        markup (-> request :params :markup)]
+    (response (render-file "templates/sample.selmer" {:name              "Default name"
+                                                      :tags              []
+                                                      :short_description "Default short desc"
+
+                                                      :scripts           []
+                                                      :styles            []
+
+                                                      :markup            markup
+                                                      :code              code
+                                                      :style             style}))))
 
 (defroutes app-routes
            (route/resources "/")
            (GET "/" [] landing-page)
            (GET "/signin" [] "signin")
            (GET "/signup" [] "signup")
-           (GET "/editor" [] editor-page)
            (GET "/:repo/_update_" [] (check-repo-middleware update-repo))
            (POST "/:repo/_update_" [] (check-repo-middleware update-repo))
-           (GET "/:repo/:version/*-iframe" [] (check-repo-middleware
-                                                (check-version-middleware
-                                                  (check-sample-middleware
-                                                    show-sample))))
+           (GET "/:repo/:version/*" [] (check-repo-middleware
+                                         (check-version-middleware
+                                           (check-sample-middleware
+                                             show-sample))))
            ;(GET "/sample/*-iframe" [] show-sample-iframe)
-           (route/not-found "Page not found."))
+           (POST "/run" [] run)
+           (GET "/run" [] run)
+           (route/not-found "404 Page not found"))

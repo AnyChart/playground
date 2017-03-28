@@ -84,3 +84,32 @@ footer p{
     padding: 70px 20px;
     z-index: -1;
 }
+
+/*================ editor page ===================== */
+#main {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0px;
+    padding: 70px 20px;
+    z-index: -1;
+
+    border: solid 1px #555555;
+}
+.column-container{
+    height: 100%;
+    width: 100%;
+    border: solid 1px #555555;
+}
+#markup-editor, #code-editor, #style-editor{
+    height: 23%;
+    border: solid 1px green;
+    overflow: hidden;
+}
+
+#main .horizontal-column {
+    float: left;
+    width: 50%;
+    height: 100%;
+    border: solid 1px #DDDDDD;
+}

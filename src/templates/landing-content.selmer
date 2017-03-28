@@ -25,9 +25,9 @@
                             sandbox="allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"
                             allowtransparency="true"
                             allowfullscreen="true"
-                            src="/{{sample.repo_name}}/{{sample.version_name}}{{sample.url}}-iframe"></iframe>
+                            src="/{{sample.repo_name}}/{{sample.version_name}}{{sample.url}}?view=iframe"></iframe>
                 </div>
-                <p><a href="/{{sample.repo_name}}/{{sample.version_name}}{{sample.url}}-iframe?view=standalone"
+                <p><a href="/{{sample.repo_name}}/{{sample.version_name}}{{sample.url}}?view=standalone"
                       target="_blank">{{sample.name}}</a></p>
                 <p class="text-muted">{{sample.short_description}}</p>
                 <p><b>Views: </b>{{sample.views}} <b>, Likes: </b>{{sample.likes}}</p>

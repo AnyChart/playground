@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>AnyChart Playground</title>
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- codemirror-->
+    <script src="/codemirror/lib/codemirror.js"></script>
+    <link rel="stylesheet" href="/codemirror/lib/codemirror.css">
+    <script src="/codemirror/mode/javascript/javascript.js"></script>
+    <script src="/codemirror/mode/css/css.js"></script>
+    <script src="/codemirror/mode/xml/xml.js"></script>
+
+    <link rel="stylesheet" href="/css/editor.css">
+</head>
+<body>
+<div style="display: none;">
+    <textarea id="transit-data">{{data|safe}}</textarea>
+</div>
+<div id="main-container"></div>
+<footer class="footer" style="margin-top: 40px;">
+    <div class="container">
+        <span class="text-muted">© {% now yyyy %} AnyChart.Com All rights reserved.</span>
+    </div>
+</footer>
+<script type="text/javascript" src="/js/playground.js"></script>
+<script type="text/javascript">
+    playground.core.run(document.getElementById("transit-data").innerText);
+</script>
+</body>
+</html>

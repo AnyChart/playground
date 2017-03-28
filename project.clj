@@ -6,7 +6,7 @@
   :main ^:aot playground.core
   :uberjar-name "pg-standalone.jar"
   :source-paths ["src" "src-cljc"]
-  :dependencies [[org.clojure/clojure "1.9.0-alpha14"]
+  :dependencies [[org.clojure/clojure "1.9.0-alpha15"]
 
                  [org.immutant/web "2.1.6"]
                  ;[org.immutant/caching "2.1.5"]
@@ -19,6 +19,8 @@
                  [compojure "1.5.2"]
                  [com.taoensso/timbre "4.8.0"]
                  [clj-http "3.4.1"]
+                 [version-clj "0.1.2"]
+                 [com.cognitect/transit-clj "0.8.300"]
 
                  [com.stuartsierra/component "0.3.2"]
 
@@ -33,7 +35,7 @@
                  [yesql "0.5.3"]
                  ;[org.clojure/java.jdbc "0.6.1"]
                  [org.clojure/java.jdbc "0.7.0-alpha1"]
-                 [mysql/mysql-connector-java "6.0.5"]
+                 [mysql/mysql-connector-java "6.0.6"]
                  [com.taoensso/carmine "2.15.1"]
 
                  ;; git
@@ -42,11 +44,12 @@
                  ;[clj-jgit "0.8.9"]
                  ;[ilevd/clj-jgit "0.8.8"]
 
-
                  ;; front-end
                  [org.clojure/clojurescript "1.9.495"]
                  [reagent "0.6.1"]
+                 [re-frame "0.9.2"]
                  [cljs-http "0.1.42"]
+                 [com.cognitect/transit-cljs "0.8.239"]
                  ]
   :plugins [[lein-ancient "0.6.10"]
             [lein-cljsbuild "1.1.4"]]

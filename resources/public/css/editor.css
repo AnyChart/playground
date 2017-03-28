@@ -1,0 +1,90 @@
+html{
+    /* for footer */
+    /*position: relative;*/
+    height: 100%;
+}
+
+body{
+    /* Margin bottom by footer height */
+    padding-bottom: 50px;
+    /*height:100%;*/
+}
+
+.navbar-brand{
+    padding: 10px;
+}
+.navbar-brand img{
+    margin-right: 5px;
+}
+
+footer{
+    color: #555555;
+    /*border-top: 1px solid #F0F0F0;*/
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    background-color: #f2f2f2;
+}
+
+nav{
+    margin: 0 !important;
+}
+
+/*================ editor page ===================== */
+#main-container{
+
+}
+
+#main {
+    position:absolute; top: 100px; left:0px; right:0px; bottom:100px;
+    border: solid 1px yellow;
+}
+
+.column-container{
+    position: relative;
+}
+
+.column-left{
+    height: 100%;
+    width: 50%;
+    position: absolute;
+    left: 0;
+}
+
+.column-right{
+    height: 100%;
+    width: 50%;
+    position: absolute;
+    right: 0;
+}
+
+#markup-editor, #code-editor, #style-editor{
+    height: 100%;
+    position: relative;
+}
+.editor-box{
+    height: 33.33%;
+    border: solid 1px #DDDDDD;
+    position: relative;
+}
+
+.CodeMirror {
+    /* Set height, width, borders, and global font properties here */
+    font-family: monospace;
+    height: 100%;
+    font-size: 12px;
+}
+
+.result{
+    width: 100%;
+    height: 100%;
+    border: solid 1px #DDDDDD;
+}
+
+.iframe-result{
+    border: none;
+    width: 100%;
+    height: 100%
+}
