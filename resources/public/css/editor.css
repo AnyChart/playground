@@ -88,3 +88,50 @@ nav{
     width: 100%;
     height: 100%
 }
+
+/* --------- settings window -----------*/
+.settings-window{
+    display: inline-block;
+    position: fixed;
+    text-align: center;
+    vertical-align: middle;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height:100%;
+    z-index: 1000;
+}
+.settings-window-background{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height:100%;
+    background-color: black;
+    opacity: 0.5;
+    z-index: -100;
+}
+/* The ghost, nudged to maintain perfect centering */
+.settings-window:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: -0.25em; /* Adjusts for spacing */
+}
+.settings-window-container {
+    /*border: 2px solid #888888;*/
+    text-align: left;
+    display: inline-block;
+    vertical-align: middle;
+    background-color: white;
+    position: relative;
+    width: 650px;
+    padding: 20px;
+}
+.settings-window-container .form-inline .form-group{
+    margin-right: 20px;
+}
+.settings-window-container .form-inline .form-group label{
+    margin-right: 5px;
+}

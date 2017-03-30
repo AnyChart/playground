@@ -7,6 +7,9 @@
             [com.stuartsierra.component :as component]
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
             [ring.middleware.params :refer [wrap-params]]
+            [ring.middleware.format :refer [wrap-restful-format]]
+            [ring.middleware.format-params :refer [wrap-transit-json-params]]
+            [ring.middleware.format-response :refer [wrap-transit-json-response]]
             [playground.web.routes :refer [app-routes]]))
 
 (defn- component-middleware [web-component handler]
@@ -22,9 +25,11 @@
   (start [component]
     (timbre/info "Web start")
     (assoc component :server (web/run
-                               (wrap-params
-                                 (wrap-keyword-params
-                                   (create-web-handler component)))
+                               (-> (create-web-handler component)
+                                   wrap-transit-json-params
+                                   wrap-transit-json-response
+                                   wrap-keyword-params
+                                   wrap-params)
                                conf)))
 
   (stop [component]

@@ -29,8 +29,12 @@
      [:ul {:class "nav navbar-nav"}
       [:li [:a {:href     "javascript:;"
                 :on-click #(rf/dispatch [:run])} "Run"]]
-      [:li [:a {:href "#"} "Save"]]
-      [:li [:a {:href "#"} "Fork"]]
+      [:li [:a {:href     "javascript:;"
+                :on-click #(rf/dispatch [:save])} "Save"]]
+      [:li [:a {:href     "javascript:;"
+                :on-click #(rf/dispatch [:fork])} "Fork"]]
+      [:li [:a {:href     "javascript:;"
+                :on-click #(rf/dispatch [:show-settings])} "Settings"]]
       [:li {:class "dropdown"}
        [:a {:href          "#"
             :class         "dropdown-toggle"
@@ -97,10 +101,81 @@
             :type  "hidden"}]
    [:input {:name  "style"
             :value @(rf/subscribe [:style])
+            :type  "hidden"}]
+   [:input {:name  "styles"
+            :value @(rf/subscribe [:styles])
+            :type  "hidden"}]
+   [:input {:name  "scripts"
+            :value @(rf/subscribe [:scripts])
             :type  "hidden"}]])
+
+(defn settings-window []
+  [:div.settings-window
+   [:div.settings-window-background {:on-click #(rf/dispatch [:hide-settings])}]
+   [:div.settings-window-container
+    [:form
+     [:div.form-group
+      [:label {:for "settings-name"} "Name"]
+      [:input.form-control {:id            "settings-name"
+                            :default-value @(rf/subscribe [:name])
+                            :on-change     #(rf/dispatch [:settings/change-name (-> % .-target .-value)])}]]
+     [:div.form-group
+      [:label {:for "settings-short-desc"} "Short Description"]
+      [:input.form-control {:id            "settings-short-desc"
+                            :default-value @(rf/subscribe [:short-description])
+                            :on-change     #(rf/dispatch [:settings/change-short-desc (-> % .-target .-value)])}]]
+     [:div.form-group
+      [:label {:for "settings-desc"} "Description"]
+      [:textarea.form-control {:id            "settings-desc"
+                               :default-value @(rf/subscribe [:description])
+                               :on-change     #(rf/dispatch [:settings/change-desc (-> % .-target .-value)])}]]
+     [:div.form-group
+      [:label {:for "settings-tags"} "Tags"]
+      [:input.form-control {:id    "settings-tags"
+                            :value @(rf/subscribe [:tags])}]]
+
+     [:div.form-group
+      [:label {:for "settings-scripts"} "Scripts"]
+      [:textarea.form-control {:id    "settings-scripts"
+                               :value @(rf/subscribe [:scripts])}]]
+
+     [:div.form-group
+      [:label {:for "settings-styles"} "Styles"]
+      [:textarea.form-control {:id    "settings-styles"
+                               :value @(rf/subscribe [:styles])}]]
+     [:div.form-inline
+      {:style {:padding-right "10px"}}
+
+      [:div.form-group
+       [:label {:for "settings-markup-type"} "Markup type"]
+       [:select.form-control {:id            "settings-markupt-type"
+                              :default-value @(rf/subscribe [:markup-type])}
+        [:option "HTML"]
+        [:option "Slim"]
+        [:option "Pug"]]]
+
+      [:div.form-group
+       [:label {:for "settings-style-type"} "Style type"]
+       [:select.form-control {:id            "settings-style-type"
+                              :default-value @(rf/subscribe [:style-type])}
+        [:option "CSS"]
+        [:option "Sass"]
+        [:option "LESS"]]]
+
+      [:div.form-group
+       [:label {:for "settings-code-type"} "Code type"]
+       [:select.form-control {:id            "settings-code-type"
+                              :default-value @(rf/subscribe [:code-type])}
+        [:option "JavaScript"]
+        [:option "CoffeeScript"]
+        [:option "TypeScript"]]]]
+     [:button {:type     "button"
+               :on-click #(rf/dispatch [:hide-settings])} "Close"]]]])
 
 (defn app []
   [:div
    [send-form]
    [navbar]
-   [editors]])
+   [editors]
+   (when @(rf/subscribe [:settings-show])
+     [settings-window])])

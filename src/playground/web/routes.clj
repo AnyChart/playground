@@ -36,7 +36,7 @@
                                                                           (:url sample) "?view=iframe")}))
 
 (defn show-sample-editor [repo version sample request]
-  (prn (web-utils/pack sample))
+  ;(prn (web-utils/pack sample))
   (render-file "templates/editor.selmer" {:data (web-utils/pack sample)}))
 
 (defn show-sample [repo version sample request]
@@ -78,20 +78,45 @@
         (route/not-found "sample not found")))))
 
 (defn run [request]
-  ;(prn "run: " request)
+  (prn "run: " request)
   (let [code (-> request :params :code)
         style (-> request :params :style)
-        markup (-> request :params :markup)]
+        markup (-> request :params :markup)
+        styles (-> request :params :styles (clojure.string/split #","))
+        scripts (-> request :params :scripts (clojure.string/split #","))]
+    ;(prn "run scripts:" styles)
+    ;(prn "styles:" scripts)
     (response (render-file "templates/sample.selmer" {:name              "Default name"
                                                       :tags              []
                                                       :short_description "Default short desc"
 
-                                                      :scripts           []
-                                                      :styles            []
+                                                      :scripts           scripts
+                                                      :styles            styles
 
                                                       :markup            markup
                                                       :code              code
                                                       :style             style}))))
+
+(defn save [request]
+  (prn "Save: " request)
+  (let [sample (-> request :params :sample)
+        hash (web-utils/new-hash)
+        sample* (assoc sample :url hash)]
+    (prn "Save: " sample*)
+    (db-req/add-sample! (get-db request) sample*)
+    (response {:status :ok
+               :hash   hash})))
+
+(defn fork [request]
+  (prn "Fork: " request))
+
+(defn show-user-sample [request]
+  (prn "Show user sample: " (-> request :route-params))
+  (let [hash (-> request :route-params :hash)
+        sample (db-req/sample-by-hash (get-db request) {:url hash})]
+    (if sample
+      (show-sample-editor nil nil sample nil)
+      (route/not-found "sample not found"))))
 
 (defroutes app-routes
            (route/resources "/")
@@ -100,11 +125,15 @@
            (GET "/signup" [] "signup")
            (GET "/:repo/_update_" [] (check-repo-middleware update-repo))
            (POST "/:repo/_update_" [] (check-repo-middleware update-repo))
+           (GET "/:hash/:version" [] show-user-sample)
+           (GET "/:hash/:version/" [] show-user-sample)
            (GET "/:repo/:version/*" [] (check-repo-middleware
                                          (check-version-middleware
                                            (check-sample-middleware
                                              show-sample))))
            ;(GET "/sample/*-iframe" [] show-sample-iframe)
            (POST "/run" [] run)
-           (GET "/run" [] run)
+           (POST "/save" [] save)
+           (POST "/fork" [] fork)
+
            (route/not-found "404 Page not found"))

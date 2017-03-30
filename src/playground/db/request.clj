@@ -2,7 +2,8 @@
   (:require [yesql.core :refer [defqueries]]
             [clojure.string :refer [ends-with?]]
             [playground.db.core :refer [insert-multiple!]]
-            [cheshire.core :refer [generate-string parse-string]]))
+            [cheshire.core :refer [generate-string parse-string]]
+            [wharf.core :as wharf]))
 
 (defqueries "sql/queries.sql")
 
@@ -43,10 +44,16 @@
 
 ;; samples
 (defn parse-sample [sample]
+  ;; TODO: rename all keywords with underscore to dash
+  ;(wharf/transform-keys wharf/underscore->hyphen
   (-> sample
       (assoc :tags (parse-string (:tags sample)))
       (assoc :scripts (parse-string (:scripts sample)))
-      (assoc :styles (parse-string (:styles sample)))))
+      (assoc :styles (parse-string (:styles sample))))
+  ;)
+  )
+
+(defsql add-sample<!)
 
 (defsql samples)
 
@@ -55,39 +62,46 @@
 (defsql sample-by-url {:result-set-fn first
                        :row-fn        parse-sample})
 
+(defsql sample-by-hash {:result-set-fn first
+                        :row-fn        parse-sample})
+
 ; TODO: wait until yesql has multiple insert
 ;(defsql add-samples!)
 
 (defsql delete-samples!)
 
+(defn- insert-sample [sample & [version-id]]
+  {:version_id        version-id
+
+   :name              (:name sample)
+   :description       (:description sample)
+   :short_description (:short_description sample)
+
+   :url               (:url sample)
+   :show_on_landing   (:show_on_landing sample)
+   :tags              (generate-string (:tags sample))
+   :exports           (:exports sample)
+
+   :styles            (when (seq (:styles sample))
+                        (generate-string (:styles sample)))
+
+   :scripts           (when (seq (:scripts sample))
+                        (generate-string (:scripts sample)))
+
+   :local_scripts     (when (seq (:local-scripts sample))
+                        (generate-string (:local-scripts sample)))
+
+   :code              (:code sample)
+   :code_type         (:code_type sample)
+
+   :markup            (:markup sample)
+   :markup_type       (:markup_type sample)
+
+   :style             (:style sample)
+   :style_type        (:style_type sample)})
+
+(defn add-sample! [db sample]
+  (add-sample<! db (insert-sample sample)))
+
 (defn add-samples! [db version-id samples]
-  (insert-multiple! db :samples (map (fn [sample]
-                                       {:version_id        version-id
-
-                                        :name              (:name sample)
-                                        :description       (:description sample)
-                                        :short_description (:short_description sample)
-
-                                        :url               (:url sample)
-                                        :show_on_landing   (:show_on_landing sample)
-                                        :tags              (generate-string (:tags sample))
-                                        :exports           (:exports sample)
-
-                                        :styles            (when (seq (:styles sample))
-                                                             (generate-string (:styles sample)))
-
-                                        :scripts           (when (seq (:scripts sample))
-                                                             (generate-string (:scripts sample)))
-
-                                        :local_scripts     (when (seq (:local-scripts sample))
-                                                             (generate-string (:local-scripts sample)))
-
-                                        :code              (:code sample)
-                                        :code_type         (:code_type sample)
-
-                                        :markup            (:markup sample)
-                                        :markup_type       (:markup_type sample)
-
-                                        :style             (:style sample)
-                                        :style_type        (:style_type sample)})
-                                     samples)))
+  (insert-multiple! db :samples (map #(insert-sample % version-id) samples)))

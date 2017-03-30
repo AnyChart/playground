@@ -14,6 +14,8 @@
                  ;[org.immutant/scheduling "2.1.5"]
                  ;[org.immutant/transactions "2.1.5"]
 
+                 [com.stuartsierra/component "0.3.2"]
+                 [ring-middleware-format "0.7.2"]
                  [toml "0.1.1"]
                  [cheshire "5.7.0"]
                  [compojure "1.5.2"]
@@ -21,14 +23,13 @@
                  [clj-http "3.4.1"]
                  [version-clj "0.1.2"]
                  [com.cognitect/transit-clj "0.8.300"]
-
-                 [com.stuartsierra/component "0.3.2"]
-
+                 [org.apache.commons/commons-lang3 "3.5"]
                  [com.anychart/playground-samples-parser "0.1.3"]
                  [enlive "1.1.6"]
                  [selmer "1.10.6"]
                  [clj-time "0.13.0"]
                  [me.raynes/fs "1.4.6"]
+                 [thinktopic/wharf "0.2.0"]
 
                  ;; db
                  [clojure.jdbc/clojure.jdbc-c3p0 "0.3.2"]
@@ -48,9 +49,9 @@
                  [org.clojure/clojurescript "1.9.495"]
                  [reagent "0.6.1"]
                  [re-frame "0.9.2"]
-                 [cljs-http "0.1.42"]
-                 [com.cognitect/transit-cljs "0.8.239"]
-                 ]
+                 ; [cljs-http "0.1.42"]
+                 [cljs-ajax "0.5.8"]
+                 [com.cognitect/transit-cljs "0.8.239"]]
   :plugins [[lein-ancient "0.6.10"]
             [lein-cljsbuild "1.1.4"]]
   :cljsbuild {:builds [{:id           "dev"
