@@ -1,7 +1,8 @@
 (ns playground.subs
   (:require [reagent.core :as reagent :refer [atom]]
             [re-frame.core :as rf]
-            [playground.utils :as utils]))
+            [playground.utils :as utils]
+            [playground.utils.utils :as common-utils]))
 
 (defn- makrup-type->str [type]
   (case type
@@ -27,13 +28,26 @@
   :editors-height
   (fn [db _] (- (:editors-height db) 102)))
 
+(rf/reg-sub
+  :sample-url
+  (fn [db _]
+    (common-utils/sample-url (:sample db))))
+
 ;; make url like /acg/master/Column_Chart?view=iframe"
 (rf/reg-sub
   :sample-iframe-url
-  (fn [db _] (str "/" (-> db :sample :repo-name)
-                  "/" (-> db :sample :version-name)
-                  (-> db :sample :url)
-                  "?view=iframe")))
+  (fn [query_v _] (rf/subscribe [:sample-url]))
+  (fn [sample-url _] (str sample-url "?view=iframe")))
+
+(rf/reg-sub
+  :sample-standalone-url
+  (fn [query_v _] (rf/subscribe [:sample-url]))
+  (fn [sample-url _] (str sample-url "?view=standalone")))
+
+(rf/reg-sub
+  :sample-editor-url
+  (fn [query_v _] (rf/subscribe [:sample-url]))
+  (fn [sample-url _] (str sample-url "?view=editor")))
 
 (rf/reg-sub :name (fn [db _] (-> db :sample :name)))
 (rf/reg-sub :description (fn [db _] (-> db :sample :description)))
@@ -51,3 +65,4 @@
 
 (rf/reg-sub :settings-show (fn [db _] (-> db :settings-show)))
 
+(rf/reg-sub :user-sample? (fn [db _] (-> db :sample :version_id not)))

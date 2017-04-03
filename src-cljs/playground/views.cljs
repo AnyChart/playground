@@ -29,12 +29,13 @@
      [:ul {:class "nav navbar-nav"}
       [:li [:a {:href     "javascript:;"
                 :on-click #(rf/dispatch [:run])} "Run"]]
-      [:li [:a {:href     "javascript:;"
-                :on-click #(rf/dispatch [:save])} "Save"]]
+      (when @(rf/subscribe [:user-sample?])
+        [:li [:a {:href     "javascript:;"
+                  :on-click #(rf/dispatch [:save])} "Save"]])
       [:li [:a {:href     "javascript:;"
                 :on-click #(rf/dispatch [:fork])} "Fork"]]
       [:li [:a {:href     "javascript:;"
-                :on-click #(rf/dispatch [:show-settings])} "Settings"]]
+                :on-click #(rf/dispatch [:settings/show])} "Settings"]]
       [:li {:class "dropdown"}
        [:a {:href          "#"
             :class         "dropdown-toggle"
@@ -44,9 +45,9 @@
             :aria-expanded "false"} "View"
         [:span {:class "caret"}]]
        [:ul {:class "dropdown-menu"}
-        [:li [:a {:href "#"} "Editor"]]
-        [:li [:a {:href "#"} "Standalone"]]
-        [:li [:a {:href "#"} "Iframe"]]]]]
+        [:li [:a {:href @(rf/subscribe [:sample-editor-url])} "Editor"]]
+        [:li [:a {:href @(rf/subscribe [:sample-standalone-url])} "Standalone"]]
+        [:li [:a {:href @(rf/subscribe [:sample-iframe-url])} "Iframe"]]]]]
      [:ul {:class "nav navbar-nav navbar-right"}
       [:li {:class "dropdown"}
        [:a {:href          "#"
@@ -111,7 +112,7 @@
 
 (defn settings-window []
   [:div.settings-window
-   [:div.settings-window-background {:on-click #(rf/dispatch [:hide-settings])}]
+   [:div.settings-window-background {:on-click #(rf/dispatch [:settings/hide])}]
    [:div.settings-window-container
     [:form
      [:div.form-group
@@ -170,7 +171,7 @@
         [:option "CoffeeScript"]
         [:option "TypeScript"]]]]
      [:button {:type     "button"
-               :on-click #(rf/dispatch [:hide-settings])} "Close"]]]])
+               :on-click #(rf/dispatch [:settings/hide])} "Close"]]]])
 
 (defn app []
   [:div

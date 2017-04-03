@@ -2,7 +2,8 @@
   (:require [reagent.core :as reagent :refer [atom]]
             [re-frame.core :as rf]
             [playground.utils :as utils]
-            [ajax.core :refer [GET POST]]))
+            [ajax.core :refer [GET POST]]
+            [accountant.core :as accountant]))
 
 (defn window-height []
   (or (.-innerHeight js/window)
@@ -56,7 +57,6 @@
 (rf/reg-event-db
   :run
   (fn [db _]
-    ;(utils/log "Run")
     (.submit (.getElementById js/document "run-form"))
     db))
 
@@ -64,10 +64,9 @@
   :save
   (fn [db _]
     (utils/log "Save")
-    ;(.submit (.getElementById js/document "run-form"))
     (POST "/save"
           {:params        {:sample (:sample db)}
-           :handler       #(rf/dispatch [:save-response %1]) ;; <2> further dispatch !!
+           :handler       #(rf/dispatch [:save-response %1])
            :error-handler #(rf/dispatch [:save-error %1])})
     db))
 
@@ -75,40 +74,70 @@
   :save-response
   (fn [db [_ data]]
     (utils/log "Save ok!" data)
-    db
-    ))
+    (if (= :ok (:status data))
+      (do (accountant/navigate! (str "/" (:hash data) "/" (:version data)))
+          (-> db
+              (assoc-in [:sample :version_id] nil)
+              (assoc-in [:sample :url] (:hash data))
+              (assoc-in [:sample :version] (:version data))))
+      (do
+        (js/alert "Sample saving error")
+        db))))
 
 (rf/reg-event-db
   :save-error
   (fn [db [_ error]]
     (utils/log "Save erro!" error)
-    db
-    ))
+    db))
 
+
+;; fork
 (rf/reg-event-db
   :fork
   (fn [db _]
     (utils/log "Fork")
-    ;(.submit (.getElementById js/document "run-form"))
+    (POST "/fork"
+          {:params        {:sample (:sample db)}
+           :handler       #(rf/dispatch [:fork-response %1])
+           :error-handler #(rf/dispatch [:fork-error %1])})
+    db))
+
+(rf/reg-event-db
+  :fork-response
+  (fn [db [_ data]]
+    (utils/log "Fork ok!" data)
+    (if (= :ok (:status data))
+      (do (accountant/navigate! (str "/" (:hash data)
+                                     (when-not (zero? (:version data))
+                                       (str "/" (:version data)))))
+          (-> db
+              (assoc-in [:sample :version_id] nil)
+              (assoc-in [:sample :url] (:hash data))
+              (assoc-in [:sample :version] (:version data))))
+      (do
+        (js/alert "Sample fork error")
+        db))))
+
+(rf/reg-event-db
+  :fork-error
+  (fn [db [_ error]]
+    (utils/log "Fork error!" error)
     db))
 
 
 (rf/reg-event-db
-  :show-settings
+  :settings/show
   (fn [db _]
-    ;(utils/log "Show settings")
     (assoc db :settings-show true)))
 
 (rf/reg-event-db
-  :hide-settings
+  :settings/hide
   (fn [db _]
-    ;(utils/log "Hide settings")
     (assoc db :settings-show false)))
 
 (rf/reg-event-db
   :settings/change-name
   (fn [db [_ name]]
-    (utils/log "Change name: " name)
     (assoc-in db [:sample :name] name)))
 
 (rf/reg-event-db

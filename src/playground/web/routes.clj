@@ -7,7 +7,7 @@
             [playground.db.request :as db-req]
             [playground.generator.core :as worker]
             [playground.redis.core :as redis]
-            [playground.utils.utils :as utils]
+            [playground.utils.utils :as common-utils]
             [playground.web.utils :as web-utils]))
 
 (defn get-db [request] (-> request :component :db))
@@ -31,9 +31,8 @@
 
 (defn show-sample-standalone [repo version sample]
   (render-file "templates/standalone-iframe-content.selmer" {:sample sample
-                                                             :url    (str "/" (:name repo)
-                                                                          "/" (:name version)
-                                                                          (:url sample) "?view=iframe")}))
+                                                             :url    (str (common-utils/sample-url sample)
+                                                                          "?view=iframe")}))
 
 (defn show-sample-editor [repo version sample request]
   ;(prn (web-utils/pack sample))
@@ -47,6 +46,21 @@
       "editor" (show-sample-editor repo version sample request)
       nil (show-sample-editor repo version sample request)
       "Bad view type")))
+
+(defn show-user-sample [request]
+  (prn "Show user sample: " (-> request :route-params))
+  (let [hash (-> request :route-params :hash)
+        version (or (some-> (-> request :route-params :version) Integer.) 0)
+        sample (db-req/sample-by-hash (get-db request) {:url     hash
+                                                        :version version})
+        view (-> request :params :view)]
+    (if sample
+      (case view
+        "standalone" (show-sample-standalone nil nil sample)
+        "iframe" (show-sample-iframe nil nil sample request)
+        "editor" (show-sample-editor nil nil sample request)
+        nil (show-sample-editor nil nil sample nil))
+      (route/not-found "sample not found"))))
 
 ;; middleware for getting repo, version, sample
 (defn- check-repo-middleware [handler]
@@ -77,15 +91,16 @@
                                 :version-name (:name version)) request)
         (route/not-found "sample not found")))))
 
+(defn new [request]
+  "New chart")
+
 (defn run [request]
-  (prn "run: " request)
+  (prn "run: " (:params request))
   (let [code (-> request :params :code)
         style (-> request :params :style)
         markup (-> request :params :markup)
         styles (-> request :params :styles (clojure.string/split #","))
         scripts (-> request :params :scripts (clojure.string/split #","))]
-    ;(prn "run scripts:" styles)
-    ;(prn "styles:" scripts)
     (response (render-file "templates/sample.selmer" {:name              "Default name"
                                                       :tags              []
                                                       :short_description "Default short desc"
@@ -98,42 +113,55 @@
                                                       :style             style}))))
 
 (defn save [request]
-  (prn "Save: " request)
+  (prn "Save: " (-> request :params :sample))
   (let [sample (-> request :params :sample)
-        hash (web-utils/new-hash)
-        sample* (assoc sample :url hash)]
-    (prn "Save: " sample*)
+        hash (:url sample)
+        ;; TODO transaction
+        version (db-req/sample-version (get-db request) {:url hash})
+        sample* (assoc sample :version (inc version))
+        ]
+    (prn "Save, insert" sample*)
     (db-req/add-sample! (get-db request) sample*)
-    (response {:status :ok
-               :hash   hash})))
+    (response {:status  :ok
+               :hash    hash
+               :version (inc version)})))
 
 (defn fork [request]
-  (prn "Fork: " request))
+  (prn "Fork: " (-> request :params :sample))
+  (let [sample (-> request :params :sample)
+        hash (web-utils/new-hash)
+        sample* (assoc sample
+                  :url hash
+                  :version 0)]
+    (prn "Fork: " sample*)
+    (db-req/add-sample! (get-db request) sample*)
+    (response {:status  :ok
+               :hash    hash
+               :version 0})))
 
-(defn show-user-sample [request]
-  (prn "Show user sample: " (-> request :route-params))
-  (let [hash (-> request :route-params :hash)
-        sample (db-req/sample-by-hash (get-db request) {:url hash})]
-    (if sample
-      (show-sample-editor nil nil sample nil)
-      (route/not-found "sample not found"))))
 
 (defroutes app-routes
            (route/resources "/")
            (GET "/" [] landing-page)
            (GET "/signin" [] "signin")
            (GET "/signup" [] "signup")
+
+           (GET "/new" [] new)
+           (POST "/run" [] run)
+           (POST "/save" [] save)
+           (POST "/fork" [] fork)
+
            (GET "/:repo/_update_" [] (check-repo-middleware update-repo))
            (POST "/:repo/_update_" [] (check-repo-middleware update-repo))
+
+           (GET "/:hash/" [] show-user-sample)
+           (GET "/:hash" [] show-user-sample)
            (GET "/:hash/:version" [] show-user-sample)
            (GET "/:hash/:version/" [] show-user-sample)
            (GET "/:repo/:version/*" [] (check-repo-middleware
                                          (check-version-middleware
                                            (check-sample-middleware
                                              show-sample))))
-           ;(GET "/sample/*-iframe" [] show-sample-iframe)
-           (POST "/run" [] run)
-           (POST "/save" [] save)
-           (POST "/fork" [] fork)
 
+           ;(GET "/sample/*-iframe" [] show-sample-iframe)
            (route/not-found "404 Page not found"))

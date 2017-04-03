@@ -51,9 +51,12 @@
                  [re-frame "0.9.2"]
                  ; [cljs-http "0.1.42"]
                  [cljs-ajax "0.5.8"]
-                 [com.cognitect/transit-cljs "0.8.239"]]
+                 ;[secretary "1.2.3"]
+                 [com.cognitect/transit-cljs "0.8.239"]
+                 [venantius/accountant "0.1.9"]]
   :plugins [[lein-ancient "0.6.10"]
-            [lein-cljsbuild "1.1.4"]]
+            [lein-cljsbuild "1.1.5"]
+            [lein-kibit "0.1.3"]]
   :cljsbuild {:builds [{:id           "dev"
                         :source-paths ["src-cljs" "src-cljc"]
                         :compiler     {:output-to     "resources/public/js/playground.js"

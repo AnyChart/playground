@@ -57,6 +57,8 @@
 
 (defsql samples)
 
+(defsql sample-version {:result-set-fn (comp :version first)})
+
 (defsql top-samples {:row-fn parse-sample})
 
 (defsql sample-by-url {:result-set-fn first
@@ -98,7 +100,9 @@
    :markup_type       (:markup_type sample)
 
    :style             (:style sample)
-   :style_type        (:style_type sample)})
+   :style_type        (:style_type sample)
+
+   :version           (or (:version sample) 0)})
 
 (defn add-sample! [db sample]
   (add-sample<! db (insert-sample sample)))
