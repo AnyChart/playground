@@ -40,9 +40,6 @@
 ;      (assoc sample :code new-code))
 ;    sample))
 
-(defn tag-content [envlive-page tag]
-  (apply str (-> envlive-page (html/select [tag]) first :content html/emit*)))
-
 (defn parse-html-sample [path s]
   (let [page (html/html-snippet s)
         scripts (->> (html/select page [:script])

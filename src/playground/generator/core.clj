@@ -92,7 +92,7 @@
     (info (count db-repos) (pr-str db-repos))
     (let [result (map #(check-repository db % (get-repo-by-name-fn @% db-repos)) repos)]
       (slack/complete-sync notifier
-                           (filter (complement :e) result)
+                           (remove :e result)
                            (filter :e result)))))
 
 

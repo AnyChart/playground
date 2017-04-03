@@ -63240,8 +63240,8 @@ goog.require("re_frame.core");
 goog.require("playground.utils");
 goog.require("playground.utils.utils");
 playground.subs.makrup_type__GT_str = function playground$subs$makrup_type__GT_str(type) {
-  var G__24288 = type;
-  switch(G__24288) {
+  var G__24871 = type;
+  switch(G__24871) {
     case "html":
       return "HTML";
       break;
@@ -63262,8 +63262,8 @@ playground.subs.makrup_type__GT_str = function playground$subs$makrup_type__GT_s
   }
 };
 playground.subs.style_type__GT_str = function playground$subs$style_type__GT_str(type) {
-  var G__24291 = type;
-  switch(G__24291) {
+  var G__24874 = type;
+  switch(G__24874) {
     case "css":
       return "CSS";
       break;
@@ -63278,8 +63278,8 @@ playground.subs.style_type__GT_str = function playground$subs$style_type__GT_str
   }
 };
 playground.subs.code_type__GT_str = function playground$subs$code_type__GT_str(type) {
-  var G__24294 = type;
-  switch(G__24294) {
+  var G__24877 = type;
+  switch(G__24877) {
     case "js":
       return "JavaScript";
       break;

@@ -16,7 +16,7 @@
 (defn- prefix [notifier] (-> notifier :config :tag clojure.string/upper-case))
 
 (defn- format-exception [e]
-  (str e "\n\n" (apply str (interpose "\n" (.getStackTrace e)))))
+  (str e "\n\n" (clojure.string/join "\n" (.getStackTrace e))))
 
 (defn- notify-attach [notifier attachments & [text]]
   (http/post (str "https://anychart-team.slack.com/services/hooks/incoming-webhook?token="

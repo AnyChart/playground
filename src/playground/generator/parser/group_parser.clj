@@ -32,8 +32,8 @@
          (tree-seq (fn [f] (and (.isDirectory f) (not (.isHidden f))))
                    (fn [d] (filter #(not (.isHidden %)) (.listFiles d))))
          (filter #(and (.isDirectory %)
-                       (not (= (.getName %) "_samples"))
-                       (not (= fpath %))))
+                       (not= (.getName %) "_samples")
+                       (not= fpath %)))
          (map #(clojure.string/replace (.getAbsolutePath %)
                                        (re-quote-replacement (to-folder-path path)) "")))))
 

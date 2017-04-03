@@ -114,7 +114,7 @@
   (-> git
       (.checkout)
       (.setName branch-name)
-      (.setCreateBranch (not (some #{branch-name} (branch-list-local git))))
+      (.setCreateBranch (not-any? #{branch-name} (branch-list-local git)))
       (.setForce true)
       (.setStartPoint (str "origin/" branch-name))
       (.call)))

@@ -63,6 +63,6 @@
 (rf/reg-sub :style-type (fn [db _] (-> db :sample :style_type style-type->str)))
 (rf/reg-sub :style (fn [db _] (-> db :sample :style)))
 
-(rf/reg-sub :settings-show (fn [db _] (-> db :settings-show)))
+(rf/reg-sub :settings-show (fn [db _] (:settings-show db)))
 
 (rf/reg-sub :user-sample? (fn [db _] (-> db :sample :version_id not)))
