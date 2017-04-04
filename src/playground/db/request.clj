@@ -3,7 +3,14 @@
             [clojure.string :refer [ends-with?]]
             [playground.db.core :refer [insert-multiple!]]
             [cheshire.core :refer [generate-string parse-string]]
-            [wharf.core :as wharf]))
+            [camel-snake-kebab.core :as kebab]
+            [camel-snake-kebab.extras :as kebab-extra]))
+
+(defn underscore->dash [data]
+  (kebab-extra/transform-keys kebab/->kebab-case data))
+
+(defn dash->underscore [data]
+  (kebab-extra/transform-keys kebab/->snake_case data))
 
 (defqueries "sql/queries.sql")
 
@@ -16,22 +23,23 @@
 (defmacro defsql [fn-name & [opts]]
   (if (ends-with? fn-name "<!")
     `(defn ~fn-name [db# & [params#]]
-       (:generated_key (~(sql-sym fn-name) params# (merge {:connection (:conn db#)} ~opts))))
+       (:generated_key (~(sql-sym fn-name) (dash->underscore params#) (merge {:connection (:conn db#)} ~opts))))
     `(defn ~fn-name [db# & [params#]]
-       (~(sql-sym fn-name) params# (merge {:connection (:conn db#)} ~opts)))))
+       (~(sql-sym fn-name) (dash->underscore params#) (merge {:connection (:conn db#)} ~opts)))))
 
 ;; repos
 (defsql add-repo<!)
 
-(defsql repos)
+(defsql repos {:row-fn underscore->dash})
 
-(defsql repo-by-name {:result-set-fn first})
+(defsql repo-by-name {:result-set-fn first
+                      :row-fn        underscore->dash})
 
 ;; versions
 (defn parse-version [version]
   (update version :config parse-string true))
 
-(defsql versions)
+(defsql versions {:row-fn underscore->dash})
 
 (defsql version-by-name {:result-set-fn first
                          :row-fn        parse-version})
@@ -45,19 +53,18 @@
 ;; samples
 (defn parse-sample [sample]
   ;; TODO: rename all keywords with underscore to dash
-  ;(wharf/transform-keys wharf/underscore->hyphen
   (-> sample
       (assoc :tags (parse-string (:tags sample)))
       (assoc :scripts (parse-string (:scripts sample)))
-      (assoc :styles (parse-string (:styles sample))))
-  ;)
-  )
+      (assoc :styles (parse-string (:styles sample)))
+      underscore->dash))
 
 (defsql add-sample<!)
 
-(defsql samples)
+(defsql samples {:row-fn underscore->dash})
 
-(defsql sample-version {:result-set-fn (comp :version first)})
+(defsql sample-version {:result-set-fn (comp :version first)
+                        :row-fn        underscore->dash})
 
 (defsql top-samples {:row-fn parse-sample})
 
@@ -77,10 +84,10 @@
 
    :name              (:name sample)
    :description       (:description sample)
-   :short_description (:short_description sample)
+   :short_description (:short-description sample)
 
    :url               (:url sample)
-   :show_on_landing   (:show_on_landing sample)
+   :show_on_landing   (:show-on-landing sample)
    :tags              (generate-string (:tags sample))
    :exports           (:exports sample)
 
@@ -94,13 +101,13 @@
                         (generate-string (:local-scripts sample)))
 
    :code              (:code sample)
-   :code_type         (:code_type sample)
+   :code_type         (:code-type sample)
 
    :markup            (:markup sample)
-   :markup_type       (:markup_type sample)
+   :markup_type       (:markup-type sample)
 
    :style             (:style sample)
-   :style_type        (:style_type sample)
+   :style_type        (:style-type sample)
 
    :version           (or (:version sample) 0)})
 

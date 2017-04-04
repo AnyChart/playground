@@ -96,23 +96,23 @@
                                  first :attrs :content read-string)]
     {:name              name
      :description       description
-     :short_description short-description
+     :short-description short-description
 
-     :show_on_landing   show-on-landing
+     :show-on-landing   show-on-landing
      :tags              tags
      :exports           exports
 
      :scripts           scripts
-     :local_scripts     local-scripts
+     :local-scripts     local-scripts
      :styles            css-libs
 
-     :code_type         (when code "js")
+     :code-type         (when code "js")
      :code              (trim-code code)
 
-     :markup_type       (when markup "html")
+     :markup-type       (when markup "html")
      :markup            (trim-code markup)
 
-     :style_type        (when style "css")
+     :style-type        (when style "css")
      :style             (trim-code style)}))
 
 
@@ -122,23 +122,23 @@
     (let [data (toml/read s :keywordize)]
       {:name              (-> data :name)
        :description       (-> data :description)
-       :short_description (-> data :short-description)
+       :short-description (-> data :short-description)
 
-       :show_on_landing   (-> data :meta :show-on-landing)
+       :show-on-landing   (-> data :meta :show-on-landing)
        :tags              (-> data :meta :tags)
        :exports           (-> data :meta :export)
 
        :scripts           (-> data :deps :scripts)
-       :local_scripts     (-> data :deps :local-scripts)
+       :local-scripts     (-> data :deps :local-scripts)
        :styles            (-> data :deps :styles)
 
-       :code_type         (-> data :code :type)
+       :code-type         (-> data :code :type)
        :code              (-> data :code :code trim-code)
 
-       :markup_type       (-> data :markup :type)
+       :markup-type       (-> data :markup :type)
        :markup            (-> data :markup :code trim-code)
 
-       :style_type        (-> data :style :type)
+       :style-type        (-> data :style :type)
        :style             (-> data :style :code trim-code)})
     (catch Exception e
       (info "parse TOML error: " path e)

@@ -98,7 +98,7 @@
 
 ;;============ remove branches
 (defn- remove-branch [db branch]
-  (db-req/delete-samples! db {:version_id (:id branch)})
+  (db-req/delete-samples! db {:version-id (:id branch)})
   (db-req/delete-version! db {:id (:id branch)}))
 
 (defn need-remove-branch? [db-branch actual-branches]
@@ -120,7 +120,7 @@
                            (assoc-in [:vars :branch-name] (:name branch)))
         version-id (db-req/add-version<! db {:name    (:name branch)
                                              :commit  (:commit branch)
-                                             :repo_id (:id @repo)
+                                             :repo-id (:id @repo)
                                              :hidden  true
                                              :config  (json/generate-string version-config)})
         samples (group-parser/samples path version-config)]
@@ -132,7 +132,7 @@
       (info "Delete old versions for" (:name branch) ": " (pr-str old-versions))
       (doseq [version old-versions]
         (remove-branch db version)))
-    (db-req/show-version! db {:repo_id (:id @repo) :id version-id})))
+    (db-req/show-version! db {:repo-id (:id @repo) :id version-id})))
 
 (defn update-branch [db repo branch versions generator queue-index]
   (try
@@ -168,7 +168,7 @@
       (git/fetch repo)
       (fs/mkdirs (versions-path @repo))
       (let [actual-branches (git/branch-list (:git @repo))
-            db-branches (db-req/versions db {:repo_id (:id @repo)})
+            db-branches (db-req/versions db {:repo-id (:id @repo)})
             updated-branches (branches-for-update actual-branches db-branches)
             removed-branches (branches-for-remove actual-branches db-branches)]
         (info "Actual branches: " (pr-str (map :name actual-branches)))

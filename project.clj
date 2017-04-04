@@ -29,7 +29,7 @@
                  [selmer "1.10.6"]
                  [clj-time "0.13.0"]
                  [me.raynes/fs "1.4.6"]
-                 [thinktopic/wharf "0.2.0"]
+                 [camel-snake-kebab "0.4.0"]
 
                  ;; db
                  [clojure.jdbc/clojure.jdbc-c3p0 "0.3.2"]

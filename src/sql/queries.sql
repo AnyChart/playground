@@ -41,7 +41,7 @@ INSERT INTO samples (`name`, `short_description`, `description`, `tags`, `styles
                       :url, :version);
 
 -- name: sql-top-samples
-SELECT samples.*, versions.id as version_id, versions.`name` as version_name, repos.name as repo_name FROM samples
+SELECT samples.*, versions.`name` as version_name, repos.name as repo_name FROM samples
   JOIN versions ON samples.version_id = versions.id JOIN repos ON versions.repo_id = repos.id WHERE samples.show_on_landing = TRUE LIMIT :count;
 
 -- name: sql-sample-by-url
@@ -51,7 +51,7 @@ SELECT * FROM samples WHERE version_id = :version_id AND url = :url;
 SELECT * FROM samples WHERE version_id IS NULL AND url = :url AND version = :version;
 
 -- name: sql-add-samples!
-INSERT INTO samples (name, description, short_description, tags, export, scripts, local_scripts, styles, code_type, code, style_type, style, markup_type, markup) VALUES :values;
+-- INSERT INTO samples (name, description, short_description, tags, export, scripts, local_scripts, styles, code_type, code, style_type, style, markup_type, markup) VALUES :values;
 
 -- name: sql-delete-samples!
 DELETE FROM samples WHERE version_id = :version_id;

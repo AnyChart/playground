@@ -4,7 +4,7 @@
   (re-matches #"^\d+\.\d+\.\d+$" version-key))
 
 (defn sample-url [sample]
-  (if (:version_id sample)
+  (if (:version-id sample)
     (str "/" (:repo-name sample)
          "/" (:version-name sample)
          (:url sample))

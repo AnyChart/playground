@@ -25,14 +25,14 @@
                             sandbox="allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"
                             allowtransparency="true"
                             allowfullscreen="true"
-                            src="/{{sample.repo_name}}/{{sample.version_name}}{{sample.url}}?view=iframe"></iframe>
+                            src="/{{sample.repo-name}}/{{sample.version-name}}{{sample.url}}?view=iframe"></iframe>
                 </div>
-                <p><a href="/{{sample.repo_name}}/{{sample.version_name}}{{sample.url}}?view=standalone"
+                <p><a href="/{{sample.repo-name}}/{{sample.version-name}}{{sample.url}}?view=standalone"
                       target="_blank">{{sample.name}}</a></p>
-                <p class="text-muted">{{sample.short_description}}</p>
+                <p class="text-muted">{{sample.short-description}}</p>
                 <p><b>Views: </b>{{sample.views}} <b>, Likes: </b>{{sample.likes}}</p>
                 <p><b>Author: </b>{{sample.author}}</p>
-                <p><b>Date: </b>{{sample.create_date|date:mediumDate}}</p>
+                <p><b>Date: </b>{{sample.create-date|date:mediumDate}}</p>
             </div>
         </div>
         {% endfor %}

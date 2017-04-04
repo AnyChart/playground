@@ -77,7 +77,7 @@
     (if (= :ok (:status data))
       (do (accountant/navigate! (str "/" (:hash data) "/" (:version data)))
           (-> db
-              (assoc-in [:sample :version_id] nil)
+              (assoc-in [:sample :version-id] nil)
               (assoc-in [:sample :url] (:hash data))
               (assoc-in [:sample :version] (:version data))))
       (do
@@ -111,7 +111,7 @@
                                      (when-not (zero? (:version data))
                                        (str "/" (:version data)))))
           (-> db
-              (assoc-in [:sample :version_id] nil)
+              (assoc-in [:sample :version-id] nil)
               (assoc-in [:sample :url] (:hash data))
               (assoc-in [:sample :version] (:version data))))
       (do
@@ -143,7 +143,7 @@
 (rf/reg-event-db
   :settings/change-short-desc
   (fn [db [_ value]]
-    (assoc-in db [:sample :short_description] value)))
+    (assoc-in db [:sample :short-description] value)))
 
 (rf/reg-event-db
   :settings/change-desc

@@ -7,7 +7,7 @@
 
     <title>{{name}}</title>
     {% if tags|not-empty %}<meta name="keywords" content="{{tags|join:","}}">{% endif %}
-    {% if short_description %}<meta name="description" content="{{short_description}}">{% endif %}
+    {% if short-description %}<meta name="description" content="{{short-description}}">{% endif %}
 
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>

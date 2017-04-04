@@ -74,7 +74,7 @@
 (defn- check-version-middleware [handler]
   (fn [repo request]
     (let [version-name (-> request :route-params :version)
-          version (db-req/version-by-name (get-db request) {:repo_id (:id repo)
+          version (db-req/version-by-name (get-db request) {:repo-id (:id repo)
                                                             :name    version-name})]
       (if version
         (handler repo version request)
@@ -83,7 +83,7 @@
 (defn- check-sample-middleware [handler]
   (fn [repo version request]
     (let [sample-url (-> request :route-params :*)
-          sample (db-req/sample-by-url (get-db request) {:version_id (:id version)
+          sample (db-req/sample-by-url (get-db request) {:version-id (:id version)
                                                          :url        (str "/" sample-url)})]
       (if sample
         (handler repo version (assoc sample
@@ -103,7 +103,7 @@
         scripts (-> request :params :scripts (clojure.string/split #","))]
     (response (render-file "templates/sample.selmer" {:name              "Default name"
                                                       :tags              []
-                                                      :short_description "Default short desc"
+                                                      :short-description "Default short desc"
 
                                                       :scripts           scripts
                                                       :styles            styles
