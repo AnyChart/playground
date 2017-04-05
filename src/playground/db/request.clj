@@ -74,6 +74,9 @@
 (defsql sample-by-hash {:result-set-fn first
                         :row-fn        parse-sample})
 
+(defsql sample-template-by-url {:result-set-fn first
+                                :row-fn        parse-sample})
+
 ; TODO: wait until yesql has multiple insert
 ;(defsql add-samples!)
 
@@ -115,4 +118,21 @@
   (add-sample<! db (insert-sample sample)))
 
 (defn add-samples! [db version-id samples]
-  (insert-multiple! db :samples (map #(insert-sample % version-id) samples)))
+  (doall (map :generated_key
+              (insert-multiple! db :samples (map #(insert-sample % version-id) samples)))))
+
+(defsql delete-samples-by-ids!)
+
+
+;; templates
+(defsql template-by-url {:result-set-fn first
+                         :row-fn parse-sample})
+
+(defsql templates {:row-fn parse-sample})
+
+(defsql templates-sample-ids {:row-fn :sample_id})
+
+(defsql delete-templates!)
+
+(defn add-templates! [db ids]
+  (insert-multiple! db :templates (map (fn [id] {:sample_id id}) ids)))

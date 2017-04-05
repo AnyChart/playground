@@ -47,6 +47,11 @@ SELECT samples.*, versions.`name` as version_name, repos.name as repo_name FROM 
 -- name: sql-sample-by-url
 SELECT * FROM samples WHERE version_id = :version_id AND url = :url;
 
+-- name: sql-sample-template-by-url
+SELECT samples.*, templates.id AS template_id FROM samples LEFT JOIN templates ON samples.id = templates.sample_id
+  WHERE url = :url ORDER BY version DESC;
+
+
 -- name: sql-sample-by-hash
 SELECT * FROM samples WHERE version_id IS NULL AND url = :url AND version = :version;
 
@@ -56,5 +61,18 @@ SELECT * FROM samples WHERE version_id IS NULL AND url = :url AND version = :ver
 -- name: sql-delete-samples!
 DELETE FROM samples WHERE version_id = :version_id;
 
+-- name: sql-delete-samples-by-ids!
+DELETE FROM samples WHERE id IN (:ids);
 
 
+-- name: sql-template-by-url
+SELECT * FROM samples JOIN templates ON samples.id = templates.sample_id WHERE samples.url = :url;
+
+-- name: sql-templates
+SELECT * FROM samples JOIN templates ON samples.id = templates.sample_id;
+
+-- name: sql-templates-sample-ids
+SELECT sample_id FROM templates;
+
+-- name: sql-delete-templates!
+DELETE FROM templates;

@@ -15,8 +15,10 @@
 (defn get-redis-queue [request] (-> (get-redis request) :config :queue))
 
 (defn landing-page [request]
-  (let [samples (db-req/top-samples (get-db request) {:count 9})]
-    (render-file "templates/landing-content.selmer" {:samples samples})))
+  (let [samples (db-req/top-samples (get-db request) {:count 9})
+        templates (db-req/templates (get-db request))]
+    (render-file "templates/landing-page.selmer" {:samples   samples
+                                                  :templates templates})))
 
 (defn update-repo [repo request]
   (prn "Repo: " repo)
@@ -29,26 +31,30 @@
 (defn show-sample-iframe [repo version sample request]
   (response (render-file "templates/sample.selmer" sample)))
 
-(defn show-sample-standalone [repo version sample]
-  (render-file "templates/standalone-iframe-content.selmer" {:sample sample
-                                                             :url    (str (common-utils/sample-url sample)
-                                                                          "?view=iframe")}))
+(defn show-sample-standalone [request sample]
+  (let [templates (db-req/templates (get-db request))]
+    (render-file "templates/standalone-page.selmer" {:sample    sample
+                                                     :templates templates
+                                                     :url       (str (common-utils/sample-url sample)
+                                                                     "?view=iframe")})))
 
 (defn show-sample-editor [repo version sample request]
   ;(prn (web-utils/pack sample))
-  (render-file "templates/editor.selmer" {:data (web-utils/pack sample)}))
+  (let [templates (db-req/templates (get-db request))]
+    (render-file "templates/editor.selmer" {:data (web-utils/pack {:sample    sample
+                                                                   :templates templates})})))
 
 (defn show-sample [repo version sample request]
   (let [view (-> request :params :view)]
     (case view
-      "standalone" (show-sample-standalone repo version sample)
+      "standalone" (show-sample-standalone request sample)
       "iframe" (show-sample-iframe repo version sample request)
       "editor" (show-sample-editor repo version sample request)
       nil (show-sample-editor repo version sample request)
       "Bad view type")))
 
 (defn show-user-sample [request]
-  (prn "Show user sample: " (-> request :route-params))
+  ;(prn "Show user sample: " (-> request :route-params))
   (let [hash (-> request :route-params :hash)
         version (or (some-> (-> request :route-params :version) Integer.) 0)
         sample (db-req/sample-by-hash (get-db request) {:url     hash
@@ -56,10 +62,10 @@
         view (-> request :params :view)]
     (if sample
       (case view
-        "standalone" (show-sample-standalone nil nil sample)
+        "standalone" (show-sample-standalone request sample)
         "iframe" (show-sample-iframe nil nil sample request)
         "editor" (show-sample-editor nil nil sample request)
-        nil (show-sample-editor nil nil sample nil))
+        nil (show-sample-editor nil nil sample request))
       (route/not-found "sample not found"))))
 
 ;; middleware for getting repo, version, sample
@@ -84,15 +90,44 @@
   (fn [repo version request]
     (let [sample-url (-> request :route-params :*)
           sample (db-req/sample-by-url (get-db request) {:version-id (:id version)
-                                                         :url        (str "/" sample-url)})]
+                                                         :url        sample-url})]
       (if sample
         (handler repo version (assoc sample
                                 :repo-name (:name repo)
                                 :version-name (:name version)) request)
         (route/not-found "sample not found")))))
 
+(def empty-sample
+  {:name              ""
+   :tags              []
+   :short-description ""
+   :description       ""
+   :url               ""
+
+   :styles            []
+   :scripts           []
+
+   :markup            ""
+   :markup-type       "html"
+
+   :code              ""
+   :code-type         "js"
+
+   :style             ""
+   :style-type        "css"})
+
 (defn new [request]
-  "New chart")
+  (let [template-url (-> request :params :template)
+        view (-> request :params :view)
+        sample (if template-url
+                 (db-req/template-by-url (get-db request) {:url template-url})
+                 empty-sample)]
+    (prn "New: " template-url view sample)
+    (case view
+      "editor" (show-sample-editor nil nil sample request)
+      "standalone" (show-sample-standalone request sample)
+      "iframe" (show-sample-iframe nil nil sample nil)
+      nil (show-sample-editor nil nil sample request))))
 
 (defn run [request]
   (prn "run: " (:params request))
@@ -112,20 +147,6 @@
                                                       :code              code
                                                       :style             style}))))
 
-(defn save [request]
-  (prn "Save: " (-> request :params :sample))
-  (let [sample (-> request :params :sample)
-        hash (:url sample)
-        ;; TODO transaction
-        version (db-req/sample-version (get-db request) {:url hash})
-        sample* (assoc sample :version (inc version))
-        ]
-    (prn "Save, insert" sample*)
-    (db-req/add-sample! (get-db request) sample*)
-    (response {:status  :ok
-               :hash    hash
-               :version (inc version)})))
-
 (defn fork [request]
   (prn "Fork: " (-> request :params :sample))
   (let [sample (-> request :params :sample)
@@ -139,6 +160,28 @@
                :hash    hash
                :version 0})))
 
+(defn save [request]
+  (prn "Save: " (-> request :params :sample))
+  (let [sample (-> request :params :sample)
+        hash (:url sample)
+        db-sample (when (and hash (seq hash))
+                    (db-req/sample-template-by-url (get-db request) {:url hash}))]
+    ;(prn "db sample: " db-sample)
+    ;(prn "db sample: " (:template-id db-sample))
+    ;(prn "db sample: " (:version-id db-sample))
+    (if (and db-sample
+             (nil? (:template-id db-sample))
+             (nil? (:version-id db-sample)))
+      (let [
+            ;version (db-req/sample-version (get-db request) {:url hash}) ;; TODO transaction
+            version (:version db-sample)
+            sample* (assoc sample :version (inc version))]
+        (prn "Save, insert" sample*)
+        (db-req/add-sample! (get-db request) sample*)
+        (response {:status  :ok
+                   :hash    hash
+                   :version (inc version)}))
+      (fork request))))
 
 (defroutes app-routes
            (route/resources "/")

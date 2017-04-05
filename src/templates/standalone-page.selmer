@@ -44,12 +44,11 @@
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Chart</a></li>
-                        <li><a href="#">Stock</a></li>
-                        <li><a href="#">Gantt</a></li>
-                        <li><a href="#">Map</a></li>
+                        {% for template in templates %}
+                        <li><a href="/new?template={{template.url}}">{{template.name}}</a></li>
+                        {% endfor %}
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">From scratch</a></li>
+                        <li><a href="/new">From scratch</a></li>
                     </ul>
                 </li>
                 <li><a href="/signin">Log In</a></li>
@@ -59,8 +58,13 @@
     </div>
 </nav>
 
-{% block content %}
-{% endblock %}
+<div class="iframe-standalone-box" >
+    <iframe class="iframe-standalone"
+            sandbox="allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"
+            allowtransparency="true"
+            allowfullscreen="true"
+            src="{{url}}"></iframe>
+</div>
 
 <footer class="footer" style="margin-top: 40px;">
     <div class="container">

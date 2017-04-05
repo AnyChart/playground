@@ -166,7 +166,5 @@
       (assoc base-info                                      ;TODO need fix exports?  ; (fix-exports base-info)
         :name (or (:name base-info) (clojure.string/replace name #"_" " "))
         :hidden (= name "Coming_Soon")
-        :url (str (if (= group "/")
-                    group
-                    (str "/" group))
+        :url (str (when (not= group "/") group)
                   (clojure.string/replace name #"%" "%25"))))))

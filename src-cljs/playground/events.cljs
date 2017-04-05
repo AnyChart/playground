@@ -32,15 +32,16 @@
      :markup         ""
      :style          ""
      :editors-height (window-height)
-     :sample         data}))
+     :sample         (:sample data)
+     :templates      (:templates data)}))
 
 (rf/reg-event-db
   :init
   (fn [db [_ data]]
     (assoc db
-      :markup-editor (create-editor :markup (:markup data) "text/html")
-      :style-editor (create-editor :style (:style data) "css")
-      :code-editor (create-editor :code (:code data) "javascript"))))
+      :markup-editor (create-editor :markup (-> data :sample :markup) "text/html")
+      :style-editor (create-editor :style (-> data :sample :style) "css")
+      :code-editor (create-editor :code (-> data :sample :code) "javascript"))))
 
 (rf/reg-event-db
   :resize-window
@@ -75,7 +76,9 @@
   (fn [db [_ data]]
     (utils/log "Save ok!" data)
     (if (= :ok (:status data))
-      (do (accountant/navigate! (str "/" (:hash data) "/" (:version data)))
+      (do (accountant/navigate! (str "/" (:hash data)
+                                     (when (pos? (:version data))
+                                       (str "/" (:version data)))))
           (-> db
               (assoc-in [:sample :version-id] nil)
               (assoc-in [:sample :url] (:hash data))
@@ -108,7 +111,7 @@
     (utils/log "Fork ok!" data)
     (if (= :ok (:status data))
       (do (accountant/navigate! (str "/" (:hash data)
-                                     (when-not (zero? (:version data))
+                                     (when (pos? (:version data))
                                        (str "/" (:version data)))))
           (-> db
               (assoc-in [:sample :version-id] nil)

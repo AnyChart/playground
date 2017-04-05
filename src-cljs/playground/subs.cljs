@@ -37,7 +37,9 @@
 (rf/reg-sub
   :sample-iframe-url
   (fn [query_v _] (rf/subscribe [:sample-url]))
-  (fn [sample-url _] (str sample-url "?view=iframe")))
+  (fn [sample-url _]
+    (when (seq sample-url)
+      (str sample-url "?view=iframe"))))
 
 (rf/reg-sub
   :sample-standalone-url
@@ -66,3 +68,5 @@
 (rf/reg-sub :settings-show (fn [db _] (:settings-show db)))
 
 (rf/reg-sub :user-sample? (fn [db _] (-> db :sample :version-id not)))
+
+(rf/reg-sub :templates (fn [db _] (-> db :templates)))

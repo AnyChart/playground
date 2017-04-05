@@ -55,20 +55,17 @@
             :data-toggle   "dropdown"
             :role          "button"
             :aria-haspopup "true"
-            :aria-expanded "false"} "New Chart"
+            :aria-expanded "false"} "Create"
         [:span {:class "caret"}]]
        [:ul {:class "dropdown-menu"}
-        [:li [:a {:href "#"} "Chart"]]
-        [:li [:a {:href "#"} "Stock"]]
-        [:li [:a {:href "#"} "Gantt"]]
-        [:li [:a {:href "#"} "Map"]]
+        (for [template @(rf/subscribe [:templates])]
+          ^{:key (:name template)} [:li [:a {:href (str "/new?template=" (:url template))} (:name template)]])
         [:li {:role "separator" :class "divider"}]
-        [:li [:a {:href "#"} "From scratch"]]]]
+        [:li [:a {:href "/new"} "From scratch"]]]]
       [:li [:a {:href "/signin"} "Log In"]]
       [:li [:a {:href "/signup"} "Sign Up"]]]]]])
 
-(defn footer []
-  )
+(defn footer [])
 
 (defn editors []
   [:div.column-container {:style {:height @(rf/subscribe [:editors-height])}}

@@ -31,7 +31,8 @@
     :db (db/new-jdbc (:db conf))
     :redis (redis/new-redis (:redis conf))
     :notifier (slack/new-notifier (-> conf :notifications :slack))
-    :generator (component/using (generator/new-generator {} (repositories-conf conf)) [:db :notifier :redis])
+    :generator (component/using (generator/new-generator {:templates (:templates conf)} (repositories-conf conf))
+                                [:db :notifier :redis])
     :web (component/using (web/new-web (:web conf)) [:db :redis])))
 
 (defn get-worker-system [conf]
@@ -39,7 +40,7 @@
     :db (db/new-jdbc (:db conf))
     :redis (redis/new-redis (:redis conf))
     :notifier (slack/new-notifier (-> conf :notifications :slack))
-    :generator (component/using (generator/new-generator {} (repositories-conf conf))
+    :generator (component/using (generator/new-generator {:templates (:templates conf)}  (repositories-conf conf))
                                 [:db :notifier :redis])))
 
 (defn get-web-system [conf]
