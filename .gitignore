@@ -12,3 +12,4 @@ pom.xml.asc
 .idea
 playground.iml
 data/
+resources/public/js/playground.js
