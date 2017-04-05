@@ -204,5 +204,7 @@
         ids (db-req/add-samples! (:db generator) nil samples)
         old-ids (db-req/templates-sample-ids (:db generator))]
     (db-req/delete-templates! (:db generator))
-    (db-req/add-templates! (:db generator) ids)
-    (db-req/delete-samples-by-ids! (:db generator) {:ids old-ids})))
+    (when (seq ids)
+      (db-req/add-templates! (:db generator) ids))
+    (when (seq old-ids)
+      (db-req/delete-samples-by-ids! (:db generator) {:ids old-ids}))))
