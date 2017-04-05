@@ -46,7 +46,8 @@
                  ;[ilevd/clj-jgit "0.8.8"]
 
                  ;; front-end
-                 [org.clojure/clojurescript "1.9.495"]
+                 ;[org.clojure/clojurescript "1.9.495"]
+                 [org.clojure/clojurescript "1.9.473"]
                  [reagent "0.6.1"]
                  [re-frame "0.9.2"]
                  ; [cljs-http "0.1.42"]
@@ -64,7 +65,7 @@
                                        :pretty-print  true}}
                        {:id           "prod"
                         :source-paths ["src-cljs" "src-cljc"]
-                        :compiler     {:output-to       "resources/public/js/playground.min.js"
+                        :compiler     {:output-to       "resources/public/js/playground.js"
                                        :optimizations   :advanced
                                        :pretty-print    false
                                        :pseudo-names    false
