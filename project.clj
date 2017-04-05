@@ -2,7 +2,7 @@
   :description "AnyChart Playground"
   :url "http://example."
   :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
+            :url  "http://www.eclipse.org/legal/epl-v10.html"}
   :main ^:aot playground.core
   :uberjar-name "pg-standalone.jar"
   :source-paths ["src" "src-cljc"]
@@ -69,4 +69,5 @@
                                        :optimizations   :advanced
                                        :pretty-print    false
                                        :pseudo-names    false
+                                       :externs         ["codemirror_externs.js"]
                                        :closure-defines {"goog.DEBUG" false}}}]})
