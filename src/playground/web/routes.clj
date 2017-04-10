@@ -121,13 +121,14 @@
         view (-> request :params :view)
         sample (if template-url
                  (db-req/template-by-url (get-db request) {:url template-url})
-                 empty-sample)]
+                 empty-sample)
+        sample* (assoc sample :new true)]
     (prn "New: " template-url view sample)
     (case view
-      "editor" (show-sample-editor nil nil sample request)
-      "standalone" (show-sample-standalone request sample)
-      "iframe" (show-sample-iframe nil nil sample nil)
-      nil (show-sample-editor nil nil sample request))))
+      "editor" (show-sample-editor nil nil sample* request)
+      "standalone" (show-sample-standalone request sample*)
+      "iframe" (show-sample-iframe nil nil sample* nil)
+      nil (show-sample-editor nil nil sample* request))))
 
 (defn run [request]
   (prn "run: " (:params request))

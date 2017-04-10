@@ -70,3 +70,7 @@
 (rf/reg-sub :user-sample? (fn [db _] (-> db :sample :version-id not)))
 
 (rf/reg-sub :templates (fn [db _] (-> db :templates)))
+
+(rf/reg-sub :show-save-button (fn [db _]
+                                (or (-> db :sample :version-id not)
+                                    (-> db :sample :new))))

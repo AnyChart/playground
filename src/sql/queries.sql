@@ -66,7 +66,11 @@ DELETE FROM samples WHERE id IN (:ids);
 
 
 -- name: sql-template-by-url
-SELECT * FROM samples JOIN templates ON samples.id = templates.sample_id WHERE samples.url = :url;
+SELECT samples.*, versions.`name` as version_name, repos.name as repo_name FROM samples
+  JOIN templates ON samples.id = templates.sample_id
+  JOIN versions ON samples.version_id = versions.id
+  JOIN repos ON versions.repo_id = repos.id
+  WHERE samples.url = :url;
 
 -- name: sql-templates
 SELECT * FROM samples JOIN templates ON samples.id = templates.sample_id;

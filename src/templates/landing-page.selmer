@@ -66,13 +66,10 @@
                 <h1>AnyChart Playground </h1>
                 <p>AnyChart Playground is a place where all your data visualization dreams come true</p>
                 <p>
-                    <button class="btn btn-primary btn-lg "
-                            onclick="location.href='/new';"
-                            role="button">Create from scratch</button>
                     {% for template in templates %}
                     <button class="btn btn-primary btn-lg "
                             onclick="location.href='/new?template={{template.url}}';"
-                            role="button">Create new {{template.name}}</button>
+                            role="button">Create {{template.name}}</button>
                     {% endfor %}
                 </p>
             </div>

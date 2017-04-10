@@ -3,7 +3,8 @@
             [re-frame.core :as rf]
             [playground.utils :as utils]
             [ajax.core :refer [GET POST]]
-            [accountant.core :as accountant]))
+    ;[accountant.core :as accountant]
+            ))
 
 (defn window-height []
   (or (.-innerHeight js/window)
@@ -76,13 +77,18 @@
   (fn [db [_ data]]
     (utils/log "Save ok!" data)
     (if (= :ok (:status data))
-      (do (accountant/navigate! (str "/" (:hash data)
-                                     (when (pos? (:version data))
-                                       (str "/" (:version data)))))
-          (-> db
-              (assoc-in [:sample :version-id] nil)
-              (assoc-in [:sample :url] (:hash data))
-              (assoc-in [:sample :version] (:version data))))
+      (do
+        ;(accountant/navigate! (str "/" (:hash data)
+        ;                             (when (pos? (:version data))
+        ;                               (str "/" (:version data)))))
+        (.pushState (.-history js/window) nil nil (str "/" (:hash data)
+                                                       (when (pos? (:version data))
+                                                         (str "/" (:version data)))))
+
+        (-> db
+            (assoc-in [:sample :version-id] nil)
+            (assoc-in [:sample :url] (:hash data))
+            (assoc-in [:sample :version] (:version data))))
       (do
         (js/alert "Sample saving error")
         db))))
@@ -110,13 +116,17 @@
   (fn [db [_ data]]
     (utils/log "Fork ok!" data)
     (if (= :ok (:status data))
-      (do (accountant/navigate! (str "/" (:hash data)
-                                     (when (pos? (:version data))
-                                       (str "/" (:version data)))))
-          (-> db
-              (assoc-in [:sample :version-id] nil)
-              (assoc-in [:sample :url] (:hash data))
-              (assoc-in [:sample :version] (:version data))))
+      (do
+        ;(accountant/navigate! (str "/" (:hash data)
+        ;                             (when (pos? (:version data))
+        ;                               (str "/" (:version data)))))
+        (.pushState (.-history js/window) nil nil (str "/" (:hash data)
+                                                       (when (pos? (:version data))
+                                                         (str "/" (:version data)))))
+        (-> db
+            (assoc-in [:sample :version-id] nil)
+            (assoc-in [:sample :url] (:hash data))
+            (assoc-in [:sample :version] (:version data))))
       (do
         (js/alert "Sample fork error")
         db))))

@@ -30,7 +30,8 @@
   (start [this]
     (timbre/info "Generator start" conf)
     (check-repositories this (:db this) (:notifier this))
-    (parse-templates this (:templates conf))
+    ;(when (some-> conf :templates :path)
+    ;  (parse-templates this (:templates conf)))
     (assoc this
       :redis-worker (redis/create-worker redis (-> redis :config :queue) (message-handler this))))
 
@@ -127,7 +128,12 @@
                                              :config  (json/generate-string version-config)})
         samples (group-parser/samples path version-config)]
     (timbre/info "Insert samples: " (count samples) version-config)
-    (db-req/add-samples! db version-id samples)
+    (let [ids (db-req/add-samples! db version-id samples)]
+      ;; if repo is templates-repo, then update templates
+      (when (:templates @repo)
+        (db-req/delete-templates! db)
+        (when (seq ids)
+          (db-req/add-templates! db ids))))
     (timbre/info "Done samples inserting: " (count samples))
     (let [old-versions (filter #(and (= (:name %) (:name branch))
                                      (not= (:id %) version-id)) versions)]
