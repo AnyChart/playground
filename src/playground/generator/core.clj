@@ -67,7 +67,7 @@
   (fs/mkdirs (:dir @repo))
   (git/clone @repo (repo-path @repo)))
 
-(defn check-repository [db repo db-repo]
+(defn check-repository [generator db repo db-repo]
   ;(info "Check repository: " @repo db-repo (merge db-repo @repo))
   (if (and db-repo (fs/exists? (:dir @repo)))
     (do
@@ -80,6 +80,7 @@
         (download-repo repo)
         (swap! repo (fn [repo] (merge db-repo repo {:git (git/get-git (git-path (repo-path repo)))
                                                     :id  (db-req/add-repo<! db {:name (:name repo)})})))
+        (update-repository-by-repo-name generator db (:name @repo))
         (info (str "Repository \"" (:name @repo) "\" - OK"))
         {:name (:name @repo)}
         (catch Exception e
@@ -93,7 +94,7 @@
         get-repo-by-name-fn (fn [repo db-repos]
                               (first (filter #(= (:name repo) (:name %)) db-repos)))]
     (info (count db-repos) (pr-str db-repos))
-    (let [result (map #(check-repository db % (get-repo-by-name-fn @% db-repos)) repos)]
+    (let [result (map #(check-repository generator db % (get-repo-by-name-fn @% db-repos)) repos)]
       (slack/complete-sync notifier
                            (remove :e result)
                            (filter :e result)))))
