@@ -10,7 +10,7 @@ SELECT * FROM repos WHERE `name` = :name;
 
 
 -- name: sql-add-version<!
-INSERT INTO versions (`name`, repo_id, commit, hidden, config) VALUES(:name, :repo_id, :commit, :hidden, :config);
+INSERT INTO versions (`name`, repo_id, commit, hidden, config, samples_count) VALUES(:name, :repo_id, :commit, :hidden, :config, :samples_count);
 
 -- name: sql-versions
 SELECT * FROM versions WHERE repo_id = :repo_id;
@@ -28,6 +28,10 @@ UPDATE versions SET hidden = false WHERE repo_id = :repo_id AND id = :id;
 
 -- name: sql-samples
 SELECT * FROM samples;
+
+-- name: sql-samples-by-version
+SELECT samples.*, versions.`name` as version_name, repos.name as repo_name FROM samples
+  JOIN versions ON samples.version_id = versions.id JOIN repos ON versions.repo_id = repos.id WHERE samples.version_id = :version_id;
 
 -- name: sql-sample-version
 SELECT version FROM samples WHERE url = :url ORDER BY version DESC;

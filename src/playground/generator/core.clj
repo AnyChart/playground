@@ -122,18 +122,19 @@
   (info "Build branch: " path (:name branch))
   (let [version-config (-> (read-version-config (str path "/config.toml"))
                            (assoc-in [:vars :branch-name] (:name branch)))
-        version-id (db-req/add-version<! db {:name    (:name branch)
-                                             :commit  (:commit branch)
-                                             :repo-id (:id @repo)
-                                             :hidden  true
-                                             :config  (json/generate-string version-config)})
-        samples (group-parser/samples path version-config)]
+        samples (group-parser/samples path version-config)
+        version-id (db-req/add-version<! db {:name          (:name branch)
+                                             :commit        (:commit branch)
+                                             :repo-id       (:id @repo)
+                                             :hidden        true
+                                             :config        (json/generate-string version-config)
+                                             :samples-count (count samples)})]
     (timbre/info "Insert samples: " (count samples) version-config)
-    (let [ids (db-req/add-samples! db version-id samples)]
-      ;; if repo is templates-repo, then update templates
-      (when (:templates @repo)
-        (db-req/delete-templates! db)
-        (when (seq ids)
+    (when (seq samples)
+      (let [ids (db-req/add-samples! db version-id samples)]
+        ;  ;; if repo is templates-repo, then update templates
+        (when (:templates @repo)
+          (db-req/delete-templates! db)
           (db-req/add-templates! db ids))))
     (timbre/info "Done samples inserting: " (count samples))
     (let [old-versions (filter #(and (= (:name %) (:name branch))
@@ -176,10 +177,14 @@
       (info "update repo: " (:git @repo))
       (git/fetch repo)
       (fs/mkdirs (versions-path @repo))
-      (let [actual-branches (git/branch-list (:git @repo))
+      (let [branch-list (git/branch-list (:git @repo))
+            actual-branches (if (:branches @repo)
+                              (filter #(re-matches (re-pattern (:branches @repo)) %) (:name branch-list))
+                              branch-list)
             db-branches (db-req/versions db {:repo-id (:id @repo)})
             updated-branches (branches-for-update actual-branches db-branches)
             removed-branches (branches-for-remove actual-branches db-branches)]
+        (info "Branch list: " (pr-str (map :name branch-list)))
         (info "Actual branches: " (pr-str (map :name actual-branches)))
         (info "DB branches: " (pr-str (map :name db-branches)))
         (info "Updated branches: " (pr-str (map :name updated-branches)))

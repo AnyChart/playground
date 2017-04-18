@@ -14,20 +14,18 @@
 (defn get-redis [request] (-> request :component :redis))
 (defn get-redis-queue [request] (-> (get-redis request) :config :queue))
 
-(defn landing-page [request]
-  (let [samples (db-req/top-samples (get-db request) {:count 9})
-        templates (db-req/templates (get-db request))]
-    (render-file "templates/landing-page.selmer" {:samples   samples
-                                                  :templates templates})))
-
 (defn update-repo [repo request]
-  (prn "Repo: " repo)
   (redis/enqueue (get-redis request)
                  (get-redis-queue request)
                  (:name repo))
   (response (str "Start updating: " (:name repo))))
 
 
+(defn landing-page [request]
+  (let [samples (db-req/top-samples (get-db request) {:count 9})]
+    (render-file "templates/landing-page.selmer" {:samples   samples
+                                                  :templates (-> request :app :templates)
+                                                  :repos     (-> request :app :repos)})))
 (defn show-sample-iframe [repo version sample request]
   (response (render-file "templates/sample.selmer" sample)))
 
@@ -39,7 +37,6 @@
                                                                      "?view=iframe")})))
 
 (defn show-sample-editor [repo version sample request]
-  ;(prn (web-utils/pack sample))
   (let [templates (db-req/templates (get-db request))]
     (render-file "templates/editor.selmer" {:data (web-utils/pack {:sample    sample
                                                                    :templates templates})})))
@@ -73,29 +70,56 @@
   (fn [request]
     (let [repo-name (-> request :route-params :repo)
           repo (db-req/repo-by-name (get-db request) {:name repo-name})]
-      (if repo
+      (when repo
         (handler repo request)
-        (route/not-found "repo not found")))))
+        ;(route/not-found "repo not found")
+        ))))
 
 (defn- check-version-middleware [handler]
   (fn [repo request]
     (let [version-name (-> request :route-params :version)
           version (db-req/version-by-name (get-db request) {:repo-id (:id repo)
                                                             :name    version-name})]
-      (if version
+      (when version
         (handler repo version request)
-        (route/not-found "version not found")))))
+        ;(route/not-found "version not found")
+        ))))
 
 (defn- check-sample-middleware [handler]
   (fn [repo version request]
     (let [sample-url (-> request :route-params :*)
           sample (db-req/sample-by-url (get-db request) {:version-id (:id version)
                                                          :url        sample-url})]
-      (if sample
+      (when sample
         (handler repo version (assoc sample
                                 :repo-name (:name repo)
                                 :version-name (:name version)) request)
-        (route/not-found "sample not found")))))
+        ;(route/not-found "sample not found")
+        ))))
+
+(defn- templates-middleware [handler]
+  (fn [request]
+    (handler (assoc-in request [:app :templates]
+                       (db-req/templates (get-db request))))))
+
+(defn- repos-middleware [handler]
+  (fn [request]
+    (handler (assoc-in request [:app :repos]
+                       (db-req/repos (get-db request))))))
+
+(defn repo-page [repo request]
+  (let [versions (db-req/versions (get-db request) {:repo-id (:id repo)})
+        versions-with-samples (filter (comp pos? :samples-count) versions)]
+    (render-file "templates/repo-page.selmer" {:repo      repo
+                                               :templates (-> request :app :templates)
+                                               :repos     (-> request :app :repos)
+                                               :versions  versions-with-samples})))
+
+(defn version-page [repo version request]
+  (let [samples (db-req/samples-by-version (get-db request) {:version_id (:id version)})]
+    (render-file "templates/version-page.selmer" {:samples   samples
+                                                  :templates (-> request :app :templates)
+                                                  :repos     (-> request :app :repos)})))
 
 (def empty-sample
   {:name              ""
@@ -186,7 +210,9 @@
 
 (defroutes app-routes
            (route/resources "/")
-           (GET "/" [] landing-page)
+           (GET "/" [] (repos-middleware
+                         (templates-middleware
+                           landing-page)))
            (GET "/signin" [] "signin")
            (GET "/signup" [] "signup")
 
@@ -195,17 +221,29 @@
            (POST "/save" [] save)
            (POST "/fork" [] fork)
 
-           (GET "/:repo/_update_" [] (check-repo-middleware update-repo))
-           (POST "/:repo/_update_" [] (check-repo-middleware update-repo))
+           (GET "/:repo/_update_" [] (check-repo-middleware
+                                       update-repo))
+           (POST "/:repo/_update_" [] (check-repo-middleware
+                                        update-repo))
 
-           (GET "/:hash/" [] show-user-sample)
-           (GET "/:hash" [] show-user-sample)
-           (GET "/:hash/:version" [] show-user-sample)
-           (GET "/:hash/:version/" [] show-user-sample)
+           (GET "/:repo" [] (repos-middleware
+                              (templates-middleware
+                                (check-repo-middleware
+                                  repo-page))))
+
+           (GET "/:repo/:version" [] (repos-middleware
+                                       (templates-middleware
+                                         (check-repo-middleware
+                                           (check-version-middleware
+                                             version-page)))))
+
            (GET "/:repo/:version/*" [] (check-repo-middleware
                                          (check-version-middleware
                                            (check-sample-middleware
                                              show-sample))))
 
-           ;(GET "/sample/*-iframe" [] show-sample-iframe)
+           (GET "/:hash/" [] show-user-sample)
+           (GET "/:hash" [] show-user-sample)
+           (GET "/:hash/:version" [] show-user-sample)
+           (GET "/:hash/:version/" [] show-user-sample)
            (route/not-found "404 Page not found"))

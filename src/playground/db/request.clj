@@ -17,10 +17,11 @@
 (defn sql-sym [sym]
   (symbol (str 'sql- (name sym))))
 
-;generate for each request something like:
-;(defn versions [db & [params]
-;  (sql-versions params {:connection (:conn db)}))
-(defmacro defsql [fn-name & [opts]]
+(defmacro defsql
+  "generate for each request something like:
+  (defn versions [db & [params]
+   (sql-versions params {:connection (:conn db)}))"
+  [fn-name & [opts]]
   (if (ends-with? fn-name "<!")
     `(defn ~fn-name [db# & [params#]]
        (:generated_key (~(sql-sym fn-name) (dash->underscore params#) (merge {:connection (:conn db#)} ~opts))))
@@ -67,6 +68,8 @@
                         :row-fn        underscore->dash})
 
 (defsql top-samples {:row-fn parse-sample})
+
+(defsql samples-by-version {:row-fn parse-sample})
 
 (defsql sample-by-url {:result-set-fn first
                        :row-fn        parse-sample})
@@ -126,7 +129,7 @@
 
 ;; templates
 (defsql template-by-url {:result-set-fn first
-                         :row-fn parse-sample})
+                         :row-fn        parse-sample})
 
 (defsql templates {:row-fn parse-sample})
 
