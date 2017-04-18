@@ -26,29 +26,31 @@
     (render-file "templates/landing-page.selmer" {:samples   samples
                                                   :templates (-> request :app :templates)
                                                   :repos     (-> request :app :repos)})))
-(defn show-sample-iframe [repo version sample request]
+(defn show-sample-iframe [sample request]
   (response (render-file "templates/sample.selmer" sample)))
 
-(defn show-sample-standalone [request sample]
+(defn show-sample-standalone [sample request]
   (let [templates (db-req/templates (get-db request))]
     (render-file "templates/standalone-page.selmer" {:sample    sample
                                                      :templates templates
                                                      :url       (str (common-utils/sample-url sample)
                                                                      "?view=iframe")})))
 
-(defn show-sample-editor [repo version sample request]
+(defn show-sample-editor [sample request]
   (let [templates (db-req/templates (get-db request))]
     (render-file "templates/editor.selmer" {:data (web-utils/pack {:sample    sample
                                                                    :templates templates})})))
 
+(defn show-sample-by-view [view sample request]
+  (case view
+    "standalone" (show-sample-standalone sample request)
+    "iframe" (show-sample-iframe sample request)
+    "editor" (show-sample-editor sample request)
+    nil (show-sample-editor sample request)))
+
 (defn show-sample [repo version sample request]
   (let [view (-> request :params :view)]
-    (case view
-      "standalone" (show-sample-standalone request sample)
-      "iframe" (show-sample-iframe repo version sample request)
-      "editor" (show-sample-editor repo version sample request)
-      nil (show-sample-editor repo version sample request)
-      "Bad view type")))
+    (show-sample-by-view view sample request)))
 
 (defn show-user-sample [request]
   ;(prn "Show user sample: " (-> request :route-params))
@@ -58,11 +60,7 @@
                                                         :version version})
         view (-> request :params :view)]
     (if sample
-      (case view
-        "standalone" (show-sample-standalone request sample)
-        "iframe" (show-sample-iframe nil nil sample request)
-        "editor" (show-sample-editor nil nil sample request)
-        nil (show-sample-editor nil nil sample request))
+      (show-sample-by-view view sample request)
       (route/not-found "sample not found"))))
 
 ;; middleware for getting repo, version, sample
@@ -71,9 +69,7 @@
     (let [repo-name (-> request :route-params :repo)
           repo (db-req/repo-by-name (get-db request) {:name repo-name})]
       (when repo
-        (handler repo request)
-        ;(route/not-found "repo not found")
-        ))))
+        (handler repo request)))))
 
 (defn- check-version-middleware [handler]
   (fn [repo request]
@@ -81,9 +77,7 @@
           version (db-req/version-by-name (get-db request) {:repo-id (:id repo)
                                                             :name    version-name})]
       (when version
-        (handler repo version request)
-        ;(route/not-found "version not found")
-        ))))
+        (handler repo version request)))))
 
 (defn- check-sample-middleware [handler]
   (fn [repo version request]
@@ -93,9 +87,7 @@
       (when sample
         (handler repo version (assoc sample
                                 :repo-name (:name repo)
-                                :version-name (:name version)) request)
-        ;(route/not-found "sample not found")
-        ))))
+                                :version-name (:name version)) request)))))
 
 (defn- templates-middleware [handler]
   (fn [request]
@@ -147,15 +139,11 @@
                  (db-req/template-by-url (get-db request) {:url template-url})
                  empty-sample)
         sample* (assoc sample :new true)]
-    (prn "New: " template-url view sample)
-    (case view
-      "editor" (show-sample-editor nil nil sample* request)
-      "standalone" (show-sample-standalone request sample*)
-      "iframe" (show-sample-iframe nil nil sample* nil)
-      nil (show-sample-editor nil nil sample* request))))
+    ;(prn "New: " template-url view sample)
+    (show-sample-by-view view sample* request)))
 
 (defn run [request]
-  (prn "run: " (:params request))
+  ;(prn "run: " (:params request))
   (let [code (-> request :params :code)
         style (-> request :params :style)
         markup (-> request :params :markup)

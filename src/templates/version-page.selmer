@@ -78,9 +78,20 @@
                     <p><a href="/{{sample.repo-name}}/{{sample.version-name}}/{{sample.url}}?view=standalone"
                           target="_blank">{{sample.name}}</a></p>
                     <p class="text-muted">{{sample.short-description}}</p>
-                    <p><b>Views: </b>{{sample.views}} <b>, Likes: </b>{{sample.likes}}</p>
-                    <p><b>Author: </b>{{sample.author}}</p>
-                    <p><b>Date: </b>{{sample.create-date|date:mediumDate}}</p>
+                    <div class="sample-info">
+                        <p class="sample-info-likes">
+                                <span title="Views: {{sample.views}}">
+                                    <span style="padding-left: 4px;">{{sample.views}}</span>
+                                    <span class="glyphicon glyphicon-eye-open sample-icon" aria-hidden="true"></span>
+                                </span>
+                                <span title="Likes: {{sample.likes}}">
+                                    <span style="padding-left: 4px;">{{sample.likes}}</span>
+                                    <span class="glyphicon glyphicon-heart sample-icon" aria-hidden="true"></span>
+                                </span>
+                        </p>
+                        <p>By <span title="Column chart created by {{sample.author}}">{{sample.author}}</span>,
+                            <span title="{{sample.create-date|date:"MMM d, yyyy"}}">{{sample.create-date|date:"MMM d"}}</span></p>
+                    </div>
                 </div>
             </div>
             {% endfor %}
