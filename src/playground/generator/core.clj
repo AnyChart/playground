@@ -179,7 +179,7 @@
       (fs/mkdirs (versions-path @repo))
       (let [branch-list (git/branch-list (:git @repo))
             actual-branches (if (:branches @repo)
-                              (filter #(re-matches (re-pattern (:branches @repo)) %) (:name branch-list))
+                              (filter #(re-matches (re-pattern (:branches @repo)) (:name %)) branch-list)
                               branch-list)
             db-branches (db-req/versions db {:repo-id (:id @repo)})
             updated-branches (branches-for-update actual-branches db-branches)
