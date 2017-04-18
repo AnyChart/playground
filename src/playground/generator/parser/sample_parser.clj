@@ -163,8 +163,7 @@
   (let [path (sample-path base-path group sample)
         name (clojure.string/replace sample #"\.(html|sample)$" "")
         sample-str (-> path slurp (replace-vars (:vars config)))
-        base-info (cond (and (.endsWith path ".html")
-                             (html? sample-str)) (parse-html-sample path sample-str)
+        base-info (cond (.endsWith path ".html") (parse-html-sample path sample-str)
                         (.endsWith path ".sample") (if (html? sample-str)
                                                      (parse-html-sample path sample-str)
                                                      (parse-toml-sample path sample-str)))]
