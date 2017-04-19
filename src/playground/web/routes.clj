@@ -22,7 +22,7 @@
 
 
 (defn landing-page [request]
-  (let [samples (db-req/top-samples (get-db request) {:count 9})]
+  (let [samples (db-req/top-samples (get-db request) {:count 9 :offset 0})]
     (render-file "templates/landing-page.selmer" {:samples   samples
                                                   :templates (-> request :app :templates)
                                                   :repos     (-> request :app :repos)})))
@@ -30,6 +30,7 @@
   (response (render-file "templates/sample.selmer" sample)))
 
 (defn show-sample-standalone [sample request]
+  (db-req/update-sample-views! (get-db request) {:id (:id sample)})
   (let [templates (db-req/templates (get-db request))]
     (render-file "templates/standalone-page.selmer" {:sample    sample
                                                      :templates templates
@@ -37,6 +38,7 @@
                                                                      "?view=iframe")})))
 
 (defn show-sample-editor [sample request]
+  (db-req/update-sample-views! (get-db request) {:id (:id sample)})
   (let [templates (db-req/templates (get-db request))]
     (render-file "templates/editor.selmer" {:data (web-utils/pack {:sample    sample
                                                                    :templates templates})})))
@@ -59,9 +61,8 @@
         sample (db-req/sample-by-hash (get-db request) {:url     hash
                                                         :version version})
         view (-> request :params :view)]
-    (if sample
-      (show-sample-by-view view sample request)
-      (route/not-found "sample not found"))))
+    (when sample
+      (show-sample-by-view view sample request))))
 
 ;; middleware for getting repo, version, sample
 (defn- check-repo-middleware [handler]
@@ -218,12 +219,25 @@
                               (templates-middleware
                                 (check-repo-middleware
                                   repo-page))))
+           (GET "/:repo/" [] (fn [request]
+                               (when ((repos-middleware
+                                        (templates-middleware
+                                          (check-repo-middleware
+                                            repo-page))) request)
+                                 (redirect (web-utils/drop-slash (:uri request)) 301))))
 
            (GET "/:repo/:version" [] (repos-middleware
                                        (templates-middleware
                                          (check-repo-middleware
                                            (check-version-middleware
                                              version-page)))))
+           (GET "/:repo/:version/" [] (fn [request]
+                                        (when ((repos-middleware
+                                                 (templates-middleware
+                                                   (check-repo-middleware
+                                                     (check-version-middleware
+                                                       version-page)))) request)
+                                          (redirect (web-utils/drop-slash (:uri request)) 301))))
 
            (GET "/:repo/:version/*" [] (check-repo-middleware
                                          (check-version-middleware

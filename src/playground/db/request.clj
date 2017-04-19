@@ -4,7 +4,8 @@
             [playground.db.core :refer [insert-multiple!]]
             [cheshire.core :refer [generate-string parse-string]]
             [camel-snake-kebab.core :as kebab]
-            [camel-snake-kebab.extras :as kebab-extra]))
+            [camel-snake-kebab.extras :as kebab-extra]
+            [playground.utils.utils :as utils]))
 
 (defn underscore->dash [data]
   (kebab-extra/transform-keys kebab/->kebab-case data))
@@ -52,13 +53,17 @@
 (defsql show-version!)
 
 ;; samples
+(defn- add-full-url [sample]
+  (assoc sample :full-url (utils/sample-url sample)))
+
 (defn parse-sample [sample]
   ;; TODO: rename all keywords with underscore to dash
   (-> sample
       (assoc :tags (parse-string (:tags sample)))
       (assoc :scripts (parse-string (:scripts sample)))
       (assoc :styles (parse-string (:styles sample)))
-      underscore->dash))
+      underscore->dash
+      add-full-url))
 
 (defsql add-sample<!)
 
@@ -126,6 +131,7 @@
 
 (defsql delete-samples-by-ids!)
 
+(defsql update-sample-views!)
 
 ;; templates
 (defsql template-by-url {:result-set-fn first

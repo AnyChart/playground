@@ -3,6 +3,9 @@
   (:import (java.io ByteArrayOutputStream ByteArrayInputStream)
            (org.apache.commons.lang3 RandomStringUtils)))
 
+(defn drop-slash [s]
+  (subs s 0 (dec (count s))))
+
 (defn pack [data]
   (let [out (ByteArrayOutputStream. 4096)
         writer (transit/writer out :json)]

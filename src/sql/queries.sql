@@ -46,7 +46,9 @@ INSERT INTO samples (`name`, `short_description`, `description`, `tags`, `styles
 
 -- name: sql-top-samples
 SELECT samples.*, versions.`name` as version_name, repos.name as repo_name FROM samples
-  JOIN versions ON samples.version_id = versions.id JOIN repos ON versions.repo_id = repos.id WHERE samples.show_on_landing = TRUE LIMIT :count;
+  LEFT JOIN versions ON samples.version_id = versions.id LEFT JOIN repos ON versions.repo_id = repos.id
+  JOIN (SELECT id FROM samples ORDER BY likes DESC, views DESC LIMIT :offset, :count) as optimize_samples
+  ON optimize_samples.id = samples.id ORDER BY likes DESC, views DESC;
 
 -- name: sql-sample-by-url
 SELECT * FROM samples WHERE version_id = :version_id AND url = :url;
@@ -54,7 +56,6 @@ SELECT * FROM samples WHERE version_id = :version_id AND url = :url;
 -- name: sql-sample-template-by-url
 SELECT samples.*, templates.id AS template_id FROM samples LEFT JOIN templates ON samples.id = templates.sample_id
   WHERE url = :url ORDER BY version DESC;
-
 
 -- name: sql-sample-by-hash
 SELECT * FROM samples WHERE version_id IS NULL AND url = :url AND version = :version;
@@ -68,6 +69,8 @@ DELETE FROM samples WHERE version_id = :version_id;
 -- name: sql-delete-samples-by-ids!
 DELETE FROM samples WHERE id IN (:ids);
 
+-- name: sql-update-sample-views!
+UPDATE samples SET views = views + 1 WHERE id = :id;
 
 -- name: sql-template-by-url
 SELECT samples.*, versions.`name` as version_name, repos.name as repo_name FROM samples

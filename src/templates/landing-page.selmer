@@ -91,9 +91,9 @@
                                     sandbox="allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"
                                     allowtransparency="true"
                                     allowfullscreen="true"
-                                    src="/{{sample.repo-name}}/{{sample.version-name}}/{{sample.url}}?view=iframe"></iframe>
+                                    src="{{sample.full-url}}?view=iframe"></iframe>
                         </div>
-                        <p><a href="/{{sample.repo-name}}/{{sample.version-name}}/{{sample.url}}?view=standalone"
+                        <p><a href="{{sample.full-url}}?view=standalone"
                               target="_blank">{{sample.name}}</a></p>
                         <p class="text-muted">{{sample.short-description}}</p>
                         <div class="sample-info">

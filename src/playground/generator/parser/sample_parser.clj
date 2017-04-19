@@ -106,14 +106,14 @@
      :local-scripts     local-scripts
      :styles            css-libs
 
-     :code-type         (when code "js")
-     :code              (trim-code code)
+     :code-type         "js"
+     :code              (or (trim-code code) "")
 
-     :markup-type       (when markup "html")
-     :markup            (trim-code markup)
+     :markup-type       "html"
+     :markup            (or (trim-code markup) "")
 
-     :style-type        (when style "css")
-     :style             (trim-code style)}))
+     :style-type        "css"
+     :style             (or (trim-code style) "")}))
 
 
 

@@ -55,13 +55,16 @@ footer p{
 .samples-container{
     padding-bottom: 50px;
 }
-
+.sample-box-container{
+    min-height: 370px;
+}
 .sample-box{
     border: 1px solid #DDDDDD;
     border-radius: 0;
     padding: 15px;
     margin-top: 25px;
     background-color: white;
+    min-height: 370px;
 }
 .sample-icon {
     padding-right: 8px;
