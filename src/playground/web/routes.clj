@@ -8,7 +8,12 @@
             [playground.generator.core :as worker]
             [playground.redis.core :as redis]
             [playground.utils.utils :as common-utils]
-            [playground.web.utils :as web-utils]))
+            [playground.web.utils :as web-utils]
+            [playground.views.landing-page :as landing-view]
+            [playground.views.version-page :as version-view]
+            [playground.views.repo-page :as repo-view]))
+
+(def ^:const samples-per-page 12)
 
 (defn get-db [request] (-> request :component :db))
 (defn get-redis [request] (-> request :component :redis))
@@ -22,10 +27,12 @@
 
 
 (defn landing-page [request]
-  (let [samples (db-req/top-samples (get-db request) {:count 9 :offset 0})]
-    (render-file "templates/landing-page.selmer" {:samples   samples
-                                                  :templates (-> request :app :templates)
-                                                  :repos     (-> request :app :repos)})))
+  (let [samples (db-req/top-samples (get-db request) {:count  (inc samples-per-page)
+                                                      :offset 0})]
+    (landing-view/page {:samples   (take samples-per-page samples)
+                        :end       (< (count samples) (inc samples-per-page))
+                        :templates (-> request :app :templates)
+                        :repos     (-> request :app :repos)})))
 (defn show-sample-iframe [sample request]
   (response (render-file "templates/sample.selmer" sample)))
 
@@ -103,16 +110,46 @@
 (defn repo-page [repo request]
   (let [versions (db-req/versions (get-db request) {:repo-id (:id repo)})
         versions-with-samples (filter (comp pos? :samples-count) versions)]
-    (render-file "templates/repo-page.selmer" {:repo      repo
-                                               :templates (-> request :app :templates)
-                                               :repos     (-> request :app :repos)
-                                               :versions  versions-with-samples})))
+    ;(render-file "templates/repo-page.selmer" {:repo      repo
+    ;                                           :templates (-> request :app :templates)
+    ;                                           :repos     (-> request :app :repos)
+    ;                                           :versions  versions-with-samples})
+    (repo-view/page {:repo      repo
+                     :templates (-> request :app :templates)
+                     :repos     (-> request :app :repos)
+                     :versions  versions-with-samples})
+    ))
 
 (defn version-page [repo version request]
-  (let [samples (db-req/samples-by-version (get-db request) {:version_id (:id version)})]
-    (render-file "templates/version-page.selmer" {:samples   samples
-                                                  :templates (-> request :app :templates)
-                                                  :repos     (-> request :app :repos)})))
+  (let [samples (db-req/samples-by-version (get-db request) {:version_id (:id version)
+                                                             :offset     0
+                                                             :count      (inc samples-per-page)})]
+    (version-view/page {:samples    (take samples-per-page samples)
+                        :end        (< (count samples) (inc samples-per-page))
+                        :version-id (:id version)
+                        :templates  (-> request :app :templates)
+                        :repos      (-> request :app :repos)})))
+
+(defn top-landing-samples [request]
+  (let [offset* (-> request :params :offset)
+        offset (if (int? offset*) offset* (Integer/parseInt offset*))
+        samples (db-req/top-samples (get-db request) {:count  (inc samples-per-page)
+                                                      :offset offset})
+        result {:samples (take samples-per-page samples)
+                :end     (< (count samples) (inc samples-per-page))}]
+    (response result)))
+
+(defn top-version-samples [request]
+  (let [offset* (-> request :params :offset)
+        offset (if (int? offset*) offset* (Integer/parseInt offset*))
+        version-id (-> request :params :version_id)
+        samples (db-req/samples-by-version (get-db request) {:version_id version-id
+                                                             :count      (inc samples-per-page)
+                                                             :offset     offset})
+        result {:samples (take samples-per-page samples)
+                :end     (< (count samples) (inc samples-per-page))}]
+    ;(prn "version samples: " offset version-id (count samples))
+    (response result)))
 
 (def empty-sample
   {:name              ""
@@ -214,6 +251,11 @@
                                        update-repo))
            (POST "/:repo/_update_" [] (check-repo-middleware
                                         update-repo))
+
+           (GET "/landing-samples.json" [] top-landing-samples)
+           (POST "/landing-samples.json" [] top-landing-samples)
+           (GET "/version-samples.json" [] top-version-samples)
+           (POST "/version-samples.json" [] top-version-samples)
 
            (GET "/:repo" [] (repos-middleware
                               (templates-middleware

@@ -30,6 +30,7 @@
                  [clj-time "0.13.0"]
                  [me.raynes/fs "1.4.6"]
                  [camel-snake-kebab "0.4.0"]
+                 [hiccup "1.0.5"]
 
                  ;; db
                  [clojure.jdbc/clojure.jdbc-c3p0 "0.3.2"]
@@ -52,13 +53,17 @@
                  [re-frame "0.9.2"]
                  ; [cljs-http "0.1.42"]
                  [cljs-ajax "0.5.9"]
+                 [com.andrewmcveigh/cljs-time "0.4.0"]
+                 [hiccups "0.3.0"]
                  ;[secretary "1.2.3"]
                  [com.cognitect/transit-cljs "0.8.239"]
                  [venantius/accountant "0.1.9"]]
   :plugins [[lein-ancient "0.6.10"]
             [lein-cljsbuild "1.1.5"]
             [lein-kibit "0.1.3"]]
-  :cljsbuild {:builds [{:id           "dev"
+  :cljsbuild {:builds [
+                       ;; editor
+                       {:id           "dev"
                         :source-paths ["src-cljs" "src-cljc"]
                         :compiler     {:output-to     "resources/public/js/playground.js"
                                        :optimizations :whitespace
@@ -70,4 +75,17 @@
                                        :pretty-print    false
                                        :pseudo-names    false
                                        :externs         ["codemirror_externs.js"]
+                                       :closure-defines {"goog.DEBUG" false}}}
+                       ;; site
+                       {:id           "dev-site"
+                        :source-paths ["src-site-cljs" "src-cljc"]
+                        :compiler     {:output-to     "resources/public/js/site.js"
+                                       :optimizations :whitespace
+                                       :pretty-print  true}}
+                       {:id           "prod-site"
+                        :source-paths ["src-site-cljs" "src-cljc"]
+                        :compiler     {:output-to       "resources/public/js/site.js"
+                                       :optimizations   :advanced
+                                       :pretty-print    false
+                                       :pseudo-names    false
                                        :closure-defines {"goog.DEBUG" false}}}]})

@@ -71,7 +71,7 @@
         </div>
     </div>
 
-    <footer class="footer" style="margin-top: 40px;">
+    <footer class="footer">
         <div class="container">
             <p class="text-muted">© {% now yyyy %} AnyChart.Com All rights reserved.</p>
         </div>

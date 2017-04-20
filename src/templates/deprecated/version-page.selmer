@@ -64,7 +64,7 @@
 
     <div class="container-fluid content">
         <!--<div class="col-lg-8 col-lg-offset-2">-->
-        <div class="row samples-container" style="max-width: 1200px; margin: 0 auto;">
+        <div class="row samples-container">
             {% for sample in samples %}
             <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                 <div class="sample-box">

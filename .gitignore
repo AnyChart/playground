@@ -13,3 +13,4 @@ pom.xml.asc
 playground.iml
 data/
 resources/public/js/playground.js
+resources/public/js/site.js

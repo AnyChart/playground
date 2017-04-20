@@ -61,58 +61,15 @@
         </div>
     </nav>
 
+
     <div class="content">
-
         <div class="container-fluid">
-            <div class="row" style="max-width: 1200px; margin: 0 auto;">
-                <div class="col-lg-12 col-md-12">
-                    <div class="jumbotron" style="margin-top: 20px;">
-                        <h1>AnyChart Playground </h1>
-                        <p>AnyChart Playground is a place where all your data visualization dreams come true</p>
-                        <p>
-                            {% for template in templates %}
-                            <button class="btn btn-primary btn-lg "
-                                    onclick="location.href='/new?template={{template.url}}';"
-                                    role="button">Create {{template.name}}
-                            </button>
-                            {% endfor %}
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!--<div class="col-lg-8 col-lg-offset-2">-->
-            <div class="row samples-container" style="max-width: 1200px; margin: 0 auto;">
-                {% for sample in samples %}
-                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                    <div class="sample-box">
-                        <div class="iframe-height-scaling">
-                            <iframe class="iframe-preview"
-                                    sandbox="allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"
-                                    allowtransparency="true"
-                                    allowfullscreen="true"
-                                    src="{{sample.full-url}}?view=iframe"></iframe>
-                        </div>
-                        <p><a href="{{sample.full-url}}?view=standalone"
-                              target="_blank">{{sample.name}}</a></p>
-                        <p class="text-muted">{{sample.short-description}}</p>
-                        <div class="sample-info">
-                            <p class="sample-info-likes">
-                                <span title="Views: {{sample.views}}">
-                                    <span style="padding-left: 4px;">{{sample.views}}</span>
-                                    <span class="glyphicon glyphicon-eye-open sample-icon" aria-hidden="true"></span>
-                                </span>
-                                <span title="Likes: {{sample.likes}}">
-                                    <span style="padding-left: 4px;">{{sample.likes}}</span>
-                                    <span class="glyphicon glyphicon-heart sample-icon" aria-hidden="true"></span>
-                                </span>
-                            </p>
-                            <p>By <span title="Column chart created by {{sample.author}}">{{sample.author}}</span>,
-                                <span title="{{sample.create-date|date:"MMM d, yyyy"}}">{{sample.create-date|date:"MMM d"}}</span></p>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
+            <div class="branches">
+            <ul>
+            {% for version in versions %}
+                <li><a href="/{{repo.name}}/{{version.name}}"">Branch {{version.name}}</a></li>
+            {% endfor %}
+            </ul>
             </div>
         </div>
     </div>

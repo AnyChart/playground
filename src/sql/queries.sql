@@ -31,7 +31,9 @@ SELECT * FROM samples;
 
 -- name: sql-samples-by-version
 SELECT samples.*, versions.`name` as version_name, repos.name as repo_name FROM samples
-  JOIN versions ON samples.version_id = versions.id JOIN repos ON versions.repo_id = repos.id WHERE samples.version_id = :version_id;
+  JOIN versions ON samples.version_id = versions.id JOIN repos ON versions.repo_id = repos.id
+  JOIN (SELECT id FROM samples WHERE version_id = :version_id ORDER BY likes DESC, views DESC LIMIT :offset, :count) as optimize_samples
+  ON optimize_samples.id = samples.id ORDER BY likes DESC, views DESC;
 
 -- name: sql-sample-version
 SELECT version FROM samples WHERE url = :url ORDER BY version DESC;
@@ -45,7 +47,9 @@ INSERT INTO samples (`name`, `short_description`, `description`, `tags`, `styles
                       :url, :version);
 
 -- name: sql-top-samples
-SELECT samples.*, versions.`name` as version_name, repos.name as repo_name FROM samples
+SELECT samples.id, samples.name, samples.author, samples.views, samples.likes, samples.create_date, samples.url, samples.version, samples.version_id,
+  samples.tags, samples.description, samples.short_description,
+  versions.`name` as version_name, repos.name as repo_name FROM samples
   LEFT JOIN versions ON samples.version_id = versions.id LEFT JOIN repos ON versions.repo_id = repos.id
   JOIN (SELECT id FROM samples ORDER BY likes DESC, views DESC LIMIT :offset, :count) as optimize_samples
   ON optimize_samples.id = samples.id ORDER BY likes DESC, views DESC;
@@ -73,7 +77,9 @@ DELETE FROM samples WHERE id IN (:ids);
 UPDATE samples SET views = views + 1 WHERE id = :id;
 
 -- name: sql-template-by-url
-SELECT samples.*, versions.`name` as version_name, repos.name as repo_name FROM samples
+SELECT samples.id, samples.name, samples.author, samples.views, samples.likes, samples.create_date, samples.url, samples.version, samples.version_id,
+  samples.tags, samples.description, samples.short_description,
+  versions.`name` as version_name, repos.name as repo_name FROM samples
   JOIN templates ON samples.id = templates.sample_id
   JOIN versions ON samples.version_id = versions.id
   JOIN repos ON versions.repo_id = repos.id
