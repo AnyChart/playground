@@ -71,8 +71,9 @@
     (if (= (s/conform ::core-spec/config conf) ::s/invalid)
       (timbre/info "Bad config file!\n" (s/explain-str ::core-spec/config conf))
       (let [sys (case (:mode conf)
-                  "frontend" (get-web-system conf)
-                  "backend" (get-worker-system conf)
+                  "web" (get-web-system conf)
+                  "generator" (get-worker-system conf)
+                  "preview-generator" (get-preview-worker-system conf)
                   (get-full-system conf))]
         (alter-var-root #'system (constantly (component/start-system sys)))
         system))))

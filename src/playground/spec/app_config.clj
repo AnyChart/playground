@@ -3,7 +3,7 @@
             [clojure.spec.test :as stest]))
 
 ;;=================== App .toml config file spec ==================
-(s/def ::mode #{"full" "backend" "frontend"})
+(s/def ::mode #{"full" "web" "generator" "preview-generator"})
 
 (s/def ::port (s/and int? pos?))
 (s/def ::web (s/keys :req-un [::port]))
