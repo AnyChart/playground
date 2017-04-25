@@ -106,6 +106,12 @@ footer p {
     text-overflow: ellipsis;
     width: 270px;
 }
+.sample-box .name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 270px;
+}
 
 .iframe-preview {
     width: 100%;

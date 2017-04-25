@@ -25,7 +25,7 @@
                                 :allowfullscreen   "true"
                                 :allowtransparency "true"
                                 :sandbox           "allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"}])]
-    [:p [:a {:target "_blank" :href (str (:full-url sample))}
+    [:p.name [:a {:target "_blank" :href (str (:full-url sample)) :title (if (s/blank? (:name sample)) "Noname sample" (:name sample))}
          (if (s/blank? (:name sample)) "Noname sample" (:name sample))]]
     [:p.text-muted.description
      [:span (when (seq (:short-description sample)) {:title (:short-description sample)})

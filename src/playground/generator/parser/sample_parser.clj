@@ -89,16 +89,11 @@
         tags-content (->> (html/select page [:meta])
                           (filter #(= "ac:tags" (:name (:attrs %))))
                           first :attrs :content)
-        tags (if tags-content (clojure.string/split tags-content #"\s*,\s*") [])
-
-        show-on-landing (some->> (html/select page [:meta])
-                                 (filter #(= "ac:show-on-landing" (:name (:attrs %))))
-                                 first :attrs :content read-string)]
+        tags (if tags-content (clojure.string/split tags-content #"\s*,\s*") [])]
     {:name              name
      :description       description
      :short-description short-description
 
-     :show-on-landing   show-on-landing
      :tags              tags
      :exports           exports
 
@@ -124,7 +119,6 @@
        :description       (-> data :description)
        :short-description (-> data :short-description)
 
-       :show-on-landing   (-> data :meta :show-on-landing)
        :tags              (-> data :meta :tags)
        :exports           (-> data :meta :export)
 

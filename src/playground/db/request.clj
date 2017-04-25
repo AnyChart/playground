@@ -100,7 +100,6 @@
    :short_description (:short-description sample)
 
    :url               (:url sample)
-   :show_on_landing   (:show-on-landing sample)
    :tags              (generate-string (:tags sample))
    :exports           (:exports sample)
 

@@ -6,7 +6,6 @@
 (s/def ::description string?)
 (s/def ::short_description string?)
 
-(s/def ::show_on_landing boolean?)
 (s/def ::tags (s/coll-of string?))
 (s/def ::exports (s/coll-of string?))
 
@@ -29,7 +28,6 @@
                                  ::description
                                  ::short_description
 
-                                 ::show_on_landing
                                  ::tags
                                  ::exports
 
