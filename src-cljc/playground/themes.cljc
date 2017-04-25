@@ -52,6 +52,6 @@
   ([version-key]
    (if (re-matches #"^\d+\.\d+\.\d+$" version-key)
      (if (= 1 (version-compare version-key "7.10.1"))
-      (get-full-themes version-key all-raw-themes)
-      (get-full-themes version-key (get themes version-key)))
+       (get-full-themes version-key all-raw-themes)
+       (get-full-themes version-key (get themes version-key)))
      (get-themes))))

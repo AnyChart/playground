@@ -23,14 +23,14 @@
   component/Lifecycle
 
   (start [component]
-    (timbre/info "Web start")
+    (timbre/info "Web start" conf)
     (assoc component :server (web/run
                                (-> (create-web-handler component)
                                    wrap-transit-json-params
                                    wrap-transit-json-response
                                    wrap-keyword-params
                                    wrap-params)
-                               conf)))
+                               {:port (:port conf)})))
 
   (stop [component]
     (timbre/info "Web stop")

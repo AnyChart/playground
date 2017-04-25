@@ -8,7 +8,8 @@
             [playground.web.core :as web]
             [playground.generator.core :as generator]
             [playground.notification.slack :as slack]
-            [playground.redis.core :as redis])
+            [playground.redis.core :as redis]
+            [playground.preview-generator.core :as pw-generator])
   (:gen-class)
   (:import (org.slf4j LoggerFactory Logger)
            (ch.qos.logback.classic Level)))
@@ -33,14 +34,17 @@
     :notifier (slack/new-notifier (-> conf :notifications :slack))
     :generator (component/using (generator/new-generator {:templates (:templates conf)} (repositories-conf conf))
                                 [:db :notifier :redis])
-    :web (component/using (web/new-web (:web conf)) [:db :redis])))
+    :preview-generator (component/using (pw-generator/new-preview-generator (:previews conf))
+                                        [:db :redis :notifier])
+    :web (component/using (web/new-web (merge (:web conf) (:previews conf)))
+                          [:db :redis])))
 
 (defn get-worker-system [conf]
   (component/system-map
     :db (db/new-jdbc (:db conf))
     :redis (redis/new-redis (:redis conf))
     :notifier (slack/new-notifier (-> conf :notifications :slack))
-    :generator (component/using (generator/new-generator {:templates (:templates conf)}  (repositories-conf conf))
+    :generator (component/using (generator/new-generator {:templates (:templates conf)} (repositories-conf conf))
                                 [:db :notifier :redis])))
 
 (defn get-web-system [conf]
@@ -48,6 +52,14 @@
     :db (db/new-jdbc (:db conf))
     :redis (redis/new-redis (:redis conf))
     :web (component/using (web/new-web (:web conf)) [:db :redis])))
+
+(defn get-preview-worker-system [conf]
+  (component/system-map
+    :db (db/new-jdbc (:db conf))
+    :redis (redis/new-redis (:redis conf))
+    :notifier (slack/new-notifier (-> conf :notifications :slack))
+    :preview-generator (component/using (pw-generator/new-preview-generator (merge (:web conf) (:previews conf)))
+                                        [:db :redis :notifier])))
 
 (def system nil)
 

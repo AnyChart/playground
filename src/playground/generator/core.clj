@@ -11,7 +11,8 @@
             [playground.db.request :as db-req]
             [playground.notification.slack :as slack]
             [playground.redis.core :as redis]
-            [playground.repo.git :as git]))
+            [playground.repo.git :as git]
+            [playground.utils.utils :as utils]))
 
 ;;============== component ==============
 (declare update-repository-by-repo-name)
@@ -118,11 +119,13 @@
   (when (.exists (file path))
     (some-> path slurp (toml/read :keywordize))))
 
-(defn build-branch [db repo branch path versions]
+(defn build-branch [db redis repo branch path versions]
   (info "Build branch: " path (:name branch))
   (let [version-config (-> (read-version-config (str path "/config.toml"))
                            (assoc-in [:vars :branch-name] (:name branch)))
-        samples (group-parser/samples path version-config)
+        samples* (group-parser/samples path version-config)
+        ;; TODO: delete replacing urls for old sample format
+        samples (map #(update-in % [:scripts] (fn [scripts] (utils/replace-urls (:name branch) scripts))) samples*)
         version-id (db-req/add-version<! db {:name          (:name branch)
                                              :commit        (:commit branch)
                                              :repo-id       (:id @repo)
@@ -133,6 +136,9 @@
     (when (seq samples)
       (let [ids (db-req/add-samples! db version-id samples)]
         ;  ;; if repo is templates-repo, then update templates
+        (redis/enqueue redis
+                       (-> redis :config :preview-queue)
+                       ids)
         (when (:templates @repo)
           (db-req/delete-templates! db)
           (db-req/add-templates! db ids))))
@@ -144,7 +150,7 @@
         (remove-branch db version)))
     (db-req/show-version! db {:repo-id (:id @repo) :id version-id})))
 
-(defn update-branch [db repo branch versions generator queue-index]
+(defn update-branch [db redis repo branch versions generator queue-index]
   (try
     (info "Update branch: " branch)
     (let [path (version-path @repo (:name branch))
@@ -155,7 +161,7 @@
       (let [git-repo (git/get-git git-path)]
         (git/checkout git-repo (:name branch))
         (git/pull git-repo @repo)
-        (build-branch db repo branch path versions)))
+        (build-branch db redis repo branch path versions)))
     nil
     (catch Exception e
       (do (error e)
@@ -194,7 +200,7 @@
           (remove-branch db branch))
         ;(doseq [branch updated-branches]
         ;  (update-branch db repo branch db-branches generator @repo queue-index))
-        (let [result (doall (map #(update-branch db repo % db-branches generator queue-index) updated-branches))
+        (let [result (doall (map #(update-branch db (:redis generator) repo % db-branches generator queue-index) updated-branches))
               errors (filter some? result)]
           (fs/delete-dir (versions-path @repo))
           (if (not-empty errors)

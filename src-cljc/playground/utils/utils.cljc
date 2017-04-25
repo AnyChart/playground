@@ -1,7 +1,14 @@
-(ns playground.utils.utils)
+(ns playground.utils.utils
+  (:require [clojure.string :as s]))
 
 (defn released-version? [version-key]
   (re-matches #"^\d+\.\d+\.\d+$" version-key))
+
+(defn replace-urls [version-name scripts]
+  (map (fn [script]
+         (if (= script "../anychart-bundle.min.js")
+           (str "https://cdn.anychart.com/js/" version-name "/anychart-bundle.min.js")
+           script)) scripts))
 
 (defn sample-url [sample]
   (if (:version-id sample)
@@ -13,3 +20,14 @@
            (when (pos? (:version sample))
              (str "/" (:version sample))))
       "")))
+
+(defn name->url [name]
+  (-> name
+      (clojure.string/replace #"^/" "")
+      (clojure.string/replace #"/" "-")
+      (clojure.string/replace #", " "-")
+      (clojure.string/replace #",_" "-")
+      (clojure.string/replace #"," "-")
+      (clojure.string/replace #" " "-")
+      (clojure.string/replace #"_" "-")
+      s/lower-case))

@@ -1,28 +1,31 @@
 (ns playground.views.sample
   (:require [clojure.string :as s]
-    #?(:clj [clj-time.core :as t])
-    #?(:clj [clj-time.coerce :as c]
-       :cljs [cljs-time.coerce :as c])
-    #?(:clj [clj-time.format :as f]
+    #?(:cljs [cljs-time.coerce :as c]
+       :clj  [clj-time.coerce :as c])
+    #?(:clj  [clj-time.format :as f]
        :cljs [cljs-time.format :as f])))
 
 (defn date [date]
-  #?(:clj (f/unparse (f/formatter "MMM d") (c/from-sql-date date))
+  #?(:clj  (f/unparse (f/formatter "MMM d") (c/from-sql-date date))
      :cljs (f/unparse (f/formatter "MMM d") (c/to-date-time date))))
 
 (defn full-date [date]
-  #?(:clj (f/unparse (f/formatter "MMM d, yyyy") (c/from-sql-date date))
+  #?(:clj  (f/unparse (f/formatter "MMM d, yyyy") (c/from-sql-date date))
      :cljs (f/unparse (f/formatter "MMM d, yyyy") (c/to-date-time date))))
 
 (defn sample-landing [sample]
   [:div.col-lg-4.col-md-4.col-sm-6.col-xs-12
    [:div.sample-box
     [:div.iframe-height-scaling
-     [:iframe.iframe-preview {:src               (str (:full-url sample) "?view=iframe")
-                              :allowfullscreen   "true"
-                              :allowtransparency "true"
-                              :sandbox           "allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"}]]
-    [:p [:a {:target "_blank" :href (str (:full-url sample) "?view=standalone")}
+     (if (:preview sample)
+       [:a {:target "_blank" :href (str (:full-url sample))}
+        [:img.image-preview {:src (str (:full-url sample) "?view=preview")
+                             :alt (:name sample)}]]
+       [:iframe.iframe-preview {:src               (str (:full-url sample) "?view=iframe")
+                                :allowfullscreen   "true"
+                                :allowtransparency "true"
+                                :sandbox           "allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"}])]
+    [:p [:a {:target "_blank" :href (str (:full-url sample))}
          (if (s/blank? (:name sample)) "Noname sample" (:name sample))]]
     [:p.text-muted.description
      [:span (when (seq (:short-description sample)) {:title (:short-description sample)})

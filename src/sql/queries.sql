@@ -29,8 +29,15 @@ UPDATE versions SET hidden = false WHERE repo_id = :repo_id AND id = :id;
 -- name: sql-samples
 SELECT * FROM samples;
 
--- name: sql-samples-by-version
+-- name: sql-samples-by-ids
 SELECT samples.*, versions.`name` as version_name, repos.name as repo_name FROM samples
+   LEFT JOIN versions ON samples.version_id = versions.id LEFT JOIN repos ON versions.repo_id = repos.id
+   WHERE samples.id IN (:ids);
+
+-- name: sql-samples-by-version
+SELECT samples.id, samples.name, samples.author, samples.views, samples.likes, samples.create_date, samples.url, samples.version, samples.version_id,
+  samples.tags, samples.description, samples.short_description, samples.preview,
+  versions.`name` as version_name, repos.name as repo_name FROM samples
   JOIN versions ON samples.version_id = versions.id JOIN repos ON versions.repo_id = repos.id
   JOIN (SELECT id FROM samples WHERE version_id = :version_id ORDER BY likes DESC, views DESC LIMIT :offset, :count) as optimize_samples
   ON optimize_samples.id = samples.id ORDER BY likes DESC, views DESC;
@@ -48,7 +55,7 @@ INSERT INTO samples (`name`, `short_description`, `description`, `tags`, `styles
 
 -- name: sql-top-samples
 SELECT samples.id, samples.name, samples.author, samples.views, samples.likes, samples.create_date, samples.url, samples.version, samples.version_id,
-  samples.tags, samples.description, samples.short_description,
+  samples.tags, samples.description, samples.short_description, samples.preview,
   versions.`name` as version_name, repos.name as repo_name FROM samples
   LEFT JOIN versions ON samples.version_id = versions.id LEFT JOIN repos ON versions.repo_id = repos.id
   JOIN (SELECT id FROM samples ORDER BY likes DESC, views DESC LIMIT :offset, :count) as optimize_samples
@@ -76,10 +83,11 @@ DELETE FROM samples WHERE id IN (:ids);
 -- name: sql-update-sample-views!
 UPDATE samples SET views = views + 1 WHERE id = :id;
 
+-- name: sql-update-samples-preview!
+UPDATE samples SET preview = :preview WHERE id IN (:ids);
+
 -- name: sql-template-by-url
-SELECT samples.id, samples.name, samples.author, samples.views, samples.likes, samples.create_date, samples.url, samples.version, samples.version_id,
-  samples.tags, samples.description, samples.short_description,
-  versions.`name` as version_name, repos.name as repo_name FROM samples
+SELECT  samples.*, versions.`name` as version_name, repos.name as repo_name FROM samples
   JOIN templates ON samples.id = templates.sample_id
   JOIN versions ON samples.version_id = versions.id
   JOIN repos ON versions.repo_id = repos.id

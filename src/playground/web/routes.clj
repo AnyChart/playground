@@ -1,7 +1,7 @@
 (ns playground.web.routes
   (:require [compojure.core :refer :all]
             [compojure.route :as route]
-            [ring.util.response :refer [redirect response]]
+            [ring.util.response :refer [redirect response file-response]]
             [taoensso.timbre :as timbre]
             [selmer.parser :refer [render-file]]
             [playground.db.request :as db-req]
@@ -11,7 +11,8 @@
             [playground.web.utils :as web-utils]
             [playground.views.landing-page :as landing-view]
             [playground.views.version-page :as version-view]
-            [playground.views.repo-page :as repo-view]))
+            [playground.views.repo-page :as repo-view]
+            [playground.preview-generator.phantom :as phantom]))
 
 (def ^:const samples-per-page 12)
 
@@ -50,11 +51,17 @@
     (render-file "templates/editor.selmer" {:data (web-utils/pack {:sample    sample
                                                                    :templates templates})})))
 
+(defn show-sample-preview [sample request]
+  (if (:preview sample)
+    (file-response (phantom/image-path (-> request :component :conf :images-dir) sample))
+    (response "Preview is not available, try later.")))
+
 (defn show-sample-by-view [view sample request]
   (case view
     "standalone" (show-sample-standalone sample request)
     "iframe" (show-sample-iframe sample request)
     "editor" (show-sample-editor sample request)
+    "preview" (show-sample-preview sample request)
     nil (show-sample-editor sample request)))
 
 (defn show-sample [repo version sample request]
@@ -93,9 +100,10 @@
           sample (db-req/sample-by-url (get-db request) {:version-id (:id version)
                                                          :url        sample-url})]
       (when sample
-        (handler repo version (assoc sample
-                                :repo-name (:name repo)
-                                :version-name (:name version)) request)))))
+        (handler repo version (-> sample
+                                  (assoc :repo-name (:name repo))
+                                  (assoc :version-name (:name version))
+                                  db-req/add-full-url) request)))))
 
 (defn- templates-middleware [handler]
   (fn [request]
@@ -117,8 +125,7 @@
     (repo-view/page {:repo      repo
                      :templates (-> request :app :templates)
                      :repos     (-> request :app :repos)
-                     :versions  versions-with-samples})
-    ))
+                     :versions  versions-with-samples})))
 
 (defn version-page [repo version request]
   (let [samples (db-req/samples-by-version (get-db request) {:version_id (:id version)
@@ -206,7 +213,8 @@
                   :url hash
                   :version 0)]
     (prn "Fork: " sample*)
-    (db-req/add-sample! (get-db request) sample*)
+    (let [id (db-req/add-sample! (get-db request) sample*)]
+      (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [id]))
     (response {:status  :ok
                :hash    hash
                :version 0})))
@@ -228,7 +236,8 @@
             version (:version db-sample)
             sample* (assoc sample :version (inc version))]
         (prn "Save, insert" sample*)
-        (db-req/add-sample! (get-db request) sample*)
+        (let [id (db-req/add-sample! (get-db request) sample*)]
+          (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [id]))
         (response {:status  :ok
                    :hash    hash
                    :version (inc version)}))

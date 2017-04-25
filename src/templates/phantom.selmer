@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+    {% for script in scripts %}
+    <script>
+        {{script|safe}}
+    </script>
+    {% endfor %}
+
+    {% for style in styles %}
+    <style>
+        {{style|safe}}
+    </style>
+    {% endfor %}
+
+    <style>
+        {{style|safe}}
+    </style>
+
+    <style>
+        .anychart-credits { display: none; }
+    </style>
+</head>
+<body>
+{{markup|safe}}
+<script type="text/javascript">
+    {{code|safe}}
+    window.onload = function() {
+        var checkRenderCount = 0;
+        var checkRender = function(){
+            var svgs = document.getElementsByTagName('svg');
+            if (svgs.length > 0) {
+                console.log('chart draw');
+            }else {
+                checkRenderCount++;
+                if (checkRenderCount > 100) {
+                    console.log('chart draw');
+                }
+            }
+        };
+        setInterval(checkRender, 20);
+    };
+</script>
+</body>
+</html>

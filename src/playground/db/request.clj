@@ -53,7 +53,7 @@
 (defsql show-version!)
 
 ;; samples
-(defn- add-full-url [sample]
+(defn add-full-url [sample]
   (assoc sample :full-url (utils/sample-url sample)))
 
 (defn parse-sample [sample]
@@ -68,6 +68,8 @@
 (defsql add-sample<!)
 
 (defsql samples {:row-fn underscore->dash})
+
+(defsql samples-by-ids {:row-fn parse-sample})
 
 (defsql sample-version {:result-set-fn (comp :version first)
                         :row-fn        underscore->dash})
@@ -132,6 +134,8 @@
 (defsql delete-samples-by-ids!)
 
 (defsql update-sample-views!)
+
+(defsql update-samples-preview!)
 
 ;; templates
 (defsql template-by-url {:result-set-fn first

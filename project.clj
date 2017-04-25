@@ -46,6 +46,9 @@
                  ;[clj-jgit "0.8.9"]
                  ;[ilevd/clj-jgit "0.8.8"]
 
+                 ;; phantom
+                 [org.imgscalr/imgscalr-lib "4.2"]
+
                  ;; front-end
                  ;[org.clojure/clojurescript "1.9.495"]
                  [org.clojure/clojurescript "1.9.473"]
