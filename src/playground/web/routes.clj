@@ -243,6 +243,19 @@
                    :version (inc version)}))
       (fork request))))
 
+(defn- generate-previews [samples request]
+  (let [ids (map :id samples)]
+    (if (seq ids)
+      (do (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) ids)
+          (response (str "Start generate previews for " (count samples) " samples: " (clojure.string/join ", " (map :name samples)))))
+      "All samples have previews")))
+
+(defn user-previews [request]
+  (generate-previews (db-req/user-samples-without-preview (get-db request)) request))
+
+(defn repo-previews [request]
+  (generate-previews (db-req/repo-samples-without-preview (get-db request)) request))
+
 (defroutes app-routes
            (route/resources "/")
            (GET "/" [] (repos-middleware
@@ -255,6 +268,9 @@
            (POST "/run" [] run)
            (POST "/save" [] save)
            (POST "/fork" [] fork)
+
+           (GET "/_user_previews_" [] user-previews)
+           (GET "/_repo_previews_" [] repo-previews)
 
            (GET "/:repo/_update_" [] (check-repo-middleware
                                        update-repo))

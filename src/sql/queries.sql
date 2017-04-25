@@ -93,6 +93,12 @@ SELECT  samples.*, versions.`name` as version_name, repos.name as repo_name FROM
   JOIN repos ON versions.repo_id = repos.id
   WHERE samples.url = :url;
 
+-- name: sql-user-samples-without-preview
+SELECT id, `name` FROM samples WHERE preview = false AND version_id IS NULL;
+
+-- name: sql-repo-samples-without-preview
+SELECT id, `name` FROM samples WHERE preview = false AND version_id IS NOT NULL;
+
 -- name: sql-templates
 SELECT * FROM samples JOIN templates ON samples.id = templates.sample_id;
 

@@ -137,6 +137,10 @@
 
 (defsql update-samples-preview!)
 
+(defsql user-samples-without-preview)
+
+(defsql repo-samples-without-preview)
+
 ;; templates
 (defsql template-by-url {:result-set-fn first
                          :row-fn        parse-sample})
