@@ -28,10 +28,14 @@
 
 
 (defn landing-page [request]
-  (let [samples (db-req/top-samples (get-db request) {:count  (inc samples-per-page)
-                                                      :offset 0})]
+  (prn request)
+  (let [page (dec (try (-> request :params :page Integer/parseInt) (catch Exception _ 1)))
+        samples (db-req/top-samples (get-db request) {:count  (inc samples-per-page)
+                                                      :offset (* samples-per-page page)})]
+    (prn page)
     (landing-view/page {:samples   (take samples-per-page samples)
                         :end       (< (count samples) (inc samples-per-page))
+                        :page      page
                         :templates (-> request :app :templates)
                         :repos     (-> request :app :repos)})))
 (defn show-sample-iframe [sample request]
@@ -128,14 +132,17 @@
                      :versions  versions-with-samples})))
 
 (defn version-page [repo version request]
-  (let [samples (db-req/samples-by-version (get-db request) {:version_id (:id version)
-                                                             :offset     0
+  (let [page (dec (try (-> request :params :page Integer/parseInt) (catch Exception _ 1)))
+        samples (db-req/samples-by-version (get-db request) {:version_id (:id version)
+                                                             :offset     (* samples-per-page page)
                                                              :count      (inc samples-per-page)})]
-    (version-view/page {:samples    (take samples-per-page samples)
-                        :end        (< (count samples) (inc samples-per-page))
-                        :version-id (:id version)
-                        :templates  (-> request :app :templates)
-                        :repos      (-> request :app :repos)})))
+    (version-view/page {:samples   (take samples-per-page samples)
+                        :end       (< (count samples) (inc samples-per-page))
+                        :page      page
+                        :version   version
+                        :repo      repo
+                        :templates (-> request :app :templates)
+                        :repos     (-> request :app :repos)})))
 
 (defn top-landing-samples [request]
   (let [offset* (-> request :params :offset)

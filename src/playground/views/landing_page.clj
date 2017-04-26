@@ -3,7 +3,7 @@
             [playground.views.common :as page]
             [hiccup.page :as hiccup-page]))
 
-(defn page [data]
+(defn page [{:keys [page] :as data}]
   (hiccup-page/html5
     {:lang "en"}
     (page/head)
@@ -20,10 +20,14 @@
          (for [sample (:samples data)]
            (sample-view/sample-landing sample))]
         [:div#prev-next-buttons.row.text-center
-         [:button#prevButton.btn.btn-default {:style "display: none;"} "Prev"]
-         [:button#nextButton.btn.btn-default {:style (str "display: " (if (:end data) "none;" "inline-block;"))} "Next"]]]]
+         [:a#prevButton.btn.btn-default {:style (str "display: " (if (zero? page) "none;" "inline-block;"))
+                                         :href  (str "/?page=" page)
+                                         :title (str "Prev page, " page)} "Prev"]
+         [:a#nextButton.btn.btn-default {:style (str "display: " (if (:end data) "none;" "inline-block;"))
+                                         :href  (str "/?page=" (-> page inc inc))
+                                         :title (str "Next page, " (-> page inc inc))} "Next"]]]]
 
       (page/footer (:repos data))]
 
      [:script {:src "/js/site.js" :type "text/javascript"}]
-     [:script "playground.site.landing.start(" (:end data) ");"]]))
+     [:script "playground.site.landing.start(" (:end data) ", " page ");"]]))

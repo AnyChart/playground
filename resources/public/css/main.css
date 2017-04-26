@@ -63,8 +63,7 @@ footer p {
 #prev-next-buttons {
     margin-bottom: 20px;
 }
-
-#prev-next-buttons button {
+#prev-next-buttons a {
     margin: 2px;
 }
 
