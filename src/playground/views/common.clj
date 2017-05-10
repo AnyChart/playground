@@ -33,7 +33,7 @@
       [:span.icon-bar]
       [:span.icon-bar]]
      [:a.navbar-brand
-      {:href "//anychart.com/"}
+      {:href "/"}
       [:img {:alt    "AnyChart"
              :height "30"
              :width  "30"
