@@ -18,7 +18,7 @@
       [:span {:class "icon-bar"}]
       [:span {:class "icon-bar"}]
       [:span {:class "icon-bar"}]]
-     [:a {:class "navbar-brand" :href "//anychart.com/"}
+     [:a {:class "navbar-brand" :href "/"}
       [:img {:src    "/icons/anychart.png"
              :style  {:display "inline-block"}
              :width  "30"
@@ -62,8 +62,11 @@
           ^{:key (:name template)} [:li [:a {:href (str "/new?template=" (:url template))} (:name template)]])
         [:li {:role "separator" :class "divider"}]
         [:li [:a {:href "/new"} "From scratch"]]]]
-      [:li [:a {:href "/signin"} "Log In"]]
-      [:li [:a {:href "/signup"} "Sign Up"]]]]]])
+       (if @(rf/subscribe [:can-signin])
+        [:li [:a {:href "/signin"} "Log In"]]
+        [:li [:a {:href "/signout"} "Log Out"]])
+      (when @(rf/subscribe [:can-signup])
+        [:li [:a {:href "/signup"} "Sign Up"]])]]]])
 
 (defn footer [])
 

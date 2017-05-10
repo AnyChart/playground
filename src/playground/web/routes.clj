@@ -27,6 +27,7 @@
             [playground.views.marketing.roadmap-page :as roadmap-view]
             [playground.views.marketing.support-page :as support-view]
             [playground.views.marketing.version-history-page :as version-history-view]
+            [playground.web.auth-base :as auth-base]
             [playground.web.helpers :refer :all]))
 
 ;; =====================================================================================================================
@@ -323,7 +324,7 @@
                      :email       email
                      :password    hash
                      :salt        salt
-                     :permissions auth/base-perms}
+                     :permissions auth-base/base-perms}
             id (db-req/add-user<! (get-db request) db-user)
             user (assoc db-user :id id)]
         (timbre/info "signup" (str password salt) hash)

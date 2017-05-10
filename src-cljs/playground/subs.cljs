@@ -2,7 +2,8 @@
   (:require [reagent.core :as reagent :refer [atom]]
             [re-frame.core :as rf]
             [playground.utils :as utils]
-            [playground.utils.utils :as common-utils]))
+            [playground.utils.utils :as common-utils]
+            [playground.web.auth-base :as auth-base]))
 
 (defn- makrup-type->str [type]
   (case type
@@ -77,3 +78,6 @@
                                      (-> db :user :id))
                                   (-> db :sample :version-id not)
                                   (-> db :sample :new not))))
+
+(rf/reg-sub :can-signin (fn [db _] (auth-base/can (-> db :user) :signin)))
+(rf/reg-sub :can-signup (fn [db _] (auth-base/can (-> db :user) :signup)))

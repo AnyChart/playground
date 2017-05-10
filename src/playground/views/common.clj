@@ -1,6 +1,6 @@
 (ns playground.views.common
   (:require [clj-time.core :as t]
-            [playground.web.auth :as auth]))
+            [playground.web.auth-base :as auth-base]))
 
 (defn head []
   [:head
@@ -79,10 +79,10 @@
           [:li [:a {:href (str "/new?template=" (:url template))} (:name template)]])
         [:li.divider {:role "separator"}]
         [:li [:a {:href "/new"} "From scratch"]]]]
-      (if (auth/can user :signin)
+      (if (auth-base/can user :signin)
         [:li [:a {:href "/signin"} "Log In"]]
         [:li [:a {:href "/signout"} "Log Out"]])
-      (when (auth/can user :signup)
+      (when (auth-base/can user :signup)
         [:li [:a {:href "/signup"} "Sign Up"]])
 
       ]]]])
