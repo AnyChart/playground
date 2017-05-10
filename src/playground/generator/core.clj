@@ -15,7 +15,7 @@
             [playground.utils.utils :as utils]
             [crypto.password.bcrypt :as bcrypt]
             [playground.web.utils :as web-utils]
-            [playground.web.auth :as auth]))
+            [playground.web.auth-base :as auth-base]))
 
 ;;============== component ==============
 (declare update-repository-by-repo-name)
@@ -262,4 +262,4 @@
             hash (bcrypt/encrypt (str (:password user) salt))]
         (db-req/add-user<! db (assoc user :salt salt
                                           :password hash
-                                          :permissions auth/base-perms))))))
+                                          :permissions auth-base/base-perms))))))
