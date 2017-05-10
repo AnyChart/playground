@@ -72,5 +72,8 @@
 (rf/reg-sub :templates (fn [db _] (-> db :templates)))
 
 (rf/reg-sub :show-save-button (fn [db _]
-                                (or (-> db :sample :version-id not)
-                                    (-> db :sample :new))))
+                                (and
+                                  (= (-> db :sample :owner-id)
+                                     (-> db :user :id))
+                                  (-> db :sample :version-id not)
+                                  (-> db :sample :new not))))
