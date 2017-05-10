@@ -13,7 +13,7 @@
 
       [:div.content
        [:div.container
-        "Coming soon"
-        ]]
+        [:h1.page-caption "Data Sets"]
+        [:p.page-caption-desc "Тут будет overview предоставляемых источников данных."]]]
 
       (page/footer (:repos data))]]))

@@ -13,7 +13,9 @@
 
       [:div.content
        [:div.container
-        "Coming soon"
-        ]]
+        [:h1.page-caption "Pricing - Enterprice"]
+        [:p.page-caption-desc "Тут будет информация об использовании плейграунда в качесвте коробки.
+        У гитхаба это выглядит вот так: https://enterprise.github.com/home"]]]
+
 
       (page/footer (:repos data))]]))

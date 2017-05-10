@@ -13,7 +13,7 @@
 
       [:div.content
        [:div.container
-        "Coming soon"
-        ]]
+        [:h1.page-caption "Support"]
+        [:p.page-caption-desc "Тут будет информация о поддержке."]]]
 
       (page/footer (:repos data))]]))

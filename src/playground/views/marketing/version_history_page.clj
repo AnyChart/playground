@@ -13,7 +13,7 @@
 
       [:div.content
        [:div.container
-        "Coming soon"
-        ]]
+        [:h1.page-caption "Version History"]
+        [:p.page-caption-desc "Тут будет вся история проекта."]]]
 
       (page/footer (:repos data))]]))

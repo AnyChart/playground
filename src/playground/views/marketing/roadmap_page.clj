@@ -13,7 +13,7 @@
 
       [:div.content
        [:div.container
-        "Coming soon"
-        ]]
+        [:h1.page-caption "Roadmap"]
+        [:p.page-caption-desc "Тут бутет информация о грядущих обновлениях и возможность зареквестить фичу."]]]
 
       (page/footer (:repos data))]]))
