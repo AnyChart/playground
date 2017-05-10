@@ -52,7 +52,8 @@
   (db-req/update-sample-views! (get-db request) {:id (:id sample)})
   (let [templates (db-req/templates (get-db request))]
     (response (render-file "templates/editor.selmer" {:data (web-utils/pack {:sample    sample
-                                                                             :templates templates})}))))
+                                                                             :templates templates
+                                                                             :user      (get-safe-user request)})}))))
 
 (defn show-sample-preview [sample request]
   (if (:preview sample)
@@ -268,9 +269,10 @@
                   :owner-id (-> request :session :user :id))]
     (let [id (db-req/add-sample! (get-db request) sample*)]
       (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [id]))
-    (response {:status  :ok
-               :hash    hash
-               :version 0})))
+    (response {:status   :ok
+               :hash     hash
+               :version  0
+               :owner-id (:id (get-user request))})))
 
 (defn save [request]
   ;(prn "Save: " (-> request :params :sample))
@@ -287,9 +289,10 @@
                                   :owner-id (-> request :session :user :id))]
         (let [id (db-req/add-sample! (get-db request) sample*)]
           (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [id]))
-        (response {:status  :ok
-                   :hash    hash
-                   :version (inc version)}))
+        (response {:status   :ok
+                   :hash     hash
+                   :version  (inc version)
+                   :owner-id (:id (get-user request))}))
       (fork request))))
 
 (defn- generate-previews [samples request]
@@ -313,17 +316,18 @@
         password (-> request :params :password)]
     (prn "signup" username fullname email password)
     (if (and (seq username) (seq fullname) (seq email) (seq password))
-      (do
-        (let [salt (web-utils/new-salt)
-              hash (bcrypt/encrypt (str password salt))]
-          (prn "signup" (str password salt) hash)
-          (db-req/add-user<! (get-db request) {:fullname    fullname
-                                               :username    username
-                                               :email       email
-                                               :password    hash
-                                               :salt        salt
-                                               :permissions auth/base-perms}))
-        (redirect "/"))
+      (let [salt (web-utils/new-salt)
+            hash (bcrypt/encrypt (str password salt))
+            db-user {:fullname    fullname
+                     :username    username
+                     :email       email
+                     :password    hash
+                     :salt        salt
+                     :permissions auth/base-perms}
+            id (db-req/add-user<! (get-db request) db-user)
+            user (assoc db-user :id id)]
+        (timbre/info "signup" (str password salt) hash)
+        (assoc-in (redirect "/") [:session :user] user))
       "Bad values")))
 
 (defn signin [request]

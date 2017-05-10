@@ -34,7 +34,8 @@
      :style          ""
      :editors-height (window-height)
      :sample         (:sample data)
-     :templates      (:templates data)}))
+     :templates      (:templates data)
+     :user           (:user data)}))
 
 (rf/reg-event-db
   :init
@@ -87,8 +88,10 @@
 
         (-> db
             (assoc-in [:sample :version-id] nil)
+            (assoc-in [:sample :new] false)
             (assoc-in [:sample :url] (:hash data))
-            (assoc-in [:sample :version] (:version data))))
+            (assoc-in [:sample :version] (:version data))
+            (assoc-in [:sample :owner-id] (:owner-id data))))
       (do
         (js/alert "Sample saving error")
         db))))
@@ -125,8 +128,10 @@
                                                          (str "/" (:version data)))))
         (-> db
             (assoc-in [:sample :version-id] nil)
+            (assoc-in [:sample :new] false)
             (assoc-in [:sample :url] (:hash data))
-            (assoc-in [:sample :version] (:version data))))
+            (assoc-in [:sample :version] (:version data))
+            (assoc-in [:sample :owner-id] (:owner-id data))))
       (do
         (js/alert "Sample fork error")
         db))))

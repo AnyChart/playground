@@ -25,4 +25,4 @@
 ;; session
 (defn get-user [request] (-> request :session :user))
 
-(defn get-cut-user [request] (dissoc (get-user request) :salt :password))
+(defn get-safe-user [request] (dissoc (get-user request) :salt :password :session-id :session :create-date))
