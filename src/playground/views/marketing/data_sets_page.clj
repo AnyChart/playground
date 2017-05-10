@@ -27,6 +27,6 @@
          [:span.label.label-primary "Revenue"]
          [:span.label.label-primary "Dummy data"]
          [:span.label.label-primary "Single value"]
-         ]]]
+         [:a {:href "#"} "Usage sample"]]]]
 
       (page/footer (:repos data))]]))
