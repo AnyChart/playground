@@ -15,7 +15,7 @@
 
 (defn title [sample]
   (str (if (s/blank? (:name sample)) "Sample" (:name sample))
-       " created by " (:author sample)))
+       " created by " (:fullname sample)))
 
 (defn image-alt [sample]
   (str (title sample)
@@ -52,5 +52,5 @@
        [:span {:class "views-count"} (:likes sample)]
        [:span.glyphicon.glyphicon-heart.sample-icon {:aria-hidden "true"}]]]
      [:p "By "
-      [:span {:title (title sample)} (:author sample)] ", "
+      [:span {:title (title sample)} (:fullname sample)] ", "
       [:span {:title (full-date (:create-date sample))} (date (:create-date sample))]]]]])

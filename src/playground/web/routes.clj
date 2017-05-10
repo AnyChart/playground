@@ -4,6 +4,7 @@
             [ring.util.response :refer [redirect response file-response]]
             [taoensso.timbre :as timbre]
             [selmer.parser :refer [render-file]]
+            [crypto.password.bcrypt :as bcrypt]
             [playground.db.request :as db-req]
             [playground.generator.core :as worker]
             [playground.redis.core :as redis]
@@ -11,49 +12,39 @@
             [playground.web.utils :as web-utils]
             [playground.views.landing-page :as landing-view]
             [playground.views.version-page :as version-view]
+            [playground.views.register-page :as register-view]
+            [playground.views.auth-page :as auth-view]
             [playground.views.repo-page :as repo-view]
-            [playground.preview-generator.phantom :as phantom]))
+            [playground.views.profile-page :as profile-view]
+            [playground.preview-generator.phantom :as phantom]
+            [playground.web.auth :as auth]
+            [playground.web.middleware :as mw]
+            [playground.web.helpers :refer :all]))
 
+;; =====================================================================================================================
+;; Consts
+;; =====================================================================================================================
 (def ^:const samples-per-page 12)
 
-(defn get-db [request] (-> request :component :db))
-(defn get-redis [request] (-> request :component :redis))
-(defn get-redis-queue [request] (-> (get-redis request) :config :queue))
-
-(defn update-repo [repo request]
-  (redis/enqueue (get-redis request)
-                 (get-redis-queue request)
-                 (:name repo))
-  (response (str "Start updating: " (:name repo))))
-
-
-(defn landing-page [request]
-  (prn request)
-  (let [page (dec (try (-> request :params :page Integer/parseInt) (catch Exception _ 1)))
-        samples (db-req/top-samples (get-db request) {:count  (inc samples-per-page)
-                                                      :offset (* samples-per-page page)})]
-    (prn page)
-    (landing-view/page {:samples   (take samples-per-page samples)
-                        :end       (< (count samples) (inc samples-per-page))
-                        :page      page
-                        :templates (-> request :app :templates)
-                        :repos     (-> request :app :repos)})))
+;; =====================================================================================================================
+;; Show samples
+;; =====================================================================================================================
 (defn show-sample-iframe [sample request]
   (response (render-file "templates/sample.selmer" sample)))
 
 (defn show-sample-standalone [sample request]
   (db-req/update-sample-views! (get-db request) {:id (:id sample)})
   (let [templates (db-req/templates (get-db request))]
-    (render-file "templates/standalone-page.selmer" {:sample    sample
-                                                     :templates templates
-                                                     :url       (str (common-utils/sample-url sample)
-                                                                     "?view=iframe")})))
+    (response (render-file "templates/standalone-page.selmer" {:sample    sample
+                                                               :templates templates
+                                                               :url       (str (common-utils/sample-url sample)
+                                                                               "?view=iframe")}))))
 
 (defn show-sample-editor [sample request]
   (db-req/update-sample-views! (get-db request) {:id (:id sample)})
   (let [templates (db-req/templates (get-db request))]
-    (render-file "templates/editor.selmer" {:data (web-utils/pack {:sample    sample
-                                                                   :templates templates})})))
+    (response (render-file "templates/editor.selmer" {:data (web-utils/pack {:sample    sample
+                                                                             :templates templates})}))))
 
 (defn show-sample-preview [sample request]
   (if (:preview sample)
@@ -62,77 +53,56 @@
 
 (defn show-sample-by-view [view sample request]
   (case view
-    "standalone" (show-sample-standalone sample request)
-    "iframe" (show-sample-iframe sample request)
-    "editor" (show-sample-editor sample request)
-    "preview" (show-sample-preview sample request)
+    :standalone (show-sample-standalone sample request)
+    :iframe (show-sample-iframe sample request)
+    :editor (show-sample-editor sample request)
+    :preview (show-sample-preview sample request)
     nil (show-sample-editor sample request)))
 
-(defn show-sample [repo version sample request]
-  (let [view (-> request :params :view)]
+(defn show-sample [request]
+  ;(prn "show sample: " (-> request :session))
+  (let [sample (get-sample request)
+        view (-> request :params :view keyword)]
     (show-sample-by-view view sample request)))
 
 (defn show-user-sample [request]
-  ;(prn "Show user sample: " (-> request :route-params))
   (let [hash (-> request :route-params :hash)
-        version (or (some-> (-> request :route-params :version) Integer.) 0)
+        version (try (-> request :route-params :version Integer/parseInt) (catch Exception _ 0))
         sample (db-req/sample-by-hash (get-db request) {:url     hash
                                                         :version version})
-        view (-> request :params :view)]
+        view (-> request :params :view keyword)]
     (when sample
       (show-sample-by-view view sample request))))
 
-;; middleware for getting repo, version, sample
-(defn- check-repo-middleware [handler]
-  (fn [request]
-    (let [repo-name (-> request :route-params :repo)
-          repo (db-req/repo-by-name (get-db request) {:name repo-name})]
-      (when repo
-        (handler repo request)))))
-
-(defn- check-version-middleware [handler]
-  (fn [repo request]
-    (let [version-name (-> request :route-params :version)
-          version (db-req/version-by-name (get-db request) {:repo-id (:id repo)
-                                                            :name    version-name})]
-      (when version
-        (handler repo version request)))))
-
-(defn- check-sample-middleware [handler]
-  (fn [repo version request]
-    (let [sample-url (-> request :route-params :*)
-          sample (db-req/sample-by-url (get-db request) {:version-id (:id version)
-                                                         :url        sample-url})]
-      (when sample
-        (handler repo version (-> sample
-                                  (assoc :repo-name (:name repo))
-                                  (assoc :version-name (:name version))
-                                  db-req/add-full-url) request)))))
-
-(defn- templates-middleware [handler]
-  (fn [request]
-    (handler (assoc-in request [:app :templates]
-                       (db-req/templates (get-db request))))))
-
-(defn- repos-middleware [handler]
-  (fn [request]
-    (handler (assoc-in request [:app :repos]
-                       (db-req/repos (get-db request))))))
-
-(defn repo-page [repo request]
-  (let [versions (db-req/versions (get-db request) {:repo-id (:id repo)})
-        versions-with-samples (filter (comp pos? :samples-count) versions)]
-    ;(render-file "templates/repo-page.selmer" {:repo      repo
-    ;                                           :templates (-> request :app :templates)
-    ;                                           :repos     (-> request :app :repos)
-    ;                                           :versions  versions-with-samples})
-    (repo-view/page {:repo      repo
-                     :templates (-> request :app :templates)
-                     :repos     (-> request :app :repos)
-                     :versions  versions-with-samples})))
-
-(defn version-page [repo version request]
+;; =====================================================================================================================
+;; Pages
+;; =====================================================================================================================
+(defn landing-page [request]
+  (prn "landing: " (get-user request))
   (let [page (dec (try (-> request :params :page Integer/parseInt) (catch Exception _ 1)))
+        samples (db-req/top-samples (get-db request) {:count  (inc samples-per-page)
+                                                      :offset (* samples-per-page page)})]
+    (response (landing-view/page {:samples   (take samples-per-page samples)
+                                  :end       (< (count samples) (inc samples-per-page))
+                                  :page      page
+                                  :user      (get-user request)
+                                  :templates (get-templates request)
+                                  :repos     (get-repos request)}))))
+
+(defn repo-page [request]
+  (let [repo (get-repo request)
+        versions (db-req/versions (get-db request) {:repo-id (:id repo)})
+        versions-with-samples (filter (comp pos? :samples-count) versions)]
+    (repo-view/page {:repo      repo
+                     :templates (get-templates request)
+                     :repos     (get-repos request)
+                     :versions  versions-with-samples
+                     :user      (get-user request)})))
+
+(defn version-page [request]
+  (let [repo (get-repo request)
+        version (get-version request)
+        page (dec (try (-> request :params :page Integer/parseInt) (catch Exception _ 1)))
         samples (db-req/samples-by-version (get-db request) {:version_id (:id version)
                                                              :offset     (* samples-per-page page)
                                                              :count      (inc samples-per-page)})]
@@ -141,8 +111,34 @@
                         :page      page
                         :version   version
                         :repo      repo
-                        :templates (-> request :app :templates)
-                        :repos     (-> request :app :repos)})))
+                        :templates (get-templates request)
+                        :repos     (get-repos request)
+                        :user      (get-user request)})))
+
+(defn signup-page [request]
+  (register-view/page {:templates (get-templates request)
+                       :repos     (get-repos request)
+                       :user      (get-user request)}))
+
+(defn signin-page [request]
+  (auth-view/page {:templates (get-templates request)
+                   :repos     (get-repos request)
+                   :user      (get-user request)}))
+
+(defn profile-page [request]
+  (profile-view/page {:templates (get-templates request)
+                      :repos     (get-repos request)
+                      :user      (get-user request)}))
+
+;; =====================================================================================================================
+;; API
+;; =====================================================================================================================
+(defn update-repo [request]
+  (let [repo (get-repo request)]
+    (redis/enqueue (get-redis request)
+                   (get-redis-queue request)
+                   (:name repo))
+    (response (str "Start updating: " (:name repo)))))
 
 (defn top-landing-samples [request]
   (let [offset* (-> request :params :offset)
@@ -162,7 +158,6 @@
                                                              :offset     offset})
         result {:samples (take samples-per-page samples)
                 :end     (< (count samples) (inc samples-per-page))}]
-    ;(prn "version samples: " offset version-id (count samples))
     (response result)))
 
 (def empty-sample
@@ -195,7 +190,6 @@
     (show-sample-by-view view sample* request)))
 
 (defn run [request]
-  ;(prn "run: " (:params request))
   (let [code (-> request :params :code)
         style (-> request :params :style)
         markup (-> request :params :markup)
@@ -213,13 +207,13 @@
                                                       :style             style}))))
 
 (defn fork [request]
-  (prn "Fork: " (-> request :params :sample))
+  ;(prn "Fork: " (-> request :session :user) (-> request :params :sample))
   (let [sample (-> request :params :sample)
         hash (web-utils/new-hash)
         sample* (assoc sample
                   :url hash
-                  :version 0)]
-    (prn "Fork: " sample*)
+                  :version 0
+                  :owner-id (-> request :session :user :id))]
     (let [id (db-req/add-sample! (get-db request) sample*)]
       (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [id]))
     (response {:status  :ok
@@ -227,22 +221,18 @@
                :version 0})))
 
 (defn save [request]
-  (prn "Save: " (-> request :params :sample))
+  ;(prn "Save: " (-> request :params :sample))
   (let [sample (-> request :params :sample)
         hash (:url sample)
         db-sample (when (and hash (seq hash))
                     (db-req/sample-template-by-url (get-db request) {:url hash}))]
-    ;(prn "db sample: " db-sample)
-    ;(prn "db sample: " (:template-id db-sample))
-    ;(prn "db sample: " (:version-id db-sample))
     (if (and db-sample
              (nil? (:template-id db-sample))
-             (nil? (:version-id db-sample)))
-      (let [
-            ;version (db-req/sample-version (get-db request) {:url hash}) ;; TODO transaction
-            version (:version db-sample)
-            sample* (assoc sample :version (inc version))]
-        (prn "Save, insert" sample*)
+             (nil? (:version-id db-sample))
+             (= (:id (get-user request)) (:owner-id db-sample)))
+      (let [version (:version db-sample)
+            sample* (assoc sample :version (inc version)
+                                  :owner-id (-> request :session :user :id))]
         (let [id (db-req/add-sample! (get-db request) sample*)]
           (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [id]))
         (response {:status  :ok
@@ -254,7 +244,8 @@
   (let [ids (map :id samples)]
     (if (seq ids)
       (do (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) ids)
-          (response (str "Start generate previews for " (count samples) " samples: " (clojure.string/join ", " (map :name samples)))))
+          (response (str "Start generate previews for " (count samples) " samples: "
+                         (clojure.string/join ", " (map :name samples)))))
       "All samples have previews")))
 
 (defn user-previews [request]
@@ -263,13 +254,82 @@
 (defn repo-previews [request]
   (generate-previews (db-req/repo-samples-without-preview (get-db request)) request))
 
+(defn signup [request]
+  (let [username (-> request :params :username)
+        fullname (-> request :params :fullname)
+        email (-> request :params :email)
+        password (-> request :params :password)]
+    (prn "signup" username fullname email password)
+    (if (and (seq username) (seq fullname) (seq email) (seq password))
+      (do
+        (let [salt (web-utils/new-salt)
+              hash (bcrypt/encrypt (str password salt))]
+          (prn "signup" (str password salt) hash)
+          (db-req/add-user<! (get-db request) {:fullname    fullname
+                                               :username    username
+                                               :email       email
+                                               :password    hash
+                                               :salt        salt
+                                               :permissions auth/base-perms}))
+        (redirect "/"))
+      "Bad values")))
+
+(defn signin [request]
+  (let [username (-> request :params :username)
+        password (-> request :params :password)]
+    (prn "signin" username password)
+    (if (and (seq username) (seq password))
+      (if-let [user (db-req/get-user-by-username-or-email (get-db request) {:username username})]
+        (if (bcrypt/check (str password (:salt user)) (:password user))
+          (do
+            (prn "auth: " user)
+            (assoc-in (redirect "/") [:session :user] user))))
+      "Bad values")))
+
+(defn signout [request]
+  (assoc-in (redirect "/") [:session :user]
+            (auth/create-anonymous-user (get-db request))))
+
+;; =====================================================================================================================
+;; Routes
+;; =====================================================================================================================
 (defroutes app-routes
            (route/resources "/")
-           (GET "/" [] (repos-middleware
-                         (templates-middleware
-                           landing-page)))
-           (GET "/signin" [] "signin")
-           (GET "/signup" [] "signup")
+
+           (GET "/" [] (-> landing-page
+                           mw/templates-middleware
+                           mw/repos-middleware
+                           auth/check-anonymous-middleware))
+
+           (GET "/profile" [] (-> profile-page
+                                  mw/templates-middleware
+                                  mw/repos-middleware
+                                  auth/check-anonymous-middleware))
+
+           (GET "/signin" [] (-> signin-page
+                                 mw/templates-middleware
+                                 mw/repos-middleware
+                                 (auth/permissions-middleware :signin)
+                                 auth/check-anonymous-middleware))
+
+           (GET "/signup" [] (-> signup-page
+                                 mw/templates-middleware
+                                 mw/repos-middleware
+                                 (auth/permissions-middleware :signup)
+                                 auth/check-anonymous-middleware))
+
+           (POST "/signin" [] (-> signin
+                                  (auth/permissions-middleware :signin)
+                                  auth/check-anonymous-middleware))
+
+           (POST "/signup" [] (-> signup
+                                  (auth/permissions-middleware :signup)
+                                  auth/check-anonymous-middleware))
+
+           (GET "/signout" [] (-> signout
+                                  ;(auth/permissions-middleware :signout)
+                                  auth/check-anonymous-middleware
+                                  ))
 
            (GET "/new" [] new)
            (POST "/run" [] run)
@@ -279,9 +339,9 @@
            (GET "/_user_previews_" [] user-previews)
            (GET "/_repo_previews_" [] repo-previews)
 
-           (GET "/:repo/_update_" [] (check-repo-middleware
+           (GET "/:repo/_update_" [] (mw/check-repo-middleware
                                        update-repo))
-           (POST "/:repo/_update_" [] (check-repo-middleware
+           (POST "/:repo/_update_" [] (mw/check-repo-middleware
                                         update-repo))
 
            (GET "/landing-samples.json" [] top-landing-samples)
@@ -289,37 +349,46 @@
            (GET "/version-samples.json" [] top-version-samples)
            (POST "/version-samples.json" [] top-version-samples)
 
-           (GET "/:repo" [] (repos-middleware
-                              (templates-middleware
-                                (check-repo-middleware
-                                  repo-page))))
+           (GET "/:repo" [] (-> repo-page
+                                mw/check-repo-middleware
+                                mw/templates-middleware
+                                mw/repos-middleware
+                                auth/check-anonymous-middleware))
            (GET "/:repo/" [] (fn [request]
-                               (when ((repos-middleware
-                                        (templates-middleware
-                                          (check-repo-middleware
-                                            repo-page))) request)
+                               (when ((-> repo-page
+                                          mw/check-repo-middleware
+                                          mw/templates-middleware
+                                          mw/repos-middleware
+                                          auth/check-anonymous-middleware) request)
                                  (redirect (web-utils/drop-slash (:uri request)) 301))))
 
-           (GET "/:repo/:version" [] (repos-middleware
-                                       (templates-middleware
-                                         (check-repo-middleware
-                                           (check-version-middleware
-                                             version-page)))))
+           (GET "/:repo/:version" [] (-> version-page
+                                         mw/check-version-middleware
+                                         mw/check-repo-middleware
+                                         mw/templates-middleware
+                                         mw/repos-middleware
+                                         auth/check-anonymous-middleware))
            (GET "/:repo/:version/" [] (fn [request]
-                                        (when ((repos-middleware
-                                                 (templates-middleware
-                                                   (check-repo-middleware
-                                                     (check-version-middleware
-                                                       version-page)))) request)
+                                        (when ((-> version-page
+                                                   mw/check-version-middleware
+                                                   mw/check-repo-middleware
+                                                   mw/templates-middleware
+                                                   mw/repos-middleware
+                                                   auth/check-anonymous-middleware) request)
                                           (redirect (web-utils/drop-slash (:uri request)) 301))))
 
-           (GET "/:repo/:version/*" [] (check-repo-middleware
-                                         (check-version-middleware
-                                           (check-sample-middleware
-                                             show-sample))))
+           (GET "/:repo/:version/*" [] (-> show-sample
+                                           mw/check-sample-middleware
+                                           mw/check-version-middleware
+                                           mw/check-repo-middleware
+                                           auth/check-anonymous-middleware))
 
-           (GET "/:hash/" [] show-user-sample)
-           (GET "/:hash" [] show-user-sample)
-           (GET "/:hash/:version" [] show-user-sample)
-           (GET "/:hash/:version/" [] show-user-sample)
+           (GET "/:hash/" [] (-> show-user-sample
+                                 auth/check-anonymous-middleware))
+           (GET "/:hash" [] (-> show-user-sample
+                                auth/check-anonymous-middleware))
+           (GET "/:hash/:version" [] (-> show-user-sample
+                                         auth/check-anonymous-middleware))
+           (GET "/:hash/:version/" [] (-> show-user-sample
+                                          auth/check-anonymous-middleware))
            (route/not-found "404 Page not found"))

@@ -22,17 +22,12 @@
 
 (.setLevel (LoggerFactory/getLogger Logger/ROOT_LOGGER_NAME) Level/INFO)
 
-(defn repositories-conf [conf]
-  (map
-    #(atom (update % :type keyword))
-    (:repositories conf)))
-
 (defn get-full-system [conf]
   (component/system-map
     :db (db/new-jdbc (:db conf))
     :redis (redis/new-redis (:redis conf))
     :notifier (slack/new-notifier (-> conf :notifications :slack))
-    :generator (component/using (generator/new-generator {:templates (:templates conf)} (repositories-conf conf))
+    :generator (component/using (generator/new-generator conf)
                                 [:db :notifier :redis])
     :preview-generator (component/using (pw-generator/new-preview-generator (:previews conf))
                                         [:db :redis :notifier])
@@ -44,7 +39,7 @@
     :db (db/new-jdbc (:db conf))
     :redis (redis/new-redis (:redis conf))
     :notifier (slack/new-notifier (-> conf :notifications :slack))
-    :generator (component/using (generator/new-generator {:templates (:templates conf)} (repositories-conf conf))
+    :generator (component/using (generator/new-generator conf)
                                 [:db :notifier :redis])))
 
 (defn get-web-system [conf]

@@ -174,3 +174,13 @@ footer p {
     padding: 70px 20px;
     z-index: -1;
 }
+
+/* register page */
+form {
+    padding: 20px;
+    width: 400px;
+    margin: 30px auto;
+    vertical-align: middle;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}

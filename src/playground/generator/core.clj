@@ -12,12 +12,15 @@
             [playground.notification.slack :as slack]
             [playground.redis.core :as redis]
             [playground.repo.git :as git]
-            [playground.utils.utils :as utils]))
+            [playground.utils.utils :as utils]
+            [crypto.password.bcrypt :as bcrypt]
+            [playground.web.utils :as web-utils]))
 
 ;;============== component ==============
 (declare update-repository-by-repo-name)
 (declare check-repositories)
 (declare parse-templates)
+(declare add-predefined-users)
 
 (defn message-handler [generator]
   (fn [{:keys [message attemp]}]
@@ -30,9 +33,8 @@
 
   (start [this]
     (timbre/info "Generator start" conf)
+    (add-predefined-users (:db this) (:users conf))
     (check-repositories this (:db this) (:notifier this))
-    ;(when (some-> conf :templates :path)
-    ;  (parse-templates this (:templates conf)))
     (assoc this
       :redis-worker (redis/create-worker redis (-> redis :config :queue) (message-handler this))))
 
@@ -41,9 +43,18 @@
     (redis/delete-worker (:redis-worker this))
     (dissoc this :conf)))
 
-(defn new-generator [conf repos]
-  (map->Generator {:conf  (assoc conf :queue-index (atom 0))
-                   :repos repos}))
+(defn get-repos [conf]
+  (let [get-user-fn (fn [username] (first (filter #(= username (:username %)) (:users conf))))
+        repos (map #(atom (-> %
+                              (update :type keyword)
+                              (assoc :owner (get-user-fn (:user %)))))
+                   (:repositories conf))]
+    repos))
+
+(defn new-generator [conf]
+  (map->Generator {:conf  {:users       (:users conf)
+                           :queue-index (atom 0)}
+                   :repos (get-repos conf)}))
 
 (defn get-repo-by-name [generator name]
   (let [repos (:repos generator)]
@@ -65,28 +76,40 @@
 
 ;;============== init repo
 (defn download-repo [repo]
-  (fs/mkdirs (:dir @repo))
-  (git/clone @repo (repo-path @repo)))
+  (try
+    (fs/mkdirs (:dir @repo))
+    (git/clone @repo (repo-path @repo))
+    (catch Exception e
+      (info "Download repo "  (:name @repo) " error!")
+      (fs/delete-dir (:dir @repo))
+      (throw (Exception. (str "Download repo "  (:name @repo) " error"))))))
 
 (defn check-repository [generator db repo db-repo]
-  ;(info "Check repository: " @repo db-repo (merge db-repo @repo))
-  (if (and db-repo (fs/exists? (:dir @repo)))
-    (do
-      (swap! repo (fn [repo] (merge db-repo repo {:git (git/get-git (git-path (repo-path repo)))})))
-      (info (str "Repository \"" (:name @repo) "\" - OK"))
-      {:name (:name @repo)})
-    (do
-      (info (str "Repository \"" (:name @repo) "\" - sync..."))
-      (try
-        (download-repo repo)
-        (swap! repo (fn [repo] (merge db-repo repo {:git (git/get-git (git-path (repo-path repo)))
-                                                    :id  (db-req/add-repo<! db {:name (:name repo)})})))
-        (update-repository-by-repo-name generator db (:name @repo))
-        (info (str "Repository \"" (:name @repo) "\" - OK"))
-        {:name (:name @repo)}
-        (catch Exception e
-          (info (str "Repository \"" (:name @repo) "\" - ERROR, check repository's settings " e))
-          {:name (:name @repo) :e e})))))
+  (try
+
+    (when-not (and db-repo (fs/exists? (:dir @repo)))
+      (info (str "Repository \"" (:name @repo) "\" - sync...")))
+
+    (when-not (fs/exists? (:dir @repo))
+      (download-repo repo))
+
+    (swap! repo (fn [repo] (merge db-repo repo {:git (git/get-git (git-path (repo-path repo)))})))
+
+    (let [owner (db-req/get-user-by-username db {:username (:user @repo)})]
+      (swap! repo assoc :owner owner)
+
+      (when-not db-repo
+        (let [repo-id (db-req/add-repo<! db {:name     (:name @repo)
+                                             :owner-id (:id owner)})]
+          (swap! repo assoc :id repo-id)
+          (update-repository-by-repo-name generator db (:name @repo)))))
+
+    (info (str "Repository \"" (:name @repo) "\" - OK"))
+    {:name (:name @repo)}
+
+    (catch Exception e
+      (info (str "Repository \"" (:name @repo) "\" - ERROR, check repository's settings " e))
+      {:name (:name @repo) :e e})))
 
 (defn check-repositories [generator db notifier]
   (info "Synchronize repositories...")
@@ -94,7 +117,6 @@
         db-repos (db-req/repos db)
         get-repo-by-name-fn (fn [repo db-repos]
                               (first (filter #(= (:name repo) (:name %)) db-repos)))]
-    (info (count db-repos) (pr-str db-repos))
     (let [result (map #(check-repository generator db % (get-repo-by-name-fn @% db-repos)) repos)]
       (slack/complete-sync notifier
                            (remove :e result)
@@ -125,7 +147,8 @@
                            (assoc-in [:vars :branch-name] (:name branch)))
         samples* (group-parser/samples path version-config)
         ;; TODO: delete replacing urls for old sample format
-        samples (map #(update-in % [:scripts] (fn [scripts] (utils/replace-urls (:name branch) scripts))) samples*)
+        samples** (map #(update-in % [:scripts] (fn [scripts] (utils/replace-urls (:name branch) scripts))) samples*)
+        samples (map #(assoc % :owner-id (-> @repo :owner :id)) samples**)
         version-id (db-req/add-version<! db {:name          (:name branch)
                                              :commit        (:commit branch)
                                              :repo-id       (:id @repo)
@@ -226,3 +249,15 @@
       (db-req/add-templates! (:db generator) ids))
     (when (seq old-ids)
       (db-req/delete-samples-by-ids! (:db generator) {:ids old-ids}))))
+
+
+;;=== users ===
+(defn add-predefined-users [db users]
+  (doseq [user users]
+    (when-not (or (db-req/get-user-by-username db {:username (:username user)})
+                  (db-req/get-user-by-email db {:email (:email user)}))
+      (info "Add new predefined user: " (:fullname user))
+      (let [salt (web-utils/new-salt)
+            hash (bcrypt/encrypt (str (:password user) salt))]
+        (db-req/add-user<! db (assoc user :salt salt
+                                          :password hash))))))

@@ -1,5 +1,6 @@
 (ns playground.views.common
-  (:require [clj-time.core :as t]))
+  (:require [clj-time.core :as t]
+            [playground.web.auth :as auth]))
 
 (defn head []
   [:head
@@ -17,7 +18,7 @@
    [:link {:href "/css/main.css" :rel "stylesheet"}]])
 
 
-(defn nav [templates]
+(defn nav [templates user]
   [:nav.navbar.navbar-default
    [:div.container-fluid
 
@@ -54,9 +55,13 @@
           [:li [:a {:href (str "/new?template=" (:url template))} (:name template)]])
         [:li.divider {:role "separator"}]
         [:li [:a {:href "/new"} "From scratch"]]]]
+      (if (auth/can user :signin)
+        [:li [:a {:href "/signin"} "Log In"]]
+        [:li [:a {:href "/signout"} "Log Out"]])
+      (when (auth/can user :signup)
+        [:li [:a {:href "/signup"} "Sign Up"]])
 
-      [:li [:a {:href "/signin"} "Log In"]]
-      [:li [:a {:href "/signup"} "Sign Up"]]]]]])
+      ]]]])
 
 
 (defn jumbotron [templates]
@@ -76,7 +81,7 @@
 (defn footer [repos]
   [:footer.footer
    [:div.container
-    [:p.text-muted (str "© " (t/year (t/now)) " AnyChart.Com All rights reserved.")]
+    [:p.text-muted (str "&copy; " (t/year (t/now)) " AnyChart.Com All rights reserved.")]
     [:b "Repositories"]
     (for [repo repos]
       [:div [:a {:href (str "/" (:name repo))} (:name repo)]])]])

@@ -10,7 +10,9 @@
             [ring.middleware.format :refer [wrap-restful-format]]
             [ring.middleware.format-params :refer [wrap-transit-json-params]]
             [ring.middleware.format-response :refer [wrap-transit-json-response]]
-            [playground.web.routes :refer [app-routes]]))
+            [ring.middleware.session :refer [wrap-session]]
+            [playground.web.routes :refer [app-routes]]
+            [playground.web.sessions :as session]))
 
 (defn- component-middleware [web-component handler]
   (fn [request]
@@ -29,7 +31,8 @@
                                    wrap-transit-json-params
                                    wrap-transit-json-response
                                    wrap-keyword-params
-                                   wrap-params)
+                                   wrap-params
+                                   (wrap-session {:store (session/create-storage db)}))
                                {:port (:port conf)})))
 
   (stop [component]

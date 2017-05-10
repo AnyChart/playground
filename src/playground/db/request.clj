@@ -103,6 +103,8 @@
    :tags              (generate-string (:tags sample))
    :exports           (:exports sample)
 
+   :owner_id          (:owner-id sample)
+
    :styles            (when (seq (:styles sample))
                         (generate-string (:styles sample)))
 
@@ -152,3 +154,17 @@
 
 (defn add-templates! [db ids]
   (insert-multiple! db :templates (map (fn [id] {:sample_id id}) ids)))
+
+;; users
+(defsql add-user<!)
+
+(defsql get-user-by-username-or-email {:result-set-fn first})
+
+(defsql get-user-by-username {:result-set-fn first})
+
+(defsql get-user-by-email {:result-set-fn first})
+
+;; sessions
+(defsql get-session {:result-set-fn first})
+(defsql add-session<!)
+(defsql delete-session!)

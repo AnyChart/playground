@@ -9,7 +9,7 @@
     [:body
      [:div.wrapper
 
-      (page/nav (:templates data))
+      (page/nav (:templates data) (:user data))
 
       [:div.content
        [:div.container-fluid

@@ -16,6 +16,7 @@
 
                  [com.stuartsierra/component "0.3.2"]
                  [ring-middleware-format "0.7.2"]
+                 ;[ring "1.6.0"]
                  [toml "0.1.2"]
                  [cheshire "5.7.0"]
                  [compojure "1.5.2"]
@@ -39,6 +40,10 @@
                  [org.clojure/java.jdbc "0.7.0-alpha1"]
                  [mysql/mysql-connector-java "6.0.6"]
                  [com.taoensso/carmine "2.15.1"]
+
+                 ;; crypto
+                 [buddy "1.3.0"]
+                 [crypto-password "0.2.0"]
 
                  ;; git
                  ;[im.chit/gita "0.2.5"]
@@ -73,12 +78,16 @@
                                        :pretty-print  true}}
                        {:id           "prod"
                         :source-paths ["src-cljs" "src-cljc"]
-                        :compiler     {:output-to       "resources/public/js/playground.js"
+                        :compiler     {
+                                       ;:output-dir "resources/public/js"
+                                       :output-to       "resources/public/js/playground.js"
                                        :optimizations   :advanced
                                        :pretty-print    false
                                        :pseudo-names    false
                                        :externs         ["codemirror_externs.js"]
-                                       :closure-defines {"goog.DEBUG" false}}}
+                                       :closure-defines {"goog.DEBUG" false}
+                                       ;:source-map "resources/public/js/playground.js.map"
+                                       }}
                        ;; site
                        {:id           "dev-site"
                         :source-paths ["src-site-cljs" "src-cljc"]

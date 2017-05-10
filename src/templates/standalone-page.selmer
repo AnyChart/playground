@@ -60,7 +60,6 @@
         </div>
     </nav>
 
-
     <div class="content">
         <div class="iframe-standalone-box">
             <iframe class="iframe-standalone"
@@ -73,10 +72,9 @@
 
     <footer class="footer">
         <div class="container">
-            <p class="text-muted">© {% now yyyy %} AnyChart.Com All rights reserved.</p>
+            <p class="text-muted">&copy; {% now yyyy %} AnyChart.Com All rights reserved.</p>
         </div>
     </footer>
-
 
 </body>
 </html>

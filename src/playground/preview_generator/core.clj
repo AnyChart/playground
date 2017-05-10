@@ -37,8 +37,7 @@
 
 (defn generate-previews [generator ids]
   (let [samples (db-req/samples-by-ids (:db generator) {:ids ids})]
-    (prn samples)
-    (timbre/info "Start generate previews: " (if (= 1 (count samples)) (-> samples first :name) (count ids)))
+    (timbre/info "Generate previews: " (if (= 1 (count samples)) (-> samples first :name) (count ids)))
     (fs/mkdirs (-> generator :conf :images-dir))
     (let [result (doall (pmap #(phantom/generate-img (-> generator :conf :phantom-engine)
                                                      (-> generator :conf :generator)

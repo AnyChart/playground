@@ -20,6 +20,7 @@
   (str images-folder "/" (utils/name->url (:full-url sample)) ".png"))
 
 (defn generate-img [phantom-engine phantom-generator images-folder sample]
+  ;{:id (:id sample) :error true}
   (let [code (render-file "templates/phantom.selmer"
                           {:scripts (download/get-urls (:scripts sample))
                            :styles  (download/get-urls (:styles sample))
@@ -29,7 +30,7 @@
         tmp-file (java.io.File/createTempFile "sample" ".html")
         ;image-path (str images-folder "/" (utils/name->url (:full-url sample)) ".png")
         image-path (image-path images-folder sample)]
-    (info "generate-img:" phantom-engine phantom-generator images-folder (.getAbsolutePath tmp-file) image-path sample)
+    (info "generate-img:" (:id sample) image-path (.getAbsolutePath tmp-file))
     (with-open [f (clojure.java.io/writer tmp-file)]
       (binding [*out* f]
         (println code)))
@@ -51,7 +52,7 @@
           (ImageIO/write res "png" (file image-path)))
         (sh "pngquant" "--force" "--ext" ".png" image-path)
         (info "generated" image-path)
-        ;;(.delete tmp-file)
+        (.delete tmp-file)
         {:id (:id sample) :img image-path})
       (catch Exception e
         (do
