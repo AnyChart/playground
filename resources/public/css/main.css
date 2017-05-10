@@ -67,6 +67,11 @@ footer p {
     margin: 2px;
 }
 
+.content-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
 .samples-container {
     padding-bottom: 20px;
     max-width: 1200px;

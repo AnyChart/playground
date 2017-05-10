@@ -40,7 +40,31 @@
              :style  "display:inline-block"
              :src    "/icons/anychart.png"}] "AnyChart Playground "]]
 
+    ;; left navbar
     [:div#navbar.navbar-collapse.collapse
+     [:ul.nav.navbar-nav
+
+      [:li [:a {:href "/chart-types"} "Chart Types"]]
+      [:li [:a {:href "/data-sets"} "Data Sets"]]
+
+      [:li {:class "dropdown"}
+       [:a {:href          "#"
+            :class         "dropdown-toggle"
+            :data-toggle   "dropdown"
+            :role          "button"
+            :aria-haspopup "true"
+            :aria-expanded "false"} "Support"
+        [:span {:class "caret"}]]
+
+       [:ul {:class "dropdown-menu"}
+        [:li [:a {:href "/support"} "Support"]]
+        [:li [:a {:href "/roadmap"} "Roadmap"]]
+        [:li [:a {:href "/version-history"} "Version History"]]]]
+      [:li [:a {:href "/pricing"} "Pricing"]]
+      [:li [:a {:href "/about"} "About"]]
+      ]
+
+     ;; right navbar
      [:ul.nav.navbar-nav.navbar-right
 
       [:li.dropdown
@@ -65,7 +89,7 @@
 
 
 (defn jumbotron [templates]
-  [:div.row {:style "max-width: 1200px; margin: 0 auto;"}
+  [:div.content-container.row
    [:div.col-lg-12.col-md-12
     [:div.jumbotron {:style "margin-top: 20px;"}
      [:h1 "AnyChart Playground "]
@@ -82,6 +106,50 @@
   [:footer.footer
    [:div.container
     [:p.text-muted (str "&copy; " (t/year (t/now)) " AnyChart.Com All rights reserved.")]
-    [:b "Repositories"]
-    (for [repo repos]
-      [:div [:a {:href (str "/" (:name repo))} (:name repo)]])]])
+
+    [:div.row
+
+     [:div.col-sm-2.col-xs-4
+      [:div [:b "Vendor"]]
+      [:div [:a {:href "https://anychart.com"} "AnyChart"]]
+      [:div [:a {:href "https://anychart.com/"} "Products"]]
+      [:div [:a {:href "https://anychart.com/features"} "Features"]]
+      [:div [:a {:href "https://anychart.com/"} "Resources"]]
+      [:div [:a {:href "https://anychart.com/download"} "Download"]]
+      [:div [:a {:href "https://anychart.com/buy"} "Buy"]]
+      [:div [:a {:href "https://anychart.com/blog"} "Blog"]]]
+
+     [:div.col-sm-2.col-xs-4
+      [:div [:b "Playground"]]
+      [:div [:a {:href "/chart-types"} "Chart Types"]]
+      [:div [:a {:href "/data-sets"} "Data Sets"]]
+      [:div [:a {:href "/support"} "Support"]]
+      [:div [:a {:href "/roadmap"} "Roadmap"]]
+      [:div [:a {:href "/version-history"} "Version History"]]
+      [:div [:a {:href "/pricing"} "Pricing"]]
+      [:div [:a {:href "/about"} "About"]]]
+
+     [:div.col-sm-2.col-xs-4
+      [:div [:b "Projects"]]
+      (for [repo repos]
+        [:div [:a {:href (str "/" (:name repo))} (:name repo)]])]
+
+     [:div.clearfix.visible-xs-block]
+
+     [:div.col-sm-2.col-xs-4
+      [:div [:b "Popular Tags"]]
+      (for [i (range 1 8)]
+        [:div (str "Tag " i)])]
+
+     [:div.col-sm-2.col-xs-4
+      [:div [:b "Popular Data Sets"]]
+      (for [i (range 1 8)]
+        [:div (str "Data Set " i)])]
+
+     [:div.col-sm-2.col-xs-4
+      [:div [:b "Social Networks"]]
+      [:div [:a {:href "https://www.facebook.com/AnyCharts"} "Facebook"]]
+      [:div [:a {:href "https://twitter.com/AnyChart"} "Twitter"]]
+      [:div [:a {:href "https://www.linkedin.com/company/386660"} "Linked In"]]]
+
+     ]]])

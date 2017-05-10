@@ -19,6 +19,14 @@
             [playground.preview-generator.phantom :as phantom]
             [playground.web.auth :as auth]
             [playground.web.middleware :as mw]
+            [playground.views.marketing.chart-types-page :as chart-types-view]
+            [playground.views.marketing.data-sets-page :as data-sets-view]
+            [playground.views.marketing.about-page :as about-view]
+            [playground.views.marketing.pricing-enterprise-page :as pricing-enterprise-view]
+            [playground.views.marketing.pricing-page :as pricing-view]
+            [playground.views.marketing.roadmap-page :as roadmap-view]
+            [playground.views.marketing.support-page :as support-view]
+            [playground.views.marketing.version-history-page :as version-history-view]
             [playground.web.helpers :refer :all]))
 
 ;; =====================================================================================================================
@@ -129,6 +137,50 @@
   (profile-view/page {:templates (get-templates request)
                       :repos     (get-repos request)
                       :user      (get-user request)}))
+
+
+;; =====================================================================================================================
+;; Marketing pages
+;; =====================================================================================================================
+(defn chart-types-page [request]
+  (chart-types-view/page {:repos     (get-repos request)
+                          :templates (get-templates request)
+                          :user      (get-user request)}))
+
+(defn data-sets-page [request]
+  (data-sets-view/page {:repos     (get-repos request)
+                        :templates (get-templates request)
+                        :user      (get-user request)}))
+
+(defn about-page [request]
+  (about-view/page {:repos     (get-repos request)
+                    :templates (get-templates request)
+                    :user      (get-user request)}))
+
+(defn support-page [request]
+  (support-view/page {:repos     (get-repos request)
+                      :templates (get-templates request)
+                      :user      (get-user request)}))
+
+(defn roadmap-page [request]
+  (roadmap-view/page {:repos     (get-repos request)
+                      :templates (get-templates request)
+                      :user      (get-user request)}))
+
+(defn pricing-page [request]
+  (pricing-view/page {:repos     (get-repos request)
+                      :templates (get-templates request)
+                      :user      (get-user request)}))
+
+(defn pricing-enterprise-page [request]
+  (pricing-enterprise-view/page {:repos     (get-repos request)
+                                 :templates (get-templates request)
+                                 :user      (get-user request)}))
+
+(defn version-history-page [request]
+  (version-history-view/page {:repos     (get-repos request)
+                              :templates (get-templates request)
+                              :user      (get-user request)}))
 
 ;; =====================================================================================================================
 ;; API
@@ -300,6 +352,17 @@
                            mw/templates-middleware
                            mw/repos-middleware
                            auth/check-anonymous-middleware))
+
+           ;; Marketing pages
+           (GET "/chart-types" [] (-> chart-types-page mw/templates-middleware mw/repos-middleware auth/check-anonymous-middleware))
+           (GET "/data-sets" [] (-> data-sets-page mw/templates-middleware mw/repos-middleware auth/check-anonymous-middleware))
+           (GET "/support" [] (-> support-page mw/templates-middleware mw/repos-middleware auth/check-anonymous-middleware))
+           (GET "/roadmap" [] (-> roadmap-page mw/templates-middleware mw/repos-middleware auth/check-anonymous-middleware))
+           (GET "/version-history" [] (-> version-history-page mw/templates-middleware mw/repos-middleware auth/check-anonymous-middleware))
+           (GET "/pricing" [] (-> pricing-page mw/templates-middleware mw/repos-middleware auth/check-anonymous-middleware))
+           (GET "/pricing/enterprise" [] (-> pricing-enterprise-page mw/templates-middleware mw/repos-middleware auth/check-anonymous-middleware))
+           (GET "/about" [] (-> about-page mw/templates-middleware mw/repos-middleware auth/check-anonymous-middleware))
+
 
            (GET "/profile" [] (-> profile-page
                                   mw/templates-middleware

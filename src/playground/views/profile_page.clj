@@ -16,7 +16,8 @@
         [:div.branches
          [:ul
           (for [version (:versions data)]
-            [:li [:a {:href (str "/" (:name (:repo data)) "/" (:name version))} (str "Branch " (:name version))]])]]
+            [:li [:a {:href (str "/" (:name (:repo data)) "/" (:name version))}
+                  (str "Branch " (:name version))]])]]
         [:p [:b "ID: "] (:id user)]
         [:p [:b "Username: "] (:username user)]
         [:p [:b "Full name: "] (:fullname user)]
