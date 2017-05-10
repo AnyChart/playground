@@ -13,7 +13,8 @@
 
       [:div.content
        [:div.container
-        "Coming soon"
-        ]]
+        [:h1.page-caption "Pricing"]
+        [:p.page-caption-desc "Тут будет информация о персональных и командных тарифах (когда они появятся).
+        А так же краткая иформация о коробочном использовании, которая будет вести на /pricing/enterprise"]]]
 
       (page/footer (:repos data))]]))

@@ -13,7 +13,9 @@
 
       [:div.content
        [:div.container
-        "Coming soon"
-        ]]
+        [:h1.page-caption "Chart Types"]
+        [:p.page-caption-desc "Тут будут перечисленны все поддерживаемые типы графиков.
+        По сути этот должен быть некий клон чартопедии, как-то сказать какие графики можно использовать - нужно,
+        но клонить чартопедию для этого не хочется. http://www.anychart.com/chartopedia/"]]]
 
       (page/footer (:repos data))]]))
