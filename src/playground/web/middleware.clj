@@ -2,7 +2,8 @@
   (:require [playground.db.request :as db-req]
             [playground.web.helpers :refer :all]))
 
-;; middleware for getting repo, version, sample, all repos and templates
+;; middleware for getting repo, version, sample, all repos, templates,
+;; tags for footer and tags for tags-page
 (defn check-repo-middleware [handler]
   (fn [request]
     (let [repo-name (-> request :route-params :repo)
@@ -42,3 +43,14 @@
   (fn [request]
     (handler (assoc-in request [:app :repos]
                        (db-req/repos (get-db request))))))
+
+(defn tags-middleware [handler]
+  (fn [request]
+    (handler (assoc-in request [:app :tags]
+                       (db-req/top-tags (get-db request) {:limit 7})))))
+
+
+(defn all-tags-middleware [handler]
+  (fn [request]
+    (handler (assoc-in request [:app :all-tags]
+                       (db-req/tags (get-db request))))))

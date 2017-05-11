@@ -18,4 +18,4 @@
         У гитхаба это выглядит вот так: https://enterprise.github.com/home"]]]
 
 
-      (page/footer (:repos data))]]))
+      (page/footer (:repos data) (:tags data))]]))

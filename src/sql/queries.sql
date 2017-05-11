@@ -145,3 +145,55 @@ SELECT users.*,
 --name: sql-delete-session!
 DELETE FROM sessions WHERE session = :session;
 
+
+
+------ tags ------------
+--name: sql-tags
+SELECT substring(tag, 2, LENGTH(tag)-2) name, count(*) count FROM (
+SELECT JSON_EXTRACT(tags, CONCAT('$[', idx, ']')) AS tag FROM samples
+JOIN (
+SELECT  0  AS idx UNION
+SELECT  1  UNION
+SELECT  2  UNION
+SELECT  3  UNION
+SELECT  4  UNION
+SELECT  5  UNION
+SELECT  6  UNION
+SELECT  7  UNION
+SELECT  8  UNION
+SELECT  9  UNION
+SELECT  10) AS indexes
+WHERE JSON_EXTRACT(tags, CONCAT('$[', idx, ']')) IS NOT NULL) as t1 GROUP BY tag ORDER BY count DESC;
+
+--name: sql-top-tags
+SELECT substring(tag, 2, LENGTH(tag)-2) name, count(*) count FROM (
+SELECT JSON_EXTRACT(tags, CONCAT('$[', idx, ']')) AS tag FROM samples
+JOIN (
+SELECT  0  AS idx UNION
+SELECT  1  UNION
+SELECT  2  UNION
+SELECT  3  UNION
+SELECT  4  UNION
+SELECT  5  UNION
+SELECT  6  UNION
+SELECT  7  UNION
+SELECT  8  UNION
+SELECT  9  UNION
+SELECT  10) AS indexes
+WHERE JSON_EXTRACT(tags, CONCAT('$[', idx, ']')) IS NOT NULL) as t1 GROUP BY tag ORDER BY count DESC LIMIT :limit;
+
+
+-- name: sql-samples-by-tag
+SELECT samples.id, samples.name, samples.author, samples.views, samples.likes, samples.create_date, samples.url, samples.version, samples.version_id,
+  samples.tags, samples.description, samples.short_description, samples.preview,
+  versions.`name` as version_name, repos.name as repo_name,
+  users.username, users.fullname FROM samples
+  LEFT JOIN versions ON samples.version_id = versions.id
+  LEFT JOIN repos ON versions.repo_id = repos.id
+  JOIN users ON samples.owner_id = users.id
+  JOIN (SELECT id FROM samples WHERE JSON_CONTAINS(tags, CONCAT('["', :tag , '"]'))
+        ORDER BY likes DESC, views DESC LIMIT :offset, :count) as optimize_samples
+  ON optimize_samples.id = samples.id ORDER BY likes DESC, views DESC;
+
+
+--SELECT * FROM samples WHERE JSON_CONTAINS(tags, CONCAT('["', :tag , '"]'));

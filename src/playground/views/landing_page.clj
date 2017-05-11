@@ -27,7 +27,7 @@
                                          :href  (str "/?page=" (-> page inc inc))
                                          :title (str "Next page, " (-> page inc inc))} "Next"]]]]
 
-      (page/footer (:repos data))]
+      (page/footer (:repos data) (:tags data))]
 
      [:script {:src "/js/site.js" :type "text/javascript"}]
      [:script "playground.site.landing.start(" (:end data) ", " page ");"]]))

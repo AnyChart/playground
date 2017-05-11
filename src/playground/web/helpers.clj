@@ -21,8 +21,17 @@
 
 (defn get-repos [request] (-> request :app :repos))
 
+(defn get-tags [request] (-> request :app :tags))
+
+(defn get-all-tags [request] (-> request :app :all-tags))
+
 
 ;; session
 (defn get-user [request] (-> request :session :user))
 
 (defn get-safe-user [request] (dissoc (get-user request) :salt :password :session-id :session :create-date))
+
+
+;; all data
+(defn get-app-data [request] (merge (:app request)
+                                    (:session request)))

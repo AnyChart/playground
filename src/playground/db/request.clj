@@ -168,3 +168,8 @@
 (defsql get-session {:result-set-fn first})
 (defsql add-session<!)
 (defsql delete-session!)
+
+;; tags
+(defsql tags)
+(defsql top-tags)
+(defsql samples-by-tag {:row-fn parse-sample})

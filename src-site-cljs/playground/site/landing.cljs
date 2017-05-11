@@ -11,11 +11,15 @@
 
 (def ^:const samples-per-page 12)
 
-(def offset (atom 0))
+;(def offset (atom 0))
 (def page (atom 0))
 (def end (atom false))
-;; if version-id is nil then it's landing, not version-page
+;; when some? version-id, it's version-page
 (def version-id (atom nil))
+;; when some? tag it's tag page
+(def tag (atom nil))
+;; else it's landing page
+
 
 (defn set-buttons-visibility []
   ;(utils/log "set visibitlity: page, end: " @page @end)
@@ -47,10 +51,16 @@
                            :version_id @version-id}
            :handler       on-samples-load
            :error-handler #(utils/log "Error!" %)})
-    (POST "/landing-samples.json"
-          {:params        {:offset (* samples-per-page @page)}
-           :handler       on-samples-load
-           :error-handler #(utils/log "Error!" %)})))
+    (if @tag
+      (POST "/tag-samples.json"
+            {:params        {:offset (* samples-per-page @page)
+                             :tag    @tag}
+             :handler       on-samples-load
+             :error-handler #(utils/log "Error!" %)})
+      (POST "/landing-samples.json"
+            {:params        {:offset (* samples-per-page @page)}
+             :handler       on-samples-load
+             :error-handler #(utils/log "Error!" %)}))))
 
 (defn init-buttons []
   (let [prevButton (dom/getElement "prevButton")
@@ -64,11 +74,12 @@
                                        (swap! page inc)
                                        (load-samples)))))
 
-(defn ^:export start [end-val page-val & [version-id-val]]
-  ;(utils/log "Start site: " end-val version-id-val)
+(defn ^:export start [end-val page-val & [version-id-val tag-val]]
+  (utils/log "Start site: " end-val version-id-val tag-val)
   (reset! end end-val)
   (reset! page page-val)
-  (when version-id (reset! version-id version-id-val))
+  (when version-id-val (reset! version-id version-id-val))
+  (when tag-val (reset! tag tag-val))
   (init-buttons)
   (set-buttons-visibility))
 

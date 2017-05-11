@@ -102,7 +102,7 @@
          (str "Create " (:name template))])]]]])
 
 
-(defn footer [repos]
+(defn footer [repos tags]
   [:footer.footer
    [:div.container
     [:p.text-muted (str "&copy; " (t/year (t/now)) " AnyChart.Com All rights reserved.")]
@@ -138,8 +138,8 @@
 
      [:div.col-sm-2.col-xs-4
       [:div [:b "Popular Tags"]]
-      (for [i (range 1 8)]
-        [:div (str "Tag " i)])]
+      (for [tag tags]
+        [:div [:a {:href (str "/tags/" (:name tag))} (:name tag)]])]
 
      [:div.col-sm-2.col-xs-4
       [:div [:b "Popular Data Sets"]]
