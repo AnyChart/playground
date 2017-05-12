@@ -131,6 +131,8 @@ SELECT * FROM users WHERE username = :username;
 -- name: sql-get-user-by-email
 SELECT * FROM users WHERE email = :email;
 
+-- name: sql-delete-user!
+DELETE FROM users WHERE id = :id;
 
 
 ------ sessions ------

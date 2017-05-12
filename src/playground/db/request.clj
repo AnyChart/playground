@@ -164,6 +164,8 @@
 
 (defsql get-user-by-email {:result-set-fn first})
 
+(defsql delete-user!)
+
 ;; sessions
 (defsql get-session {:result-set-fn first})
 (defsql add-session<!)

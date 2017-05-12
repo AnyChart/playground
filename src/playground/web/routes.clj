@@ -1,7 +1,7 @@
 (ns playground.web.routes
   (:require [compojure.core :refer :all]
             [compojure.route :as route]
-            [ring.util.response :refer [redirect response file-response]]
+            [ring.util.response :refer [redirect file-response]]
             [taoensso.timbre :as timbre]
             [selmer.parser :refer [render-file]]
             [crypto.password.bcrypt :as bcrypt]
@@ -12,7 +12,7 @@
             [playground.utils.utils :as common-utils]
             [playground.preview-generator.phantom :as phantom]
     ;; web
-            [playground.web.utils :as web-utils]
+            [playground.web.utils :as web-utils :refer [response]]
             [playground.web.auth :as auth]
             [playground.web.middleware :as mw]
             [playground.web.auth-base :as auth-base]

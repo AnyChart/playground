@@ -4,7 +4,7 @@
             [playground.utils :as utils]
             [ajax.core :refer [GET POST]]
     ;[accountant.core :as accountant]
-            ))
+            [clojure.string :as string]))
 
 (defn window-height []
   (or (.-innerHeight js/window)
@@ -35,7 +35,13 @@
      :editors-height (window-height)
      :sample         (:sample data)
      :templates      (:templates data)
-     :user           (:user data)}))
+     :user           (:user data)
+
+     :settings       {:show        false
+                      :tab         :general
+                      :scripts-str (string/join "\n" (-> data :sample :scripts))
+                      :styles-str  (string/join "\n" (-> data :sample :styles))
+                      :tags-str    (string/join "\n" (-> data :sample :tags))}}))
 
 (rf/reg-event-db
   :init
@@ -142,16 +148,29 @@
     (utils/log "Fork error!" error)
     db))
 
-
+;;======================================================================================================================
+;; Settings
+;;======================================================================================================================
 (rf/reg-event-db
   :settings/show
   (fn [db _]
-    (assoc db :settings-show true)))
+    (assoc-in db [:settings :show] true)))
 
 (rf/reg-event-db
   :settings/hide
   (fn [db _]
-    (assoc db :settings-show false)))
+    (assoc-in db [:settings :show] false)))
+
+(rf/reg-event-db
+  :settings/general-tab
+  (fn [db _]
+    (assoc-in db [:settings :tab] :general)))
+
+(rf/reg-event-db
+  :settings/external-tab
+  (fn [db _]
+    (assoc-in db [:settings :tab] :external)))
+
 
 (rf/reg-event-db
   :settings/change-name
@@ -167,3 +186,33 @@
   :settings/change-desc
   (fn [db [_ value]]
     (assoc-in db [:sample :description] value)))
+
+(rf/reg-event-db
+  :settings/add-script
+  (fn [db [_ value]]
+    (if (every? #(not= % value) (-> db :sample :scripts))
+      (-> db
+          (update-in [:sample :scripts] #(concat % [value]))
+          (update-in [:settings :scripts-str] str (str "\n" value)))
+      db)))
+
+(rf/reg-event-db
+  :settings/change-scripts
+  (fn [db [_ value]]
+    (-> db
+        (assoc-in [:sample :scripts] (filter seq (map string/trim (string/split-lines value))))
+        (assoc-in [:settings :scripts-str] value))))
+
+(rf/reg-event-db
+  :settings/change-styles
+  (fn [db [_ value]]
+    (-> db
+        (assoc-in [:sample :styles] (filter seq (map string/trim (string/split-lines value))))
+        (assoc-in [:settings :styles-str] value))))
+
+(rf/reg-event-db
+  :settings/change-tags
+  (fn [db [_ value]]
+    (-> db
+        (assoc-in [:sample :tags] (filter seq (map string/trim (string/split-lines value))))
+        (assoc-in [:settings :tags-str] value))))

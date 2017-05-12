@@ -6,6 +6,11 @@
            (java.security SecureRandom)
            (java.util Base64)))
 
+(defn response [body]
+  {:status  200
+   :headers {"Content-Type" "text/html; charset=utf-8"}
+   :body    body})
+
 (defn drop-slash [s]
   (subs s 0 (dec (count s))))
 

@@ -1,6 +1,7 @@
 (ns playground.subs
   (:require [reagent.core :as reagent :refer [atom]]
             [re-frame.core :as rf]
+            [clojure.string :as string]
             [playground.utils :as utils]
             [playground.utils.utils :as common-utils]
             [playground.web.auth-base :as auth-base]))
@@ -56,8 +57,15 @@
 (rf/reg-sub :description (fn [db _] (-> db :sample :description)))
 (rf/reg-sub :short-description (fn [db _] (-> db :sample :short-description)))
 (rf/reg-sub :tags (fn [db _] (-> db :sample :tags)))
+
+
 (rf/reg-sub :scripts (fn [db _] (-> db :sample :scripts)))
+(rf/reg-sub :scripts-str (fn [db _] (-> db :settings :scripts-str)))
 (rf/reg-sub :styles (fn [db _] (-> db :sample :styles)))
+(rf/reg-sub :styles-str (fn [db _] (-> db :settings :styles-str)))
+(rf/reg-sub :tags-str (fn [db _] (-> db :settings :tags-str)))
+
+
 
 (rf/reg-sub :code-type (fn [db _] (-> db :sample :code-type code-type->str)))
 (rf/reg-sub :code (fn [db _] (-> db :sample :code)))
@@ -66,7 +74,10 @@
 (rf/reg-sub :style-type (fn [db _] (-> db :sample :style-type style-type->str)))
 (rf/reg-sub :style (fn [db _] (-> db :sample :style)))
 
-(rf/reg-sub :settings-show (fn [db _] (:settings-show db)))
+(rf/reg-sub :settings-show (fn [db _] (-> db :settings :show)))
+(rf/reg-sub :settings/general-tab? (fn [db _] (= :general (-> db :settings :tab))))
+(rf/reg-sub :settings/external-tab? (fn [db _] (= :external (-> db :settings :tab))))
+
 
 (rf/reg-sub :user-sample? (fn [db _] (-> db :sample :version-id not)))
 
