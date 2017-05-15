@@ -22,14 +22,13 @@
          [:div.col-md-7
           [:h3 "Top 10 Cosmetic Products by Revenue"]
           [:p "This data set provides a dummy data for single value charts demonstration"]
-          [:span.label.label-primary "Bar Charts"]
-          [:span.label.label-primary "Sales"]
-          [:span.label.label-primary "Revenue"]
-          [:span.label.label-primary "Dummy data"]
-          [:span.label.label-primary "Single value"]
-          [:div.col-md-2
-           [:a.btn.btn-primary {:href "#" :style "display:block;"} "Usage Sample"]
-           [:a.btn.btn-success {:href "#" :style "display:block;"} "Quick Add"]]
-          ]]]]
+          [:span.label.label-primary {:style "marign-left: 4px;"} "Bar Charts"]
+          [:span.label.label-primary {:style "marign-left: 4px;"} "Sales"]
+          [:span.label.label-primary {:style "marign-left: 4px;"} "Revenue"]
+          [:span.label.label-primary {:style "marign-left: 4px;"} "Dummy data"]
+          [:span.label.label-primary {:style "marign-left: 4px;"} "Single value"]]
+         [:div.col-md-2
+          [:a.btn.btn-primary {:href "#" :style "display:block; margin-bottom:6px;"} "Usage Sample"]
+          [:a.btn.btn-success {:href "#" :style "display:block;"} "Quick Add"]]]]]
 
       (page/footer (:repos data) (:tags data))]]))
