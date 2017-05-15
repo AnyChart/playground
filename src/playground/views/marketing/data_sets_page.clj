@@ -14,19 +14,22 @@
       [:div.content
        [:div.container
         [:h1.page-caption "Data Sets"]
-        [:p.page-caption-desc "Тут будет overview предоставляемых источников данных."]]
-       [:div.row.data-sets-item
-        [:div.col-md-3.data-sets-item-icon {:style "text-align:right;"}
-         [:img {:src   "https://static.anychart.com/cdn/anydata/common/0.png"
-                :style "width: 100%; height: 100%; max-width: 200px; margin-top: 20px;"}]]
-        [:div.col-md-9
-         [:h3 "Top 10 Cosmetic Products by Revenue"]
-         [:p "This data set provides a dummy data for single value charts demonstration"]
-         [:span.label.label-primary "Bar Charts"]
-         [:span.label.label-primary "Sales"]
-         [:span.label.label-primary "Revenue"]
-         [:span.label.label-primary "Dummy data"]
-         [:span.label.label-primary "Single value"]
-         [:a {:href "#"} "Usage sample"]]]]
+        [:p.page-caption-desc "Тут будет overview предоставляемых источников данных."]
+        [:div.row.data-sets-item
+         [:div.col-md-3.data-sets-item-icon {:style "text-align:right;"}
+          [:img {:src   "https://static.anychart.com/cdn/anydata/common/0.png"
+                 :style "width: 100%; height: 100%; max-width: 200px; margin-top: 20px;"}]]
+         [:div.col-md-7
+          [:h3 "Top 10 Cosmetic Products by Revenue"]
+          [:p "This data set provides a dummy data for single value charts demonstration"]
+          [:span.label.label-primary "Bar Charts"]
+          [:span.label.label-primary "Sales"]
+          [:span.label.label-primary "Revenue"]
+          [:span.label.label-primary "Dummy data"]
+          [:span.label.label-primary "Single value"]
+          [:div.col-md-2
+           [:a.btn.btn-primary {:href "#" :style "display:block;"} "Usage Sample"]
+           [:a.btn.btn-success {:href "#" :style "display:block;"} "Quick Add"]]
+          ]]]]
 
       (page/footer (:repos data) (:tags data))]]))
