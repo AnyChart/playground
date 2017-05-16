@@ -145,7 +145,7 @@
         [:div (str "Data Set " i)])]
 
      [:div.col-sm-2.col-xs-4
-      [:div [:b "Social Networks"]]
+      [:div [:b "Social"]]
       [:div [:a {:href "https://www.facebook.com/AnyCharts"} "Facebook"]]
       [:div [:a {:href "https://twitter.com/AnyChart"} "Twitter"]]
       [:div [:a {:href "https://www.linkedin.com/company/386660"} "Linked In"]]]
