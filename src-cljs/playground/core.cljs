@@ -14,11 +14,8 @@
 ;                                   :path-exists?
 ;                                   (fn [path] (utils/log "Path exist? " path))})
 
-(defn pre-init [data]
+(defn init [data]
   (rf/dispatch-sync [:pre-init data]))
-
-(defn post-init [data]
-  (rf/dispatch-sync [:create-editors]))
 
 (defn mount-html []
   (reagent/render-component [views/app] (.getElementById js/document "main-container")))
@@ -27,6 +24,5 @@
   (let [r (t/reader :json)
         data (t/read r data)]
     ;(utils/log "Data: " data)
-    (pre-init data)
-    (mount-html)
-    (post-init data)))
+    (init data)
+    (mount-html)))
