@@ -33,10 +33,6 @@
           [:li "Фиксим баги если они есть"]
           [:li "Берем один - два итема из Features list"]]]
         [:div.row
-         [:h3 "Version 1.1.0 - TBA"]
-         [:ul
-          [:li "Набираем из Features list"]]]
-        [:div.row
          [:h3 "Drop list"]
          [:p "Вещи которые есть на старом PG и их планируется дропнуть"]
          [:div.col-md-3
@@ -60,23 +56,26 @@
         [:div.row
          [:h3 "Features list"]
          [:div.col-md-3
-          [:h5 "Export and Embeding"]
+          [:h5 "Embeding"]
           [:ul
-           [:li "Copy btn for HTML/CSS/JS/Result windows"]
-           [:li "Full source as text/gist"]
-           [:li "Download button"]
-           [:li "Embed as iframe link"]
+           [:li "Embed as iframe"]
            [:li "Embed as Script with code"]
-           [:li "Embed as Script with link"]]]
+           [:li "Embed as Script with src"]]]
          [:div.col-md-3
-          [:h5 "Share to"]
+          [:h5 "Export to image"]
+          [:ul
+           [:li "PNG"]
+           [:li "JPG"]
+           [:li "PDF"]
+           [:li "SVG"]]]
+         [:div.col-md-3
+          [:h5 "Sharing"]
           [:ul
            [:li "Facebook"]
            [:li "Twitter"]
            [:li "LinkedIn"]
            [:li "Pinterest"]
-           [:li "Instagram"]
-           [:li "XLSX"]]]
+           [:li "Instagram"]]]
          [:div.col-md-3
           [:h5 "Search"]
           [:ul
@@ -86,10 +85,23 @@
            [:li "По коду"]
            [:li "С фильтрами по проекту/тегу/дата сету"]]]
          [:div.col-md-3
+          [:h5 "User related"]
+          [:ul
+           [:li "Мои примеры"]
+           [:li "Проекты"]
+           [:li "Настройки"]
+           [:li "Платные вещи + билинг/оплата"]
+           [:li "Assets"]]]
+         [:div.col-md-3
           [:h5 "Разное"]
           [:ul
+           [:li "Copy btn for HTML/CSS/JS/Result windows"]
+           [:li "Full source as text/gist"]
+           [:li "Download button"]
            [:li "Full screen"]
-           [:li "Print"]]]
+           [:li "Print"]
+           [:li "Console"]
+           [:li "Keyboard/Keymap"]]]
          [:div.col-md-3
           [:h5 "Preprocessors"]
           [:ul
