@@ -77,7 +77,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p class="text-muted">© {% now yyyy %} AnyChart.Com All rights reserved.</p>
+            <p class="text-muted">© {% now yyyy %} AnyChart.com All rights reserved.</p>
             <b>Repositories</b>
             {% for repo in repos %}
             <div><a href="/{{repo.name}}">{{repo.name}}</a></div>

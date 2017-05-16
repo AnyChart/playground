@@ -105,8 +105,6 @@
 (defn footer [repos tags]
   [:footer.footer
    [:div.container
-    [:p.text-muted (str "&copy; " (t/year (t/now)) " AnyChart.Com All rights reserved.")]
-
     [:div.row
 
      [:div.col-sm-2.col-xs-4
@@ -137,19 +135,21 @@
      [:div.clearfix.visible-xs-block]
 
      [:div.col-sm-2.col-xs-4
-      [:div [:b "Popular Tags"]]
+      [:div [:b "Tags"]]
       (for [tag tags]
         [:div [:a {:href (str "/tags/" (:name tag))} (:name tag)]])]
 
      [:div.col-sm-2.col-xs-4
-      [:div [:b "Popular Data Sets"]]
+      [:div [:b "Data Sets"]]
       (for [i (range 1 8)]
         [:div (str "Data Set " i)])]
 
      [:div.col-sm-2.col-xs-4
-      [:div [:b "Social Networks"]]
+      [:div [:b "Social"]]
       [:div [:a {:href "https://www.facebook.com/AnyCharts"} "Facebook"]]
       [:div [:a {:href "https://twitter.com/AnyChart"} "Twitter"]]
       [:div [:a {:href "https://www.linkedin.com/company/386660"} "Linked In"]]]
 
-     ]]])
+     ]
+    [:p.text-muted (str "&copy; " (t/year (t/now)) " AnyChart.com All rights reserved.")]
+    ]])
