@@ -1,9 +1,9 @@
 (ns playground.views
   (:require [reagent.core :as reagent :refer [atom]]
             [re-frame.core :as rf]
-
             [re-com.core :refer [h-box v-box box gap line scroller border h-split v-split title flex-child-style p]]
-            [re-com.splits :refer [hv-split-args-desc]]))
+            [re-com.splits :refer [hv-split-args-desc]]
+            [playground.utils :as utils]))
 
 
 ;; -- View Functions ----------------------------------------------
@@ -50,7 +50,16 @@
        [:ul {:class "dropdown-menu"}
         [:li [:a {:href @(rf/subscribe [:sample-editor-url])} "Editor"]]
         [:li [:a {:href @(rf/subscribe [:sample-standalone-url])} "Standalone"]]
-        [:li [:a {:href @(rf/subscribe [:sample-iframe-url])} "Iframe"]]]]]
+        [:li [:a {:href @(rf/subscribe [:sample-iframe-url])} "Iframe"]]
+        [:li {:role "separator" :class "divider"}]
+        [:li [:a {:href     "javascript:;"
+                  :on-click #(rf/dispatch [:view/left])} "Left"]]
+        [:li [:a {:href     "javascript:;"
+                  :on-click #(rf/dispatch [:view/bottom])} "Bottom"]]
+        [:li [:a {:href     "javascript:;"
+                  :on-click #(rf/dispatch [:view/right])} "Right"]]
+        [:li [:a {:href     "javascript:;"
+                  :on-click #(rf/dispatch [:view/top])} "Top"]]]]]
      [:ul {:class "nav navbar-nav navbar-right"}
       [:li {:class "dropdown"}
        [:a {:href          "#"
@@ -73,30 +82,94 @@
 
 (defn footer [])
 
+(defn iframe-result []
+  [:div.result
+   [:iframe#result-iframe {:name              "result-iframe"
+                           :class             "iframe-result"
+                           :sandbox           "allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"
+                           :allowTransparency "true"
+                           :allowFullScreen   "true"
+                           :src               @(rf/subscribe [:sample-iframe-url])}]])
+
+(defn editors-left []
+  (reagent/create-class {:component-did-mount  #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
+                         :reagent-render       (fn []
+                                                 [h-split
+                                                  :class "cont1"
+                                                  :splitter-size "8px"
+                                                  :panel-1 [v-split
+                                                            :margin "0px"
+                                                            :splitter-size "8px"
+                                                            :initial-split 33
+                                                            :panel-1 [:div#markup-editor {:class "editor-box"}]
+                                                            :panel-2 [v-split
+                                                                      :margin "0px"
+                                                                      :splitter-size "8px"
+                                                                      :panel-1 [:div#style-editor {:class "editor-box"}]
+                                                                      :panel-2 [:div#code-editor {:class "editor-box"}]]]
+                                                  :panel-2 [iframe-result]])}))
+
+(defn editors-right []
+  (reagent/create-class {:component-did-mount  #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
+                         :reagent-render       (fn []
+                                                 [h-split
+                                                  :class "cont1"
+                                                  :splitter-size "8px"
+                                                  :panel-2 [v-split
+                                                            :margin "0px"
+                                                            :splitter-size "8px"
+                                                            :initial-split 33
+                                                            :panel-1 [:div#markup-editor {:class "editor-box"}]
+                                                            :panel-2 [v-split
+                                                                      :margin "0px"
+                                                                      :splitter-size "8px"
+                                                                      :panel-1 [:div#style-editor {:class "editor-box"}]
+                                                                      :panel-2 [:div#code-editor {:class "editor-box"}]]]
+                                                  :panel-1 [iframe-result]])}))
+
+(defn editors-top []
+  (reagent/create-class {:component-did-mount  #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
+                         :reagent-render       (fn []
+                                                 [v-split
+                                                  :class "cont1"
+                                                  :splitter-size "8px"
+                                                  :panel-1 [h-split
+                                                            :margin "0px"
+                                                            :splitter-size "8px"
+                                                            :initial-split 33
+                                                            :panel-1 [:div#markup-editor {:class "editor-box"}]
+                                                            :panel-2 [h-split
+                                                                      :margin "0px"
+                                                                      :splitter-size "8px"
+                                                                      :panel-1 [:div#style-editor {:class "editor-box"}]
+                                                                      :panel-2 [:div#code-editor {:class "editor-box"}]]]
+                                                  :panel-2 [iframe-result]])}))
+
+(defn editors-bottom []
+  (reagent/create-class {:component-did-mount  #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
+                         :reagent-render       (fn []
+                                                 [v-split
+                                                  :class "cont1"
+                                                  :splitter-size "8px"
+                                                  :panel-2 [h-split
+                                                            :margin "0px"
+                                                            :splitter-size "8px"
+                                                            :initial-split 33
+                                                            :panel-1 [:div#markup-editor {:class "editor-box"}]
+                                                            :panel-2 [h-split
+                                                                      :margin "0px"
+                                                                      :splitter-size "8px"
+                                                                      :panel-1 [:div#style-editor {:class "editor-box"}]
+                                                                      :panel-2 [:div#code-editor {:class "editor-box"}]]]
+                                                  :panel-1 [iframe-result]])}))
+
 (defn editors []
   [:div.column-container {:style {:height @(rf/subscribe [:editors-height])}}
-   [:fieldset.column-left
-    [:div.editor-box
-     [:div#markup-editor]]
-    [:div.editor-box
-     [:div#style-editor]]
-    [:div.editor-box
-     [:div#code-editor]]]
-   [:fieldset.column-right
-    [:div.result
-     [:iframe#result-iframe {:name              "result-iframe"
-                             :class             "iframe-result"
-                             :sandbox           "allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"
-                             :allowTransparency "true"
-                             :allowFullScreen   "true"
-                             :src               @(rf/subscribe [:sample-iframe-url])}]]]
-   ;[h-split
-   ; :panel-1 [:div
-   ;          "Panel 1"]
-   ; :panel-2  [:div "Panel 2"]
-   ; ]
-
-   ])
+   (case @(rf/subscribe [:view])
+     :left [editors-left]
+     :right [editors-right]
+     :top [editors-top]
+     :bottom [editors-bottom])])
 
 (defn send-form []
   [:form#run-form
@@ -126,7 +199,7 @@
    [:div.settings-window-container
 
 
-    [:ul.nav.nav-tabs
+    [:ul.nav.nav-tabs.settings-tabs
      [:li {:class (when @(rf/subscribe [:settings/general-tab?]) "active")}
       [:a {:href     "javascript:;"
            :on-click #(rf/dispatch [:settings/general-tab])} "General"]]
@@ -205,7 +278,7 @@
                                   :on-change #(rf/dispatch [:settings/change-scripts (-> % .-target .-value)])
                                   :value     @(rf/subscribe [:scripts-str])}]]
 
-        [:div "Quick Add"]
+        [:h4 "Quick Add"]
 
         [:div.form-group
          [:label {:for "settings-select-bin"} "Binaries"]

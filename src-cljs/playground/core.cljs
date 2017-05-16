@@ -18,7 +18,7 @@
   (rf/dispatch-sync [:pre-init data]))
 
 (defn post-init [data]
-  (rf/dispatch-sync [:init data]))
+  (rf/dispatch-sync [:create-editors]))
 
 (defn mount-html []
   (reagent/render-component [views/app] (.getElementById js/document "main-container")))

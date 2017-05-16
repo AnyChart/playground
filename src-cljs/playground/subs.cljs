@@ -92,3 +92,5 @@
 
 (rf/reg-sub :can-signin (fn [db _] (auth-base/can (-> db :user) :signin)))
 (rf/reg-sub :can-signup (fn [db _] (auth-base/can (-> db :user) :signup)))
+
+(rf/reg-sub :view (fn [db _] (-> db :view)))

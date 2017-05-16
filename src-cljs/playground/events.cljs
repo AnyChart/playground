@@ -14,6 +14,7 @@
 (.addEventListener js/window "resize" (fn [_] (rf/dispatch [:resize-window])))
 
 (defn create-editor [type value mode]
+  ;(utils/log "create-editor: " type value mode)
   (let [editor-name (str (name type) "-editor")
         cm (js/CodeMirror (.getElementById js/document editor-name)
                           (clj->js {:value       value
@@ -32,7 +33,10 @@
     {:code           ""
      :markup         ""
      :style          ""
+
      :editors-height (window-height)
+     :view           :left
+
      :sample         (:sample data)
      :templates      (:templates data)
      :user           (:user data)
@@ -44,12 +48,12 @@
                       :tags-str    (string/join "\n" (-> data :sample :tags))}}))
 
 (rf/reg-event-db
-  :init
-  (fn [db [_ data]]
+  :create-editors
+  (fn [db _]
     (assoc db
-      :markup-editor (create-editor :markup (-> data :sample :markup) "text/html")
-      :style-editor (create-editor :style (-> data :sample :style) "css")
-      :code-editor (create-editor :code (-> data :sample :code) "javascript"))))
+      :markup-editor (create-editor :markup (-> db :sample :markup) "text/html")
+      :style-editor (create-editor :style (-> db :sample :style) "css")
+      :code-editor (create-editor :code (-> db :sample :code) "javascript"))))
 
 (rf/reg-event-db
   :resize-window
@@ -216,3 +220,26 @@
     (-> db
         (assoc-in [:sample :tags] (filter seq (map string/trim (string/split-lines value))))
         (assoc-in [:settings :tags-str] value))))
+
+;;======================================================================================================================
+;; Settings
+;;======================================================================================================================
+(rf/reg-event-db
+  :view/left
+  (fn [db _]
+    (assoc-in db [:view] :left)))
+
+(rf/reg-event-db
+  :view/right
+  (fn [db _]
+    (assoc-in db [:view] :right)))
+
+(rf/reg-event-db
+  :view/bottom
+  (fn [db _]
+    (assoc-in db [:view] :bottom)))
+
+(rf/reg-event-db
+  :view/top
+  (fn [db _]
+    (assoc-in db [:view] :top)))
