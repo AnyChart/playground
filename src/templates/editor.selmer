@@ -34,7 +34,7 @@
 <div id="main-container"></div>
 <footer class="footer" style="margin-top: 40px;">
     <div class="container">
-        <span class="text-muted">© {% now yyyy %} AnyChart.Com All rights reserved.</span>
+        <span class="text-muted">© {% now yyyy %} AnyChart.com All rights reserved.</span>
     </div>
 </footer>
 <script type="text/javascript" src="/js/playground.js"></script>

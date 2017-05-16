@@ -105,8 +105,6 @@
 (defn footer [repos tags]
   [:footer.footer
    [:div.container
-    [:p.text-muted (str "&copy; " (t/year (t/now)) " AnyChart.Com All rights reserved.")]
-
     [:div.row
 
      [:div.col-sm-2.col-xs-4
@@ -152,4 +150,6 @@
       [:div [:a {:href "https://twitter.com/AnyChart"} "Twitter"]]
       [:div [:a {:href "https://www.linkedin.com/company/386660"} "Linked In"]]]
 
-     ]]])
+     ]
+    [:p.text-muted (str "&copy; " (t/year (t/now)) " AnyChart.com All rights reserved.")]
+    ]])

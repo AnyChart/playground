@@ -72,7 +72,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p class="text-muted">&copy; {% now yyyy %} AnyChart.Com All rights reserved.</p>
+            <p class="text-muted">&copy; {% now yyyy %} AnyChart.com All rights reserved.</p>
         </div>
     </footer>
 
