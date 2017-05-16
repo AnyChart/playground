@@ -135,12 +135,12 @@
      [:div.clearfix.visible-xs-block]
 
      [:div.col-sm-2.col-xs-4
-      [:div [:b "Popular Tags"]]
+      [:div [:b "Tags"]]
       (for [tag tags]
         [:div [:a {:href (str "/tags/" (:name tag))} (:name tag)]])]
 
      [:div.col-sm-2.col-xs-4
-      [:div [:b "Popular Data Sets"]]
+      [:div [:b "Data Sets"]]
       (for [i (range 1 8)]
         [:div (str "Data Set " i)])]
 
