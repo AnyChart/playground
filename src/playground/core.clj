@@ -12,7 +12,8 @@
             [playground.preview-generator.core :as pw-generator])
   (:gen-class)
   (:import (org.slf4j LoggerFactory Logger)
-           (ch.qos.logback.classic Level)))
+           (ch.qos.logback.classic Level)
+           (java.nio.charset Charset)))
 
 ; disable some dirty logging
 (System/setProperties
@@ -61,7 +62,12 @@
 (defn read-config [path]
   (toml/read (slurp path) :keywordize))
 
+(defn set-default-charset []
+  (System/setProperty "file.encoding" "UTF-8")
+  (doto (.getDeclaredField Charset "defaultCharset") (.setAccessible true) (.set nil nil)))
+
 (defn -main [conf-path & args]
+  (set-default-charset)
   (timbre/info "Charset: " (System/getProperty "file.encoding"))
   (let [conf (read-config conf-path)]
     (if (= (s/conform ::core-spec/config conf) ::s/invalid)
