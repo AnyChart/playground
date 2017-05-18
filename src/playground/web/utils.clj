@@ -18,7 +18,7 @@
   (let [out (ByteArrayOutputStream. 4096)
         writer (transit/writer out :json)]
     (transit/write writer data)
-    (.toString out)))
+    (.toString out "UTF-8")))
 
 (defn unpack [s]
   (let [in (ByteArrayInputStream. (.getBytes s))
