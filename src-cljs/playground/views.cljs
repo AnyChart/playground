@@ -92,76 +92,76 @@
                            :src               @(rf/subscribe [:sample-iframe-url])}]])
 
 (defn editors-left []
-  (reagent/create-class {:component-did-mount  #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
-                         :reagent-render       (fn []
-                                                 [h-split
-                                                  :class "cont1"
-                                                  :splitter-size "8px"
-                                                  :panel-1 [v-split
-                                                            :margin "0px"
-                                                            :splitter-size "8px"
-                                                            :initial-split 33
-                                                            :panel-1 [:div#markup-editor {:class "editor-box"}]
-                                                            :panel-2 [v-split
-                                                                      :margin "0px"
-                                                                      :splitter-size "8px"
-                                                                      :panel-1 [:div#style-editor {:class "editor-box"}]
-                                                                      :panel-2 [:div#code-editor {:class "editor-box"}]]]
-                                                  :panel-2 [iframe-result]])}))
+  (reagent/create-class {:component-did-mount #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
+                         :reagent-render      (fn []
+                                                [h-split
+                                                 :class "cont1"
+                                                 :splitter-size "8px"
+                                                 :panel-1 [v-split
+                                                           :margin "0px"
+                                                           :splitter-size "8px"
+                                                           :initial-split 33
+                                                           :panel-1 [:div#markup-editor {:class "editor-box"}]
+                                                           :panel-2 [v-split
+                                                                     :margin "0px"
+                                                                     :splitter-size "8px"
+                                                                     :panel-1 [:div#style-editor {:class "editor-box"}]
+                                                                     :panel-2 [:div#code-editor {:class "editor-box"}]]]
+                                                 :panel-2 [iframe-result]])}))
 
 (defn editors-right []
-  (reagent/create-class {:component-did-mount  #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
-                         :reagent-render       (fn []
-                                                 [h-split
-                                                  :class "cont1"
-                                                  :splitter-size "8px"
-                                                  :panel-2 [v-split
-                                                            :margin "0px"
-                                                            :splitter-size "8px"
-                                                            :initial-split 33
-                                                            :panel-1 [:div#markup-editor {:class "editor-box"}]
-                                                            :panel-2 [v-split
-                                                                      :margin "0px"
-                                                                      :splitter-size "8px"
-                                                                      :panel-1 [:div#style-editor {:class "editor-box"}]
-                                                                      :panel-2 [:div#code-editor {:class "editor-box"}]]]
-                                                  :panel-1 [iframe-result]])}))
+  (reagent/create-class {:component-did-mount #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
+                         :reagent-render      (fn []
+                                                [h-split
+                                                 :class "cont1"
+                                                 :splitter-size "8px"
+                                                 :panel-2 [v-split
+                                                           :margin "0px"
+                                                           :splitter-size "8px"
+                                                           :initial-split 33
+                                                           :panel-1 [:div#markup-editor {:class "editor-box"}]
+                                                           :panel-2 [v-split
+                                                                     :margin "0px"
+                                                                     :splitter-size "8px"
+                                                                     :panel-1 [:div#style-editor {:class "editor-box"}]
+                                                                     :panel-2 [:div#code-editor {:class "editor-box"}]]]
+                                                 :panel-1 [iframe-result]])}))
 
 (defn editors-top []
-  (reagent/create-class {:component-did-mount  #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
-                         :reagent-render       (fn []
-                                                 [v-split
-                                                  :class "cont1"
-                                                  :splitter-size "8px"
-                                                  :panel-1 [h-split
-                                                            :margin "0px"
-                                                            :splitter-size "8px"
-                                                            :initial-split 33
-                                                            :panel-1 [:div#markup-editor {:class "editor-box"}]
-                                                            :panel-2 [h-split
-                                                                      :margin "0px"
-                                                                      :splitter-size "8px"
-                                                                      :panel-1 [:div#style-editor {:class "editor-box"}]
-                                                                      :panel-2 [:div#code-editor {:class "editor-box"}]]]
-                                                  :panel-2 [iframe-result]])}))
+  (reagent/create-class {:component-did-mount #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
+                         :reagent-render      (fn []
+                                                [v-split
+                                                 :class "cont1"
+                                                 :splitter-size "8px"
+                                                 :panel-1 [h-split
+                                                           :margin "0px"
+                                                           :splitter-size "8px"
+                                                           :initial-split 33
+                                                           :panel-1 [:div#markup-editor {:class "editor-box"}]
+                                                           :panel-2 [h-split
+                                                                     :margin "0px"
+                                                                     :splitter-size "8px"
+                                                                     :panel-1 [:div#style-editor {:class "editor-box"}]
+                                                                     :panel-2 [:div#code-editor {:class "editor-box"}]]]
+                                                 :panel-2 [iframe-result]])}))
 
 (defn editors-bottom []
-  (reagent/create-class {:component-did-mount  #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
-                         :reagent-render       (fn []
-                                                 [v-split
-                                                  :class "cont1"
-                                                  :splitter-size "8px"
-                                                  :panel-2 [h-split
-                                                            :margin "0px"
-                                                            :splitter-size "8px"
-                                                            :initial-split 33
-                                                            :panel-1 [:div#markup-editor {:class "editor-box"}]
-                                                            :panel-2 [h-split
-                                                                      :margin "0px"
-                                                                      :splitter-size "8px"
-                                                                      :panel-1 [:div#style-editor {:class "editor-box"}]
-                                                                      :panel-2 [:div#code-editor {:class "editor-box"}]]]
-                                                  :panel-1 [iframe-result]])}))
+  (reagent/create-class {:component-did-mount #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
+                         :reagent-render      (fn []
+                                                [v-split
+                                                 :class "cont1"
+                                                 :splitter-size "8px"
+                                                 :panel-2 [h-split
+                                                           :margin "0px"
+                                                           :splitter-size "8px"
+                                                           :initial-split 33
+                                                           :panel-1 [:div#markup-editor {:class "editor-box"}]
+                                                           :panel-2 [h-split
+                                                                     :margin "0px"
+                                                                     :splitter-size "8px"
+                                                                     :panel-1 [:div#style-editor {:class "editor-box"}]
+                                                                     :panel-2 [:div#code-editor {:class "editor-box"}]]]
+                                                 :panel-1 [iframe-result]])}))
 
 (defn editors []
   [:div.column-container {:style {:height @(rf/subscribe [:editors-height])}}
@@ -365,14 +365,9 @@
                                                             } "Usage Sample"]
             [:a.btn.btn-success.btn-xs.usage-sample-button {:href     "javascript:;"
                                                             :on-click #(do (utils/log (:type data-set))
-                                                                          (case (:type data-set)
-                                                                         "text/javascript" (rf/dispatch [:settings/add-script (:url data-set)])))
-                                                            } "Quick Add"]]]
-
-          )
-        ]
-
-       )
+                                                                           (case (:type data-set)
+                                                                             "text/javascript" (rf/dispatch [:settings/add-script (:url data-set)])))}
+             "Quick Add"]]])])
 
      [:button {:type     "button"
                :on-click #(rf/dispatch [:settings/hide])} "Close"]]

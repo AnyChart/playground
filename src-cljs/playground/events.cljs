@@ -46,7 +46,7 @@
                       :tab         :general
                       :scripts-str (string/join "\n" (-> data :sample :scripts))
                       :styles-str  (string/join "\n" (-> data :sample :styles))
-                      :tags-str    (string/join "\n" (-> data :sample :tags))}}))
+                      :tags-str    (string/join " " (-> data :sample :tags))}}))
 
 (rf/reg-event-db
   :create-editors
@@ -223,7 +223,7 @@
   :settings/change-tags
   (fn [db [_ value]]
     (-> db
-        (assoc-in [:sample :tags] (filter seq (map string/trim (string/split-lines value))))
+        (assoc-in [:sample :tags] (filter seq (map string/trim (string/split value #"\s"))))
         (assoc-in [:settings :tags-str] value))))
 
 ;;======================================================================================================================
