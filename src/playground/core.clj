@@ -62,6 +62,7 @@
   (toml/read (slurp path) :keywordize))
 
 (defn -main [conf-path & args]
+  (timbre/info "Charset: " (System/getProperty "file.encoding"))
   (let [conf (read-config conf-path)]
     (if (= (s/conform ::core-spec/config conf) ::s/invalid)
       (timbre/info "Bad config file!\n" (s/explain-str ::core-spec/config conf))
