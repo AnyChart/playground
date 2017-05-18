@@ -57,7 +57,6 @@
   (assoc sample :full-url (utils/sample-url sample)))
 
 (defn parse-sample [sample]
-  ;; TODO: rename all keywords with underscore to dash
   (-> sample
       (assoc :tags (parse-string (:tags sample)))
       (assoc :scripts (parse-string (:scripts sample)))
@@ -175,3 +174,18 @@
 (defsql tags)
 (defsql top-tags)
 (defsql samples-by-tag {:row-fn parse-sample})
+
+;;data sources
+(defn parse-data-set [data-set]
+  (-> data-set
+      (assoc :tags (parse-string (:tags data-set)))
+      underscore->dash))
+
+(defsql add-data-source<!)
+(defsql add-data-set<!)
+(defsql delete-data-sources!)
+(defsql delete-data-sets!)
+(defsql data-sets {:row-fn parse-data-set})
+(defsql top-data-sets {:row-fn parse-data-set})
+(defsql data-set-by-name {:result-set-fn first
+                         :row-fn        parse-data-set})

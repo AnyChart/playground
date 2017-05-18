@@ -45,7 +45,7 @@
      [:ul.nav.navbar-nav
 
       [:li [:a {:href "/chart-types"} "Chart Types"]]
-      [:li [:a {:href "/data-sets"} "Data Sets"]]
+      [:li [:a {:href "/datasets"} "Data Sets"]]
 
       [:li {:class "dropdown"}
        [:a {:href          "#"
@@ -102,7 +102,7 @@
          (str "Create " (:name template))])]]]])
 
 
-(defn footer [repos tags]
+(defn footer [repos tags data-sets]
   [:footer.footer
    [:div.container
     [:div.row
@@ -120,7 +120,7 @@
      [:div.col-sm-2.col-xs-4
       [:div [:b "Playground"]]
       [:div [:a {:href "/chart-types"} "Chart Types"]]
-      [:div [:a {:href "/data-sets"} "Data Sets"]]
+      [:div [:a {:href "/datasets"} "Data Sets"]]
       [:div [:a {:href "/support"} "Support"]]
       [:div [:a {:href "/roadmap"} "Roadmap"]]
       [:div [:a {:href "/version-history"} "Version History"]]
@@ -141,8 +141,10 @@
 
      [:div.col-sm-2.col-xs-4
       [:div [:b "Data Sets"]]
-      (for [i (range 1 8)]
-        [:div (str "Data Set " i)])]
+      (for [data-set data-sets]
+        [:div.dataset [:a {:href (str "/datasets/" (:data-source-name data-set) "/" (:name data-set))
+                           :title (:title data-set)}
+                       (:title data-set)]])]
 
      [:div.col-sm-2.col-xs-4
       [:div [:b "Social"]]

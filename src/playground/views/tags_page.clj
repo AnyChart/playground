@@ -21,4 +21,4 @@
             [:li [:a {:href (str "/tags/" (:name tag))}
                   (str "Tag " (:name tag))]])]]]]
 
-      (page/footer (:repos data) (:tags data))]]))
+      (page/footer (:repos data) (:tags data) (:data-sets data))]]))

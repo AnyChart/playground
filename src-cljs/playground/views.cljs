@@ -206,7 +206,11 @@
 
      [:li {:class (when @(rf/subscribe [:settings/external-tab?]) "active")}
       [:a {:href     "javascript:;"
-           :on-click #(rf/dispatch [:settings/external-tab])} "External Resources"]]]
+           :on-click #(rf/dispatch [:settings/external-tab])} "External Resources"]]
+
+     [:li {:class (when @(rf/subscribe [:settings/data-sets-tab?]) "active")}
+      [:a {:href     "javascript:;"
+           :on-click #(rf/dispatch [:settings/data-sets-tab])} "Data Sets"]]]
     [:form
 
      (when @(rf/subscribe [:settings/general-tab?])
@@ -341,6 +345,34 @@
           [:option {:value "https://cdn.anychart.com/geodata/1.2.0/countries/france/france.topo.js"} "France"]]]
 
         ])
+
+     (when @(rf/subscribe [:settings/data-sets-tab?])
+       [:div
+        (for [data-set @(rf/subscribe [:data-sets])]
+          ^{:key (:name data-set)}
+
+          [:div.row.data-sets-item
+           [:div.col-md-2.data-sets-item-icon
+            [:img {:src (:logo data-set)}]]
+           [:div.col-md-7
+            [:h5 (:title data-set)]
+            [:p (:description data-set)]
+            (for [tag (:tags data-set)]
+              ^{:key tag} [:span.label.label-primary.tag tag])]
+           [:div.col-md-3
+            [:a.btn.btn-primary.btn-xs.usage-sample-button {:href "javascript:;"
+                                                            ;:on-click #(rf/dispatch [:settings/general-tab])
+                                                            } "Usage Sample"]
+            [:a.btn.btn-success.btn-xs.usage-sample-button {:href     "javascript:;"
+                                                            :on-click #(do (utils/log (:type data-set))
+                                                                          (case (:type data-set)
+                                                                         "text/javascript" (rf/dispatch [:settings/add-script (:url data-set)])))
+                                                            } "Quick Add"]]]
+
+          )
+        ]
+
+       )
 
      [:button {:type     "button"
                :on-click #(rf/dispatch [:settings/hide])} "Close"]]

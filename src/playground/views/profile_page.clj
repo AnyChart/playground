@@ -24,4 +24,4 @@
         [:p [:b "Email: "] (:email user)]
         [:p [:b "Permissions: "] (:permissions user)]]]
 
-      (page/footer (:repos data) (:tags data))]]))
+      (page/footer (:repos data) (:tags data) (:data-sets data))]]))

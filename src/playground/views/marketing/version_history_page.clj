@@ -16,4 +16,4 @@
         [:h1.page-caption "Version History"]
         [:p.page-caption-desc "Тут будет вся история проекта."]]]
 
-      (page/footer (:repos data) (:tags data))]]))
+      (page/footer (:repos data) (:tags data) (:data-sets data))]]))

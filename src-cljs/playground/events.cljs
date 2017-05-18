@@ -40,6 +40,7 @@
      :sample         (:sample data)
      :templates      (:templates data)
      :user           (:user data)
+     :data-sets      (:data-sets data)
 
      :settings       {:show        false
                       :tab         :general
@@ -175,6 +176,10 @@
   (fn [db _]
     (assoc-in db [:settings :tab] :external)))
 
+(rf/reg-event-db
+  :settings/data-sets-tab
+  (fn [db _]
+    (assoc-in db [:settings :tab] :data-sets)))
 
 (rf/reg-event-db
   :settings/change-name

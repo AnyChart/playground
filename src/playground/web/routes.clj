@@ -28,6 +28,7 @@
             [playground.views.tag-page :as tag-view]
             [playground.views.marketing.chart-types-page :as chart-types-view]
             [playground.views.marketing.data-sets-page :as data-sets-view]
+            [playground.views.marketing.data-set-page :as data-set-view]
             [playground.views.marketing.about-page :as about-view]
             [playground.views.marketing.pricing-enterprise-page :as pricing-enterprise-view]
             [playground.views.marketing.pricing-page :as pricing-view]
@@ -56,9 +57,11 @@
 
 (defn show-sample-editor [sample request]
   (db-req/update-sample-views! (get-db request) {:id (:id sample)})
-  (let [templates (db-req/templates (get-db request))]
+  (let [templates (db-req/templates (get-db request))
+        data-sets (db-req/data-sets (get-db request))]
     (response (render-file "templates/editor.selmer" {:data (web-utils/pack {:sample    sample
                                                                              :templates templates
+                                                                             :data-sets data-sets
                                                                              :user      (get-safe-user request)})}))))
 
 (defn show-sample-preview [sample request]
@@ -97,24 +100,18 @@
   (let [page (dec (try (-> request :params :page Integer/parseInt) (catch Exception _ 1)))
         samples (db-req/top-samples (get-db request) {:count  (inc samples-per-page)
                                                       :offset (* samples-per-page page)})]
-    (response (landing-view/page {:samples   (take samples-per-page samples)
-                                  :end       (< (count samples) (inc samples-per-page))
-                                  :page      page
-                                  :user      (get-user request)
-                                  :templates (get-templates request)
-                                  :repos     (get-repos request)
-                                  :tags      (get-tags request)}))))
+    (response (landing-view/page (merge (get-app-data request)
+                                        {:samples (take samples-per-page samples)
+                                         :end     (< (count samples) (inc samples-per-page))
+                                         :page    page})))))
 
 (defn repo-page [request]
   (let [repo (get-repo request)
         versions (db-req/versions (get-db request) {:repo-id (:id repo)})
         versions-with-samples (filter (comp pos? :samples-count) versions)]
-    (repo-view/page {:repo      repo
-                     :templates (get-templates request)
-                     :repos     (get-repos request)
-                     :tags      (get-tags request)
-                     :versions  versions-with-samples
-                     :user      (get-user request)})))
+    (repo-view/page (merge (get-app-data request)
+                           {:repo     repo
+                            :versions versions-with-samples}))))
 
 (defn version-page [request]
   (let [repo (get-repo request)
@@ -123,15 +120,12 @@
         samples (db-req/samples-by-version (get-db request) {:version_id (:id version)
                                                              :offset     (* samples-per-page page)
                                                              :count      (inc samples-per-page)})]
-    (version-view/page {:samples   (take samples-per-page samples)
-                        :end       (< (count samples) (inc samples-per-page))
-                        :page      page
-                        :version   version
-                        :repo      repo
-                        :templates (get-templates request)
-                        :repos     (get-repos request)
-                        :tags      (get-tags request)
-                        :user      (get-user request)})))
+    (version-view/page (merge (get-app-data request)
+                              {:samples (take samples-per-page samples)
+                               :end     (< (count samples) (inc samples-per-page))
+                               :page    page
+                               :version version
+                               :repo    repo}))))
 
 (defn signup-page [request]
   (register-view/page (get-app-data request)))
@@ -152,14 +146,11 @@
                                                          :offset (* samples-per-page page)
                                                          :tag    tag})]
     ;(prn "tag-page: " (count samples))
-    (tag-view/page {:samples   (take samples-per-page samples)
-                    :end       (< (count samples) (inc samples-per-page))
-                    :page      page
-                    :tag       tag
-                    :templates (get-templates request)
-                    :repos     (get-repos request)
-                    :tags      (get-tags request)
-                    :user      (get-user request)})))
+    (tag-view/page (merge {:samples (take samples-per-page samples)
+                           :end     (< (count samples) (inc samples-per-page))
+                           :page    page
+                           :tag     tag}
+                          (get-app-data request)))))
 
 ;; =====================================================================================================================
 ;; Marketing pages
@@ -169,6 +160,15 @@
 
 (defn data-sets-page [request]
   (data-sets-view/page (get-app-data request)))
+
+(defn data-set-page [request]
+  (let [data-source-name (-> request :params :data-source)
+        data-set-name (-> request :params :data-set)
+        data-set (db-req/data-set-by-name (get-db request) {:data-source-name data-source-name
+                                                            :name             data-set-name})]
+    (when data-set
+      (data-set-view/page (merge (get-app-data request)
+                                 {:data-set data-set})))))
 
 (defn about-page [request]
   (about-view/page (get-app-data request)))
@@ -372,6 +372,7 @@
                            mw/templates-middleware
                            mw/repos-middleware
                            mw/tags-middleware
+                           mw/data-sets-middleware
                            auth/check-anonymous-middleware))
 
            ;; Marketing pages
@@ -379,48 +380,64 @@
                                       mw/templates-middleware
                                       mw/repos-middleware
                                       mw/tags-middleware
+                                      mw/data-sets-middleware
                                       auth/check-anonymous-middleware))
 
-           (GET "/data-sets" [] (-> data-sets-page
-                                    mw/templates-middleware
-                                    mw/repos-middleware
-                                    mw/tags-middleware
-                                    auth/check-anonymous-middleware))
+           (GET "/datasets" [] (-> data-sets-page
+                                   mw/templates-middleware
+                                   mw/repos-middleware
+                                   mw/tags-middleware
+                                   mw/data-sets-middleware
+                                   mw/all-data-sets-middleware
+                                   auth/check-anonymous-middleware))
+
+           (GET "/datasets/:data-source/:data-set" [] (-> data-set-page
+                                                          mw/templates-middleware
+                                                          mw/repos-middleware
+                                                          mw/tags-middleware
+                                                          mw/data-sets-middleware
+                                                          auth/check-anonymous-middleware))
 
            (GET "/support" [] (-> support-page
                                   mw/templates-middleware
                                   mw/repos-middleware
                                   mw/tags-middleware
+                                  mw/data-sets-middleware
                                   auth/check-anonymous-middleware))
 
            (GET "/roadmap" [] (-> roadmap-page
                                   mw/templates-middleware
                                   mw/repos-middleware
                                   mw/tags-middleware
+                                  mw/data-sets-middleware
                                   auth/check-anonymous-middleware))
 
            (GET "/version-history" [] (-> version-history-page
                                           mw/templates-middleware
                                           mw/repos-middleware
                                           mw/tags-middleware
+                                          mw/data-sets-middleware
                                           auth/check-anonymous-middleware))
 
            (GET "/pricing" [] (-> pricing-page
                                   mw/templates-middleware
                                   mw/repos-middleware
                                   mw/tags-middleware
+                                  mw/data-sets-middleware
                                   auth/check-anonymous-middleware))
 
            (GET "/pricing/enterprise" [] (-> pricing-enterprise-page
                                              mw/templates-middleware
                                              mw/repos-middleware
                                              mw/tags-middleware
+                                             mw/data-sets-middleware
                                              auth/check-anonymous-middleware))
 
            (GET "/about" [] (-> about-page
                                 mw/templates-middleware
                                 mw/repos-middleware
                                 mw/tags-middleware
+                                mw/data-sets-middleware
                                 auth/check-anonymous-middleware))
 
            ;; End marketing pages
@@ -429,12 +446,14 @@
                                mw/repos-middleware
                                mw/tags-middleware
                                mw/all-tags-middleware
+                               mw/data-sets-middleware
                                auth/check-anonymous-middleware))
 
            (GET "/tags/*" [] (-> tag-page
                                  mw/templates-middleware
                                  mw/repos-middleware
                                  mw/tags-middleware
+                                 mw/data-sets-middleware
                                  auth/check-anonymous-middleware))
 
 
@@ -442,12 +461,14 @@
                                   mw/templates-middleware
                                   mw/repos-middleware
                                   mw/tags-middleware
+                                  mw/data-sets-middleware
                                   auth/check-anonymous-middleware))
 
            (GET "/signin" [] (-> signin-page
                                  mw/templates-middleware
                                  mw/repos-middleware
                                  mw/tags-middleware
+                                 mw/data-sets-middleware
                                  (auth/permissions-middleware :signin)
                                  auth/check-anonymous-middleware))
 
@@ -455,6 +476,7 @@
                                  mw/templates-middleware
                                  mw/repos-middleware
                                  mw/tags-middleware
+                                 mw/data-sets-middleware
                                  (auth/permissions-middleware :signup)
                                  auth/check-anonymous-middleware))
 
@@ -496,6 +518,7 @@
                                 mw/templates-middleware
                                 mw/repos-middleware
                                 mw/tags-middleware
+                                mw/data-sets-middleware
                                 auth/check-anonymous-middleware))
            (GET "/:repo/" [] (fn [request]
                                (when ((-> repo-page
@@ -503,6 +526,7 @@
                                           mw/templates-middleware
                                           mw/repos-middleware
                                           mw/tags-middleware
+                                          mw/data-sets-middleware
                                           auth/check-anonymous-middleware) request)
                                  (redirect (web-utils/drop-slash (:uri request)) 301))))
 
@@ -512,6 +536,7 @@
                                          mw/templates-middleware
                                          mw/repos-middleware
                                          mw/tags-middleware
+                                         mw/data-sets-middleware
                                          auth/check-anonymous-middleware))
            (GET "/:repo/:version/" [] (fn [request]
                                         (when ((-> version-page
@@ -520,6 +545,7 @@
                                                    mw/templates-middleware
                                                    mw/repos-middleware
                                                    mw/tags-middleware
+                                                   mw/data-sets-middleware
                                                    auth/check-anonymous-middleware) request)
                                           (redirect (web-utils/drop-slash (:uri request)) 301))))
 

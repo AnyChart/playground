@@ -7,6 +7,7 @@
             [cheshire.core :as json]
             [playground-samples-parser.fs :as samples-fs]
             [playground.generator.parser.group-parser :as group-parser]
+            [playground.generator.data-sets :as data-sets]
             [playground.generator.utils :refer [copy-dir]]
             [playground.db.request :as db-req]
             [playground.notification.slack :as slack]
@@ -34,6 +35,7 @@
 
   (start [this]
     (timbre/info "Generator start" conf)
+    (data-sets/parse-data-source (:db this) (:data_sources conf))
     (add-predefined-users (:db this) (:users conf))
     (check-repositories this (:db this) (:notifier this))
     (assoc this
@@ -53,8 +55,9 @@
     repos))
 
 (defn new-generator [conf]
-  (map->Generator {:conf  {:users       (:users conf)
-                           :queue-index (atom 0)}
+  (map->Generator {:conf  {:users        (:users conf)
+                           :data_sources (:data_sources conf)
+                           :queue-index  (atom 0)}
                    :repos (get-repos conf)}))
 
 (defn get-repo-by-name [generator name]
@@ -81,9 +84,9 @@
     (fs/mkdirs (:dir @repo))
     (git/clone @repo (repo-path @repo))
     (catch Exception e
-      (info "Download repo "  (:name @repo) " error!")
+      (info "Download repo " (:name @repo) " error!")
       (fs/delete-dir (:dir @repo))
-      (throw (Exception. (str "Download repo "  (:name @repo) " error"))))))
+      (throw (Exception. (str "Download repo " (:name @repo) " error"))))))
 
 (defn check-repository [generator db repo db-repo]
   (try

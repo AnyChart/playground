@@ -77,7 +77,9 @@
 (rf/reg-sub :settings-show (fn [db _] (-> db :settings :show)))
 (rf/reg-sub :settings/general-tab? (fn [db _] (= :general (-> db :settings :tab))))
 (rf/reg-sub :settings/external-tab? (fn [db _] (= :external (-> db :settings :tab))))
+(rf/reg-sub :settings/data-sets-tab? (fn [db _] (= :data-sets (-> db :settings :tab))))
 
+(rf/reg-sub :data-sets (fn [db _] (-> db :data-sets)))
 
 (rf/reg-sub :user-sample? (fn [db _] (-> db :sample :version-id not)))
 

@@ -26,4 +26,4 @@
          [:button.btn.btn-default {:type "submit"} "Log in"]]
         ]]
 
-      (page/footer (:repos data) (:tags data))]]))
+      (page/footer (:repos data) (:tags data) (:data-sets data))]]))

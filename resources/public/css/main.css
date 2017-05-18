@@ -55,6 +55,12 @@ footer p {
     margin-top: 20px;
 }
 
+.footer .dataset{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 /* repo page */
 .branches {
     padding: 20px;
@@ -188,4 +194,24 @@ form {
     vertical-align: middle;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+/* data-sets page */
+.data-sets-item .data-sets-item-icon {
+    text-align: right;
+}
+
+.data-sets-item .data-sets-item-icon img {
+    width: 100%;
+    height: 100%;
+    max-width: 200px;
+    margin-top: 20px;
+}
+.data-sets-item .tag {
+    margin-left: 4px;
+}
+
+.data-sets-item .usage-sample-button {
+    display:block;
+    margin-bottom:6px;"
 }

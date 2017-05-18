@@ -26,7 +26,7 @@
                                          :href  (str "/" (:name repo) "/" (:name version) "?page=" (-> page inc inc))
                                          :title (str "Next page, " (-> page inc inc))} "Next"]]]]
 
-      (page/footer (:repos data) (:tags data))]
+      (page/footer (:repos data) (:tags data) (:data-sets data))]
 
      [:script {:src "/js/site.js" :type "text/javascript"}]
      [:script "playground.site.landing.start(" (:end data) ", " page "," (-> data :version :id) ");"]]))

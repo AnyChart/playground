@@ -18,4 +18,4 @@
         По сути этот должен быть некий клон чартопедии, как-то сказать какие графики можно использовать - нужно,
         но клонить чартопедию для этого не хочется. http://www.anychart.com/chartopedia/"]]]
 
-      (page/footer (:repos data) (:tags data))]]))
+      (page/footer (:repos data) (:tags data) (:data-sets data))]]))

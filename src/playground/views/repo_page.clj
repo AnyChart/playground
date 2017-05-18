@@ -19,4 +19,4 @@
             [:li [:a {:href (str "/" (:name (:repo data)) "/" (:name version))}
                   (str "Branch " (:name version))]])]]]]
 
-      (page/footer (:repos data) (:tags data))]]))
+      (page/footer (:repos data) (:tags data) (:data-sets data))]]))

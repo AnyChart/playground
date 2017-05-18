@@ -34,4 +34,4 @@
          [:button.btn.btn-default {:type "submit"} "Sign up"]]
         ]]
 
-      (page/footer (:repos data) (:tags data))]]))
+      (page/footer (:repos data) (:tags data) (:data-sets data))]]))

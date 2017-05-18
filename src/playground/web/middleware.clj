@@ -49,8 +49,17 @@
     (handler (assoc-in request [:app :tags]
                        (db-req/top-tags (get-db request) {:limit 7})))))
 
-
 (defn all-tags-middleware [handler]
   (fn [request]
     (handler (assoc-in request [:app :all-tags]
                        (db-req/tags (get-db request))))))
+
+(defn data-sets-middleware [handler]
+  (fn [request]
+    (handler (assoc-in request [:app :data-sets]
+                       (db-req/top-data-sets (get-db request) {:limit 7})))))
+
+(defn all-data-sets-middleware [handler]
+  (fn [request]
+    (handler (assoc-in request [:app :all-data-sets]
+                       (db-req/data-sets (get-db request))))))

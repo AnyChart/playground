@@ -25,6 +25,10 @@
 
 (defn get-all-tags [request] (-> request :app :all-tags))
 
+(defn get-data-sets [request] (-> request :app :data-sets))
+
+(defn get-all-data-sets [request] (-> request :app :all-data-sets))
+
 
 ;; session
 (defn get-user [request] (-> request :session :user))

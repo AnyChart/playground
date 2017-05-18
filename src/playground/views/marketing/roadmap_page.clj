@@ -47,7 +47,7 @@
          [:ul
           [:li "Фиксим баги если они есть"]
           [:li "Берем один - два итема из Features list"]
-         ]]
+          ]]
         [:div.row
          [:h3 "Version 1.1.0 - TBA"]
          [:ul
@@ -87,4 +87,4 @@
          ]
         ]]
 
-      (page/footer (:repos data) (:tags data))]]))
+      (page/footer (:repos data) (:tags data) (:data-sets data))]]))
