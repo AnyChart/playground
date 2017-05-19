@@ -11,6 +11,9 @@
       (.-clientHeight (.-documentElement js/document))
       (.-clientHeight (.-body js/document))))
 
+(defn editors-height []
+  (- (window-height) 102))
+
 (.addEventListener js/window "resize" (fn [_] (rf/dispatch [:resize-window])))
 
 (defn create-editor [type value mode]
@@ -34,7 +37,7 @@
      :markup         ""
      :style          ""
 
-     :editors-height (window-height)
+     :editors-height (editors-height)
      :view           :left
 
      :sample         (:sample data)
@@ -59,12 +62,11 @@
 (rf/reg-event-db
   :resize-window
   (fn [db _]
-    (assoc db :editors-height (window-height))))
+    (assoc db :editors-height (editors-height))))
 
 (rf/reg-event-db
   :change-code
   (fn [db [_ type code]]
-    ;(utils/log "Change code event: " type code)
     (assoc-in db [:sample type] code)))
 
 

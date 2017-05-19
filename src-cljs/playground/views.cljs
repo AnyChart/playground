@@ -94,38 +94,42 @@
 (defn editors-left []
   (reagent/create-class {:component-did-mount #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
                          :reagent-render      (fn []
-                                                [h-split
-                                                 :class "cont1"
-                                                 :splitter-size "8px"
-                                                 :panel-1 [v-split
-                                                           :margin "0px"
-                                                           :splitter-size "8px"
-                                                           :initial-split 33
-                                                           :panel-1 [:div#markup-editor {:class "editor-box"}]
-                                                           :panel-2 [v-split
-                                                                     :margin "0px"
-                                                                     :splitter-size "8px"
-                                                                     :panel-1 [:div#style-editor {:class "editor-box"}]
-                                                                     :panel-2 [:div#code-editor {:class "editor-box"}]]]
-                                                 :panel-2 [iframe-result]])}))
+                                                (let [[markup-percent style-percent] @(rf/subscribe [:splitter-percents])]
+                                                  [h-split
+                                                   :class "cont1"
+                                                   :splitter-size "8px"
+                                                   :panel-1 [v-split
+                                                             :margin "0px"
+                                                             :splitter-size "8px"
+                                                             :initial-split markup-percent
+                                                             :panel-1 [:div#markup-editor {:class "editor-box"}]
+                                                             :panel-2 [v-split
+                                                                       :margin "0px"
+                                                                       :splitter-size "8px"
+                                                                       :initial-split style-percent
+                                                                       :panel-1 [:div#style-editor {:class "editor-box"}]
+                                                                       :panel-2 [:div#code-editor {:class "editor-box"}]]]
+                                                   :panel-2 [iframe-result]]))}))
 
 (defn editors-right []
   (reagent/create-class {:component-did-mount #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
                          :reagent-render      (fn []
-                                                [h-split
-                                                 :class "cont1"
-                                                 :splitter-size "8px"
-                                                 :panel-2 [v-split
-                                                           :margin "0px"
-                                                           :splitter-size "8px"
-                                                           :initial-split 33
-                                                           :panel-1 [:div#markup-editor {:class "editor-box"}]
-                                                           :panel-2 [v-split
-                                                                     :margin "0px"
-                                                                     :splitter-size "8px"
-                                                                     :panel-1 [:div#style-editor {:class "editor-box"}]
-                                                                     :panel-2 [:div#code-editor {:class "editor-box"}]]]
-                                                 :panel-1 [iframe-result]])}))
+                                                (let [[markup-percent style-percent] @(rf/subscribe [:splitter-percents])]
+                                                  [h-split
+                                                   :class "cont1"
+                                                   :splitter-size "8px"
+                                                   :panel-2 [v-split
+                                                             :margin "0px"
+                                                             :splitter-size "8px"
+                                                             :initial-split markup-percent
+                                                             :panel-1 [:div#markup-editor {:class "editor-box"}]
+                                                             :panel-2 [v-split
+                                                                       :margin "0px"
+                                                                       :splitter-size "8px"
+                                                                       :initial-split style-percent
+                                                                       :panel-1 [:div#style-editor {:class "editor-box"}]
+                                                                       :panel-2 [:div#code-editor {:class "editor-box"}]]]
+                                                   :panel-1 [iframe-result]]))}))
 
 (defn editors-top []
   (reagent/create-class {:component-did-mount #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
