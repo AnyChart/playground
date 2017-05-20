@@ -1,6 +1,7 @@
 (ns playground.views.common
   (:require [clj-time.core :as t]
-            [playground.web.auth-base :as auth-base]))
+            [playground.web.auth-base :as auth-base]
+            [playground.utils.utils :as utils]))
 
 (defn head []
   [:head
@@ -17,8 +18,21 @@
    [:script {:src "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"}]
    [:link {:href "/css/main.css" :rel "stylesheet"}]])
 
+(defn nav-sample-menu-item [sample]
+  [:li {:class "dropdown"}
+   [:a {:href          "#"
+        :class         "dropdown-toggle"
+        :data-toggle   "dropdown"
+        :role          "button"
+        :aria-haspopup "true"
+        :aria-expanded "false"} "View"
+    [:span {:class "caret"}]]
+   [:ul {:class "dropdown-menu"}
+    [:li [:a {:href (str (utils/sample-url sample) "?view=editor")} "Editor"]]
+    [:li [:a {:href (str (utils/sample-url sample) "?view=standalone")} "Standalone"]]
+    [:li [:a {:href (str (utils/sample-url sample) "?view=iframe")} "Iframe"]]]])
 
-(defn nav [templates user]
+(defn nav [templates user & [sample]]
   [:nav.navbar.navbar-default
    [:div.container-fluid
 
@@ -62,7 +76,9 @@
         [:li [:a {:href "/version-history"} "Version History"]]]]
       [:li [:a {:href "/pricing"} "Pricing"]]
       [:li [:a {:href "/about"} "About"]]
-      ]
+
+      (when sample
+        (nav-sample-menu-item sample))]
 
      ;; right navbar
      [:ul.nav.navbar-nav.navbar-right
@@ -142,7 +158,7 @@
      [:div.col-sm-2.col-xs-4
       [:div [:b "Data Sets"]]
       (for [data-set data-sets]
-        [:div.dataset [:a {:href (str "/datasets/" (:data-source-name data-set) "/" (:name data-set))
+        [:div.dataset [:a {:href  (str "/datasets/" (:data-source-name data-set) "/" (:name data-set))
                            :title (:title data-set)}
                        (:title data-set)]])]
 

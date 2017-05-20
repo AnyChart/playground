@@ -26,6 +26,7 @@
             [playground.views.profile-page :as profile-view]
             [playground.views.tags-page :as tags-view]
             [playground.views.tag-page :as tag-view]
+            [playground.views.standalone-sample-page :as standalone-sample-view]
             [playground.views.marketing.chart-types-page :as chart-types-view]
             [playground.views.marketing.data-sets-page :as data-sets-view]
             [playground.views.marketing.data-set-page :as data-set-view]
@@ -50,10 +51,10 @@
 (defn show-sample-standalone [sample request]
   (db-req/update-sample-views! (get-db request) {:id (:id sample)})
   (let [templates (db-req/templates (get-db request))]
-    (response (render-file "templates/standalone-page.selmer" {:sample    sample
-                                                               :templates templates
-                                                               :url       (str (common-utils/sample-url sample)
-                                                                               "?view=iframe")}))))
+    (response (standalone-sample-view/page (merge (get-app-data request)
+                                                  {:templates templates
+                                                   :sample    sample
+                                                   :url       (str (common-utils/sample-url sample) "?view=iframe")})))))
 
 (defn show-sample-editor [sample request]
   (db-req/update-sample-views! (get-db request) {:id (:id sample)})

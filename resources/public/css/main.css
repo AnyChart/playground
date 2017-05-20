@@ -180,10 +180,6 @@ footer p {
 .iframe-standalone-box {
     height: 100%;
     width: 100%;
-    position: absolute;
-    top: 0px;
-    padding: 70px 20px;
-    z-index: -1;
 }
 
 /* register page */
