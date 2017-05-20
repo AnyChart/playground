@@ -1,5 +1,5 @@
 -- name: sql-add-repo<!
-INSERT INTO repos (`name`, `owner_id`) VALUES (:name, :owner_id);
+INSERT INTO repos (`name`, title, templates, `owner_id`) VALUES (:name, :title, :templates, :owner_id);
 
 -- name: sql-repos
 SELECT * FROM repos;
@@ -230,3 +230,14 @@ SELECT data_sets.*,
  data_sources.id as data_source_id, data_sources.type
  FROM data_sets JOIN data_sources ON data_sets.data_source_id = data_sources.id WHERE
   data_sources.name = :data_source_name AND data_sets.name = :name;
+
+
+-- delete all repo ---
+--name: sql-delete-samples-by-repo-name!
+DELETE FROM samples WHERE version_id in (select id FROM versions WHERE repo_id in (SELECT id FROM repos WHERE `name` = :name));
+
+--name: sql-delete-versions-by-repo-name!
+DELETE FROM versions WHERE repo_id in (SELECT id FROM repos WHERE `name` = :name);
+
+--name: sql-delete-repo-by-name!
+DELETE FROM repos WHERE `name` = :name;

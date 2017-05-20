@@ -16,7 +16,7 @@
         [:div.branches
          [:ul
           (for [version (:versions data)]
-            [:li [:a {:href (str "/" (:name (:repo data)) "/" (:name version))}
+            [:li [:a {:href (str "/projects/" (:name (:repo data)) "/" (:name version))}
                   (str "Branch " (:name version))]])]]]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]]))

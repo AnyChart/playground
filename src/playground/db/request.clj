@@ -189,3 +189,9 @@
 (defsql top-data-sets {:row-fn parse-data-set})
 (defsql data-set-by-name {:result-set-fn first
                          :row-fn        parse-data-set})
+
+
+;; delete all repo
+(defsql delete-samples-by-repo-name!)
+(defsql delete-versions-by-repo-name!)
+(defsql delete-repo-by-name!)

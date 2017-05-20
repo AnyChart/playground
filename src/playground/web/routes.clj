@@ -513,34 +513,15 @@
            (POST "/tag-samples.json" [] top-tag-samples)
 
 
-           (GET "/:repo" [] (-> repo-page
-                                mw/check-repo-middleware
-                                mw/templates-middleware
-                                mw/repos-middleware
-                                mw/tags-middleware
-                                mw/data-sets-middleware
-                                auth/check-anonymous-middleware))
-           (GET "/:repo/" [] (fn [request]
-                               (when ((-> repo-page
-                                          mw/check-repo-middleware
-                                          mw/templates-middleware
-                                          mw/repos-middleware
-                                          mw/tags-middleware
-                                          mw/data-sets-middleware
-                                          auth/check-anonymous-middleware) request)
-                                 (redirect (web-utils/drop-slash (:uri request)) 301))))
-
-           (GET "/:repo/:version" [] (-> version-page
-                                         mw/check-version-middleware
+           (GET "/projects/:repo" [] (-> repo-page
                                          mw/check-repo-middleware
                                          mw/templates-middleware
                                          mw/repos-middleware
                                          mw/tags-middleware
                                          mw/data-sets-middleware
                                          auth/check-anonymous-middleware))
-           (GET "/:repo/:version/" [] (fn [request]
-                                        (when ((-> version-page
-                                                   mw/check-version-middleware
+           (GET "/projects/:repo/" [] (fn [request]
+                                        (when ((-> repo-page
                                                    mw/check-repo-middleware
                                                    mw/templates-middleware
                                                    mw/repos-middleware
@@ -548,6 +529,25 @@
                                                    mw/data-sets-middleware
                                                    auth/check-anonymous-middleware) request)
                                           (redirect (web-utils/drop-slash (:uri request)) 301))))
+
+           (GET "/projects/:repo/:version" [] (-> version-page
+                                                  mw/check-version-middleware
+                                                  mw/check-repo-middleware
+                                                  mw/templates-middleware
+                                                  mw/repos-middleware
+                                                  mw/tags-middleware
+                                                  mw/data-sets-middleware
+                                                  auth/check-anonymous-middleware))
+           (GET "/projects/:repo/:version/" [] (fn [request]
+                                                 (when ((-> version-page
+                                                            mw/check-version-middleware
+                                                            mw/check-repo-middleware
+                                                            mw/templates-middleware
+                                                            mw/repos-middleware
+                                                            mw/tags-middleware
+                                                            mw/data-sets-middleware
+                                                            auth/check-anonymous-middleware) request)
+                                                   (redirect (web-utils/drop-slash (:uri request)) 301))))
 
            (GET "/:repo/:version/*" [] (-> show-sample
                                            mw/check-sample-middleware

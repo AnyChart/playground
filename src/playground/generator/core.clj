@@ -103,8 +103,10 @@
       (swap! repo assoc :owner owner)
 
       (when-not db-repo
-        (let [repo-id (db-req/add-repo<! db {:name     (:name @repo)
-                                             :owner-id (:id owner)})]
+        (let [repo-id (db-req/add-repo<! db {:name      (:name @repo)
+                                             :title     (:title @repo)
+                                             :templates (boolean (:templates @repo))
+                                             :owner-id  (:id owner)})]
           (swap! repo assoc :id repo-id)
           (update-repository-by-repo-name generator db (:name @repo)))))
 
@@ -115,12 +117,21 @@
       (info (str "Repository \"" (:name @repo) "\" - ERROR, check repository's settings " e))
       {:name (:name @repo) :e e})))
 
+(defn delete-repo [db repo]
+  (db-req/delete-samples-by-repo-name! db {:name (:name repo)})
+  (db-req/delete-versions-by-repo-name! db {:name (:name repo)})
+  (db-req/delete-repo-by-name! db {:name (:name repo)}))
+
 (defn check-repositories [generator db notifier]
   (info "Synchronize repositories...")
   (let [repos (:repos generator)
         db-repos (db-req/repos db)
-        get-repo-by-name-fn (fn [repo db-repos]
-                              (first (filter #(= (:name repo) (:name %)) db-repos)))]
+        get-repo-by-name-fn (fn [repo repos]
+                              (first (filter #(= (:name repo) (:name %)) repos)))
+        deleted-repos (remove #(get-repo-by-name-fn % (map deref repos)) db-repos)]
+    (timbre/info "Delete repos: " (pr-str (map :name deleted-repos)))
+    (doseq [repo deleted-repos]
+      (delete-repo db repo))
     (let [result (map #(check-repository generator db % (get-repo-by-name-fn @% db-repos)) repos)]
       (slack/complete-sync notifier
                            (remove :e result)

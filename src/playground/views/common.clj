@@ -129,8 +129,8 @@
 
      [:div.col-sm-2.col-xs-4
       [:div [:b "Projects"]]
-      (for [repo repos]
-        [:div [:a {:href (str "/" (:name repo))} (:name repo)]])]
+      (for [repo (remove :templates repos)]
+        [:div [:a {:href (str "/projects/" (:name repo))} (:title repo)]])]
 
      [:div.clearfix.visible-xs-block]
 
