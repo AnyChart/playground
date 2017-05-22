@@ -23,6 +23,7 @@
             [playground.views.register-page :as register-view]
             [playground.views.auth-page :as auth-view]
             [playground.views.repo-page :as repo-view]
+            [playground.views.repos-page :as repos-view]
             [playground.views.profile-page :as profile-view]
             [playground.views.tags-page :as tags-view]
             [playground.views.tag-page :as tag-view]
@@ -153,6 +154,8 @@
                            :tag     tag}
                           (get-app-data request)))))
 
+(defn repos-page [request]
+  (repos-view/page (get-app-data request)))
 ;; =====================================================================================================================
 ;; Marketing pages
 ;; =====================================================================================================================
@@ -363,6 +366,9 @@
   (assoc-in (redirect "/") [:session :user]
             (auth/create-anonymous-user (get-db request))))
 
+(defn redirect-slash [request]
+  (redirect (web-utils/drop-slash (:uri request)) 301))
+
 ;; =====================================================================================================================
 ;; Routes
 ;; =====================================================================================================================
@@ -384,6 +390,7 @@
                                       mw/data-sets-middleware
                                       auth/check-anonymous-middleware))
 
+           (GET "/datasets/" [] redirect-slash)
            (GET "/datasets" [] (-> data-sets-page
                                    mw/templates-middleware
                                    mw/repos-middleware
@@ -442,6 +449,7 @@
                                 auth/check-anonymous-middleware))
 
            ;; End marketing pages
+           (GET "/tags/" [] redirect-slash)
            (GET "/tags" [] (-> tags-page
                                mw/templates-middleware
                                mw/repos-middleware
@@ -514,6 +522,14 @@
            (POST "/tag-samples.json" [] top-tag-samples)
 
 
+           (GET "/projects/" [] redirect-slash)
+           (GET "/projects" [] (-> repos-page
+                               mw/templates-middleware
+                               mw/repos-middleware
+                               mw/tags-middleware
+                               mw/data-sets-middleware
+                               auth/check-anonymous-middleware))
+
            (GET "/projects/:repo" [] (-> repo-page
                                          mw/check-repo-middleware
                                          mw/templates-middleware
@@ -529,7 +545,7 @@
                                                    mw/tags-middleware
                                                    mw/data-sets-middleware
                                                    auth/check-anonymous-middleware) request)
-                                          (redirect (web-utils/drop-slash (:uri request)) 301))))
+                                          (redirect-slash request))))
 
            (GET "/projects/:repo/:version" [] (-> version-page
                                                   mw/check-version-middleware
@@ -548,7 +564,7 @@
                                                             mw/tags-middleware
                                                             mw/data-sets-middleware
                                                             auth/check-anonymous-middleware) request)
-                                                   (redirect (web-utils/drop-slash (:uri request)) 301))))
+                                                   (redirect-slash request))))
 
            (GET "/:repo/:version/*" [] (-> show-sample
                                            mw/check-sample-middleware
