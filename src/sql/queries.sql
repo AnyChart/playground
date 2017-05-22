@@ -35,19 +35,19 @@ SELECT samples.*, versions.`name` as version_name, repos.name as repo_name FROM 
    WHERE samples.id IN (:ids);
 
 -- name: sql-top-samples
-SELECT samples.id, samples.name, samples.author, samples.views, samples.likes, samples.create_date, samples.url, samples.version, samples.version_id,
-  samples.tags, samples.description, samples.short_description, samples.preview,
+SELECT samples.id, samples.name, samples.views, samples.likes, samples.create_date, samples.url, samples.version, samples.version_id,
+  samples.tags, samples.description, samples.short_description, samples.preview, samples.latest,
   versions.`name` as version_name, repos.name as repo_name,
   users.username, users.fullname
   FROM samples
   LEFT JOIN versions ON samples.version_id = versions.id
   LEFT JOIN repos ON versions.repo_id = repos.id
   JOIN users ON samples.owner_id = users.id
-  JOIN (SELECT id FROM samples ORDER BY likes DESC, views DESC LIMIT :offset, :count) as optimize_samples
+  JOIN (SELECT id FROM samples WHERE samples.latest ORDER BY likes DESC, views DESC LIMIT :offset, :count) as optimize_samples
   ON optimize_samples.id = samples.id ORDER BY likes DESC, views DESC;
 
 -- name: sql-samples-by-version
-SELECT samples.id, samples.name, samples.author, samples.views, samples.likes, samples.create_date, samples.url, samples.version, samples.version_id,
+SELECT samples.id, samples.name, samples.views, samples.likes, samples.create_date, samples.url, samples.version, samples.version_id,
   samples.tags, samples.description, samples.short_description, samples.preview,
   versions.`name` as version_name, repos.name as repo_name,
   users.username, users.fullname FROM samples
@@ -92,6 +92,20 @@ UPDATE samples SET views = views + 1 WHERE id = :id;
 
 -- name: sql-update-samples-preview!
 UPDATE samples SET preview = :preview WHERE id IN (:ids);
+
+-- name: sql-update-all-samples-latest!
+UPDATE samples SET latest = :latest WHERE version_id in
+  (select id FROM versions WHERE repo_id in (SELECT id FROM repos WHERE `name` = :repo_name)
+                          AND `name` <> :version_name);
+-- name: sql-update-version-samples-latest!
+UPDATE samples SET latest = :latest WHERE version_id in
+  (select id FROM versions WHERE repo_id in (SELECT id FROM repos WHERE `name` = :repo_name)
+                           AND `name` = :version_name);
+-- name: sql-update-all-user-samples-latest!
+UPDATE samples SET latest = :latest WHERE url = :url AND version <> :version;
+-- name: sql-update-version-user-samples-latest!
+UPDATE samples SET latest = :latest WHERE url = :url AND version = :version;
+
 
 -- name: sql-template-by-url
 SELECT  samples.*, versions.`name` as version_name, repos.name as repo_name FROM samples
@@ -165,7 +179,7 @@ SELECT  7  UNION
 SELECT  8  UNION
 SELECT  9  UNION
 SELECT  10) AS indexes
-WHERE JSON_EXTRACT(tags, CONCAT('$[', idx, ']')) IS NOT NULL) as t1 GROUP BY tag ORDER BY count DESC;
+WHERE samples.latest AND JSON_EXTRACT(tags, CONCAT('$[', idx, ']')) IS NOT NULL) as t1 GROUP BY tag ORDER BY count DESC;
 
 --name: sql-top-tags
 SELECT substring(tag, 2, LENGTH(tag)-2) name, count(*) count FROM (
@@ -182,18 +196,18 @@ SELECT  7  UNION
 SELECT  8  UNION
 SELECT  9  UNION
 SELECT  10) AS indexes
-WHERE JSON_EXTRACT(tags, CONCAT('$[', idx, ']')) IS NOT NULL) as t1 GROUP BY tag ORDER BY count DESC LIMIT :limit;
+WHERE samples.latest AND JSON_EXTRACT(tags, CONCAT('$[', idx, ']')) IS NOT NULL) as t1 GROUP BY tag ORDER BY count DESC LIMIT :limit;
 
 
 -- name: sql-samples-by-tag
-SELECT samples.id, samples.name, samples.author, samples.views, samples.likes, samples.create_date, samples.url, samples.version, samples.version_id,
-  samples.tags, samples.description, samples.short_description, samples.preview,
+SELECT samples.id, samples.name, samples.views, samples.likes, samples.create_date, samples.url, samples.version, samples.version_id,
+  samples.tags, samples.description, samples.short_description, samples.preview, samples.latest,
   versions.`name` as version_name, repos.name as repo_name,
   users.username, users.fullname FROM samples
   LEFT JOIN versions ON samples.version_id = versions.id
   LEFT JOIN repos ON versions.repo_id = repos.id
   JOIN users ON samples.owner_id = users.id
-  JOIN (SELECT id FROM samples WHERE JSON_CONTAINS(tags, CONCAT('["', :tag , '"]'))
+  JOIN (SELECT id FROM samples WHERE JSON_CONTAINS(tags, CONCAT('["', :tag , '"]')) AND samples.latest
         ORDER BY likes DESC, views DESC LIMIT :offset, :count) as optimize_samples
   ON optimize_samples.id = samples.id ORDER BY likes DESC, views DESC;
 

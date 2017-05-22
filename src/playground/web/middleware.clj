@@ -1,6 +1,7 @@
 (ns playground.web.middleware
   (:require [playground.db.request :as db-req]
-            [playground.web.helpers :refer :all]))
+            [playground.web.helpers :refer :all]
+            [version-clj.core :as version-clj :refer [version-compare]]))
 
 ;; middleware for getting repo, version, sample, all repos, templates,
 ;; tags for footer and tags for tags-page
@@ -14,11 +15,13 @@
 (defn check-version-middleware [handler]
   (fn [request]
     (let [repo (get-repo request)
-          version-name (-> request :route-params :version)
-          version (db-req/version-by-name (get-db request) {:repo-id (:id repo)
-                                                            :name    version-name})]
-      (when version
-        (handler (assoc-in request [:app :version] version))))))
+          version-name (-> request :route-params :version)]
+      (let [version (if version-name
+                      (db-req/version-by-name (get-db request) {:repo-id (:id repo)
+                                                                :name    version-name})
+                      (db-req/last-version (get-db request) {:repo-id (:id repo)}))]
+        (when version
+          (handler (assoc-in request [:app :version] version)))))))
 
 (defn check-sample-middleware [handler]
   (fn [request]

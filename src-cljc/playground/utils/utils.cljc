@@ -21,6 +21,14 @@
              (str "/" (:version sample))))
       "")))
 
+(defn canonical-url [sample]
+  (if (:version-id sample)
+    (str "/" (:repo-name sample)
+         "/" (:url sample))
+    (if (and (:url sample) (seq (:url sample)))
+      (str "/" (:url sample))
+      "")))
+
 (defn name->url [name]
   (-> name
       (clojure.string/replace #"^/" "")

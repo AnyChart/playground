@@ -36,7 +36,8 @@
             [playground.views.marketing.pricing-page :as pricing-view]
             [playground.views.marketing.roadmap-page :as roadmap-view]
             [playground.views.marketing.support-page :as support-view]
-            [playground.views.marketing.version-history-page :as version-history-view]))
+            [playground.views.marketing.version-history-page :as version-history-view]
+            [playground.utils.utils :as utils]))
 
 ;; =====================================================================================================================
 ;; Consts
@@ -61,10 +62,11 @@
   (db-req/update-sample-views! (get-db request) {:id (:id sample)})
   (let [templates (db-req/templates (get-db request))
         data-sets (db-req/data-sets (get-db request))]
-    (response (render-file "templates/editor.selmer" {:data (web-utils/pack {:sample    sample
-                                                                             :templates templates
-                                                                             :data-sets data-sets
-                                                                             :user      (get-safe-user request)})}))))
+    (response (render-file "templates/editor.selmer" {:canonical-url (utils/canonical-url sample)
+                                                      :data          (web-utils/pack {:sample    sample
+                                                                                      :templates templates
+                                                                                      :data-sets data-sets
+                                                                                      :user      (get-safe-user request)})}))))
 
 (defn show-sample-preview [sample request]
   (if (:preview sample)
@@ -90,6 +92,13 @@
         version (try (-> request :route-params :version Integer/parseInt) (catch Exception _ 0))
         sample (db-req/sample-by-hash (get-db request) {:url     hash
                                                         :version version})
+        view (-> request :params :view keyword)]
+    (when sample
+      (show-sample-by-view view sample request))))
+
+(defn show-last-user-sample [request]
+  (let [hash (-> request :route-params :hash)
+        sample (db-req/sample-template-by-url (get-db request) {:url hash})
         view (-> request :params :view keyword)]
     (when sample
       (show-sample-by-view view sample request))))
@@ -288,6 +297,9 @@
                   :version 0
                   :owner-id (-> request :session :user :id))]
     (let [id (db-req/add-sample! (get-db request) sample*)]
+      (db-req/update-version-user-samples-latest! (get-db request) {:latest  true
+                                                                    :url     hash
+                                                                    :version 0})
       (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [id]))
     (response {:status   :ok
                :hash     hash
@@ -305,13 +317,20 @@
              (nil? (:version-id db-sample))
              (= (:id (get-user request)) (:owner-id db-sample)))
       (let [version (:version db-sample)
-            sample* (assoc sample :version (inc version)
+            new-version (inc version)
+            sample* (assoc sample :version new-version
                                   :owner-id (-> request :session :user :id))]
         (let [id (db-req/add-sample! (get-db request) sample*)]
+          (db-req/update-all-user-samples-latest! (get-db request) {:latest  false
+                                                                    :url     hash
+                                                                    :version new-version})
+          (db-req/update-version-user-samples-latest! (get-db request) {:latest  true
+                                                                       :url     hash
+                                                                       :version new-version})
           (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [id]))
         (response {:status   :ok
                    :hash     hash
-                   :version  (inc version)
+                   :version  new-version
                    :owner-id (:id (get-user request))}))
       (fork request))))
 
@@ -524,11 +543,11 @@
 
            (GET "/projects/" [] redirect-slash)
            (GET "/projects" [] (-> repos-page
-                               mw/templates-middleware
-                               mw/repos-middleware
-                               mw/tags-middleware
-                               mw/data-sets-middleware
-                               auth/check-anonymous-middleware))
+                                   mw/templates-middleware
+                                   mw/repos-middleware
+                                   mw/tags-middleware
+                                   mw/data-sets-middleware
+                                   auth/check-anonymous-middleware))
 
            (GET "/projects/:repo" [] (-> repo-page
                                          mw/check-repo-middleware
@@ -571,10 +590,15 @@
                                            mw/check-version-middleware
                                            mw/check-repo-middleware
                                            auth/check-anonymous-middleware))
+           (GET "/:repo/*" [] (-> show-sample
+                                  mw/check-sample-middleware
+                                  mw/check-version-middleware
+                                  mw/check-repo-middleware
+                                  auth/check-anonymous-middleware))
 
-           (GET "/:hash/" [] (-> show-user-sample
+           (GET "/:hash/" [] (-> show-last-user-sample
                                  auth/check-anonymous-middleware))
-           (GET "/:hash" [] (-> show-user-sample
+           (GET "/:hash" [] (-> show-last-user-sample
                                 auth/check-anonymous-middleware))
            (GET "/:hash/:version" [] (-> show-user-sample
                                          auth/check-anonymous-middleware))
