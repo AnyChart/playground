@@ -4,7 +4,6 @@
 
 
 (defn page [data]
-  (prn "tagspage" data)
   (hiccup-page/html5
     {:lang "en"}
     (page/head)

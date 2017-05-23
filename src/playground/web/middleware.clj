@@ -68,10 +68,16 @@
     (handler (assoc-in request [:app :all-data-sets]
                        (db-req/data-sets (get-db request))))))
 
-(defn base-page-middleware [handler]
-  (-> handler
-      templates-middleware
-      repos-middleware
-      tags-middleware
-      data-sets-middleware
-      auth/check-anonymous-middleware))
+
+;; aggregation functions
+(defn base-page-middleware [handler & [action]]
+  (let [check-perm-fn (if action
+                       (fn [handler] (auth/permissions-middleware handler action))
+                       identity)]
+    (-> handler
+        templates-middleware
+        repos-middleware
+        tags-middleware
+        data-sets-middleware
+        check-perm-fn
+        auth/check-anonymous-middleware)))
