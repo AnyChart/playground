@@ -1,7 +1,8 @@
 (ns playground.web.middleware
   (:require [playground.db.request :as db-req]
             [playground.web.helpers :refer :all]
-            [version-clj.core :as version-clj :refer [version-compare]]))
+            [version-clj.core :as version-clj :refer [version-compare]]
+            [playground.web.auth :as auth]))
 
 ;; middleware for getting repo, version, sample, all repos, templates,
 ;; tags for footer and tags for tags-page
@@ -66,3 +67,11 @@
   (fn [request]
     (handler (assoc-in request [:app :all-data-sets]
                        (db-req/data-sets (get-db request))))))
+
+(defn base-page-middleware [handler]
+  (-> handler
+      templates-middleware
+      repos-middleware
+      tags-middleware
+      data-sets-middleware
+      auth/check-anonymous-middleware))
