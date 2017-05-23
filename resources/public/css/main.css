@@ -223,3 +223,7 @@ form {
 .content .content-wrapper {
     padding: 20px 0;
 }
+.content .flex-content{
+    display: flex;
+    flex-wrap: wrap;
+}

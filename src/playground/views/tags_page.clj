@@ -26,7 +26,7 @@
        [:div.container
 
         [:div.content-wrapper
-         [:div.row
+         [:div.row.flex-content
           (divide-tags-by-blocks (map :name (:all-tags data)))]]]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]]))
