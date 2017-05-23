@@ -234,12 +234,23 @@
         (info "Updated branches: " (pr-str (map :name updated-branches)))
         (info "Removed branches: " (pr-str (map :name removed-branches)))
         (slack/start-build (:notifier generator) (:name @repo) (map :name updated-branches) (map :name removed-branches) queue-index)
+        ;; delete old branches
         (doseq [branch removed-branches]
           (remove-branch db branch))
-        ;(doseq [branch updated-branches]
-        ;  (update-branch db repo branch db-branches generator @repo queue-index))
+
+        ;; update branches
         (let [result (doall (map #(update-branch db (:redis generator) repo % db-branches generator queue-index) updated-branches))
               errors (filter some? result)]
+          ;; update latest field
+          (let [latest-version (db-req/last-version db {:repo-id (:id @repo)})]
+            (timbre/info "last version: " latest-version)
+            (db-req/update-all-samples-latest! db {:latest       false
+                                                   :repo-name    (:name @repo)
+                                                   :version-name (:name latest-version)})
+            (db-req/update-version-samples-latest! db {:latest       true
+                                                       :repo-name    (:name @repo)
+                                                       :version-name (:name latest-version)}))
+
           (fs/delete-dir (versions-path @repo))
           (if (not-empty errors)
             (slack/complete-building-with-errors (:notifier generator) (:name @repo) (map :name updated-branches)

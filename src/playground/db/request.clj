@@ -5,7 +5,8 @@
             [cheshire.core :refer [generate-string parse-string]]
             [camel-snake-kebab.core :as kebab]
             [camel-snake-kebab.extras :as kebab-extra]
-            [playground.utils.utils :as utils]))
+            [playground.utils.utils :as utils]
+            [version-clj.core :as version-clj]))
 
 (defn underscore->dash [data]
   (kebab-extra/transform-keys kebab/->kebab-case data))
@@ -31,9 +32,7 @@
 
 ;; repos
 (defsql add-repo<!)
-
 (defsql repos {:row-fn underscore->dash})
-
 (defsql repo-by-name {:result-set-fn first
                       :row-fn        underscore->dash})
 
@@ -42,15 +41,17 @@
   (update version :config parse-string true))
 
 (defsql versions {:row-fn underscore->dash})
-
 (defsql version-by-name {:result-set-fn first
                          :row-fn        parse-version})
-
 (defsql add-version<!)
-
 (defsql delete-version!)
-
 (defsql show-version!)
+
+(defn last-version [db data]
+  (let [versions (versions db data)
+        last-version (first (sort (comp - #(version-clj/version-compare (:name %1) (:name %2)))
+                                  versions))]
+    last-version))
 
 ;; samples
 (defn add-full-url [sample]
@@ -65,24 +66,16 @@
       add-full-url))
 
 (defsql add-sample<!)
-
 (defsql samples {:row-fn underscore->dash})
-
 (defsql samples-by-ids {:row-fn parse-sample})
-
 (defsql sample-version {:result-set-fn (comp :version first)
                         :row-fn        underscore->dash})
-
 (defsql top-samples {:row-fn parse-sample})
-
 (defsql samples-by-version {:row-fn parse-sample})
-
 (defsql sample-by-url {:result-set-fn first
                        :row-fn        parse-sample})
-
 (defsql sample-by-hash {:result-set-fn first
                         :row-fn        parse-sample})
-
 (defsql sample-template-by-url {:result-set-fn first
                                 :row-fn        parse-sample})
 
@@ -132,23 +125,23 @@
               (insert-multiple! db :samples (map #(insert-sample % version-id) samples)))))
 
 (defsql delete-samples-by-ids!)
-
 (defsql update-sample-views!)
-
 (defsql update-samples-preview!)
-
 (defsql user-samples-without-preview)
-
 (defsql repo-samples-without-preview)
+
+;; set sample latest
+(defsql update-all-samples-latest!)
+(defsql update-version-samples-latest!)
+(defsql update-all-user-samples-latest!)
+(defsql update-version-user-samples-latest!)
+
 
 ;; templates
 (defsql template-by-url {:result-set-fn first
                          :row-fn        parse-sample})
-
 (defsql templates {:row-fn parse-sample})
-
 (defsql templates-sample-ids {:row-fn :sample_id})
-
 (defsql delete-templates!)
 
 (defn add-templates! [db ids]
@@ -156,13 +149,9 @@
 
 ;; users
 (defsql add-user<!)
-
 (defsql get-user-by-username-or-email {:result-set-fn first})
-
 (defsql get-user-by-username {:result-set-fn first})
-
 (defsql get-user-by-email {:result-set-fn first})
-
 (defsql delete-user!)
 
 ;; sessions
@@ -188,7 +177,7 @@
 (defsql data-sets {:row-fn parse-data-set})
 (defsql top-data-sets {:row-fn parse-data-set})
 (defsql data-set-by-name {:result-set-fn first
-                         :row-fn        parse-data-set})
+                          :row-fn        parse-data-set})
 
 
 ;; delete all repo

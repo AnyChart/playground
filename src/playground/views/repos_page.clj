@@ -1,4 +1,4 @@
-(ns playground.views.tags-page
+(ns playground.views.repos-page
   (:require [playground.views.common :as page]
             [hiccup.page :as hiccup-page]))
 
@@ -17,8 +17,8 @@
        [:div.container-fluid
         [:div.branches
          [:ul
-          (for [tag (:all-tags data)]
-            [:li [:a {:href (str "/tags/" (:name tag))}
-                  (str  (:name tag))]])]]]]
+          (for [repo (remove :templates (:repos data))]
+            [:li [:a {:href (str "/projects/" (:name repo))}
+                  (str (:title repo))]])]]]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]]))
