@@ -33,7 +33,7 @@
 
 (defn check-anonymous-middleware [handler]
   (fn [request]
-    (timbre/info "check-anonymous-middleweare: " (-> request :session))
+    ;(timbre/info "check-anonymous-middleweare: " (-> request :session))
     (let [need-create-anonymous-user (-> request :session :user not)
           anonymous-user (when need-create-anonymous-user
                            (create-anonymous-user (get-db request)))
