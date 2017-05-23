@@ -394,6 +394,10 @@
 (defroutes app-routes
            (route/resources "/")
 
+           ;(GET "/t1" [] (fn [request]
+           ;                ;(redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [440256])
+           ;                (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [440133])))
+
            (GET "/" [] (-> landing-page
                            mw/base-page-middleware))
 
