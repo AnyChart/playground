@@ -43,7 +43,9 @@ SELECT samples.id, samples.name, samples.views, samples.likes, samples.create_da
   LEFT JOIN versions ON samples.version_id = versions.id
   LEFT JOIN repos ON versions.repo_id = repos.id
   JOIN users ON samples.owner_id = users.id
-  JOIN (SELECT id FROM samples WHERE samples.latest ORDER BY likes DESC, views DESC LIMIT :offset, :count) as optimize_samples
+  JOIN (SELECT samples.id FROM samples
+        LEFT JOIN templates ON samples.id = templates.sample_id
+        WHERE templates.sample_id IS NULL AND samples.latest ORDER BY likes DESC, views DESC LIMIT :offset, :count) as optimize_samples
   ON optimize_samples.id = samples.id ORDER BY likes DESC, views DESC;
 
 -- name: sql-samples-by-version
@@ -207,7 +209,9 @@ SELECT samples.id, samples.name, samples.views, samples.likes, samples.create_da
   LEFT JOIN versions ON samples.version_id = versions.id
   LEFT JOIN repos ON versions.repo_id = repos.id
   JOIN users ON samples.owner_id = users.id
-  JOIN (SELECT id FROM samples WHERE JSON_CONTAINS(tags, CONCAT('["', :tag , '"]')) AND samples.latest
+  JOIN (SELECT samples.id FROM samples
+        LEFT JOIN templates ON samples.id = templates.sample_id
+        WHERE templates.sample_id IS NULL AND JSON_CONTAINS(tags, CONCAT('["', :tag , '"]')) AND samples.latest
         ORDER BY likes DESC, views DESC LIMIT :offset, :count) as optimize_samples
   ON optimize_samples.id = samples.id ORDER BY likes DESC, views DESC;
 
