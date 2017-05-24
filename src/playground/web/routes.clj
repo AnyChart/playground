@@ -325,8 +325,8 @@
                                                                     :url     hash
                                                                     :version new-version})
           (db-req/update-version-user-samples-latest! (get-db request) {:latest  true
-                                                                       :url     hash
-                                                                       :version new-version})
+                                                                        :url     hash
+                                                                        :version new-version})
           (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [id]))
         (response {:status   :ok
                    :hash     hash
@@ -394,12 +394,12 @@
 (defroutes app-routes
            (route/resources "/")
 
-           ;(GET "/t1" [] (fn [request]
-           ;                ;(redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [440256])
-           ;                (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [440133])))
-
            (GET "/" [] (-> landing-page
                            mw/base-page-middleware))
+
+           (GET "/generate-preview/:id" [] (fn [request]
+                                             (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue)
+                                                            [(-> request :route-params :id Integer/parseInt)])))
 
            ;; Marketing pages
            (GET "/chart-types" [] (-> chart-types-page
