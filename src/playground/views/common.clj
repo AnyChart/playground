@@ -59,6 +59,7 @@
      [:ul.nav.navbar-nav
 
       [:li [:a {:href "/chart-types"} "Chart Types"]]
+      [:li [:a {:href "/tags"} "Tags"]]
       [:li [:a {:href "/datasets"} "Data Sets"]]
 
       [:li {:class "dropdown"}
