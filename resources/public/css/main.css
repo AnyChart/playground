@@ -181,6 +181,13 @@ footer p {
     height: 100%;
     width: 100%;
 }
+.info{
+    padding: 0 10px;
+}
+.info .tag{
+    margin-right: 5px;
+}
+
 
 /* register page */
 form {
@@ -210,4 +217,13 @@ form {
 .data-sets-item .usage-sample-button {
     display:block;
     margin-bottom:6px;"
+}
+
+/* tags page */
+.content .content-wrapper {
+    padding: 20px 0;
+}
+.content .flex-content{
+    display: flex;
+    flex-wrap: wrap;
 }

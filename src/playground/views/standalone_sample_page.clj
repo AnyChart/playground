@@ -1,6 +1,7 @@
 (ns playground.views.standalone-sample-page
   (:require [playground.views.common :as page]
             [playground.views.sample :as sample-view]
+            [clojure.string :as string]
             [hiccup.page :as hiccup-page]
             [clj-time.core :as t]))
 
@@ -19,6 +20,12 @@
                                     :allowtransparency "true"
                                     :allowfullscreen   "true"
                                     :src               url}]]]
+
+      [:div.info
+       [:p
+        (for [tag (:tags sample)]
+          [:a.tag {:href (str "/tags/" tag)} tag])]
+       [:div (:description sample)]]
 
       [:footer.footer
        [:div.container

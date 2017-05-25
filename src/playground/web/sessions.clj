@@ -6,17 +6,17 @@
 
 
 (defn read-db [db key]
-  (timbre/info "read db" db key)
+  ;(timbre/info "read db" db key)
   (db-req/get-session db {:session key}))
 
 (defn write-db [db key data]
-  (timbre/info "write db" key data)
+  ;(timbre/info "write db" key data)
   (let [user (:user data)]
     (db-req/add-session<! db {:session key
                               :user-id (:id user)})))
 
 (defn delete-db [db key]
-  (timbre/info "delete db" key)
+  ;(timbre/info "delete db" key)
   (db-req/delete-session! db {:session key}))
 
 ;; session storage

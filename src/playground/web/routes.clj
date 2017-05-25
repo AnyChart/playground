@@ -325,8 +325,8 @@
                                                                     :url     hash
                                                                     :version new-version})
           (db-req/update-version-user-samples-latest! (get-db request) {:latest  true
-                                                                       :url     hash
-                                                                       :version new-version})
+                                                                        :url     hash
+                                                                        :version new-version})
           (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [id]))
         (response {:status   :ok
                    :hash     hash
@@ -395,118 +395,59 @@
            (route/resources "/")
 
            (GET "/" [] (-> landing-page
-                           mw/templates-middleware
-                           mw/repos-middleware
-                           mw/tags-middleware
-                           mw/data-sets-middleware
-                           auth/check-anonymous-middleware))
+                           mw/base-page-middleware))
+
+           (GET "/generate-preview/:id" [] (fn [request]
+                                             (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue)
+                                                            [(-> request :route-params :id Integer/parseInt)])))
 
            ;; Marketing pages
            (GET "/chart-types" [] (-> chart-types-page
-                                      mw/templates-middleware
-                                      mw/repos-middleware
-                                      mw/tags-middleware
-                                      mw/data-sets-middleware
-                                      auth/check-anonymous-middleware))
+                                      mw/base-page-middleware))
 
            (GET "/datasets/" [] redirect-slash)
            (GET "/datasets" [] (-> data-sets-page
-                                   mw/templates-middleware
-                                   mw/repos-middleware
-                                   mw/tags-middleware
-                                   mw/data-sets-middleware
                                    mw/all-data-sets-middleware
-                                   auth/check-anonymous-middleware))
+                                   mw/base-page-middleware))
 
            (GET "/datasets/:data-source/:data-set" [] (-> data-set-page
-                                                          mw/templates-middleware
-                                                          mw/repos-middleware
-                                                          mw/tags-middleware
-                                                          mw/data-sets-middleware
-                                                          auth/check-anonymous-middleware))
+                                                          mw/base-page-middleware))
 
            (GET "/support" [] (-> support-page
-                                  mw/templates-middleware
-                                  mw/repos-middleware
-                                  mw/tags-middleware
-                                  mw/data-sets-middleware
-                                  auth/check-anonymous-middleware))
+                                  mw/base-page-middleware))
 
            (GET "/roadmap" [] (-> roadmap-page
-                                  mw/templates-middleware
-                                  mw/repos-middleware
-                                  mw/tags-middleware
-                                  mw/data-sets-middleware
-                                  auth/check-anonymous-middleware))
+                                  mw/base-page-middleware))
 
            (GET "/version-history" [] (-> version-history-page
-                                          mw/templates-middleware
-                                          mw/repos-middleware
-                                          mw/tags-middleware
-                                          mw/data-sets-middleware
-                                          auth/check-anonymous-middleware))
+                                          mw/base-page-middleware))
 
            (GET "/pricing" [] (-> pricing-page
-                                  mw/templates-middleware
-                                  mw/repos-middleware
-                                  mw/tags-middleware
-                                  mw/data-sets-middleware
-                                  auth/check-anonymous-middleware))
+                                  mw/base-page-middleware))
 
            (GET "/pricing/enterprise" [] (-> pricing-enterprise-page
-                                             mw/templates-middleware
-                                             mw/repos-middleware
-                                             mw/tags-middleware
-                                             mw/data-sets-middleware
-                                             auth/check-anonymous-middleware))
+                                             mw/base-page-middleware))
 
            (GET "/about" [] (-> about-page
-                                mw/templates-middleware
-                                mw/repos-middleware
-                                mw/tags-middleware
-                                mw/data-sets-middleware
-                                auth/check-anonymous-middleware))
+                                mw/base-page-middleware))
 
            ;; End marketing pages
            (GET "/tags/" [] redirect-slash)
            (GET "/tags" [] (-> tags-page
-                               mw/templates-middleware
-                               mw/repos-middleware
-                               mw/tags-middleware
                                mw/all-tags-middleware
-                               mw/data-sets-middleware
-                               auth/check-anonymous-middleware))
+                               mw/base-page-middleware))
 
            (GET "/tags/*" [] (-> tag-page
-                                 mw/templates-middleware
-                                 mw/repos-middleware
-                                 mw/tags-middleware
-                                 mw/data-sets-middleware
-                                 auth/check-anonymous-middleware))
-
+                                 mw/base-page-middleware))
 
            (GET "/profile" [] (-> profile-page
-                                  mw/templates-middleware
-                                  mw/repos-middleware
-                                  mw/tags-middleware
-                                  mw/data-sets-middleware
-                                  auth/check-anonymous-middleware))
+                                  mw/base-page-middleware))
 
            (GET "/signin" [] (-> signin-page
-                                 mw/templates-middleware
-                                 mw/repos-middleware
-                                 mw/tags-middleware
-                                 mw/data-sets-middleware
-                                 (auth/permissions-middleware :signin)
-                                 auth/check-anonymous-middleware))
+                                 (mw/base-page-middleware :signin)))
 
            (GET "/signup" [] (-> signup-page
-                                 mw/templates-middleware
-                                 mw/repos-middleware
-                                 mw/tags-middleware
-                                 mw/data-sets-middleware
-                                 (auth/permissions-middleware :signup)
-                                 auth/check-anonymous-middleware))
+                                 (mw/base-page-middleware :signup)))
 
            (POST "/signin" [] (-> signin
                                   (auth/permissions-middleware :signin)
@@ -543,46 +484,26 @@
 
            (GET "/projects/" [] redirect-slash)
            (GET "/projects" [] (-> repos-page
-                                   mw/templates-middleware
-                                   mw/repos-middleware
-                                   mw/tags-middleware
-                                   mw/data-sets-middleware
-                                   auth/check-anonymous-middleware))
+                                   mw/base-page-middleware))
 
            (GET "/projects/:repo" [] (-> repo-page
                                          mw/check-repo-middleware
-                                         mw/templates-middleware
-                                         mw/repos-middleware
-                                         mw/tags-middleware
-                                         mw/data-sets-middleware
-                                         auth/check-anonymous-middleware))
+                                         mw/base-page-middleware))
            (GET "/projects/:repo/" [] (fn [request]
                                         (when ((-> repo-page
                                                    mw/check-repo-middleware
-                                                   mw/templates-middleware
-                                                   mw/repos-middleware
-                                                   mw/tags-middleware
-                                                   mw/data-sets-middleware
-                                                   auth/check-anonymous-middleware) request)
+                                                   mw/base-page-middleware) request)
                                           (redirect-slash request))))
 
            (GET "/projects/:repo/:version" [] (-> version-page
                                                   mw/check-version-middleware
                                                   mw/check-repo-middleware
-                                                  mw/templates-middleware
-                                                  mw/repos-middleware
-                                                  mw/tags-middleware
-                                                  mw/data-sets-middleware
-                                                  auth/check-anonymous-middleware))
+                                                  mw/base-page-middleware))
            (GET "/projects/:repo/:version/" [] (fn [request]
                                                  (when ((-> version-page
                                                             mw/check-version-middleware
                                                             mw/check-repo-middleware
-                                                            mw/templates-middleware
-                                                            mw/repos-middleware
-                                                            mw/tags-middleware
-                                                            mw/data-sets-middleware
-                                                            auth/check-anonymous-middleware) request)
+                                                            mw/base-page-middleware) request)
                                                    (redirect-slash request))))
 
            (GET "/:repo/:version/*" [] (-> show-sample

@@ -89,7 +89,10 @@
         tags-content (->> (html/select page [:meta])
                           (filter #(= "ac:tags" (:name (:attrs %))))
                           first :attrs :content)
-        tags (if tags-content (clojure.string/split tags-content #"\s*,\s*") [])]
+        tags (if (and tags-content
+                      (seq tags-content))
+               (clojure.string/split tags-content #"\s*,\s*")
+               [])]
     {:name              name
      :description       description
      :short-description short-description
