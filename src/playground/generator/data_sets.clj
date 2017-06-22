@@ -45,7 +45,9 @@
 (defn parse-data-set [db data-source data-set-url]
   (let [full-data-set-url (full-url (:url data-source) data-set-url)
         raw-data (-> full-data-set-url slurp string/trim-newline string/trim)
-        data (json/parse-string (parse-js-data-set raw-data) true)
+        data (json/parse-string (cond
+                                  (.endsWith data-set-url ".js") (parse-js-data-set raw-data)
+                                  (.endsWith data-set-url ".json") raw-data) true)
         db-data {:data-source-id (:id data-source)
                  :name           (:id data)
                  :title          (:name data)
@@ -72,4 +74,5 @@
           data-source-id (db-req/add-data-source<! db (update db-data :sets json/generate-string))
           full-db-data (assoc db-data :id data-source-id)]
       (doseq [data-set-url (:sets data)]
+        (timbre/info "parse data set: " full-db-data data-set-url)
         (parse-data-set db full-db-data data-set-url)))))

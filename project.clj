@@ -60,6 +60,7 @@
                  [reagent "0.6.1"]
                  [re-frame "0.9.2"]
                  [re-com "2.0.0"]
+                 ;[re-frisk "0.4.5"]
                  ; [cljs-http "0.1.42"]
                  [cljs-ajax "0.5.9"]
                  [com.andrewmcveigh/cljs-time "0.4.0"]
