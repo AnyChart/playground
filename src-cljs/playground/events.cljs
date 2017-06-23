@@ -28,7 +28,9 @@
                       :tab         :general
                       :scripts-str (string/join "\n" (-> data :sample :scripts))
                       :styles-str  (string/join "\n" (-> data :sample :styles))
-                      :tags-str    (string/join " " (-> data :sample :tags))}}))
+                      :tags-str    (string/join " " (-> data :sample :tags))}
+     :embed          {:show false
+                      :tab  :embed}}))
 
 
 (rf/reg-event-db

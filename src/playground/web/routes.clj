@@ -73,12 +73,16 @@
     (file-response (phantom/image-path (-> request :component :conf :images-dir) sample))
     (response "Preview is not available, try later.")))
 
+(defn download [resp sample]
+  (assoc resp :headers {"Content-Disposition" (str "attachment; filename=\"" (:name sample) ".html\"")}))
+
 (defn show-sample-by-view [view sample request]
   (case view
     :standalone (show-sample-standalone sample request)
     :iframe (show-sample-iframe sample request)
     :editor (show-sample-editor sample request)
     :preview (show-sample-preview sample request)
+    :download (download (show-sample-iframe sample request) sample)
     nil (show-sample-editor sample request)))
 
 (defn show-sample [request]
@@ -511,6 +515,7 @@
                                            mw/check-version-middleware
                                            mw/check-repo-middleware
                                            auth/check-anonymous-middleware))
+           ;; for canonical links
            (GET "/:repo/*" [] (-> show-sample
                                   mw/check-sample-middleware
                                   mw/check-version-middleware

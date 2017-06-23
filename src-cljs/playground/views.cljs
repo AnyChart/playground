@@ -2,6 +2,7 @@
   (:require [reagent.core :as reagent :refer [atom]]
             [re-frame.core :as rf]
             [playground.settings-window.views :as settings-window]
+            [playground.embed-window.views :as embed-window]
             [playground.editors.views :as editors]
             [playground.utils :as utils]))
 
@@ -37,6 +38,8 @@
                 :on-click #(rf/dispatch [:fork])} "Fork"]]
       [:li [:a {:href     "javascript:;"
                 :on-click #(rf/dispatch [:settings/show])} "Settings"]]
+      [:li [:a {:href     "javascript:;"
+                :on-click #(rf/dispatch [:embed/show])} "Embed"]]
       [:li {:class "dropdown"}
        [:a {:href          "#"
             :class         "dropdown-toggle"
@@ -109,4 +112,5 @@
    [send-form]
    [navbar]
    [editors/editors]
-   [settings-window/settings-window]])
+   [settings-window/settings-window]
+   [embed-window/embed-window]])
