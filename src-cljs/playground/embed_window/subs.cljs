@@ -18,4 +18,4 @@
   :embed/download-html-link
   (fn [query_v _] (rf/subscribe [:sample-url]))
   (fn [sample-url _]
-    (str "http://localhost:8085" sample-url "?view=download")))
+    (str sample-url "?view=download")))
