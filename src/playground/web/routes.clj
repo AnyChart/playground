@@ -29,6 +29,7 @@
             [playground.views.tag-page :as tag-view]
             [playground.views.standalone-sample-page :as standalone-sample-view]
             [playground.views.marketing.chart-types-page :as chart-types-view]
+            [playground.views.marketing.chart-type-page :as chart-type-view]
             [playground.views.marketing.data-sets-page :as data-sets-view]
             [playground.views.marketing.data-set-page :as data-set-view]
             [playground.views.marketing.about-page :as about-view]
@@ -174,6 +175,11 @@
 ;; =====================================================================================================================
 (defn chart-types-page [request]
   (chart-types-view/page (get-app-data request)))
+
+(defn chart-type-page [request]
+  (let [chart-name (-> request :params :chart-type)]
+    (when-let [chart-type (chart-types-view/get-chart chart-name)]
+      (chart-type-view/page (get-app-data request) chart-type))))
 
 (defn data-sets-page [request]
   (data-sets-view/page (get-app-data request)))
@@ -408,6 +414,9 @@
            ;; Marketing pages
            (GET "/chart-types" [] (-> chart-types-page
                                       mw/base-page-middleware))
+
+           (GET "/chart-types/:chart-type" [] (-> chart-type-page
+                                                  mw/base-page-middleware))
 
            (GET "/datasets/" [] redirect-slash)
            (GET "/datasets" [] (-> data-sets-page

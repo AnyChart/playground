@@ -227,3 +227,35 @@ form {
     display: flex;
     flex-wrap: wrap;
 }
+
+
+/*chart types page*/
+.chart-types-page a.chart {
+    display: block;
+    border: 1px solid #DDDDDD;
+    padding: 10px;
+}
+.chart-types-page .chart{
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+.chart-types-page .chart .chart-img {
+    display: block;
+    margin: 0 -20px 15px -20px;
+    height: 150px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+.chart .chart-img > img {
+    display: inline-block;
+    vertical-align: bottom;
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+}
+.chart-types-page  .chart .chart-content {
+    display: block;
+    font-size: 13px;
+    line-height: 1.3333333;
+}
