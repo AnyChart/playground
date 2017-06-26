@@ -1,0 +1,3 @@
+[submodule "resources/chartopedia"]
+	path = resources/chartopedia
+	url = git@github.com:AnyChart/Chartopedia.git

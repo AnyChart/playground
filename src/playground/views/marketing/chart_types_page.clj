@@ -16,14 +16,14 @@
   (merge chart-type
          (json/parse-string
            (slurp
-             (str "http://www.anychart.com/chartopedia/chart-types/" (:id chart-type) "/?getJson"))
+             (str "resources/chartopedia/data/chart-types/" (:id chart-type) ".json"))
            true)
          {:img (str "http://www.anychart.com/chartopedia/chart-types/" (:id chart-type) "/thumb.png")}))
 
 (defn parse-chart-types []
-  (let [base (json/parse-string (slurp "http://www.anychart.com/chartopedia/?getJson") true)
-        chart-types (get-chart-types (:chartTypes base))
-        chart-types (map #(get-chart-type %) chart-types)]
+  (let [base (json/parse-string (slurp "resources/chartopedia/data/main.json") true)
+        ;chart-types (get-chart-types (:chartTypes base))
+        chart-types (map #(get-chart-type %) (:chartTypes base))]
     (vec chart-types)))
 
 (defmacro parse-chart-types-const [] (parse-chart-types))

@@ -39,10 +39,7 @@
              (for [[k v] (:docsLinks chart-type)]
                [:li
                 [:a {:href v}
-                 k]])]]
-           ]
-
-          ]
+                 k]])]]]]
 
          [:div.col-md-6
           [:iframe {:style       "height:350px; width: 100%; border: 1px solid #DDDDDD;"
@@ -53,11 +50,6 @@
                                       "-iframe")
                     :id          "pg-frame"
                     :frameborder "0"}]]]
-
-        ;[:div (str chart-type)]
-
-
-
         ]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]]))
