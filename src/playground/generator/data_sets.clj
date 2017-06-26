@@ -9,24 +9,10 @@
            (jdk.nashorn.api.scripting ScriptUtils)
            (javax.script ScriptEngineManager)))
 
-(defn parse-js-to-ast [s]
-  (let [options (doto (Options. "nashorn")
-                  (.set "anon.functions" true)
-                  (.set "parse.only" true)
-                  (.set "scripting" true))
-        errors (ErrorManager.)
-        context (Context. options errors (.getContextClassLoader (Thread/currentThread)))]
-    (Context/setGlobal (.createGlobal context))
-    (let [json-str (ScriptUtils/parse s "test" false)]
-      (json/parse-string json-str true))))
-
 (defn eval-some-javascript [s]
   (-> (ScriptEngineManager.)
       (.getEngineByMimeType "application/javascript")
       (.eval s)))
-
-(defn parse-js-obj [s]
-  (json/parse-string (eval-some-javascript (str "JSON.stringify(" s ");")) true))
 
 (defn parse-js-data-set [s]
   (eval-some-javascript (str "window = {};" s "JSON.stringify(window.anydata.datasets.pop());")))
