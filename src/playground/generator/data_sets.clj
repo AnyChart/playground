@@ -42,20 +42,22 @@
     (.startsWith url "//") (str "http://" url)
     (.startsWith url "./") (relative-path full-url url)))
 
-(defn parse-data-set [db data-source data-set-url]
-  (let [full-data-set-url (full-url (:url data-source) data-set-url)
+(defn parse-data-set [db data-source data-set]
+  (let [data-set-url (:data data-set)
+        full-data-set-url (full-url (:url data-source) data-set-url)
         raw-data (-> full-data-set-url slurp string/trim-newline string/trim)
         data (json/parse-string (cond
                                   (.endsWith data-set-url ".js") (parse-js-data-set raw-data)
                                   (.endsWith data-set-url ".json") raw-data) true)
+        data-set (merge data-set data)
         db-data {:data-source-id (:id data-source)
-                 :name           (:id data)
-                 :title          (:name data)
-                 :tags           (:tags data)
-                 :logo           (full-url full-data-set-url (:logo data))
-                 :description    (:description data)
-                 :source         (:source data)
-                 :sample         (:sample data)
+                 :name           (:id data-set)
+                 :title          (:name data-set)
+                 :tags           (:tags data-set)
+                 :logo           (full-url full-data-set-url (:logo data-set))
+                 :description    (:description data-set)
+                 :source         (:source data-set)
+                 :sample         (:sample data-set)
                  :url            full-data-set-url}]
     (db-req/add-data-set<! db (update db-data :tags json/generate-string))))
 
@@ -73,6 +75,5 @@
                    :url   url}
           data-source-id (db-req/add-data-source<! db (update db-data :sets json/generate-string))
           full-db-data (assoc db-data :id data-source-id)]
-      (doseq [data-set-url (:sets data)]
-        (timbre/info "parse data set: " full-db-data data-set-url)
-        (parse-data-set db full-db-data data-set-url)))))
+      (doseq [data-set (:sets data)]
+        (parse-data-set db full-db-data data-set)))))

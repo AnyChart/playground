@@ -8,7 +8,7 @@
   :source-paths ["src" "src-cljc"]
   :dependencies [[org.clojure/clojure "1.9.0-alpha15"]
 
-                 [org.immutant/web "2.1.8"]
+                 [org.immutant/web "2.1.9"]
                  ;[org.immutant/caching "2.1.5"]
                  ;[org.immutant/messaging "2.1.5"]
                  ;[org.immutant/scheduling "2.1.5"]

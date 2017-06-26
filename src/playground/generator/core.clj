@@ -35,7 +35,7 @@
 
   (start [this]
     (timbre/info "Generator start" conf)
-    ;(data-sets/parse-data-source (:db this) (:data_sources conf))
+    (data-sets/parse-data-source (:db this) (:data_sources conf))
     (add-predefined-users (:db this) (:users conf))
     (check-repositories this (:db this) (:notifier this))
     (assoc this

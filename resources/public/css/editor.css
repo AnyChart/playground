@@ -162,14 +162,12 @@ textarea.embed-iframe{
     padding: 0;
 }
 .settings-window .data-sets-item img{
-    width: 100%;
-    height: 100%;
-    width: 80px;
-    height: 50px;
+    max-width: 80px;
+    max-height: 50px;
 }
 .data-sets-item .tag {
-    margin-left: 3px;
-    font-size: 70%;
+    margin-left: 1px;
+    font-size: 59%;
 }
 .data-sets-item .usage-sample-button {
     display:block;
