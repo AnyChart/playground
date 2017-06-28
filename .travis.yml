@@ -17,7 +17,11 @@ addons:
   ssh_known_hosts:
   - 104.236.250.75
   - 136.243.19.202
+git:
+  submodules: false
 before_install:
+- sed -i 's/git@github.com:/https:\/\/$user:$password@github.com\//' .gitmodules
+- git submodule update --init --recursive
 - openssl aes-256-cbc -K $encrypted_5edcd9343923_key -iv $encrypted_5edcd9343923_iv -in id_rsa_irkutsk_anychart.enc -out id_rsa -d
 - mv id_rsa .travis/id_rsa
 after_success:
