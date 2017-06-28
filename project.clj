@@ -27,7 +27,7 @@
                  [org.apache.commons/commons-lang3 "3.6"]
                  [com.anychart/playground-samples-parser "0.1.3"]
                  [enlive "1.1.6"]
-                 [selmer "1.10.7"]
+                 [selmer "1.10.8"]
                  [clj-time "0.13.0"]
                  [me.raynes/fs "1.4.6"]
                  [camel-snake-kebab "0.4.0"]
@@ -57,7 +57,7 @@
                  ;; front-end
                  ;[org.clojure/clojurescript "1.9.495"]
                  [org.clojure/clojurescript "1.9.562"]
-                 [reagent "0.6.2"]
+                 [reagent "0.7.0"]
                  [re-frame "0.9.4"]
                  [re-com "2.1.0"]
                  ;[re-frisk "0.4.5"]
