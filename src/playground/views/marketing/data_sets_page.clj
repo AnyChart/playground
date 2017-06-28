@@ -26,6 +26,7 @@
             (for [tag (:tags data-set)]
               [:span.label.label-primary.tag tag])]
            [:div.col-md-2
-            [:a.btn.btn-primary.usage-sample-button {:href "#"} "Usage Sample"]]])]]
+            [:a.btn.btn-primary.usage-sample-button {:href   (:sample data-set)
+                                                     :target "_blank"} "Usage Sample"]]])]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]]))
