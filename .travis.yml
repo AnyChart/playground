@@ -32,7 +32,6 @@ before_install:
 - chmod 600 ~/.ssh/id_rsa
 - chmod 600 ~/.ssh/id_rsa.pub
 - ssh-add .travis/id_rsa
-# - scp -i .travis/id_rsa .gitmodules root@104.236.250.75:/apps/$APP/.gitmodules
 - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 - git config user.name "irkutsk-anychart"
 - git config user.email "irkutsk@anychart.com"
