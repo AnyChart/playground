@@ -33,8 +33,6 @@ before_install:
 - chmod 600 ~/.ssh/id_rsa.pub
 - ssh-add .travis/id_rsa
 - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-- git config user.name "irkutsk-anychart"
-- git config user.email "irkutsk@anychart.com"
 - git submodule update --init --recursive
 after_success:
 - scp -i .travis/id_rsa target/pg-standalone.jar root@104.236.250.75:/apps/$APP/pg-standalone.jar
