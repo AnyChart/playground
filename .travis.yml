@@ -27,6 +27,10 @@ before_install:
 - echo "Deploying to $SERVER"
 - chmod 600 .travis/id_rsa
 - chmod 600 .travis/id_rsa.pub
+- cp .travis/id_rsa ~/.ssh/id_rsa
+- cp .travis/id_rsa.pub ~/.ssh/id_rsa.pub
+- chmod 600 ~/.ssh/id_rsa
+- chmod 600 ~/.ssh/id_rsa.pub
 - ssh-add .travis/id_rsa
 # - scp -i .travis/id_rsa .gitmodules root@104.236.250.75:/apps/$APP/.gitmodules
 - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
