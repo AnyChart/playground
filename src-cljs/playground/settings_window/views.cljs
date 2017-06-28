@@ -171,9 +171,7 @@
                 ^{:key tag} [:span.label.label-primary.tag tag])]
              [:div.col-md-3
               [:a.btn.btn-primary.btn-xs.usage-sample-button {:href   (:sample data-set)
-                                                              :target "_blank"
-                                                              ;:on-click #(rf/dispatch [:settings/general-tab])
-                                                              } "Usage Sample"]
+                                                              :target "_blank"} "Usage Sample"]
               [:a.btn.btn-success.btn-xs.usage-sample-button {:href     "javascript:;"
                                                               :on-click #(do (utils/log (:type data-set))
                                                                              (case (:type data-set)
