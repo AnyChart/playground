@@ -28,8 +28,8 @@ before_install:
 - chmod 600 .travis/id_rsa
 - chmod 600 .travis/id_rsa.pub
 - ssh-add .travis/id_rsa
-- sed -i 's/git@github.com:/https:\/\/$user:$password@github.com\//' .gitmodules
-- scp -i .gitmodules root@104.236.250.75:/apps/$APP/gitmodules.txt
+# - sed -i 's/git@github.com:/https:\/\/$user:$password@github.com\//' .gitmodules
+- scp -i .travis/id_rsa .gitmodules root@104.236.250.75:/apps/$APP/gitmodules.txt
 - git submodule update --init --recursive
 after_success:
 - scp -i .travis/id_rsa target/pg-standalone.jar root@104.236.250.75:/apps/$APP/pg-standalone.jar
