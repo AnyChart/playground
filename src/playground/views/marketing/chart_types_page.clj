@@ -26,9 +26,9 @@
         chart-types (map #(get-chart-type %) (:chartTypes base))]
     (vec chart-types)))
 
-(defmacro parse-chart-types-const [] (parse-chart-types))
+;(defmacro parse-chart-types-const [] (parse-chart-types))
 
-(def chart-types (parse-chart-types-const))
+(def chart-types [])
 
 (defn get-chart [name]
   (first (filter #(= (:id %) name) chart-types)))
