@@ -21,17 +21,14 @@ git:
   submodules: false
 before_install:
 - openssl aes-256-cbc -K $encrypted_5edcd9343923_key -iv $encrypted_5edcd9343923_iv -in id_rsa_irkutsk_anychart.enc -out id_rsa_irkutsk_anychart -d
-- mv id_rsa_irkutsk_anychart .travis/id_rsa
+- mv id_rsa_irkutsk_anychart ~/.ssh/id_rsa
 - if [ "$TRAVIS_BRANCH" == "master" ]; then export APP="pg-prod"; fi
 - if [ "$TRAVIS_BRANCH" == "staging" ]; then export APP="pg-stg"; fi
 - echo "Deploying to $SERVER"
-- chmod 600 .travis/id_rsa
-- chmod 600 .travis/id_rsa.pub
-- cp .travis/id_rsa ~/.ssh/id_rsa
-- cp .travis/id_rsa.pub ~/.ssh/id_rsa.pub
+- mv .travis/id_rsa.pub ~/.ssh/id_rsa.pub
 - chmod 600 ~/.ssh/id_rsa
 - chmod 600 ~/.ssh/id_rsa.pub
-- ssh-add .travis/id_rsa
+- ssh-add ~/.ssh/id_rsa
 - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 - git submodule update --init --recursive
 after_success:
