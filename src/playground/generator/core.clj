@@ -84,7 +84,7 @@
     (fs/mkdirs (:dir @repo))
     (git/clone @repo (repo-path @repo))
     (catch Exception e
-      (info "Download repo " (:name @repo) " error!")
+      (info "Download repo " (:name @repo) " error! " e)
       (fs/delete-dir (:dir @repo))
       (throw (Exception. (str "Download repo " (:name @repo) " error"))))))
 
@@ -107,8 +107,9 @@
                                              :title     (:title @repo)
                                              :templates (boolean (:templates @repo))
                                              :owner-id  (:id owner)})]
-          (swap! repo assoc :id repo-id)
-          (update-repository-by-repo-name generator db (:name @repo)))))
+          (swap! repo assoc :id repo-id))))
+
+    (update-repository-by-repo-name generator db (:name @repo))
 
     (info (str "Repository \"" (:name @repo) "\" - OK"))
     {:name (:name @repo)}
