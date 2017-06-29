@@ -19,11 +19,10 @@
     {:chart-types chart-types
      :relations   relations}))
 
-(defmacro def-data []
-  (let [result (parse-data)]
-    `(def data '~result)))
+(defmacro parse-data-compile-time []
+  `'~(parse-data))
 
-(def-data)
+(def data (parse-data-compile-time))
 (def chart-types (:chart-types data))
 (def relations (:relations data))
 

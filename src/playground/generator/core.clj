@@ -161,7 +161,7 @@
   (info "Build branch: " path (:name branch))
   (let [version-config (-> (read-version-config (str path "/config.toml"))
                            (assoc-in [:vars :branch-name] (:name branch)))
-        samples* (group-parser/samples path version-config)
+        samples* (group-parser/samples path version-config (:samples-filter @repo))
         ;; TODO: delete replacing urls for old sample format
         samples** (map #(update-in % [:scripts] (fn [scripts] (utils/replace-urls (:name branch) scripts))) samples*)
         samples (map #(assoc % :owner-id (-> @repo :owner :id)) samples**)
@@ -265,17 +265,17 @@
 (defn update-repository-by-repo-name [generator db repo-name]
   (update-repository generator db (get-repo-by-name generator repo-name)))
 
-(defn parse-templates [generator templates-config]
-  (info "Parse templates: " templates-config)
-  (let [config (read-version-config (str (:path templates-config) "/config.toml"))
-        samples (group-parser/samples (:path templates-config) config)
-        ids (db-req/add-samples! (:db generator) nil samples)
-        old-ids (db-req/templates-sample-ids (:db generator))]
-    (db-req/delete-templates! (:db generator))
-    (when (seq ids)
-      (db-req/add-templates! (:db generator) ids))
-    (when (seq old-ids)
-      (db-req/delete-samples-by-ids! (:db generator) {:ids old-ids}))))
+;(defn parse-templates [generator templates-config]
+;  (info "Parse templates: " templates-config)
+;  (let [config (read-version-config (str (:path templates-config) "/config.toml"))
+;        samples (group-parser/samples (:path templates-config) config)
+;        ids (db-req/add-samples! (:db generator) nil samples)
+;        old-ids (db-req/templates-sample-ids (:db generator))]
+;    (db-req/delete-templates! (:db generator))
+;    (when (seq ids)
+;      (db-req/add-templates! (:db generator) ids))
+;    (when (seq old-ids)
+;      (db-req/delete-samples-by-ids! (:db generator) {:ids old-ids}))))
 
 
 ;;=== users ===

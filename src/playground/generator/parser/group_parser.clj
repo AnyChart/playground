@@ -62,5 +62,5 @@
        (cons (create-group-info path config ""))
        (sort-by (juxt :index :name))))
 
-(defn samples [path config]
+(defn samples [path config samples-filter]
   (filter some? (mapcat :samples (groups path config))))
