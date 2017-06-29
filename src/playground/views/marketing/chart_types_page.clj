@@ -19,9 +19,8 @@
     {:chart-types chart-types
      :relations   relations}))
 
-(defmacro parse-data-const [] '(parse-data))
-
-(def data (parse-data-const))
+;; run at compile time
+(def data (parse-data))
 (def chart-types (:chart-types data))
 (def relations (:relations data))
 
