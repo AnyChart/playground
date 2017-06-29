@@ -4,14 +4,6 @@
             [cheshire.core :as json]
             [clojure.string :as string]))
 
-(defn get-id [text]
-  (string/replace (string/lower-case text) #" " "-"))
-
-
-(defn get-chart-types [chart-types]
-  (map (fn [chart-type] {:id   (get-id chart-type)
-                         :name chart-type}) chart-types))
-
 (defn get-chart-type [chart-type]
   (merge chart-type
          (json/parse-string
@@ -20,18 +12,38 @@
            true)
          {:img (str "http://www.anychart.com/chartopedia/chart-types/" (:id chart-type) "/thumb.png")}))
 
-(defn parse-chart-types []
+(defn parse-data []
   (let [base (json/parse-string (slurp "resources/chartopedia/data/main.json") true)
-        ;chart-types (get-chart-types (:chartTypes base))
-        chart-types (map #(get-chart-type %) (:chartTypes base))]
-    (vec chart-types)))
+        chart-types (map #(get-chart-type %) (:chartTypes base))
+        relations (:relations base)]
+    {:chart-types chart-types
+     :relations   relations}))
 
-(defmacro parse-chart-types-const [] (parse-chart-types))
+(defmacro parse-data-const [] '(parse-data))
 
-(def chart-types (parse-chart-types-const))
+(def data (parse-data-const))
+(def chart-types (:chart-types data))
+(def relations (:relations data))
 
 (defn get-chart [name]
   (first (filter #(= (:id %) name) chart-types)))
+
+(defn get-relations [chart]
+  (let [result-relations (reduce (fn [res relation]
+                                   (if (some #(= (:name chart) %) (:charts relation))
+                                     (let [new-res (reduce (fn [res chart-name]
+                                                             (if (not= chart-name (:name chart))
+                                                               (update res chart-name conj (:name relation))
+                                                               res))
+                                                           res
+                                                           (:charts relation))]
+                                       new-res)
+                                     res))
+                                 {}
+                                 relations)
+        result-relations* (map (fn [[name relations]] {:name      name
+                                                       :relations (sort relations)}) result-relations)]
+    (sort-by :name result-relations*)))
 
 (defn page [{:keys [page] :as data}]
   (hiccup-page/html5

@@ -179,7 +179,9 @@
 (defn chart-type-page [request]
   (let [chart-name (-> request :params :chart-type)]
     (when-let [chart-type (chart-types-view/get-chart chart-name)]
-      (chart-type-view/page (get-app-data request) chart-type))))
+      (chart-type-view/page (get-app-data request)
+                            chart-type
+                            (chart-types-view/get-relations chart-type)))))
 
 (defn data-sets-page [request]
   (data-sets-view/page (get-app-data request)))
