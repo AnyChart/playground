@@ -56,7 +56,7 @@
 
                  ;; front-end
                  ;[org.clojure/clojurescript "1.9.495"]
-                 [org.clojure/clojurescript "1.9.562"]
+                 [org.clojure/clojurescript "1.9.660"]
                  [reagent "0.7.0"]
                  [re-frame "0.9.4"]
                  [re-com "2.1.0"]
