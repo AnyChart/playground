@@ -1,66 +1,23 @@
 (ns playground.generator.parser.group-parser
   (:require [taoensso.timbre :refer [info error]]
             [clojure.java.io :refer [file]]
-            [clojure.string :refer [re-quote-replacement]]
-            [playground.generator.parser.sample-parser :as sample-parser]))
+            [playground.generator.parser.sample-parser :as sample-parser]
+            [clojure.string :as string]))
 
-(defn to-folder-path [path]
-  (if (.endsWith path "/") path (str path "/")))
-
-(defn prettify-name [path]
-  (clojure.string/replace path #"_" " "))
-
-(defn fix-url [path]
-  (clojure.string/replace path #" " "_"))
-
-(defn get-group-config [config-path]
-  (when (.exists (file config-path))
-    (read-string (slurp config-path))))
-
-(defn get-group-samples [group-path extensions]
-  (let [files (concat (.listFiles (file group-path))
-                      (.listFiles (file (str group-path "_samples"))))]
-    (->> files
-         (filter #(and (not (.isDirectory %))
-                       (not (.isHidden %))
-                       (some (fn [ext] (.endsWith (.getName %) (str "." ext))) extensions)))
-         (map #(.getName %)))))
-
-(defn get-groups-from-fs [path]
-  (let [fpath (file path)]
-    (->> fpath
-         (tree-seq (fn [f] (and (.isDirectory f) (not (.isHidden f))))
-                   (fn [d] (filter #(not (.isHidden %)) (.listFiles d))))
-         (filter #(and (.isDirectory %)
-                       (not= (.getName %) "_samples")
-                       (not= fpath %)))
-         (map #(clojure.string/replace (.getAbsolutePath %)
-                                       (re-quote-replacement (to-folder-path path)) "")))))
-
-(defn- create-group-info [path config group]
-  ;(info "creating group:" group path (load-group-config path group))
-  (let [group-path (str (to-folder-path path) (to-folder-path group))
-        config-path (str group-path "group.cfg")
-        samples (get-group-samples group-path #{"sample" "html"})]
-    (merge {:index        1000
-            :gallery-name (prettify-name group)
-            :gallery-url  (fix-url group)}
-           (get-group-config config-path)
-           {:path    group
-            :hidden  (or (= samples '("Coming_Soon.sample"))
-                         (= group ""))
-            :root    (= group "")
-            :name    (prettify-name group)
-            :samples (map #(sample-parser/parse (to-folder-path path) (to-folder-path group) config %)
-                          samples)})))
-
-(defn groups [path config]
-  (info "Searching for samples in" path)
-  (->> (get-groups-from-fs path)
-       (map #(create-group-info path config %))
-       (filter #(seq (:samples %)))
-       (cons (create-group-info path config ""))
-       (sort-by (juxt :index :name))))
+(defn inner-path [base-path sample-path]
+  (let [in-path-with-name (subs sample-path (count base-path) (count sample-path))
+        in-path (string/join "/" (butlast (string/split in-path-with-name #"/")))]
+    (str in-path "/")))
 
 (defn samples [path config samples-filter]
-  (filter some? (mapcat :samples (groups path config))))
+  (let [files (file-seq (file path))
+        files* (filter #(and
+                         (not (.isDirectory %))
+                         (not (.isHidden %))
+                         (or (.endsWith (.getName %) ".sample")
+                             (.endsWith (.getName %) ".html"))
+                         (if samples-filter
+                           (re-find (re-pattern samples-filter) (inner-path path (.getAbsolutePath %)))
+                           true))
+                       files)]
+    (map (fn [file] (sample-parser/parse path (inner-path path (.getAbsolutePath file)) config (.getName file))) files*)))

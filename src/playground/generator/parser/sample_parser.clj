@@ -32,14 +32,6 @@
           pattern (re-pattern (str "(?m)^[ ]{" space-count "}"))]
       (clojure.string/replace trailing-s pattern ""))))
 
-;(defn- fix-exports [sample]
-;  (if (and (:exports sample) (:code sample))
-;    (let [export (:exports sample)
-;          pattern (re-pattern (str "var\\s+" export))
-;          new-code (-> (:code sample) (s/replace pattern export))]
-;      (assoc sample :code new-code))
-;    sample))
-
 (defn parse-html-sample [path s]
   (let [page (html/html-snippet s)
         scripts (->> (html/select page [:script])
@@ -157,6 +149,7 @@
   (.startsWith (.toLowerCase s) "<!doctype html"))
 
 (defn parse [base-path group config sample]
+  ;(prn "parse sample: " base-path group config sample)
   (let [path (sample-path base-path group sample)
         name (clojure.string/replace sample #"\.(html|sample)$" "")
         sample-str (-> path slurp (replace-vars (:vars config)))
@@ -165,8 +158,8 @@
                                                      (parse-html-sample path sample-str)
                                                      (parse-toml-sample path sample-str)))]
     (when base-info
-      (assoc base-info                                      ;TODO need fix exports?  ; (fix-exports base-info)
+      (assoc base-info
         :name (or (:name base-info) (clojure.string/replace name #"_" " "))
         :hidden (= name "Coming_Soon")
-        :url (str (when (not= group "/") group)
+        :url (str (.substring group 1)
                   (clojure.string/replace name #"%" "%25"))))))
