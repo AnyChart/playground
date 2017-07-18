@@ -29,6 +29,11 @@
       (str "/" (:url sample))
       "")))
 
+(defn url [sample]
+  (if (:latest sample)
+    (canonical-url sample)
+    (sample-url sample)))
+
 (defn name->url [name]
   (-> name
       (clojure.string/replace #"^/" "")
@@ -38,4 +43,6 @@
       (clojure.string/replace #"," "-")
       (clojure.string/replace #" " "-")
       (clojure.string/replace #"_" "-")
+      (clojure.string/replace #"\(" "")
+      (clojure.string/replace #"\)" "")
       s/lower-case))

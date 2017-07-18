@@ -1,6 +1,6 @@
 (ns playground.views.sample
   (:require [clojure.string :as s]
-    [playground.utils.utils :as utils]
+            [playground.utils.utils :as utils]
     #?(:cljs [cljs-time.coerce :as c]
        :clj  [clj-time.coerce :as c])
     #?(:clj  [clj-time.format :as f]
@@ -23,17 +23,12 @@
        (when (seq (:short-description sample))
          (str ", " (:short-description sample)))))
 
-(defn url [sample]
-  (if (:latest sample)
-    (utils/canonical-url sample)
-    (utils/sample-url sample)))
-
 (defn sample-landing [sample]
   [:div.col-lg-4.col-md-4.col-sm-6.col-xs-12
    [:div.sample-box
     [:div.iframe-height-scaling {:style (when (s/blank? (:short-description sample)) "padding-bottom: 30px;")}
      (if (:preview sample)
-       [:a {:target "_blank" :href (url sample)}
+       [:a {:target "_blank" :href (utils/url sample)}
         [:img.image-preview {:src   (str (:full-url sample) "?view=preview")
                              :alt   (image-alt sample)
                              :title (image-alt sample)}]]
@@ -42,7 +37,7 @@
                                 :allowtransparency "true"
                                 :sandbox           "allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"}])]
     [:p.name [:a {:target "_blank"
-                  :href   (url sample)
+                  :href   (utils/url sample)
                   :title  (title sample)}
               (if (s/blank? (:name sample)) "Noname sample" (:name sample))]]
     (when (seq (:short-description sample))

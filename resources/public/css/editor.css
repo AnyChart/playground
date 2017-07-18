@@ -65,6 +65,10 @@ nav{
     height: 100%;
     border: solid 1px #DDDDDD;
 }
+.editor-box-embed{
+    height: 126px;
+    width: 350px;
+}
 
 .CodeMirror {
     /* Set height, width, borders, and global font properties here */
