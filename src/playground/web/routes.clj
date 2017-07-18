@@ -38,6 +38,7 @@
             [playground.views.marketing.roadmap-page :as roadmap-view]
             [playground.views.marketing.support-page :as support-view]
             [playground.views.marketing.version-history-page :as version-history-view]
+            [playground.views.iframe :as iframe-view]
             [playground.utils.utils :as utils]
             [hiccup.core :as hiccup]
             [hiccup.page :as hiccup-page]))
@@ -53,7 +54,7 @@
 (defn show-sample-iframe [sample request]
   ;(response (render-file "templates/sample.selmer" sample))
   (response (str "<!DOCTYPE html>\n"
-                 (hiccup/html (playground.views.iframe/iframe sample)))))
+                 (hiccup/html (iframe-view/iframe sample)))))
 
 (defn show-sample-standalone [sample request]
   (db-req/update-sample-views! (get-db request) {:id (:id sample)})

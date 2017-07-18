@@ -3,6 +3,7 @@
   (:require [re-frame.core :as rf]
             [playground.utils.utils :as common-utils]
             [playground.utils :as utils]
+            [playground.views.iframe :as iframe-view]
             [hiccups.runtime :as hiccupsrt]))
 
 (rf/reg-event-db
@@ -88,7 +89,7 @@ document.getElementsByTagName('head')[0].appendChild(ac_style);
 ;; ====================================== Internal Iframe =============================================================
 (defn internal-iframe-text [db]
   (let [sample-name (sample-name db)
-        html (str "<!DOCTYPE html>" (h/html (playground.views.iframe/iframe (:sample db))))
+        html (str "<!DOCTYPE html>" (h/html (iframe-view/iframe (:sample db))))
         html (clojure.string/replace html #"/" "\\/")
         html (clojure.string/replace html #"\"" "\\\"")
         html (clojure.string/replace html #"\n" "\\\n")]
