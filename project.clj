@@ -27,14 +27,14 @@
                  [org.apache.commons/commons-lang3 "3.6"]
                  [com.anychart/playground-samples-parser "0.1.3"]
                  [enlive "1.1.6"]
-                 [selmer "1.10.8"]
-                 [clj-time "0.13.0"]
+                 [selmer "1.10.9"]
+                 [clj-time "0.14.0"]
                  [me.raynes/fs "1.4.6"]
                  [camel-snake-kebab "0.4.0"]
                  [hiccup "1.0.5"]
 
                  ;; db
-                 [clojure.jdbc/clojure.jdbc-c3p0 "0.3.2"]
+                 [clojure.jdbc/clojure.jdbc-c3p0 "0.3.3"]
                  [yesql "0.5.3"]
                  ;[org.clojure/java.jdbc "0.6.1"]
                  [org.clojure/java.jdbc "0.7.0-alpha1"]
@@ -56,7 +56,7 @@
 
                  ;; front-end
                  ;[org.clojure/clojurescript "1.9.495"]
-                 [org.clojure/clojurescript "1.9.660"]
+                 [org.clojure/clojurescript "1.9.671"]
                  [reagent "0.7.0"]
                  [re-frame "0.9.4"]
                  [re-com "2.1.0"]
