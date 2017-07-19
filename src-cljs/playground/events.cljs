@@ -5,7 +5,8 @@
             [ajax.core :refer [GET POST]]
     ;[accountant.core :as accountant]
             [clojure.string :as string]
-            [playground.editors.js :as editors-js]))
+            [playground.editors.js :as editors-js]
+            [playground.settings-window.data :as external-resources]))
 
 
 ;; -- Event Handlers -----------------------------------------------
@@ -24,11 +25,13 @@
      :user           (:user data)
      :data-sets      (:data-sets data)
 
-     :settings       {:show        false
-                      :tab         :general
-                      :scripts-str (string/join "\n" (-> data :sample :scripts))
-                      :styles-str  (string/join "\n" (-> data :sample :styles))
-                      :tags-str    (string/join " " (-> data :sample :tags))}
+     :settings       {:show               false
+                      :tab                :general
+                      :tags-str           (string/join " " (-> data :sample :tags))
+                      :external-resources {:binary (first external-resources/binaries)
+                                           :theme (first external-resources/themes)
+                                           :locale (first external-resources/locales)
+                                           :map (first external-resources/maps)}}
      :embed          {:show false
                       :tab  :embed}}))
 

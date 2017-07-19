@@ -140,7 +140,20 @@ nav{
 .settings-window-container .form-inline .form-group label{
     margin-right: 5px;
 }
-
+.settings-resource{
+    display: flex;
+    margin: 0 0 5px;
+}
+.settings-resource .title{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+.settings-window-container select{
+    margin-right: 10px;
+    width: 530px;
+}
 
 /*----- embed window ----*/
 textarea.embed-iframe{
@@ -177,3 +190,5 @@ textarea.embed-iframe{
     display:block;
     margin-bottom:6px;"
 }
+
+

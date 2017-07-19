@@ -56,9 +56,7 @@
 
 
 (rf/reg-sub :scripts (fn [db _] (-> db :sample :scripts)))
-(rf/reg-sub :scripts-str (fn [db _] (-> db :settings :scripts-str)))
 (rf/reg-sub :styles (fn [db _] (-> db :sample :styles)))
-(rf/reg-sub :styles-str (fn [db _] (-> db :settings :styles-str)))
 (rf/reg-sub :tags-str (fn [db _] (-> db :settings :tags-str)))
 
 

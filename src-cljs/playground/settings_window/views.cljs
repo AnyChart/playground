@@ -1,6 +1,7 @@
 (ns playground.settings-window.views
   (:require [re-frame.core :as rf]
-            [playground.utils :as utils]))
+            [playground.utils :as utils]
+            [playground.settings-window.data :as external-resources]))
 
 (defn settings-window []
   (when @(rf/subscribe [:settings/show])
@@ -82,77 +83,77 @@
          [:div
           [:div.form-group
            [:label {:for "settings-styles"} "Styles"]
-           [:textarea.form-control {:id        "settings-styles"
-                                    :on-change #(rf/dispatch [:settings/change-styles (-> % .-target .-value)])
-                                    :value     @(rf/subscribe [:styles-str])}]]
+           (for [style @(rf/subscribe [:styles])]
+             ^{:key style}
+             [:div.settings-resource
+              [:div.title [:a {:href style :target "_blank"} style]]
+              [:button.btn.btn-primary.btn-xs {:type     "button"
+                                               :on-click #(rf/dispatch [:settings/remove-style style])}
+               [:span.glyphicon.glyphicon-remove]]])]
 
           [:div.form-group
            [:label {:for "settings-scripts"} "Scripts"]
-           [:textarea.form-control {:id        "settings-scripts"
-                                    :on-change #(rf/dispatch [:settings/change-scripts (-> % .-target .-value)])
-                                    :value     @(rf/subscribe [:scripts-str])}]]
+           (for [script @(rf/subscribe [:scripts])]
+             ^{:key script}
+             [:div.settings-resource
+              [:div.title [:a {:href script :target "_blank"} script]]
+              [:button.btn.btn-primary.btn-xs {:type     "button"
+                                               :on-click #(rf/dispatch [:settings/remove-script script])}
+               [:span.glyphicon.glyphicon-remove]]])]
 
           [:h4 "Quick Add"]
 
           [:div.form-group
            [:label {:for "settings-select-bin"} "Binaries"]
-           [:select.form-control {:id        "settings-select-bin"
-                                  :on-change #(do (rf/dispatch [:settings/add-script (-> % .-target .-value)])
-                                                  ;(set! (-> % .-target .-selectedIndex) 0)
-                                                  )
-                                  :on-focus  #(set! (-> % .-target .-selectedIndex) -1)}
-            [:option {:value "https://cdn.anychart.com/js/latest/anychart-bundle.min.js"} "AnyChart"]
-            [:option {:value "https://cdn.anychart.com/js/latest/data-adapter.min.js"} "Data Adapter"]]]
+           [:div {:style {:display "flex"}}
+            [:select.form-control {:id        "settings-select-bin"
+                                   :on-change #(rf/dispatch [:settings.external-resources/binaries-select (-> % .-target .-value)])}
+             (for [res external-resources/binaries]
+               ^{:key res} [:option {:value (:link res)} (:name res)])]
+            (if @(rf/subscribe [:settings.external-resources/added? :binary])
+              [:button.btn.btn-primary {:type     "button"
+                                        :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :binary])} "Remove"]
+              [:button.btn.btn-success {:type     "button"
+                                        :on-click #(rf/dispatch [:settings.external-resources/add-by-type :binary])} "Add"])]]
 
           [:div.form-group
            [:label {:for "settings-select-theme"} "Themes"]
-           [:select.form-control {:id        "settings-select-theme"
-                                  :on-change #(rf/dispatch [:settings/add-script (-> % .-target .-value)])
-                                  :on-focus  #(set! (-> % .-target .-selectedIndex) -1)}
-            [:option {:value "https://cdn.anychart.com/themes/latest/coffee.min.js"} "Coffee"]
-            [:option {:value "https://cdn.anychart.com/themes/latest/dark_blue.min.js"} "Dark Blue"]
-            [:option {:value "https://cdn.anychart.com/themes/latest/dark_earth.min.js"} "Dark Earth"]
-            [:option {:value "https://cdn.anychart.com/themes/latest/dark_glamour.min.js"} "Dark Glamour"]
-            [:option {:value "https://cdn.anychart.com/themes/latest/dark_provence.min.js"} "Dark Provence"]
-            [:option {:value "https://cdn.anychart.com/themes/latest/dark_turquoise.min.js"} "Dark Turquoise"]
-            [:option {:value "https://cdn.anychart.com/themes/latest/defaultTheme.min.js"} "Default Theme"]
-            [:option {:value "https://cdn.anychart.com/themes/latest/light_blue.min.js"} "Light Blue"]
-            [:option {:value "https://cdn.anychart.com/themes/latest/light_earth.min.js"} "Light Earth"]
-            [:option {:value "https://cdn.anychart.com/themes/latest/light_glamour.min.js"} "Light Glamour"]
-            [:option {:value "https://cdn.anychart.com/themes/latest/light_provence.min.js"} "Light Provence"]
-            [:option {:value "https://cdn.anychart.com/themes/latest/light_turquoise.min.js"} "Light Turquoise"]
-            [:option {:value "https://cdn.anychart.com/themes/latest/monochrome.min.js"} "Monochrome"]
-            [:option {:value "https://cdn.anychart.com/themes/latest/morning.min.js"} "Morning"]
-            [:option {:value "https://cdn.anychart.com/themes/latest/pastel.min.js"} "Pastel"]
-            [:option {:value "https://cdn.anychart.com/themes/latest/sea.min.js"} "Sea"]
-            [:option {:value "https://cdn.anychart.com/themes/latest/wines.min.js"} "Wines"]
-
-            ]]
+           [:div {:style {:display "flex"}}
+            [:select.form-control {:id        "settings-select-theme"
+                                   :on-change #(rf/dispatch [:settings.external-resources/themes-select (-> % .-target .-value)])}
+             (for [res external-resources/themes]
+               ^{:key res} [:option {:value (:link res)} (:name res)])]
+            (if @(rf/subscribe [:settings.external-resources/added? :theme])
+              [:button.btn.btn-primary {:type     "button"
+                                        :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :theme])} "Remove"]
+              [:button.btn.btn-success {:type     "button"
+                                        :on-click #(rf/dispatch [:settings.external-resources/add-by-type :theme])} "Add"])]]
 
           [:div.form-group
            [:label {:for "settings-select-locale"} "Locales"]
-           [:select.form-control {:id        "settings-select-locale"
-                                  :on-change #(rf/dispatch [:settings/add-script (-> % .-target .-value)])
-                                  :on-focus  #(set! (-> % .-target .-selectedIndex) -1)}
-            [:option {:value "https://cdn.anychart.com/locale/1.1.0/en-us.js"} "English"]
-            [:option {:value "https://cdn.anychart.com/locale/1.1.0/de-de.js"} "German - Deutsch"]
-            [:option {:value "https://cdn.anychart.com/locale/1.1.0/ru-ru.js"} "Russian - Русский "]
-            [:option {:value "https://cdn.anychart.com/locale/1.1.0/es-es.js"} "Spanish - Español "]
-            [:option {:value "https://cdn.anychart.com/locale/1.1.0/he-il.js"} "Israel - עברית"]
-            [:option {:value "https://cdn.anychart.com/locale/1.1.0/zh-cn.js"} "Chinese - 中文 "]
-            [:option {:value "https://cdn.anychart.com/locale/1.1.0/hi-in.js"} "India (Hindi) - हिंदी"]
-            [:option {:value "https://cdn.anychart.com/locale/1.1.0/zh-hk.js"} "Chinese (Hong Kong) - 中文"]]]
+           [:div {:style {:display "flex"}}
+            [:select.form-control {:id        "settings-select-locale"
+                                   :on-change #(rf/dispatch [:settings.external-resources/locales-select (-> % .-target .-value)])}
+             (for [res external-resources/locales]
+               ^{:key res} [:option {:value (:link res)} (:name res)])]
+            (if @(rf/subscribe [:settings.external-resources/added? :locale])
+              [:button.btn.btn-primary {:type     "button"
+                                        :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :locale])} "Remove"]
+              [:button.btn.btn-success {:type     "button"
+                                        :on-click #(rf/dispatch [:settings.external-resources/add-by-type :locale])} "Add"])]]
 
           [:div.form-group
            [:label {:for "settings-select-map"} "Maps"]
-           [:select.form-control {:id        "settings-select-map"
-                                  :on-change #(rf/dispatch [:settings/add-script (-> % .-target .-value)])
-                                  :on-focus  #(set! (-> % .-target .-selectedIndex) -1)}
-            [:option {:value "https://cdn.anychart.com/geodata/1.2.0/custom/world/world.js"} "World"]
-            [:option {:value "https://cdn.anychart.com/geodata/1.2.0/custom/world_source/world_source.js"} "World Origin"]
-            [:option {:value "https://cdn.anychart.com/geodata/1.2.0/countries/australia/australia.topo.js"} "Australia"]
-            [:option {:value "https://cdn.anychart.com/geodata/1.2.0/countries/united_states_of_america/united_states_of_america.topo.js"} "USA"]
-            [:option {:value "https://cdn.anychart.com/geodata/1.2.0/countries/france/france.topo.js"} "France"]]]
+           [:div {:style {:display "flex"}}
+            [:select.form-control {:id        "settings-select-map"
+                                   :on-change #(rf/dispatch [:settings.external-resources/maps-select (-> % .-target .-value)])}
+             (for [res external-resources/maps]
+               ^{:key res} [:option {:value (:link res)} (:name res)])]
+            (if @(rf/subscribe [:settings.external-resources/added? :map])
+              [:button.btn.btn-primary {:type     "button"
+                                        :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :map])} "Remove"]
+              [:button.btn.btn-success {:type     "button"
+                                        :on-click #(rf/dispatch [:settings.external-resources/add-by-type :map])} "Add"])]]
 
           ])
 
