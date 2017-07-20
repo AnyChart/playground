@@ -6,18 +6,15 @@
     ;[accountant.core :as accountant]
             [clojure.string :as string]
             [playground.editors.js :as editors-js]
-            [playground.settings-window.data :as external-resources]))
+            [playground.settings-window.data :as external-resources]
+            [playground.utils.utils :as common-utils]))
 
 
 ;; -- Event Handlers -----------------------------------------------
 (rf/reg-event-db
   :init
   (fn [_ [_ data]]
-    {:code           ""
-     :markup         ""
-     :style          ""
-
-     :editors-height (editors-js/editors-height)
+    {:editors-height (editors-js/editors-height)
      :view           :left
 
      :sample         (:sample data)
@@ -29,11 +26,15 @@
                       :tab                :general
                       :tags-str           (string/join " " (-> data :sample :tags))
                       :external-resources {:binary (first external-resources/binaries)
-                                           :theme (first external-resources/themes)
+                                           :theme  (first external-resources/themes)
                                            :locale (first external-resources/locales)
-                                           :map (first external-resources/maps)}}
-     :embed          {:show false
-                      :tab  :embed}}))
+                                           :map    (first external-resources/maps)}}
+     :embed          {:show  false
+                      :tab   :embed
+                      :props {:id     (common-utils/embed-name  (-> data :sample))
+                              :class  "anychart-embed"
+                              :width  "600px"
+                              :height "450px"}}}))
 
 
 (rf/reg-event-db

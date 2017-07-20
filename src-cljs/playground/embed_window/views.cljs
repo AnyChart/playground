@@ -42,8 +42,33 @@
          [:div
           [:p "To place the chart in a web page, copy one of the code snippets below. We recommend using the first option as far as it doesn't bother your page with using external services to load the chart."]
 
+          [:p
+           [:form.form-inline
+
+            [:div.form-group
+             [:label "ID"]
+             [:input.form-control {:style     {:width "80px"}
+                                   :value     @(rf/subscribe [:embed.props/id])
+                                   :on-change #(rf/dispatch [:embed.props/change-id (-> % .-target .-value)])}]]
+            [:div.form-group
+             [:label "class"]
+             [:input.form-control {:style     {:width "150px"}
+                                   :value     @(rf/subscribe [:embed.props/class])
+                                   :on-change #(rf/dispatch [:embed.props/change-class (-> % .-target .-value)])}]]
+            [:div.form-group
+             [:label "width"]
+             [:input.form-control {:style     {:width "70px"}
+                                   :value     @(rf/subscribe [:embed.props/width])
+                                   :on-change #(rf/dispatch [:embed.props/change-width (-> % .-target .-value)])}]]
+            [:div.form-group
+             [:label "height"]
+             [:input.form-control {:style     {:width "70px"}
+                                   :value     @(rf/subscribe [:embed.props/height])
+                                   :on-change #(rf/dispatch [:embed.props/change-height (-> % .-target .-value)])}]]
+            ]]
+
           [:div.form-group
-           [:label {:for "settings-desc"} "Plain html"]
+           [:label {:for "settings-desc"} "Embed as plain HTML"]
            [:div
             [:div {:style {:float "right" :width "250px"}}
              "Please, make sure that IDs of HTML elements and CSS styles defined in the sample does not corrupt your page content."]
@@ -54,10 +79,10 @@
                                       :value "Copy"}]]]]
 
           [:div.form-group
-           [:label {:for "settings-desc"} "Iframe"]
+           [:label {:for "settings-desc"} "Embed as HTML iframe"]
            [:div
             [:div {:style {:float "right" :width "250px"}}
-             "This option doesn't use external resources and protect your page content from the ID's and CSS used in the sample, but uses iFrame tag that is not convenient to use."]
+             "This option doesn't use external resources and protect your page content from the ID's and CSS used in the sample, but usage of HTML iframe is not convenient to use from the page loading speed perspective."]
             [:div
              [iframe-internal-editor]
              [:input.btn.btn-primary {:id    "copy-embed-internal-iframe"
@@ -65,7 +90,7 @@
                                       :value "Copy"}]]]]
 
           [:div.form-group
-           [:label {:for "settings-desc"} "Iframe with external source"]
+           [:label {:for "settings-desc"} "Embed as HTML iframe with external source"]
            [:div
             [:div {:style {:float "right" :width "250px"}}
              "The advantage of this option is auto-update of the sample embedded on your page then you're updating the sample on playground."]

@@ -36,6 +36,7 @@
 
 (defn name->url [name]
   (-> name
+      ; TODO: refactor with one replace
       (clojure.string/replace #"^/" "")
       (clojure.string/replace #"/" "-")
       (clojure.string/replace #", " "-")
@@ -46,3 +47,8 @@
       (clojure.string/replace #"\(" "")
       (clojure.string/replace #"\)" "")
       s/lower-case))
+
+(defn embed-name [sample]
+  (if (-> sample :version-id)
+    (name->url (-> sample :url))
+    (-> sample :url)))
