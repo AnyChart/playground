@@ -7,7 +7,8 @@
             [clojure.string :as string]
             [playground.editors.js :as editors-js]
             [playground.settings-window.data :as external-resources]
-            [playground.utils.utils :as common-utils]))
+            [playground.utils.utils :as common-utils]
+            [playground.settings-window.data :as data]))
 
 
 ;; -- Event Handlers -----------------------------------------------
@@ -31,10 +32,13 @@
                                            :map    (first external-resources/maps)}}
      :embed          {:show  false
                       :tab   :embed
-                      :props {:id     (common-utils/embed-name  (-> data :sample))
+                      :props {:id     (common-utils/embed-name (-> data :sample))
                               :class  "anychart-embed"
                               :width  "600px"
-                              :height "450px"}}}))
+                              :height "450px"}}
+     :tips           {:current []                             ;[(second data/all-data)]
+                      :queue   []}
+     :data           data/all-data}))
 
 
 (rf/reg-event-db

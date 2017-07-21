@@ -2,7 +2,8 @@
   (:require [re-frame.core :as rf]
             [clojure.string :as string]
             [playground.settings-window.data :as external-resources]
-            [playground.utils :as utils]))
+            [playground.utils :as utils]
+            ))
 
 ;;======================================================================================================================
 ;; Settings
@@ -10,12 +11,25 @@
 (rf/reg-event-db
   :settings/show
   (fn [db _]
-    (assoc-in db [:settings :show] true)))
+    (-> db
+        (assoc-in [:settings :show] true)
+        ;; save current styles and scripts
+        (assoc-in [:settings :external-resources :tips :scripts] (-> db :sample :scripts))
+        (assoc-in [:settings :external-resources :tips :styles] (-> db :sample :styles)))))
 
 (rf/reg-event-db
   :settings/hide
   (fn [db _]
-    (assoc-in db [:settings :show] false)))
+    (let [added-scipts (reverse (vec (clojure.set/difference
+                                       (set (-> db :sample :scripts))
+                                       (set (-> db :settings :external-resources :tips :scripts)))))
+          added-styles (reverse (vec (clojure.set/difference
+                                       (set (-> db :sample :styles))
+                                       (set (-> db :settings :external-resources :tips :styles)))))
+          new-tips (take 3 (concat (map external-resources/get-tip added-scipts) (-> db :tips :current)))]
+      (-> db
+          (assoc-in [:settings :show] false)
+          (assoc-in [:tips :current] new-tips)))))
 
 (rf/reg-event-db
   :settings/general-tab

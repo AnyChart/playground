@@ -4,6 +4,7 @@
             [playground.settings-window.views :as settings-window]
             [playground.embed-window.views :as embed-window]
             [playground.editors.views :as editors]
+            [playground.tips.views :as tips]
             [playground.utils :as utils]))
 
 (defn navbar []
@@ -112,5 +113,6 @@
    [send-form]
    [navbar]
    [editors/editors]
+   [tips/tips]
    [settings-window/settings-window]
    [embed-window/embed-window]])

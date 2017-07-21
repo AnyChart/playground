@@ -192,3 +192,35 @@ textarea.embed-iframe{
 }
 
 
+/*=================== tip ==================*/
+.tips{
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10;
+    display: flex;
+    flex-wrap: wrap-reverse;
+    align-items: flex-start;
+}
+.tips .tip{
+    background-color: white;
+    padding: 10px 15px;
+    border: 1px solid #AAAAAA;
+    margin-right: 8px;
+    margin-top: 8px;
+    /*display: inline-block;*/
+    position: relative;
+}
+.tips .tip pre {
+    max-width: 400px;
+    max-height: 93px;
+}
+.tips .tip .tip-close{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+}
+.tip h3{
+    margin-top: 10px;
+}
