@@ -215,6 +215,9 @@ textarea.embed-iframe{
     max-width: 400px;
     max-height: 93px;
 }
+.tip p {
+    max-width: 400px;
+}
 .tips .tip .tip-close{
     position: absolute;
     top: 15px;

@@ -15,18 +15,31 @@
         (assoc-in [:settings :show] true)
         ;; save current styles and scripts
         (assoc-in [:settings :external-resources :tips :scripts] (-> db :sample :scripts))
-        (assoc-in [:settings :external-resources :tips :styles] (-> db :sample :styles)))))
+        (assoc-in [:settings :external-resources :tips :styles] (-> db :sample :styles))
+        ;; set first default button value
+        (assoc-in [:settings :external-resources :binary] (first external-resources/binaries))
+        (assoc-in [:settings :external-resources :theme] (first external-resources/themes))
+        (assoc-in [:settings :external-resources :locale] (first external-resources/locales))
+        (assoc-in [:settings :external-resources :map] (first external-resources/maps)))))
 
 (rf/reg-event-db
   :settings/hide
   (fn [db _]
-    (let [added-scipts (reverse (vec (clojure.set/difference
-                                       (set (-> db :sample :scripts))
-                                       (set (-> db :settings :external-resources :tips :scripts)))))
+    (let [local-data (-> db :local-storage deref)
+          hidden-tips (:hidden-tips local-data)
+          hidden-types (:hidden-types local-data)
+          added-scipts (filter (fn [script]
+                                 (and
+                                   (every? #(not= % script) hidden-tips)
+                                   (every? #(not= % (:type (external-resources/get-tip script))) hidden-types)))
+                               (reverse (vec (clojure.set/difference
+                                        (set (-> db :sample :scripts))
+                                        (set (-> db :settings :external-resources :tips :scripts))))))
           added-styles (reverse (vec (clojure.set/difference
                                        (set (-> db :sample :styles))
                                        (set (-> db :settings :external-resources :tips :styles)))))
-          new-tips (take 3 (concat (map external-resources/get-tip added-scipts) (-> db :tips :current)))]
+          new-tips (take 3 (distinct (concat (map external-resources/get-tip added-scipts) (-> db :tips :current))))]
+      ;(utils/log (clj->js hidden-tips))
       (-> db
           (assoc-in [:settings :show] false)
           (assoc-in [:tips :current] new-tips)))))

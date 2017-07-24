@@ -16,9 +16,10 @@
        [:label {:for   id
                 :style {:padding-left 0}}
         [:span "Never show this tip again"]]
-       [:input {:id    id
-                :type  "checkbox"
-                :style {:margin-left "5px"}}]]
+       [:input {:id        id
+                :type      "checkbox"
+                :style     {:margin-left "5px"}
+                :on-change #(rf/dispatch [:tips/never-show-again-change tip (-> % .-target .-checked)])}]]
       [:button.btn.btn-link {:type     "button"
                              :on-click #(rf/dispatch [:tips.tip/close (:link tip)])} "Hide"]]
 
@@ -29,4 +30,4 @@
 (defn tips []
   [:div.tips
    (for [tip-data @(rf/subscribe [:tips/current])]
-     [tip tip-data])])
+     ^{:key (:link tip-data)} [tip tip-data])])

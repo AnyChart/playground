@@ -60,6 +60,7 @@
                  [reagent "0.7.0"]
                  [re-frame "0.9.4"]
                  [re-com "2.1.0"]
+                 [alandipert/storage-atom "2.0.1"]
                  ;[re-frisk "0.4.5"]
                  ; [cljs-http "0.1.42"]
                  [cljs-ajax "0.6.0"]

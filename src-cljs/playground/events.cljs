@@ -8,13 +8,20 @@
             [playground.editors.js :as editors-js]
             [playground.settings-window.data :as external-resources]
             [playground.utils.utils :as common-utils]
-            [playground.settings-window.data :as data]))
+            [playground.settings-window.data :as data]
+            [alandipert.storage-atom :refer [local-storage]]))
 
 
 ;; -- Event Handlers -----------------------------------------------
 (rf/reg-event-db
   :init
   (fn [_ [_ data]]
+    ; clear prefs
+    ;(let [prefs (local-storage (atom {:hidden-tips []}) :prefs)]
+    ;  (swap! prefs assoc :hidden-tips [])
+    ;  (utils/log (clj->js @prefs))
+    ;)
+
     {:editors-height (editors-js/editors-height)
      :view           :left
 
@@ -36,8 +43,10 @@
                               :class  "anychart-embed"
                               :width  "600px"
                               :height "450px"}}
-     :tips           {:current []                             ;[(second data/all-data)]
+     :tips           {:current []                           ;[(second data/all-data)]
                       :queue   []}
+     :local-storage  (local-storage (atom {:hidden-tips []
+                                           :hidden-types []}) :prefs)
      :data           data/all-data}))
 
 
