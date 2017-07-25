@@ -8,6 +8,6 @@
 
 (rf/reg-sub :settings.external-resources/added?
             (fn [db [_ type]]
-              (let [link (-> db :settings :external-resources type :link)
+              (let [url (-> db :settings :external-resources type :url)
                     scripts (-> db :sample :scripts)]
-                (some (fn [script] (= script link)) scripts))))
+                (some (fn [script] (= script url)) scripts))))

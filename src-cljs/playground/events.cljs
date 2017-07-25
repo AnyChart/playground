@@ -19,8 +19,8 @@
     ; clear prefs
     ;(let [prefs (local-storage (atom {:hidden-tips []}) :prefs)]
     ;  (swap! prefs assoc :hidden-tips [])
-    ;  (utils/log (clj->js @prefs))
-    ;)
+    ;  (swap! prefs assoc :hidden-types [])
+    ;  (utils/log (clj->js @prefs)))
 
     {:editors-height (editors-js/editors-height)
      :view           :left
@@ -36,7 +36,8 @@
                       :external-resources {:binary (first external-resources/binaries)
                                            :theme  (first external-resources/themes)
                                            :locale (first external-resources/locales)
-                                           :map    (first external-resources/maps)}}
+                                           :map    (first external-resources/maps)}
+                      :tips               []}
      :embed          {:show  false
                       :tab   :embed
                       :props {:id     (common-utils/embed-name (-> data :sample))
@@ -45,9 +46,9 @@
                               :height "450px"}}
      :tips           {:current []                           ;[(second data/all-data)]
                       :queue   []}
-     :local-storage  (local-storage (atom {:hidden-tips []
+     :local-storage  (local-storage (atom {:hidden-tips  []
                                            :hidden-types []}) :prefs)
-     :data           data/all-data}))
+     :data           (data/compose-all-data (:data-sets data))}))
 
 
 (rf/reg-event-db

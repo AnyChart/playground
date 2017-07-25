@@ -109,7 +109,7 @@
             [:select.form-control {:id        "settings-select-bin"
                                    :on-change #(rf/dispatch [:settings.external-resources/binaries-select (-> % .-target .-value)])}
              (for [res external-resources/binaries]
-               ^{:key res} [:option {:value (:link res)} (:name res)])]
+               ^{:key res} [:option {:value (:url res)} (:name res)])]
             (if @(rf/subscribe [:settings.external-resources/added? :binary])
               [:button.btn.btn-primary {:type     "button"
                                         :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :binary])} "Remove"]
@@ -122,7 +122,7 @@
             [:select.form-control {:id        "settings-select-theme"
                                    :on-change #(rf/dispatch [:settings.external-resources/themes-select (-> % .-target .-value)])}
              (for [res external-resources/themes]
-               ^{:key res} [:option {:value (:link res)} (:name res)])]
+               ^{:key res} [:option {:value (:url res)} (:name res)])]
             (if @(rf/subscribe [:settings.external-resources/added? :theme])
               [:button.btn.btn-primary {:type     "button"
                                         :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :theme])} "Remove"]
@@ -135,7 +135,7 @@
             [:select.form-control {:id        "settings-select-locale"
                                    :on-change #(rf/dispatch [:settings.external-resources/locales-select (-> % .-target .-value)])}
              (for [res external-resources/locales]
-               ^{:key res} [:option {:value (:link res)} (:name res)])]
+               ^{:key res} [:option {:value (:url res)} (:name res)])]
             (if @(rf/subscribe [:settings.external-resources/added? :locale])
               [:button.btn.btn-primary {:type     "button"
                                         :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :locale])} "Remove"]
@@ -148,7 +148,7 @@
             [:select.form-control {:id        "settings-select-map"
                                    :on-change #(rf/dispatch [:settings.external-resources/maps-select (-> % .-target .-value)])}
              (for [res external-resources/maps]
-               ^{:key res} [:option {:value (:link res)} (:name res)])]
+               ^{:key res} [:option {:value (:url res)} (:name res)])]
             (if @(rf/subscribe [:settings.external-resources/added? :map])
               [:button.btn.btn-primary {:type     "button"
                                         :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :map])} "Remove"]

@@ -13,9 +13,8 @@
   (fn [db _]
     (-> db
         (assoc-in [:settings :show] true)
-        ;; save current styles and scripts
-        (assoc-in [:settings :external-resources :tips :scripts] (-> db :sample :scripts))
-        (assoc-in [:settings :external-resources :tips :styles] (-> db :sample :styles))
+        ;; clear new added tips
+        (assoc-in [:settings :tips] [])
         ;; set first default button value
         (assoc-in [:settings :external-resources :binary] (first external-resources/binaries))
         (assoc-in [:settings :external-resources :theme] (first external-resources/themes))
@@ -28,18 +27,13 @@
     (let [local-data (-> db :local-storage deref)
           hidden-tips (:hidden-tips local-data)
           hidden-types (:hidden-types local-data)
-          added-scipts (filter (fn [script]
-                                 (and
-                                   (every? #(not= % script) hidden-tips)
-                                   (every? #(not= % (:type (external-resources/get-tip script))) hidden-types)))
-                               (reverse (vec (clojure.set/difference
-                                        (set (-> db :sample :scripts))
-                                        (set (-> db :settings :external-resources :tips :scripts))))))
-          added-styles (reverse (vec (clojure.set/difference
-                                       (set (-> db :sample :styles))
-                                       (set (-> db :settings :external-resources :tips :styles)))))
-          new-tips (take 3 (distinct (concat (map external-resources/get-tip added-scipts) (-> db :tips :current))))]
-      ;(utils/log (clj->js hidden-tips))
+          added-tips (reverse
+                       (filter (fn [tip-url]
+                                (and
+                                  (every? #(not= % tip-url) hidden-tips)
+                                  (every? #(not= % (:type (external-resources/get-tip tip-url (:data db)))) hidden-types)))
+                              (-> db :settings :tips)))
+          new-tips (take 3 (distinct (concat (map #(external-resources/get-tip % (:data db)) added-tips) (-> db :tips :current))))]
       (-> db
           (assoc-in [:settings :show] false)
           (assoc-in [:tips :current] new-tips)))))
@@ -74,32 +68,27 @@
   (fn [db [_ value]]
     (assoc-in db [:sample :description] value)))
 
-(rf/reg-event-db
-  :settings/add-script
-  (fn [db [_ value]]
-    (if (every? #(not= % value) (-> db :sample :scripts))
-      (update-in db [:sample :scripts] #(concat % [value]))
-      db)))
+;(rf/reg-event-db
+;  :settings/add-script
+;  (fn [db [_ value]]
+;    (if (every? #(not= % value) (-> db :sample :scripts))
+;      (-> db
+;          (update-in [:sample :scripts] #(concat % [value]))
+;          ;(update-in [:settings :tips] conj value))
+;      db)))
 
 (rf/reg-event-db
   :settings/remove-script
   (fn [db [_ value]]
-    (update-in db [:sample :scripts] (fn [scripts] (remove #(= value %) scripts)))))
+    (-> db
+        (update-in [:sample :scripts] (fn [scripts] (remove #(= value %) scripts)))
+        (update-in [:settings :tips] (fn [tips-urls] (remove #(= value %) tips-urls))))))
 
 (rf/reg-event-db
   :settings/remove-style
   (fn [db [_ value]]
     (update-in db [:sample :styles] (fn [styles] (remove #(= value %) styles)))))
 
-(rf/reg-event-db
-  :settings/change-scripts
-  (fn [db [_ value]]
-    (assoc-in db [:sample :scripts] (filter seq (map string/trim (string/split-lines value))))))
-
-(rf/reg-event-db
-  :settings/change-styles
-  (fn [db [_ value]]
-    (assoc-in db [:sample :styles] (filter seq (map string/trim (string/split-lines value))))))
 
 (rf/reg-event-db
   :settings/change-tags
@@ -140,14 +129,18 @@
 (rf/reg-event-db
   :settings.external-resources/add-by-type
   (fn [db [_ type]]
-    (let [link (-> db :settings :external-resources type :link)]
-      (update-in db [:sample :scripts] #(concat % [link])))))
+    (let [url (-> db :settings :external-resources type :url)]
+      (-> db
+          (update-in [:sample :scripts] #(concat % [url]))
+          (update-in [:settings :tips] conj url)))))
 
 (rf/reg-event-db
   :settings.external-resources/remove-by-type
   (fn [db [_ type]]
-    (let [link (-> db :settings :external-resources type :link)]
-      (update-in db [:sample :scripts] (fn [scripts] (remove #(= link %) scripts))))))
+    (let [url (-> db :settings :external-resources type :url)]
+      (-> db
+          (update-in [:sample :scripts] (fn [scripts] (remove #(= url %) scripts)))
+          (update-in [:settings :tips] (fn [tips-urls] (remove #(= url %) tips-urls)))))))
 
 
 ;;======================================================================================================================
@@ -159,15 +152,18 @@
     (let [code (.getValue (-> db :code-editor))]
       (if (= (.indexOf code (:url dataset)) -1)
         ;; add dataset
-        (.setValue (.getDoc (:code-editor db))
-                   (str "anychart.data.loadJsonFile('" (:url dataset) "', function(data) {\n"
-                        "  // use data object has following format\n"
-                        "  // {\n"
-                        "  // name: string,\n"
-                        "  // data: Array\n"
-                        "  // }\n"
-                        "});\n"
-                        code))
+        (do
+          (.setValue (.getDoc (:code-editor db))
+                       (str "anychart.data.loadJsonFile('" (:url dataset) "', function(data) {\n"
+                            "  // use data object has following format\n"
+                            "  // {\n"
+                            "  // name: string,\n"
+                            "  // data: Array\n"
+                            "  // }\n"
+                            "});\n"
+                            code))
+          (update-in db [:settings :tips] conj (:url dataset)))
         ;; show alert
-        (js/alert "Dataset has been already added."))
-      db)))
+        (do
+          (js/alert "Dataset has been already added.")
+          db)))))

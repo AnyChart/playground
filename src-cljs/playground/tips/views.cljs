@@ -21,13 +21,13 @@
                 :style     {:margin-left "5px"}
                 :on-change #(rf/dispatch [:tips/never-show-again-change tip (-> % .-target .-checked)])}]]
       [:button.btn.btn-link {:type     "button"
-                             :on-click #(rf/dispatch [:tips.tip/close (:link tip)])} "Hide"]]
+                             :on-click #(rf/dispatch [:tips.tip/close (:url tip)])} "Hide"]]
 
      [:span.glyphicon.glyphicon-remove.tip-close {:aria-hidden true
-                                                  :on-click    #(rf/dispatch [:tips.tip/close (:link tip)])}]]))
+                                                  :on-click    #(rf/dispatch [:tips.tip/close (:url tip)])}]]))
 
 
 (defn tips []
   [:div.tips
    (for [tip-data @(rf/subscribe [:tips/current])]
-     ^{:key (:link tip-data)} [tip tip-data])])
+     ^{:key (:url tip-data)} [tip tip-data])])
