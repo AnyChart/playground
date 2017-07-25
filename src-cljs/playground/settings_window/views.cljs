@@ -158,7 +158,7 @@
           ])
 
        (when @(rf/subscribe [:settings/data-sets-tab?])
-         [:div
+         [:div.datasets
           (for [data-set @(rf/subscribe [:data-sets])]
             ^{:key (:name data-set)}
 
@@ -174,9 +174,7 @@
               [:a.btn.btn-primary.btn-xs.usage-sample-button {:href   (:sample data-set)
                                                               :target "_blank"} "Usage Sample"]
               [:a.btn.btn-success.btn-xs.usage-sample-button {:href     "javascript:;"
-                                                              :on-click #(do (utils/log (:type data-set))
-                                                                             (case (:type data-set)
-                                                                               "text/javascript" (rf/dispatch [:settings/add-script (:url data-set)])))}
+                                                              :on-click #(rf/dispatch [:settings/add-dataset data-set])}
                "Quick Add"]]])])
 
        [:button.btn.btn-default {:type     "button"

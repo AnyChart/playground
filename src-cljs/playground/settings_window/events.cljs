@@ -148,3 +148,26 @@
   (fn [db [_ type]]
     (let [link (-> db :settings :external-resources type :link)]
       (update-in db [:sample :scripts] (fn [scripts] (remove #(= link %) scripts))))))
+
+
+;;======================================================================================================================
+;; Data sets
+;;======================================================================================================================
+(rf/reg-event-db
+  :settings/add-dataset
+  (fn [db [_ dataset]]
+    (let [code (.getValue (-> db :code-editor))]
+      (if (= (.indexOf code (:url dataset)) -1)
+        ;; add dataset
+        (.setValue (.getDoc (:code-editor db))
+                   (str "anychart.data.loadJsonFile('" (:url dataset) "', function(data) {\n"
+                        "  // use data object has following format\n"
+                        "  // {\n"
+                        "  // name: string,\n"
+                        "  // data: Array\n"
+                        "  // }\n"
+                        "});\n"
+                        code))
+        ;; show alert
+        (js/alert "Dataset has been already added."))
+      db)))

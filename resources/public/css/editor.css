@@ -162,7 +162,12 @@ textarea.embed-iframe{
 }
 
 
-/* ---- data set ---- */
+/*=================== Datasets ==================*/
+.datasets{
+    max-height: 550px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
 .data-sets-item{
     margin-bottom: 5px;
 }
