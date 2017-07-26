@@ -60,14 +60,15 @@ nav{
 #markup-editor, #code-editor, #style-editor{
 
 }
+.editor-container{
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
 .editor-box{
     width: 100%;
     height: 100%;
     border: solid 1px #DDDDDD;
-}
-.editor-box-embed{
-    height: 126px;
-    width: 350px;
 }
 
 .CodeMirror {
@@ -78,19 +79,60 @@ nav{
     word-wrap: break-word;
 }
 
+/*=================== Copy and other editors buttons ==================*/
+.editor-label{
+    /*border: 1px solid rgba(255,255,255,0);*/
+    background: rgba(255,255,255,.8);
+    position: absolute;
+    top: 7px;
+    z-index: 100;
+    font-size: 12px;
+    letter-spacing: 1.2px;
+    color: #999999;
+    display: inline-block;
+    cursor: pointer;
+    text-transform: uppercase;
+    user-select: none;
+}
+.editor-label-gear{
+    right: 64px;
+}
+.editor-label-copy{
+    right: 7px;
+}
+.editor-box-embed{
+    height: 126px;
+    width: 350px;
+}
+
+/*=================== Iframe result ==================*/
 .result{
     width: 100%;
     height: 100%;
     border: solid 1px #DDDDDD;
 }
-
 .iframe-result{
-    border: none;
     width: 100%;
-    height: 100%
+    height: 100%;
+    border: none;
 }
 
-/* --------- settings window -----------*/
+/*=================== Code context menu ==================*/
+.code-context-menu{
+    background-color: white;
+    /*border: 1px solid #AAAAAA;*/
+    padding: 15px;
+    position: absolute;
+    top: 40px;
+    right: 20px;
+    z-index: 101;
+    box-shadow: 0 0 5px rgba(57,70,78,.15), 0 20px 55px -8px rgba(57,70,78,.25);
+}
+.code-context-menu-close-icon{
+    cursor: pointer;
+}
+
+/*=================== Settings window ==================*/
 .settings-tabs{
     margin-bottom: 7px;
 }
@@ -155,7 +197,7 @@ nav{
     width: 530px;
 }
 
-/*----- embed window ----*/
+/*=================== Embed window ==================*/
 textarea.embed-iframe{
     min-height: 110px;
     margin-bottom: 5px;

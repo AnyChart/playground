@@ -1,6 +1,7 @@
 (ns playground.tips.events
   (:require [re-frame.core :as rf]
-            [playground.utils :as utils]))
+            [playground.utils :as utils]
+            [playground.settings-window.data :as external-resources]))
 
 (rf/reg-event-db
   :tips.tip/close
@@ -8,6 +9,23 @@
     (update-in db [:tips :current]
                #(remove (fn [tip] (= (:url tip) link)) %))))
 
+(rf/reg-event-db
+  :tips/add-from-queue
+  (fn [db _]
+    (let [local-data (-> db :local-storage deref)
+          hidden-tips (:hidden-tips local-data)
+          hidden-types (:hidden-types local-data)
+          added-tips (reverse
+                       (filter (fn [tip-url]
+                                 (and
+                                   (every? #(not= % tip-url) hidden-tips)
+                                   (every? #(not= % (:type (external-resources/get-tip tip-url (:data db)))) hidden-types)))
+                               (-> db :tips :queue)))
+          new-tips (take 3 (distinct (concat (map #(external-resources/get-tip % (:data db)) added-tips) (-> db :tips :current))))]
+      (-> db
+          (assoc-in [:tips :current] new-tips)
+          ;; clear new added tips
+          (assoc-in [:tips :queue] [])))))
 
 (rf/reg-event-db
   :tips/never-show-again-change

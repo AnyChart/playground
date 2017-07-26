@@ -1,18 +1,20 @@
 (ns playground.editors.subs
-  (:require [re-frame.core :as rf]))
+  (:require [re-frame.core :as rf]
+            [playground.settings-window.data :as external-resources]
+            [playground.utils :as utils]))
 
 (rf/reg-sub :editors/height
-            (fn [db _] (:editors-height db)))
+            (fn [db _] (-> db :editors :editors-height)))
 
 (rf/reg-sub :editors/view
-            (fn [db _] (-> db :view)))
+            (fn [db _] (-> db :editors :view)))
 
 (rf/reg-sub :editors/splitter-percents
             (fn [db _]
               (let [markup-lines (-> db :sample :markup clojure.string/split-lines count)
                     style-lines (-> db :sample :style clojure.string/split-lines count)
                     ;code-lines (-> db :sample :code clojure.string/split-lines count)
-                    height (- (-> db :editors-height) 16)
+                    height (- (-> db :editors :editors-height) 16)
 
                     markup-percent (.ceil js/Math (/ (* (+ 4 (* 17.0 markup-lines)) 100) height))
                     markup-percent-min (.ceil js/Math (/ (* (+ 4 (* 17.0 3)) 100) height))
@@ -32,3 +34,16 @@
                 ;(utils/log "Calculate percent3: " markup-percent markup-percent-min markup-percent*)
                 ;(utils/log "Calculate percent3: " style-percent style-percent-min style-percent*)
                 [markup-percent* style-percent*])))
+
+
+(rf/reg-sub :editors/external-resources
+            (fn [db _]
+              (let [scripts (-> db :sample :scripts)
+                    scripts-data (->> scripts
+                                      (map #(external-resources/get-tip % (-> db :data)))
+                                      (filter some?))]
+                scripts-data)))
+
+
+(rf/reg-sub :editors.code-settings/show
+            (fn [db _] (-> db :editors :code-settings :show)))

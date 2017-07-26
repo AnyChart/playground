@@ -13,8 +13,6 @@
   (fn [db _]
     (-> db
         (assoc-in [:settings :show] true)
-        ;; clear new added tips
-        (assoc-in [:settings :tips] [])
         ;; set first default button value
         (assoc-in [:settings :external-resources :binary] (first external-resources/binaries))
         (assoc-in [:settings :external-resources :theme] (first external-resources/themes))
@@ -24,19 +22,10 @@
 (rf/reg-event-db
   :settings/hide
   (fn [db _]
-    (let [local-data (-> db :local-storage deref)
-          hidden-tips (:hidden-tips local-data)
-          hidden-types (:hidden-types local-data)
-          added-tips (reverse
-                       (filter (fn [tip-url]
-                                (and
-                                  (every? #(not= % tip-url) hidden-tips)
-                                  (every? #(not= % (:type (external-resources/get-tip tip-url (:data db)))) hidden-types)))
-                              (-> db :settings :tips)))
-          new-tips (take 3 (distinct (concat (map #(external-resources/get-tip % (:data db)) added-tips) (-> db :tips :current))))]
-      (-> db
-          (assoc-in [:settings :show] false)
-          (assoc-in [:tips :current] new-tips)))))
+    ;TODO: eliminate dispatch in event handler
+    (rf/dispatch [:tips/add-from-queue])
+    (-> db
+        (assoc-in [:settings :show] false))))
 
 (rf/reg-event-db
   :settings/general-tab
@@ -68,21 +57,21 @@
   (fn [db [_ value]]
     (assoc-in db [:sample :description] value)))
 
-;(rf/reg-event-db
-;  :settings/add-script
-;  (fn [db [_ value]]
-;    (if (every? #(not= % value) (-> db :sample :scripts))
-;      (-> db
-;          (update-in [:sample :scripts] #(concat % [value]))
-;          ;(update-in [:settings :tips] conj value))
-;      db)))
+(rf/reg-event-db
+  :settings/add-script
+  (fn [db [_ value]]
+    (if (every? #(not= % value) (-> db :sample :scripts))
+      (-> db
+          (update-in [:sample :scripts] #(concat % [value]))
+          (update-in [:tips :queue] conj value))
+      db)))
 
 (rf/reg-event-db
   :settings/remove-script
   (fn [db [_ value]]
     (-> db
         (update-in [:sample :scripts] (fn [scripts] (remove #(= value %) scripts)))
-        (update-in [:settings :tips] (fn [tips-urls] (remove #(= value %) tips-urls))))))
+        (update-in [:tips :queue] (fn [tips-urls] (remove #(= value %) tips-urls))))))
 
 (rf/reg-event-db
   :settings/remove-style
@@ -132,7 +121,7 @@
     (let [url (-> db :settings :external-resources type :url)]
       (-> db
           (update-in [:sample :scripts] #(concat % [url]))
-          (update-in [:settings :tips] conj url)))))
+          (update-in [:tips :queue] conj url)))))
 
 (rf/reg-event-db
   :settings.external-resources/remove-by-type
@@ -140,7 +129,7 @@
     (let [url (-> db :settings :external-resources type :url)]
       (-> db
           (update-in [:sample :scripts] (fn [scripts] (remove #(= url %) scripts)))
-          (update-in [:settings :tips] (fn [tips-urls] (remove #(= url %) tips-urls)))))))
+          (update-in [:tips :queue] (fn [tips-urls] (remove #(= url %) tips-urls)))))))
 
 
 ;;======================================================================================================================
@@ -153,17 +142,19 @@
       (if (= (.indexOf code (:url dataset)) -1)
         ;; add dataset
         (do
+          ;; TODO: make event handler clean
           (.setValue (.getDoc (:code-editor db))
-                       (str "anychart.data.loadJsonFile('" (:url dataset) "', function(data) {\n"
-                            "  // use data object has following format\n"
-                            "  // {\n"
-                            "  // name: string,\n"
-                            "  // data: Array\n"
-                            "  // }\n"
-                            "});\n"
-                            code))
-          (update-in db [:settings :tips] conj (:url dataset)))
+                     (str "anychart.data.loadJsonFile('" (:url dataset) "', function(data) {\n"
+                          "  // use data object has following format\n"
+                          "  // {\n"
+                          "  // name: string,\n"
+                          "  // data: Array\n"
+                          "  // }\n"
+                          "});\n"
+                          code))
+          (update-in db [:tips :queue] conj (:url dataset)))
         ;; show alert
         (do
+          ;; TODO: eliminate side-effect
           (js/alert "Dataset has been already added.")
           db)))))

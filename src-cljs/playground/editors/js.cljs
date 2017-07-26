@@ -1,5 +1,6 @@
 (ns playground.editors.js
-  (:require [re-frame.core :as rf]))
+  (:require [re-frame.core :as rf]
+            [playground.utils :as utils]))
 
 
 (defn create-editor [type value mode]
@@ -20,9 +21,22 @@
       (.-clientHeight (.-documentElement js/document))
       (.-clientHeight (.-body js/document))))
 
+
 (defn editors-height []
   (- (window-height) 102))
 
-(.addEventListener js/window "resize" (fn [_] (rf/dispatch [:resize-window])))
 
+(defn init []
+  (.addEventListener js/window "resize" (fn [_] (rf/dispatch [:resize-window]))) \
+  ;; for closing code editor context menu
+  (.addEventListener js/window "mouseup"
+                     (fn [e]
+                       (let [code-menu (.getElementById js/document "code-context-menu")
+                             btn (.getElementById js/document "code-editor-settings-button")]
+                         (when (and code-menu
+                                    btn
+                                    (not (.contains code-menu (.-target e)))
+                                    (not (.contains btn (.-target e))))
+                           (rf/dispatch [:editors.code-settings/hide]))))))
 
+(init)
