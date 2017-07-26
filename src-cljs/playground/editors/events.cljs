@@ -15,7 +15,7 @@
           ;; editors
           (assoc-in [:editors :markup-editor] markup-editor)
           (assoc-in [:editors :style-editor] style-editor)
-          (assoc-in [:editors :code-editor] markup-editor)
+          (assoc-in [:editors :code-editor] code-editor)
           ;; copy to clipboard buttons
           (assoc-in [:editors :markup-editor-clipboard]
                     (js/Clipboard. "#markup-editor-copy"
