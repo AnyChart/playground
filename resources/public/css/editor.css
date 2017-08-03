@@ -8,6 +8,8 @@ body{
     /* Margin bottom by footer height */
     padding-bottom: 50px;
     /*height:100%;*/
+    /* for tips hidden scroll */
+    overflow: hidden;
 }
 
 .navbar-brand{
@@ -246,7 +248,7 @@ textarea.embed-iframe{
     left: 20px;
     z-index: 10;
     display: flex;
-    flex-wrap: wrap-reverse;
+    flex-wrap: nowrap;
     align-items: flex-start;
 }
 .tips .tip{

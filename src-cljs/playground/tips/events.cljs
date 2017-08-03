@@ -21,7 +21,7 @@
                                    (every? #(not= % tip-url) hidden-tips)
                                    (every? #(not= % (:type (external-resources/get-tip tip-url (:data db)))) hidden-types)))
                                (-> db :tips :queue)))
-          new-tips (take 3 (distinct (concat (map #(external-resources/get-tip % (:data db)) added-tips) (-> db :tips :current))))]
+          new-tips (distinct (concat (map #(external-resources/get-tip % (:data db)) added-tips) (-> db :tips :current)))]
       (-> db
           (assoc-in [:tips :current] new-tips)
           ;; clear new added tips
