@@ -6,6 +6,15 @@
 
 [![Build Status](https://travis-ci.com/AnyChart/playground.svg?token=ERMLfyrvWdA8g6gi11Vp&branch=staging)](https://travis-ci.com/AnyChart/playground) staging
 
+
+## Dependencies
+```
+sudo apt-get install mysql-server
+sudo apt-get install redis-server
+sudo apt-get install phantomjs
+sudo apt-get install pngquant
+```
+
 ## Usage
 Config file format:
 
