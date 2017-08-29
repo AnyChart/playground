@@ -1,6 +1,6 @@
 language: clojure
 script:
-- lein sass once
+- lein sass4clj once
 - lein cljsbuild once prod prod-site
 - lein uberjar
 sudo: false

@@ -72,11 +72,11 @@
   :plugins [[lein-ancient "0.6.10"]
             [lein-cljsbuild "1.1.5"]
             [lein-kibit "0.1.3"]
-            [lein-sassy "1.0.8"]]
-  :sass {:src    "src-css/scss"
-         :dst    "resources/public/css/"
-         :syntax :scss
-         :style  :compressed}
+            [deraen/sass4clj "0.3.1"]
+            [deraen/lein-sass4clj "0.3.1"]]
+  :sass {:source-paths ["src-css/scss"]
+         :target-path  "resources/public/css"
+         :output-style :compressed}
   :cljsbuild {:builds [
                        ;; editor
                        {:id           "dev"
