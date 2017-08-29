@@ -1,0 +1,98 @@
+/* repo page */
+.branches {
+  padding: 20px;
+}
+
+#prev-next-buttons {
+  margin-bottom: 20px;
+}
+#prev-next-buttons a {
+  margin: 2px;
+}
+
+.content-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.samples-container {
+  padding-bottom: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.sample-box {
+  border: 1px solid #DDDDDD;
+  border-radius: 0;
+  padding: 15px;
+  margin-top: 25px;
+  background-color: white;
+  .name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 270px;
+  }
+  .description {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 270px;
+  }
+  .sample-info {
+    .sample-info-likes {
+      float: right;
+      padding-left: 10px;
+      background-color: white;
+      .views-count {
+        padding: 0 4px;
+      }
+      .sample-icon {
+        padding-right: 8px;
+      }
+    }
+    p:last-of-type {
+      margin: 0px;
+    }
+  }
+}
+
+
+.iframe-preview {
+  width: 100%;
+  height: 100%;
+  border: none;
+  position: absolute;
+}
+
+.image-preview {
+  width: 100%;
+  height: 100%;
+  border: none;
+  position: absolute;
+  object-fit: contain;
+  object-position: center;
+}
+
+.iframe-height-child {
+  border: 1px solid #999999;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+.iframe-height-scaling {
+  width: 100%;
+  display: inline-block;
+  position: relative;
+  :after {
+    padding-top: 56.25%;
+    /* 16:9 ratio */
+    display: block;
+    content: '';
+  }
+}
+

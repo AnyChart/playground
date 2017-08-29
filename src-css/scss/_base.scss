@@ -1,0 +1,54 @@
+html {
+  /* for footer */
+  height: 100%;
+  body {
+    height: 100%;
+    .wrapper {
+      display: table;
+      height: 100%;
+      width: 100%;
+
+      /* navbar */
+      nav {
+        margin: 0 !important;
+        .navbar-brand {
+          padding: 10px;
+          img {
+            margin-right: 5px;
+          }
+        }
+      }
+
+      .content {
+        display: table-row;
+        /* height is dynamic, and will expand... */
+        height: 100%;
+        /* ...as content is added (won't scroll) */
+        .jumbotron button {
+          margin: 5px;
+        }
+      }
+
+      footer {
+        color: #555555;
+        bottom: 0;
+        width: 100%;
+        background-color: #f2f2f2;
+        display: table-row;
+        p {
+          margin: 10px 0;
+        }
+        .container {
+          margin-top: 20px;
+        }
+        .dataset{
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+      }
+
+    }
+  }
+}
+

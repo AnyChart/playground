@@ -77,6 +77,7 @@
   :sass {:source-paths ["src-css/scss"]
          :target-path  "resources/public/css"
          :output-style :compressed}
+  :profiles {:local {:jvm-opts ["-Dlocal=true"]}}
   :cljsbuild {:builds [
                        ;; editor
                        {:id           "dev"

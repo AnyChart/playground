@@ -1,7 +1,10 @@
 (ns playground.views.common
   (:require [clj-time.core :as t]
             [playground.web.auth-base :as auth-base]
-            [playground.utils.utils :as utils]))
+            [playground.utils.utils :as utils]
+            [clojure.java.io :as io]))
+
+(def main-style (slurp (io/resource "public/css/main.css")))
 
 (defn head []
   [:head
@@ -16,7 +19,9 @@
    [:script {:src "https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"}]
    "<!-- Latest compiled and minified JavaScript -->"
    [:script {:src "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"}]
-   [:link {:href "/css/main.css" :rel "stylesheet"}]])
+   (if (System/getProperty "local")
+     [:link {:href "/css/main.css" :rel "stylesheet"}]
+     [:style main-style])])
 
 (defn nav-sample-menu-item [sample]
   [:li {:class "dropdown"}

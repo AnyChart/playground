@@ -1,0 +1,33 @@
+/*chart types page*/
+.chart-types-page {
+  a.chart {
+    display: block;
+    border: 1px solid #DDDDDD;
+    padding: 10px;
+  }
+  .chart {
+    cursor: pointer;
+    margin-bottom: 20px;
+    .chart-img {
+      display: block;
+      margin: 0 -20px 15px -20px;
+      height: 150px;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      & > img {
+        display: inline-block;
+        vertical-align: bottom;
+        height: 100%;
+        width: auto;
+        max-width: 100%;
+      }
+    }
+    .chart-content {
+      display: block;
+      font-size: 13px;
+      line-height: 1.3333333;
+    }
+  }
+}
+
