@@ -71,7 +71,12 @@
                  [venantius/accountant "0.2.0"]]
   :plugins [[lein-ancient "0.6.10"]
             [lein-cljsbuild "1.1.5"]
-            [lein-kibit "0.1.3"]]
+            [lein-kibit "0.1.3"]
+            [lein-sassy "1.0.8"]]
+  :sass {:src    "src-css/scss"
+         :dst    "resources/public/css/"
+         :syntax :scss
+         :style  :compressed}
   :cljsbuild {:builds [
                        ;; editor
                        {:id           "dev"

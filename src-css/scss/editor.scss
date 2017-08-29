@@ -1,0 +1,281 @@
+html{
+  /* for footer */
+  /*position: relative;*/
+  height: 100%;
+}
+
+body{
+  /* Margin bottom by footer height */
+  padding-bottom: 50px;
+  /*height:100%;*/
+  /* for tips hidden scroll */
+  overflow: hidden;
+}
+
+.navbar-brand{
+  padding: 10px;
+}
+.navbar-brand img{
+  margin-right: 5px;
+}
+
+footer{
+  color: #555555;
+  /*border-top: 1px solid #F0F0F0;*/
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  background-color: #f2f2f2;
+}
+
+nav{
+  margin: 0 !important;
+}
+
+/*================ editor page ===================== */
+#main-container{
+
+}
+
+#main {
+  position:absolute; top: 100px; left:0px; right:0px; bottom:100px;
+  border: solid 1px yellow;
+}
+
+.editors{
+  width: 100%;
+}
+
+.column-container{
+  display: flex;
+  flex-direction: row;
+}
+
+.cont1{
+  display: flex;
+  flex-direction: row;
+  margin: 0! important;
+}
+
+#markup-editor, #code-editor, #style-editor{
+
+}
+.editor-container{
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.editor-box{
+  width: 100%;
+  height: 100%;
+  border: solid 1px #DDDDDD;
+}
+
+.CodeMirror {
+  /* Set height, width, borders, and global font properties here */
+  font-family: monospace;
+  height: 100%;
+  font-size: 12px;
+  word-wrap: break-word;
+}
+
+/*=================== Copy and other editors buttons ==================*/
+.editor-label{
+  /*border: 1px solid rgba(255,255,255,0);*/
+  background: rgba(255,255,255,.8);
+  position: absolute;
+  top: 7px;
+  z-index: 100;
+  font-size: 12px;
+  letter-spacing: 1.2px;
+  color: #999999;
+  display: inline-block;
+  cursor: pointer;
+  text-transform: uppercase;
+  user-select: none;
+}
+.editor-label-gear{
+  right: 64px;
+}
+.editor-label-copy{
+  right: 7px;
+}
+.editor-box-embed{
+  height: 126px;
+  width: 350px;
+}
+
+/*=================== Iframe result ==================*/
+.result{
+  width: 100%;
+  height: 100%;
+  border: solid 1px #DDDDDD;
+}
+.iframe-result{
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/*=================== Code context menu ==================*/
+.code-context-menu{
+  background-color: white;
+  /*border: 1px solid #AAAAAA;*/
+  padding: 15px;
+  position: absolute;
+  top: 40px;
+  right: 20px;
+  z-index: 101;
+  box-shadow: 0 0 5px rgba(57,70,78,.15), 0 20px 55px -8px rgba(57,70,78,.25);
+}
+.code-context-menu-close-icon{
+  cursor: pointer;
+}
+
+/*=================== Settings window ==================*/
+.settings-tabs{
+  margin-bottom: 7px;
+}
+
+.settings-window{
+  display: inline-block;
+  position: fixed;
+  text-align: center;
+  vertical-align: middle;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height:100%;
+  z-index: 1000;
+}
+.settings-window-background{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height:100%;
+  background-color: black;
+  opacity: 0.5;
+  z-index: -100;
+}
+/* The ghost, nudged to maintain perfect centering */
+.settings-window:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -0.25em; /* Adjusts for spacing */
+}
+.settings-window-container {
+  /*border: 2px solid #888888;*/
+  text-align: left;
+  display: inline-block;
+  vertical-align: middle;
+  background-color: white;
+  position: relative;
+  width: 650px;
+  padding: 20px;
+}
+.settings-window-container .form-inline .form-group{
+  margin-right: 20px;
+}
+.settings-window-container .form-inline .form-group label{
+  margin-right: 5px;
+}
+.settings-resource{
+  display: flex;
+  margin: 0 0 5px;
+}
+.settings-resource .title{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+.settings-window-container select{
+  margin-right: 10px;
+  width: 530px;
+}
+
+/*=================== Embed window ==================*/
+textarea.embed-iframe{
+  min-height: 110px;
+  margin-bottom: 5px;
+}
+
+
+/*=================== Datasets ==================*/
+.datasets{
+  max-height: 550px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.data-sets-item{
+  margin-bottom: 5px;
+}
+.data-sets-item p {
+  margin-bottom: 5px;
+}
+.data-sets-item h5 {
+  margin: 5px 0;
+}
+.data-sets-item .data-sets-item-icon {
+  text-align: right;
+}
+.data-sets-item .col-md-7 {
+  padding: 0;
+}
+.settings-window .data-sets-item img{
+  max-width: 80px;
+  max-height: 50px;
+}
+.data-sets-item .tag {
+  margin-left: 1px;
+  font-size: 59%;
+}
+.data-sets-item .usage-sample-button {
+  display:block;
+  margin-bottom:6px;
+}
+
+
+/*=================== tip ==================*/
+.tips{
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+}
+.tips .tip{
+    background-color: white;
+    padding: 10px 15px;
+    border: 1px solid #AAAAAA;
+    margin-right: 8px;
+    margin-top: 8px;
+    /*display: inline-block;*/
+    position: relative;
+}
+.tips .tip pre {
+    max-width: 400px;
+    max-height: 93px;
+}
+.tip p {
+    max-width: 400px;
+}
+.tip h3{
+    max-width: 400px;
+}
+.tips .tip .tip-close{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+}
+.tip h3{
+    margin-top: 10px;
+}
