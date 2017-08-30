@@ -12,9 +12,24 @@
 
       (page/nav (:templates data) (:user data))
 
+      [:div.intro
+       [:div.container-fluid.content-container
+        [:div.row
+         [:div.col-sm-12
+          (page/jumbotron (:templates data))]]]]
+
+      [:div.create-box
+       [:div.container-fluid.content-container
+        [:div.row
+         [:div.col-sm-12
+          (page/create-box (:templates data))]]]
+       ]
+
       [:div.content
-       [:div.container-fluid
-        (page/jumbotron (:templates data))
+       [:div.container-fluid.content-container
+        ;[:div.row
+        ; [:div.col-sm-12
+        ;  (page/jumbotron (:templates data))]]
 
         [:div#samples-container.row.samples-container
          (for [sample (:samples data)]

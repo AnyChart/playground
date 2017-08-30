@@ -12,7 +12,7 @@
       (page/nav (:templates data) (:user data))
 
       [:div.content
-       [:div.container-fluid
+       [:div.container-fluid.content-container
 
         [:form {:action "/signin" :method "POST"}
          [:div.form-group

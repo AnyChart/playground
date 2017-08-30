@@ -23,7 +23,7 @@
       (page/nav (:templates data) (:user data))
 
       [:div.content
-       [:div.container
+       [:div.container-fluid.content-container
 
         [:div.content-wrapper
          [:div.row.flex-content

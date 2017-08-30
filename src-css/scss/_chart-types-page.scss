@@ -8,6 +8,13 @@
   .chart {
     cursor: pointer;
     margin-bottom: 20px;
+    background-color: white;
+    span{
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      display: block;
+    }
     .chart-img {
       display: block;
       margin: 0 -20px 15px -20px;

@@ -12,7 +12,7 @@
       (page/nav (:templates data) (:user data))
 
       [:div.content
-       [:div.container
+       [:div.container-fluid.content-container
         [:h1.page-caption "Pricing - Enterprice"]
         [:p.page-caption-desc "Тут будет информация об использовании плейграунда в качесвте коробки.
         У гитхаба это выглядит вот так: https://enterprise.github.com/home"]]]

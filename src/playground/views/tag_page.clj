@@ -13,7 +13,7 @@
       (page/nav (:templates data) (:user data))
 
       [:div.content
-       [:div.container-fluid
+       [:div.container-fluid.content-container
 
         [:div#samples-container.row.samples-container
          (for [sample (:samples data)]

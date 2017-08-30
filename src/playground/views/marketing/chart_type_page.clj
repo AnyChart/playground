@@ -17,11 +17,11 @@
       (page/nav (:templates data) (:user data))
 
       [:div.content
-       [:div.container
-        [:row
+       [:div.container-fluid.content-container
+        [:div.row
          [:div.col-md-12
           [:h1.page-caption (:name chart-type)]]]
-        [:row.chart-type-page
+        [:div.row.chart-type-page
 
          [:div.col-md-6
           [:h3 "Description"]

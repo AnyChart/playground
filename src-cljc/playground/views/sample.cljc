@@ -26,7 +26,7 @@
 (defn sample-landing [sample]
   [:div.col-lg-4.col-md-4.col-sm-6.col-xs-12
    [:div.sample-box
-    [:div.iframe-height-scaling {:style (when (s/blank? (:short-description sample)) "padding-bottom: 30px;")}
+    [:div.iframe-height-scaling {:style (when (s/blank? (:short-description sample)) "padding-bottom: 28px;")}
      (if (:preview sample)
        [:a {:target "_blank" :href (utils/url sample)}
         [:img.image-preview {:src   (str (:full-url sample) "?view=preview")

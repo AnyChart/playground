@@ -56,16 +56,17 @@
       (page/nav (:templates data) (:user data))
 
       [:div.content
-       [:div.container
+       [:div.container-fluid.content-container
         [:h1.page-caption "Chart Types"]
         [:p.page-caption-desc "It is an information resource that allows you to discover as many details about any type of chart supported in our JavaScript (HTML5) charting libraries as you need to make good use of it at ease and with full understanding. Now, to get started, click on a chart category that you would like to explore."]
 
-        (for [chart chart-types]
-          [:div.col-lg-3.col-md-4.col-sm-6.chart-types-page.text-center
-           [:a.chart {:href (str "/chart-types/" (:id chart))}
-            [:span.chart-img
-             [:img {:src (:img chart)}]]
-            [:span (:name chart)]]])
+        [:div.row
+         (for [chart chart-types]
+           [:div.col-lg-3.col-md-4.col-sm-6.chart-types-page.text-center
+            [:a.chart {:href (str "/chart-types/" (:id chart))}
+             [:span.chart-img
+              [:img {:src (:img chart)}]]
+             [:span (:name chart)]]])]
 
         ]]
 

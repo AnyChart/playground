@@ -4,7 +4,9 @@
             [playground.utils.utils :as utils]
             [clojure.java.io :as io]))
 
+
 (def main-style (slurp (io/resource "public/css/main.css")))
+
 
 (defn head []
   [:head
@@ -13,8 +15,34 @@
    [:meta {:content "width=device-width, initial-scale=1" :name "viewport"}]
    [:title "AnyChart Playground"]
    "<!--[if lt IE 9]><script src=\"https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js\"></script><script src=\"https://oss.maxcdn.com/respond/1.4.2/respond.min.js\"></script><![endif]-->"
+
+   [:link {:href  "/apple-touch-icon.png"
+           :sizes "180x180"
+           :rel   "apple-touch-icon"}]
+   [:link {:href  "/favicon-32x32.png"
+           :sizes "32x32"
+           :type  "image/png"
+           :rel   "icon"}]
+   [:link {:href  "/favicon-16x16.png"
+           :sizes "16x16"
+           :type  "image/png"
+           :rel   "icon"}]
+   [:link {:href "/manifest.json"
+           :rel "manifest"}]
+   [:link {:color "#2c4b76"
+           :href  "/safari-pinned-tab.svg"
+           :rel   "mask-icon"}]
+   [:meta {:content "playground.anychart.com"
+           :name    "apple-mobile-web-app-title"}]
+   [:meta {:content "playground.anychart.com"
+           :name "application-name"}]
+   [:meta {:content "#2c4b76"
+           :name "theme-color"}]
+
    "<!-- Latest compiled and minified CSS and Optional theme-->"
    [:link {:href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" :rel "stylesheet"}]
+   ;<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&amp;subset=greek" rel="stylesheet">
+   [:link {:href "https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&amp;subset=greek" :rel "stylesheet"}]
    ;[:link {:href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" :rel "stylesheet"}]
    [:script {:src "https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"}]
    "<!-- Latest compiled and minified JavaScript -->"
@@ -22,6 +50,7 @@
    (if (System/getProperty "local")
      [:link {:href "/css/main.css" :rel "stylesheet"}]
      [:style main-style])])
+
 
 (defn nav-sample-menu-item [sample]
   [:li {:class "dropdown"}
@@ -37,96 +66,190 @@
     [:li [:a {:href (str (utils/sample-url sample) "?view=standalone")} "Standalone"]]
     [:li [:a {:href (str (utils/sample-url sample) "?view=iframe")} "Iframe"]]]])
 
-(defn nav [templates user & [sample]]
+
+(defn nav-old [templates user & [sample]]
   [:nav.navbar.navbar-default
-   [:div.container-fluid
+   [:div.container-fluid.content-container
 
-    [:div.navbar-header
-     [:button.navbar-toggle.collapsed {:aria-controls "navbar"
-                                       :aria-expanded "false"
-                                       :data-target   "#navbar"
-                                       :data-toggle   "collapse"
-                                       :type          "button"}
-      [:span.sr-only "Toggle navigation"]
-      [:span.icon-bar]
-      [:span.icon-bar]
-      [:span.icon-bar]]
-     [:a.navbar-brand
-      {:href "/"}
-      [:img {:alt    "AnyChart"
-             :height "30"
-             :width  "30"
-             :style  "display:inline-block"
-             :src    "/icons/anychart.png"}] "AnyChart Playground "]]
+    [:row.content-container
+     [:div.navbar-header
+      [:button.navbar-toggle.collapsed {:aria-controls "navbar"
+                                        :aria-expanded "false"
+                                        :data-target   "#navbar"
+                                        :data-toggle   "collapse"
+                                        :type          "button"}
+       [:span.sr-only "Toggle navigation"]
+       [:span.icon-bar]
+       [:span.icon-bar]
+       [:span.icon-bar]]
+      [:a.navbar-brand
+       {:href "/"}
+       [:img {:alt    "AnyChart"
+              :height "26"
+              :width  "26"
+              :style  "display:inline-block"
+              :src    "/logo400x400.png"}]
+       "AnyChart "
+       [:b "Playground"]]]
 
-    ;; left navbar
-    [:div#navbar.navbar-collapse.collapse
-     [:ul.nav.navbar-nav
+     ;; left navbar
+     [:div#navbar.navbar-collapse.collapse
+      [:ul.nav.navbar-nav
 
-      [:li [:a {:href "/chart-types"} "Chart Types"]]
-      [:li [:a {:href "/tags"} "Tags"]]
-      [:li [:a {:href "/datasets"} "Data Sets"]]
+       [:li [:a {:href "/chart-types"} "Chart Types"]]
+       [:li [:a {:href "/tags"} "Tags"]]
+       [:li [:a {:href "/datasets"} "Data Sets"]]
 
-      [:li {:class "dropdown"}
-       [:a {:href          "#"
-            :class         "dropdown-toggle"
-            :data-toggle   "dropdown"
-            :role          "button"
-            :aria-haspopup "true"
-            :aria-expanded "false"} "Support"
-        [:span {:class "caret"}]]
+       [:li {:class "dropdown"}
+        [:a {:href          "#"
+             :class         "dropdown-toggle"
+             :data-toggle   "dropdown"
+             :role          "button"
+             :aria-haspopup "true"
+             :aria-expanded "false"} "Support"
+         [:span {:class "caret"}]]
 
-       [:ul {:class "dropdown-menu"}
-        [:li [:a {:href "/support"} "Support"]]
-        [:li [:a {:href "/roadmap"} "Roadmap"]]
-        [:li [:a {:href "/version-history"} "Version History"]]]]
-      [:li [:a {:href "/pricing"} "Pricing"]]
-      [:li [:a {:href "/about"} "About"]]
+        [:ul {:class "dropdown-menu"}
+         [:li [:a {:href "/support"} "Support"]]
+         [:li [:a {:href "/roadmap"} "Roadmap"]]
+         [:li [:a {:href "/version-history"} "Version History"]]]]
+       [:li [:a {:href "/pricing"} "Pricing"]]
+       [:li [:a {:href "/about"} "About"]]
 
-      (when sample
-        (nav-sample-menu-item sample))]
+       (when sample
+         (nav-sample-menu-item sample))]
 
-     ;; right navbar
-     [:ul.nav.navbar-nav.navbar-right
+      ;; right navbar
+      [:ul.nav.navbar-nav.navbar-right
 
-      [:li.dropdown
-       [:a.dropdown-toggle {:aria-expanded "false"
-                            :aria-haspopup "true"
-                            :role          "button"
-                            :data-toggle   "dropdown"
-                            :href          "#"} "Create"
-        [:span.caret]]
-       [:ul.dropdown-menu
-        (for [template templates]
-          [:li [:a {:href (str "/new?template=" (:url template))} (:name template)]])
-        [:li.divider {:role "separator"}]
-        [:li [:a {:href "/new"} "From scratch"]]]]
-      (if (auth-base/can user :signin)
-        [:li [:a {:href "/signin"} "Log In"]]
-        [:li [:a {:href "/signout"} "Log Out"]])
-      (when (auth-base/can user :signup)
-        [:li [:a {:href "/signup"} "Sign Up"]])
+       [:li.dropdown
+        [:a.dropdown-toggle {:aria-expanded "false"
+                             :aria-haspopup "true"
+                             :role          "button"
+                             :data-toggle   "dropdown"
+                             :href          "#"} "Create"
+         [:span.caret]]
+        [:ul.dropdown-menu
+         (for [template templates]
+           [:li [:a {:href (str "/new?template=" (:url template))} (:name template)]])
+         [:li.divider {:role "separator"}]
+         [:li [:a {:href "/new"} "From scratch"]]]]
 
-      ]]]])
+       ;(if (auth-base/can user :signin)
+       ;  [:li [:a {:href "/signin"} "Log In"]]
+       ;  [:li [:a {:href "/signout"} "Log Out"]])
+       ;(when (auth-base/can user :signup)
+       ;  [:li [:a {:href "/signup"} "Sign Up"]])
+
+       ]]]]])
+
+
+
+
+(defn nav [templates user & [sample]]
+  [:header
+   [:div.container-fluid.content-container.header
+    [:div.row
+     [:div.col-sm-12
+      [:div.navbar-header
+       [:button.navbar-toggle.collapsed {:aria-controls "navbar"
+                                         :aria-expanded "false"
+                                         :data-target   "#navbar"
+                                         :data-toggle   "collapse"
+                                         :type          "button"}
+        [:span.sr-only "Toggle navigation"]
+        [:span.icon-bar]
+        [:span.icon-bar]
+        [:span.icon-bar]]
+       [:a.navbar-brand
+        {:href "/"}
+        [:img {:alt    "AnyChart"
+               :height "26"
+               :width  "26"
+               :style  "display:inline-block"
+               :src    "/logo400x400.png"}]
+        "AnyChart "
+        [:b "Playground"]]]
+
+      ;; left navbar
+      [:div#navbar.navbar-collapse.collapse
+       [:ul.nav.navbar-nav
+
+        [:li [:a {:href "/chart-types"} "Chart Types"]]
+        [:li [:a {:href "/tags"} "Tags"]]
+        [:li [:a {:href "/datasets"} "Data Sets"]]
+
+        [:li {:class "dropdown"}
+         [:a {:href          "#"
+              :class         "dropdown-toggle"
+              :data-toggle   "dropdown"
+              :role          "button"
+              :aria-haspopup "true"
+              :aria-expanded "false"} "Support"
+          [:span {:class "caret"}]]
+
+         [:ul {:class "dropdown-menu"}
+          [:li [:a {:href "/support"} "Support"]]
+          [:li [:a {:href "/roadmap"} "Roadmap"]]
+          [:li [:a {:href "/version-history"} "Version History"]]]]
+        [:li [:a {:href "/pricing"} "Pricing"]]
+        [:li [:a {:href "/about"} "About"]]
+
+        (when sample
+          (nav-sample-menu-item sample))]
+
+       ;; right navbar
+       [:ul.nav.navbar-nav.navbar-right
+
+        [:li.dropdown
+         [:a.dropdown-toggle {:aria-expanded "false"
+                              :aria-haspopup "true"
+                              :role          "button"
+                              :data-toggle   "dropdown"
+                              :href          "#"} "Create"
+          [:span.caret]]
+         [:ul.dropdown-menu
+          (for [template templates]
+            [:li [:a {:href (str "/new?template=" (:url template))} (:name template)]])
+          [:li.divider {:role "separator"}]
+          [:li [:a {:href "/new"} "From scratch"]]]]
+        ]]]]]])
+
+
+
+
 
 
 (defn jumbotron [templates]
-  [:div.content-container.row
-   [:div.col-lg-12.col-md-12
-    [:div.jumbotron {:style "margin-top: 20px;"}
-     [:h1 "AnyChart Playground "]
-     [:p "AnyChart Playground is a place where all your data visualization dreams come true"]
-     [:p
-      (for [template templates]
-        [:button.btn.btn-primary.btn-lg
-         {:role    "button"
-          :onclick (str "location.href='/new?template=" (:url template) "';")}
-         (str "Create " (:name template))])]]]])
+  [:div
+   [:div.text
+    [:h1 "AnyChart "
+     [:b "Playground"]]
+    [:p.description "is a place where all your data visualization dreams come true"]    ]
+  ])
+
+(defn create-box [templates]
+  [:div.create-buttons
+   (for [template templates]
+     [:a.create-button
+      {:onclick (str "location.href='/new?template=" (:url template) "';")}
+      [:img {:src (str "icons/" (utils/name->url (:name template)) ".svg")}]
+      [:div.text
+       [:div.create "create"]
+       [:div.name [:b (:name template)]]]]
+
+     ;[:button.btn.btn-primary.btn-lg
+     ; {:role    "button"
+     ;  :onclick (str "location.href='/new?template=" (:url template) "';")}
+     ; (str "Create " (:name template))]
+
+     )]
+  )
 
 
 (defn footer [repos tags data-sets]
   [:footer.footer
-   [:div.container
+   [:div.container-fluid.content-container
     [:div.row
 
      [:div.col-sm-2.col-xs-4
@@ -161,18 +284,18 @@
       (for [tag tags]
         [:div [:a {:href (str "/tags/" (:name tag))} (:name tag)]])]
 
-     [:div.col-sm-2.col-xs-4
+     [:div.col-sm-4.col-xs-8
       [:div [:b "Data Sets"]]
       (for [data-set data-sets]
         [:div.dataset [:a {:href  (str "/datasets/" (:data-source-name data-set) "/" (:name data-set))
                            :title (:title data-set)}
                        (:title data-set)]])]
 
-     [:div.col-sm-2.col-xs-4
-      [:div [:b "Social"]]
-      [:div [:a {:href "https://www.facebook.com/AnyCharts"} "Facebook"]]
-      [:div [:a {:href "https://twitter.com/AnyChart"} "Twitter"]]
-      [:div [:a {:href "https://www.linkedin.com/company/386660"} "Linked In"]]]
+     ;[:div.col-sm-2.col-xs-4
+     ; [:div [:b "Social"]]
+     ; [:div [:a {:href "https://www.facebook.com/AnyCharts"} "Facebook"]]
+     ; [:div [:a {:href "https://twitter.com/AnyChart"} "Twitter"]]
+     ; [:div [:a {:href "https://www.linkedin.com/company/386660"} "Linked In"]]]
 
      ]
     [:p.text-muted (str "&copy; " (t/year (t/now)) " AnyChart.com All rights reserved.")]

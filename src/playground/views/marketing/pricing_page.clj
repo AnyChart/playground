@@ -12,7 +12,7 @@
       (page/nav (:templates data) (:user data))
 
       [:div.content
-       [:div.container
+       [:div.container-fluid.content-container
         [:h1.page-caption "Pricing"]
         [:p.page-caption-desc "Тут будет информация о персональных и командных тарифах (когда они появятся).
         А так же краткая иформация о коробочном использовании, которая будет вести на /pricing/enterprise"]]]

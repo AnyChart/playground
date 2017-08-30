@@ -1,8 +1,16 @@
 @import "ie";
 
+$nav-bg-color: #2c4b76;
+$main-bg-color: #e7edef;
+$footer-color: #ffffff;
+$text-color: #222222;
+$intro-color: #c3dfe8;
+
 @import "base";
 
 @import "samples-page";
+
+@import "repo-page";
 
 @import "standalone-iframe-page";
 

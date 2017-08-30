@@ -12,7 +12,7 @@
       (page/nav (:templates data) (:user data))
 
       [:div.content
-       [:div.container
+       [:div.container-fluid.content-container
         [:h1.page-caption "About"]
         [:h2 "Our Mission"]
 

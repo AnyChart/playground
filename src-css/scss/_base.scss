@@ -2,20 +2,134 @@ html {
   /* for footer */
   height: 100%;
   body {
+
     height: 100%;
+    background-color: $main-bg-color;
+    font-family: 'Open Sans', sans-serif;;
+    font-size: 13px;
+    color: $text-color;
+
     .wrapper {
       display: table;
       height: 100%;
       width: 100%;
 
       /* navbar */
-      nav {
-        margin: 0 !important;
-        .navbar-brand {
-          padding: 10px;
-          img {
-            margin-right: 5px;
+      header {
+        color: white;
+        height: 58px;
+        //margin: 0 !important;
+        background-color: $nav-bg-color;
+        .navbar-header{
+          padding: 5px 25px 0 0;
+          .navbar-brand {
+            color: white;
+            font-size: 17px;
+            padding: 10px 0;
+            img {
+              margin-right: 22px;
+            }
+            &:hover{
+              color: white;
+            }
           }
+        }
+        ul.nav.navbar-nav > li > a {
+          color: white;
+        }
+      }
+
+      .intro{
+        background-color: $nav-bg-color;
+        color: $intro-color;
+        height: 219px; //315px;
+        .text{
+          padding: 0 40px;
+          .description{
+            font-size: 18px;
+          }
+        }
+        h1{
+          font-size: 50px;
+        }
+      }
+
+      .create-box{
+        position: relative;
+        &:before{
+          top: 0;
+          left: 0;
+          width: 50%;
+          display: block;
+          content: "";
+          height: 96px;
+          background-color: #264571;
+          position: absolute;
+        }
+        &:after{
+          top: 0;
+          right: 0;
+          width: 50%;
+          display: block;
+          content: "";
+          height: 96px;
+          background-color: #0d2e5c;
+          position: absolute;
+          z-index: 1;
+        }
+        .container-fluid{
+          position: relative;
+          z-index: 2;
+        }
+        .create-buttons{
+          z-index: 2;
+          display: flex;
+          a{
+            padding: 25px;
+          }
+          .create-button{
+            flex-grow: 1;
+            height: 96px;
+            display: flex;
+            position: relative;
+            background-color: #264571;
+            //width: 20%;
+            cursor: pointer;
+            font-size: 15px;
+            img{
+              margin: 0 10px 0 0;
+              //position: absolute;
+              //display: inline-block;
+            }
+            div.text{
+              //display: inline-block;
+              text-transform: uppercase;
+              color: white;
+              //padding: 0 0 0 40px;
+              .create{
+
+              }
+            }
+            &:nth-child(1){
+              background-color: #264571;
+            }
+            &:nth-child(2){
+              background-color: #203f6c;
+            }
+            &:nth-child(3){
+              background-color: #193a66;
+            }
+            &:nth-child(4){
+              background-color: #133461;
+            }
+            &:nth-child(5){
+              background-color: #0d2e5c;
+            }
+            &:hover{
+              background-color: #1978a4;
+            }
+          }
+
         }
       }
 
@@ -30,16 +144,29 @@ html {
       }
 
       footer {
+        font-size: 12px;
         color: #555555;
         bottom: 0;
         width: 100%;
-        background-color: #f2f2f2;
+        background-color: $footer-color;
         display: table-row;
-        p {
-          margin: 10px 0;
+        b {
+          color: #80a9bd;
+          line-height: 20px;
         }
-        .container {
-          margin-top: 20px;
+        a{
+          color: $text-color;
+          line-height: 20px;
+        }
+        p {
+          color: #80a9bd;
+          font-size: 11px;
+          margin: 70px 0 50px;
+          width: 100%;
+          text-align: center;
+        }
+        .content-container {
+          margin-top: 23px;
         }
         .dataset{
           overflow: hidden;

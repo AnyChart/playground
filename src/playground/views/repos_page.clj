@@ -4,7 +4,6 @@
 
 
 (defn page [data]
-  (prn "tagspage" data)
   (hiccup-page/html5
     {:lang "en"}
     (page/head)
@@ -14,7 +13,7 @@
       (page/nav (:templates data) (:user data))
 
       [:div.content
-       [:div.container-fluid
+       [:div.container-fluid.content-container
         [:div.branches
          [:ul
           (for [repo (remove :templates (:repos data))]

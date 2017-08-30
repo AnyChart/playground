@@ -12,10 +12,10 @@
       (page/nav (:templates data) (:user data))
 
       [:div.content
-       [:div.container
+       [:div.container-fluid.content-container
         [:h1.page-caption "Roadmap"]
         [:p.page-caption-desc "Тут бутет информация о грядущих обновлениях и возможность зареквестить фичу."]
-        [:div.row
+        [:div
          [:h3 "Version 0.1.0 - First release (beta)"]
          [:ul
           [:li "Прячем все что не работает"
@@ -27,14 +27,14 @@
           [:li "При помощи автоматической утилиты ENV-544, переделываем все примеры на новый формат"]
           [:li "Имплементим дизайн"]
           [:li "Итерация по SEO: мета теги, sitemap, альты, тайтлы, описания, итд (после дизайна)"]]]
-        [:div.row
+        [:div
          [:h3 "Version 1.0.0 - Stable release"]
          [:ul
           [:li "Фиксим баги если они есть"]
           [:li "Берем один - два итема из Features list"]]]
+        [:h3 "Drop list"]
+        [:p "Вещи которые есть на старом PG и их планируется дропнуть"]
         [:div.row
-         [:h3 "Drop list"]
-         [:p "Вещи которые есть на старом PG и их планируется дропнуть"]
          [:div.col-md-3
           [:h5 "Tag Manager (текущий конфиг)"]
           [:ul
@@ -53,8 +53,8 @@
           [:ul
            [:li "Список примеров и категорий"]
            [:li "Интеграция с jsfiddle"]]]]
+        [:h3 "Features list"]
         [:div.row
-         [:h3 "Features list"]
          [:div.col-md-3
           [:h5 "Embeding"]
           [:ul
