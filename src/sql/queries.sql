@@ -123,7 +123,7 @@ SELECT id, `name` FROM samples WHERE preview = false AND version_id IS NULL;
 SELECT id, `name` FROM samples WHERE preview = false AND version_id IS NOT NULL;
 
 -- name: sql-templates
-SELECT * FROM samples JOIN templates ON samples.id = templates.sample_id;
+SELECT * FROM samples JOIN templates ON samples.id = templates.sample_id ORDER BY samples.name;
 
 -- name: sql-templates-sample-ids
 SELECT sample_id FROM templates;
