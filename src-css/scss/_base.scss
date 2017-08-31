@@ -58,13 +58,23 @@ html {
           }
         }
         ul.nav.navbar-nav.navbar-right{
-          li a {
+          & > li > a{
+            font-size: 14px;
+          }
+          a {
             text-transform: uppercase;
-            img {
-              height: 22px;
-              width: 30px;
-              object-fit: contain;
-              margin: 0 15px 0 0;
+          }
+          ul {
+            padding: 13px 0;
+            li a {
+
+              padding: 3px 20px 3px 15px;
+              img {
+                height: 22px;
+                width: 30px;
+                object-fit: contain;
+                margin: 0 10px 0 0;
+              }
             }
           }
         }
