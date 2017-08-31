@@ -34,8 +34,39 @@ html {
             }
           }
         }
-        ul.nav.navbar-nav > li > a {
-          color: white;
+        ul.nav.navbar-nav {
+          margin-top: 11px;
+          ul{
+            padding: 15px 0;
+            a {
+              font-size: 13px;
+              font-weight: 600;
+              color: #19a1ce;
+              line-height: 30px;
+              &:hover{
+                background-color: #c2eaf7;
+              }
+            }
+          }
+          & > li > a {
+            color: white;
+            padding: 7px 12px;
+            background-color: rgba(0,0,0,0);
+            &:hover, &:active, &:focus{
+              background-color: #19a1ce;
+            }
+          }
+        }
+        ul.nav.navbar-nav.navbar-right{
+          li a {
+            text-transform: uppercase;
+            img {
+              height: 22px;
+              width: 30px;
+              object-fit: contain;
+              margin: 0 20px 0 0;
+            }
+          }
         }
       }
 

@@ -28,16 +28,16 @@
            :type  "image/png"
            :rel   "icon"}]
    [:link {:href "/manifest.json"
-           :rel "manifest"}]
+           :rel  "manifest"}]
    [:link {:color "#2c4b76"
            :href  "/safari-pinned-tab.svg"
            :rel   "mask-icon"}]
    [:meta {:content "playground.anychart.com"
            :name    "apple-mobile-web-app-title"}]
    [:meta {:content "playground.anychart.com"
-           :name "application-name"}]
+           :name    "application-name"}]
    [:meta {:content "#2c4b76"
-           :name "theme-color"}]
+           :name    "theme-color"}]
 
    "<!-- Latest compiled and minified CSS and Optional theme-->"
    [:link {:href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" :rel "stylesheet"}]
@@ -210,9 +210,15 @@
           [:span.caret]]
          [:ul.dropdown-menu
           (for [template templates]
-            [:li [:a {:href (str "/new?template=" (:url template))} (:name template)]])
+            [:li
+             [:a {:href (str "/new?template=" (:url template))}
+              [:img {:src (str "icons/" (utils/name->url (:name template)) ".svg")}]
+              (:name template)]])
           [:li.divider {:role "separator"}]
-          [:li [:a {:href "/new"} "From scratch"]]]]
+          [:li
+           [:a {:href "/new"}
+            [:img {:src (str "icons/from-scratch.svg")}]
+            "From scratch"]]]]
         ]]]]]])
 
 
@@ -225,8 +231,8 @@
    [:div.text
     [:h1 "AnyChart "
      [:b "Playground"]]
-    [:p.description "is a place where all your data visualization dreams come true"]    ]
-  ])
+    [:p.description "is a place where all your data visualization dreams come true"]]
+   ])
 
 (defn create-box [templates]
   [:div.create-buttons
