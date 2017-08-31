@@ -26,7 +26,9 @@
 (defn sample-landing [sample]
   [:div.col-lg-4.col-md-4.col-sm-6.col-xs-12
    [:div.sample-box
-    [:div.iframe-height-scaling {:style (when (s/blank? (:short-description sample)) "padding-bottom: 28px;")}
+    [:div.iframe-height-scaling
+     ;{:style (when (s/blank? (:short-description sample)) "padding-bottom: 46px; margin-bottom: 88px;")}
+     {:style "margin-bottom: 88px;"}
      (if (:preview sample)
        [:a {:target "_blank" :href (utils/url sample)}
         [:img.image-preview {:src   (str (:full-url sample) "?view=preview")
@@ -36,22 +38,23 @@
                                 :allowfullscreen   "true"
                                 :allowtransparency "true"
                                 :sandbox           "allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"}])]
-    [:p.name [:a {:target "_blank"
-                  :href   (utils/url sample)
-                  :title  (title sample)}
-              (if (s/blank? (:name sample)) "Noname sample" (:name sample))]]
-    (when (seq (:short-description sample))
-      [:p.text-muted.description
-       [:span (when (seq (:short-description sample)) {:title (:short-description sample)})
-        (if (s/blank? (:short-description sample)) "no description provided" (:short-description sample))]])
     [:div.sample-info
-     [:p.sample-info-likes
-      [:span {:title (str "Views: " (:views sample))}
-       [:span {:class "views-count"} (:views sample)]
-       [:span.glyphicon.glyphicon-eye-open.sample-icon {:aria-hidden "true"}]]
-      [:span {:title (str "Likes: " (:likes sample))}
-       [:span {:class "views-count"} (:likes sample)]
-       [:span.glyphicon.glyphicon-heart.sample-icon {:aria-hidden "true"}]]]
-     [:p "By "
-      [:span {:title (title sample)} (:fullname sample)] ", "
-      [:span {:title (full-date (:create-date sample))} (date (:create-date sample))]]]]])
+     [:p.name [:a {:target "_blank"
+                   :href   (utils/url sample)
+                   :title  (title sample)}
+               (if (s/blank? (:name sample)) "Noname sample" (:name sample))]]
+     (when (seq (:short-description sample))
+       [:p.text-muted.description
+        [:span (when (seq (:short-description sample)) {:title (:short-description sample)})
+         (if (s/blank? (:short-description sample)) "no description provided" (:short-description sample))]])
+     [:div.bottom-info
+      [:p.likes
+       [:span {:title (str "Views: " (:views sample))}
+        [:span {:class "views-count"} (:views sample)]
+        [:span.glyphicon.glyphicon-eye-open.sample-icon {:aria-hidden "true"}]]
+       [:span {:title (str "Likes: " (:likes sample))}
+        [:span {:class "views-count"} (:likes sample)]
+        [:span.glyphicon.glyphicon-heart.sample-icon {:aria-hidden "true"}]]]
+      [:p.author-and-date "By "
+       [:span {:title (title sample)} (:fullname sample)] ", "
+       [:span {:title (full-date (:create-date sample))} (date (:create-date sample))]]]]]])
