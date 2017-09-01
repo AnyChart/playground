@@ -47,6 +47,7 @@
 ;; Consts
 ;; =====================================================================================================================
 (def ^:const samples-per-page 12)
+(def ^:const samples-per-block 6)
 
 ;; =====================================================================================================================
 ;; Show samples
@@ -119,11 +120,11 @@
 (defn landing-page [request]
   ;(prn "landing: " (get-user request))
   (let [page (dec (try (-> request :params :page Integer/parseInt) (catch Exception _ 1)))
-        samples (db-req/top-samples (get-db request) {:count  (inc samples-per-page)
-                                                      :offset (* samples-per-page page)})]
+        samples (db-req/top-samples (get-db request) {:count  (inc samples-per-block)
+                                                      :offset (* samples-per-block page)})]
     (response (landing-view/page (merge (get-app-data request)
-                                        {:samples (take samples-per-page samples)
-                                         :end     (< (count samples) (inc samples-per-page))
+                                        {:samples (take samples-per-block samples)
+                                         :end     (< (count samples) (inc samples-per-block))
                                          :page    page})))))
 
 (defn repo-page [request]
@@ -231,10 +232,10 @@
 (defn top-landing-samples [request]
   (let [offset* (-> request :params :offset)
         offset (if (int? offset*) offset* (Integer/parseInt offset*))
-        samples (db-req/top-samples (get-db request) {:count  (inc samples-per-page)
+        samples (db-req/top-samples (get-db request) {:count  (inc samples-per-block)
                                                       :offset offset})
-        result {:samples (take samples-per-page samples)
-                :end     (< (count samples) (inc samples-per-page))}]
+        result {:samples (take samples-per-block samples)
+                :end     (< (count samples) (inc samples-per-block))}]
     (response result)))
 
 (defn top-version-samples [request]

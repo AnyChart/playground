@@ -14,19 +14,23 @@
 
       [:div.content
        [:div.container-fluid.content-container
-
-        [:div#samples-container.row.samples-container
+        [:p.popular-label "Tag " [:b "samples"]]
+        [:div#tag-samples.row.samples-container
          (for [sample (:samples data)]
            (sample-view/sample-landing sample))]
-        [:div#prev-next-buttons.row.text-center
-         [:a#prevButton.btn.btn-default {:style (str "display: " (if (zero? page) "none;" "inline-block;"))
-                                         :href  (str "/tags/" tag "?page=" page)
-                                         :title (str "Prev page, " page)} "Prev"]
-         [:a#nextButton.btn.btn-default {:style (str "display: " (if (:end data) "none;" "inline-block;"))
-                                         :href  (str "/tags/" tag "?page=" (-> page inc inc))
-                                         :title (str "Next page, " (-> page inc inc))} "Next"]]]]
+        [:div.prev-next-buttons
+         [:a#tag-samples-prev.prev-button.btn.btn-default {:style (str "display: " (if (zero? page) "none;" "inline-block;"))
+                                                           :href  (str "/tags/" tag "?page=" page)
+                                                           :title (str "Prev page, " page)}
+          [:span.glyphicon.glyphicon-arrow-left {:aria-hidden true}]
+          " Prev"]
+         [:a#tag-samples-next.next-button.btn.btn-default {:style (str "display: " (if (:end data) "none;" "inline-block;"))
+                                                          :href  (str "/tags/" tag "?page=" (-> page inc inc))
+                                                          :title (str "Next page, " (-> page inc inc))}
+          "Next "
+          [:span.glyphicon.glyphicon-arrow-right {:aria-hidden true}]]]]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
 
      [:script {:src "/js/site.js" :type "text/javascript"}]
-     [:script "playground.site.landing.start(" (:end data) ", " page ", null,'" tag "');"]]))
+     [:script "playground.site.landing.startTagPage(" (:end data) ", " page ", '" tag "');"]]))

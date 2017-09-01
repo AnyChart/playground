@@ -1,8 +1,18 @@
-#prev-next-buttons {
+.prev-next-buttons {
   margin-bottom: 20px;
-}
-#prev-next-buttons a {
-  margin: 2px;
+  .prev-button, .next-button{
+    background: none;
+    border: 1px solid #19a1ce;
+    color: #19a1ce;
+    font-size: 13px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    margin-right: 10px;
+    &:hover{
+      background-color: #19a1ce;
+      color: white;
+    }
+  }
 }
 
 .content-container {
@@ -10,17 +20,30 @@
   margin: 0 auto;
 }
 
-.samples-container {
-  padding-bottom: 20px;
+.popular-label{
+  color: #df4e69;
+  font-size: 15px;
+  text-transform: uppercase;
+  margin: 40px 0 10px;
 }
+
+.landing-page{
+  //padding-top: 35px;
+  .samples-container {
+    //padding-bottom: 20px;
+  }
+}
+
 
 .sample-box {
   border: 1px solid #DDDDDD;
   border-radius: 0;
   padding: 15px;
-  margin-top: 25px;
+  margin-bottom: 25px;
   background-color: white;
   min-height: 271px;
+  position: relative;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
   .sample-info{
     position: absolute;
     bottom: 6px;
