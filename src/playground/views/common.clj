@@ -41,6 +41,7 @@
 
    "<!-- Latest compiled and minified CSS and Optional theme-->"
    [:link {:href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" :rel "stylesheet"}]
+   [:link {:rel "stylesheet" :type "text/css" :href "https://cdn.anychart.com/fonts/2.7.2/anychart.css"}]
    ;<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&amp;subset=greek" rel="stylesheet">
    [:link {:href "https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&amp;subset=greek" :rel "stylesheet"}]
    ;[:link {:href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" :rel "stylesheet"}]
@@ -304,5 +305,15 @@
      ; [:div [:a {:href "https://www.linkedin.com/company/386660"} "Linked In"]]]
 
      ]
-    [:p.text-muted (str "&copy; " (t/year (t/now)) " AnyChart.com All rights reserved.")]
-    ]])
+    [:div.footer-bottom-box
+     [:div.footer-inner
+      [:a.soc-network
+       {:target "_blank" :rel "nofollow" :href "https://www.facebook.com/AnyCharts"}
+       [:span.soc-network-icon.fb [:i.sn-mini-icon.ac.ac-facebook]]]
+      [:a.soc-network
+       {:target "_blank" :rel "nofollow" :href "https://twitter.com/AnyChart"}
+       [:span.soc-network-icon.tw [:i.sn-mini-icon.ac.ac-twitter]]]
+      [:a.soc-network
+       {:target "_blank" :rel "nofollow" :href "https://www.linkedin.com/company/386660"}
+       [:span.soc-network-icon.in [:i.sn-mini-icon.ac.ac-linkedin]]]]
+     [:span.copyright (str "&copy; " (t/year (t/now)) " AnyChart.com All rights reserved.")]]]])

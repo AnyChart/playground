@@ -199,13 +199,6 @@ html {
           color: $text-color;
           line-height: 20px;
         }
-        p {
-          color: #80a9bd;
-          font-size: 11px;
-          margin: 70px 0 50px;
-          width: 100%;
-          text-align: center;
-        }
         .content-container {
           margin-top: 23px;
         }
@@ -214,8 +207,61 @@ html {
           white-space: nowrap;
           text-overflow: ellipsis;
         }
-      }
+        .footer-bottom-box{
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin: 70px 0 50px;
+          .copyright {
+            color: #80a9bd;
+            font-size: 11px;
+          }
+          .footer-inner {
+            display: inline-block;
+            margin: 0 15px 0 0;
+            a.soc-network {
+              display: inline-block;
+              &:hover, &:focus {
+                text-decoration: none;
+                color: #fff;
+                .soc-network-icon{
+                  border-color: #85caff;
+                  color: #85caff;
+                }
+              }
+              .soc-network-icon {
+                font-size: 14px;
+                display: inline-block;
+                margin-right: 7px;
+                vertical-align: middle;
+                width: 24px;
+                height: 24px;
+                line-height: 23px;
+                text-align: center;
+                border-radius: 50%;
+                color: #95bfd3;
+                //border: 1px solid #d5e3e8;
+                background-color: #d5e3e8;
+                &.tw{
+                  font-size: 17px;
+                  line-height: 26px;
+                }
+                &.in {
+                  font-size: 13px;
+                }
+                &:hover, &:focus{
+                  color: white;
+                  background-color: #19a1ce;
+                }
+              }
+            }
 
+          }
+        }
+
+
+
+      }
     }
   }
 }
