@@ -100,7 +100,7 @@
   (dom/removeChildren (dom/getElement "popular-tags"))
   (set! (.-innerHTML (.getElementById js/document "popular-tags"))
         (apply str (map #(-> % sample-view/sample-landing h/html) (:samples data))))
-  (reset! *popular-samples-is-end (:end data))
+  (reset! *landing-tag-samples-is-end (:end data))
   (.pushState (.-history js/window) nil nil (str "?samples=" (inc @*popular-samples-page)
                                                  "&tags=" (inc @*landing-tag-samples-page)))
   (set-buttons-visibility "popular-tags-prev"
