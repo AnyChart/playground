@@ -84,6 +84,9 @@ html {
         background-color: $nav-bg-color;
         color: $intro-color;
         height: 219px; //315px;
+        background-image: url('/shapes.png');
+        //background-repeat: no-repeat;
+        background-position: center;
         .text{
           padding: 0 40px;
           .description{
