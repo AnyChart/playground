@@ -184,3 +184,14 @@
 (defsql delete-samples-by-repo-name!)
 (defsql delete-versions-by-repo-name!)
 (defsql delete-repo-by-name!)
+
+;; landing
+(defn top-tags-samples-transformer [res]
+  (doall (distinct (map #(dissoc % :tag-count) res))))
+
+(defsql top-tags-samples {:result-set-fn top-tags-samples-transformer
+                          :row-fn parse-sample})
+
+(defn get-top-tags-samples [db {:keys [offset count]}]
+  (let [samples (top-tags-samples db)]
+    (take count (drop offset samples))))

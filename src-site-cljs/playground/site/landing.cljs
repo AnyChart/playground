@@ -59,7 +59,8 @@
   (set! (.-innerHTML (.getElementById js/document "popular-samples"))
         (apply str (map #(-> % sample-view/sample-landing h/html) (:samples data))))
   (reset! *popular-samples-is-end (:end data))
-  (.pushState (.-history js/window) nil nil (str "?page=" (inc @*popular-samples-page)))
+  (.pushState (.-history js/window) nil nil (str "?samples=" (inc @*popular-samples-page)
+                                                 "&tags=" (inc @*landing-tag-samples-page)))
   (set-buttons-visibility "popular-samples-prev"
                           "popular-samples-next"
                           @*popular-samples-page
@@ -87,6 +88,49 @@
                           @*popular-samples-page
                           @*popular-samples-is-end
                           "samples"))
+
+;;======================================================================================================================
+;; Landing page: tag block
+;;======================================================================================================================
+(def *landing-tag-samples-page (atom 0))
+(def *landing-tag-samples-is-end (atom false))
+
+
+(defn on-landing-tag-samples-load [data]
+  (dom/removeChildren (dom/getElement "popular-tags"))
+  (set! (.-innerHTML (.getElementById js/document "popular-tags"))
+        (apply str (map #(-> % sample-view/sample-landing h/html) (:samples data))))
+  (reset! *popular-samples-is-end (:end data))
+  (.pushState (.-history js/window) nil nil (str "?samples=" (inc @*popular-samples-page)
+                                                 "&tags=" (inc @*landing-tag-samples-page)))
+  (set-buttons-visibility "popular-tags-prev"
+                          "popular-tags-next"
+                          @*landing-tag-samples-page
+                          @*landing-tag-samples-is-end
+                          "tags"))
+
+
+(defn load-landing-tag-samples []
+  (POST "/landing-tag-samples.json"
+        {:params        {:offset (* samples-per-block @*landing-tag-samples-page)}
+         :handler       on-landing-tag-samples-load
+         :error-handler #(utils/log "Error!" %)}))
+
+
+(defn ^:export startLandingTag [_end _page]
+  (utils/log "Start landing: " _end _page)
+  (reset! *landing-tag-samples-is-end _end)
+  (reset! *landing-tag-samples-page _page)
+  (init-buttons "popular-tags-prev"
+                "popular-tags-next"
+                *landing-tag-samples-page
+                load-landing-tag-samples)
+  (set-buttons-visibility "popular-tags-prev"
+                          "popular-tags-next"
+                          @*landing-tag-samples-page
+                          @*landing-tag-samples-is-end
+                          "tags"))
+
 
 ;;======================================================================================================================
 ;; Version page
