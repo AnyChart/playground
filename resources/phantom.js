@@ -58,13 +58,12 @@ if (system.args.length != 4) {
 		    function(){
 		        console.log('timeout');
 		        phantom.exit(code);
-		    }, 8000);
+		    }, 12000);
 	}
     console.log("open", address);
 
-    //page.open(address);
+    // page.open(address);
     // cause .open fails with timeout sometimes
 	var content = fs.read(address);
 	page.setContent(content, "");
 }
-

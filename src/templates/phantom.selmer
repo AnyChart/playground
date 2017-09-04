@@ -31,10 +31,12 @@
         var checkRender = function(){
             var svgs = document.getElementsByTagName('svg');
             if (svgs.length > 0) {
-                console.log('chart draw');
+                setTimeout(function(){
+                    console.log('chart draw');
+                }, 500);
             }else {
                 checkRenderCount++;
-                if (checkRenderCount > 100) {
+                if (checkRenderCount > 500) {
                     console.log('chart draw');
                 }
             }

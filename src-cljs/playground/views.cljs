@@ -22,7 +22,7 @@
       [:span {:class "icon-bar"}]
       [:span {:class "icon-bar"}]]
      [:a {:class "navbar-brand" :href "/"}
-      [:img {:src    "/icons/anychart.png"
+      [:img {:src    "/logo400x400.png"
              :style  {:display "inline-block"}
              :width  "30"
              :height "30"
