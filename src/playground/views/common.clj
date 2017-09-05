@@ -217,13 +217,17 @@
          [:ul.dropdown-menu
           (for [template templates]
             [:li
-             [:a {:href (str "/new?template=" (:url template))}
-              [:img {:src (str "icons/" (utils/name->url (:name template)) ".svg")}]
+             [:a {:href  (str "/new?template=" (:url template))
+                  :title (str "Create " (:name template))}
+              [:img {:src (str "icons/" (utils/name->url (:name template)) ".svg")
+                     :alt (str "Create " (:name template) " button icon")}]
               (:name template)]])
           [:li.divider {:role "separator"}]
           [:li
-           [:a {:href "/new"}
-            [:img {:src (str "icons/from-scratch.svg")}]
+           [:a {:href "/new"
+                :title "Create from scratch"}
+            [:img {:src (str "icons/from-scratch.svg")
+                   :alt "Create from scratch button icon"}]
             "From scratch"]]]]
         ]]]]]])
 
@@ -243,20 +247,13 @@
 (defn create-box [templates]
   [:div.create-buttons
    (for [template templates]
-     [:a.create-button
-      {:onclick (str "location.href='/new?template=" (:url template) "';")}
-      [:img {:src (str "icons/" (utils/name->url (:name template)) ".svg")}]
+     [:a.create-button {:href  (str "/new?template=" (:url template))
+                        :title (str "Create " (:name template))}
+      [:img {:src (str "icons/" (utils/name->url (:name template)) ".svg")
+             :alt (str "Create " (:name template) " button icon")}]
       [:div.text
        [:div.create "create"]
-       [:div.name [:b (:name template)]]]]
-
-     ;[:button.btn.btn-primary.btn-lg
-     ; {:role    "button"
-     ;  :onclick (str "location.href='/new?template=" (:url template) "';")}
-     ; (str "Create " (:name template))]
-
-     )]
-  )
+       [:div.name [:b (:name template)]]]])])
 
 
 (defn footer [repos tags data-sets]

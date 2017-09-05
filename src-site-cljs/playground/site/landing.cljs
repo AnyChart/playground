@@ -118,7 +118,7 @@
 
 
 (defn ^:export startLandingTag [_end _page]
-  (utils/log "Start landing: " _end _page)
+  ;(utils/log "Start landing: " _end _page)
   (reset! *landing-tag-samples-is-end _end)
   (reset! *landing-tag-samples-page _page)
   (init-buttons "popular-tags-prev"
@@ -161,7 +161,7 @@
 
 
 (defn ^:export startVersionPage [_end _page _version-id]
-  (utils/log "Start landing: " _end _page _version-id)
+  ;(utils/log "Start landing: " _end _page _version-id)
   (reset! *version-samples-is-end _end)
   (reset! *version-samples-page _page)
   (reset! *version-id _version-id)
@@ -204,7 +204,7 @@
 
 
 (defn ^:export startTagPage [_end _page _tag]
-  (utils/log "Start tag page: " _end _page _tag)
+  ;(utils/log "Start tag page: " _end _page _tag)
   (reset! *tag-samples-is-end _end)
   (reset! *tag-samples-page _page)
   (reset! *tag _tag)
