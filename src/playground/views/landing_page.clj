@@ -35,12 +35,12 @@
 
         [:div.prev-next-buttons
          [:a#popular-samples-prev.prev-button.btn.btn-default {:style (str "display: " (if (zero? page) "none;" "inline-block;"))
-                                                               :href  (str "/?page=" page)
+                                                               :href  (str "/?samples=" page)
                                                                :title (str "Prev page, " page)}
           [:span.glyphicon.glyphicon-arrow-left {:aria-hidden true}]
           " Prev"]
          [:a#popular-samples-next.next-button.btn.btn-default {:style (str "display: " (if (:end data) "none;" "inline-block;"))
-                                                               :href  (str "/?page=" (-> page inc inc))
+                                                               :href  (str "/?samples=" (-> page inc inc))
                                                                :title (str "Next page, " (-> page inc inc))}
           "Next "
           [:span.glyphicon.glyphicon-arrow-right {:aria-hidden true}]]]
@@ -53,12 +53,12 @@
            (sample-view/sample-landing sample))]
         [:div.prev-next-buttons
          [:a#popular-tags-prev.prev-button.btn.btn-default {:style (str "display: " (if (zero? tags-page) "none;" "inline-block;"))
-                                                            :href  (str "/?page=" tags-page)
+                                                            :href  (str "/?tags=" tags-page)
                                                             :title (str "Prev page, " tags-page)}
           [:span.glyphicon.glyphicon-arrow-left {:aria-hidden true}]
           " Prev"]
          [:a#popular-tags-next.next-button.btn.btn-default {:style (str "display: " (if (:tags-end data) "none;" "inline-block;"))
-                                                            :href  (str "/?page=" (-> tags-page inc inc))
+                                                            :href  (str "/?tags=" (-> tags-page inc inc))
                                                             :title (str "Next page, " (-> tags-page inc inc))}
           "Next "
           [:span.glyphicon.glyphicon-arrow-right {:aria-hidden true}]]]
