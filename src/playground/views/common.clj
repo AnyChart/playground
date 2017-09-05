@@ -6,6 +6,7 @@
 
 
 (def main-style (slurp (io/resource "public/css/main.css")))
+(def bootstrap-style (slurp (io/resource "public/bootstrap-3.3.7-dist/css/bootstrap.min.css")))
 
 
 (defn head []
@@ -39,16 +40,17 @@
    [:meta {:content "#2c4b76"
            :name    "theme-color"}]
 
-   "<!-- Latest compiled and minified CSS and Optional theme-->"
-   [:link {:rel "stylesheet" :type "text/css" :href "/bootstrap-3.3.7-dist/css/bootstrap.min.css"}]
    [:link {:rel "stylesheet" :type "text/css" :href "https://cdn.anychart.com/fonts/2.7.2/anychart.css"}]
    [:link {:rel "stylesheet" :type "text/css" :href "https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&amp;subset=greek"}]
 
    ;[:script {:src "/jquery/jquery.min.js"}]
    ;[:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]
    (if (System/getProperty "local")
+     [:link {:rel "stylesheet" :type "text/css" :href "/bootstrap-3.3.7-dist/css/bootstrap.min.css"}]
+     [:style {:type "text/css"} bootstrap-style])
+   (if (System/getProperty "local")
      [:link {:rel "stylesheet" :type "text/css" :href "/css/main.css"}]
-     [:style main-style])])
+     [:style {:type "text/css"} main-style])])
 
 
 (defn nav-sample-menu-item [sample]
