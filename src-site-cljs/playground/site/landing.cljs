@@ -21,7 +21,7 @@
                               page
                               end
                               url-param]
-  (utils/log "set visibitlity: " prev-btn-name next-btn-name page end url-param)
+  ;(utils/log "set visibitlity: " prev-btn-name next-btn-name page end url-param)
   (let [prev-button (dom/getElement prev-btn-name)
         next-button (dom/getElement next-btn-name)]
     (style/setElementShown prev-button (pos? page))
@@ -76,7 +76,7 @@
 
 
 (defn ^:export startLanding [_end _page]
-  (utils/log "Start landing: " _end _page)
+  ;;(utils/log "Start landing: " _end _page)
   (reset! *popular-samples-is-end _end)
   (reset! *popular-samples-page _page)
   (init-buttons "popular-samples-prev"

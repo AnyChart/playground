@@ -2,11 +2,16 @@
   (:require [clj-time.core :as t]
             [playground.web.auth-base :as auth-base]
             [playground.utils.utils :as utils]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [clojure.string :as string]))
 
 
 (def main-style (slurp (io/resource "public/css/main.css")))
-(def bootstrap-style (slurp (io/resource "public/bootstrap-3.3.7-dist/css/bootstrap.min.css")))
+(def bootstrap-style
+  (string/replace
+    (slurp (io/resource "public/bootstrap-3.3.7-dist/css/bootstrap.min.css"))
+    #"\.\.\/fonts"
+    "/bootstrap-3.3.7-dist/fonts"))
 
 
 (defn head []
