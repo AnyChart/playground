@@ -29,4 +29,6 @@
          [:div.row.flex-content
           (divide-tags-by-blocks (map :name (:all-tags data)))]]]]
 
-      (page/footer (:repos data) (:tags data) (:data-sets data))]]))
+      (page/footer (:repos data) (:tags data) (:data-sets data))]
+     [:script {:src "/jquery/jquery.min.js"}]
+     [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]]))

@@ -18,4 +18,6 @@
         У гитхаба это выглядит вот так: https://enterprise.github.com/home"]]]
 
 
-      (page/footer (:repos data) (:tags data) (:data-sets data))]]))
+      (page/footer (:repos data) (:tags data) (:data-sets data))]
+     [:script {:src "/jquery/jquery.min.js"}]
+     [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]]))

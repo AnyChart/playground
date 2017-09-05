@@ -42,4 +42,6 @@
          [:li "Платный контент, на сервисе будут платные услуги, но они имеют меньший приоритет перед профитами перечисленными ранее"]]
         ]]
 
-      (page/footer (:repos data) (:tags data) (:data-sets data))]]))
+      (page/footer (:repos data) (:tags data) (:data-sets data))]
+     [:script {:src "/jquery/jquery.min.js"}]
+     [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]]))

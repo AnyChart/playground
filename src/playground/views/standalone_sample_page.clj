@@ -29,6 +29,6 @@
 
       [:footer.footer
        [:div.container
-        [:p.text-muted (str "&copy; " (t/year (t/now)) " AnyChart.com All rights reserved.")]]]
-
-      ]]))
+        [:p.text-muted (str "&copy; " (t/year (t/now)) " AnyChart.com All rights reserved.")]]]]
+     [:script {:src "/jquery/jquery.min.js"}]
+     [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]]))

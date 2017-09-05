@@ -16,4 +16,6 @@
         [:h1.page-caption "Version History"]
         [:p.page-caption-desc "Тут будет вся история проекта."]]]
 
-      (page/footer (:repos data) (:tags data) (:data-sets data))]]))
+      (page/footer (:repos data) (:tags data) (:data-sets data))]
+     [:script {:src "/jquery/jquery.min.js"}]
+     [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]]))

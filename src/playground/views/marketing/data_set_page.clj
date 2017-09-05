@@ -25,4 +25,6 @@
          [:div.col-md-2
           [:a.btn.btn-primary.usage-sample-button {:href "#"} "Usage Sample"]]]]]
 
-      (page/footer (:repos data) (:tags data) (:data-sets data))]]))
+      (page/footer (:repos data) (:tags data) (:data-sets data))]
+     [:script {:src "/jquery/jquery.min.js"}]
+     [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]]))

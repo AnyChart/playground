@@ -25,12 +25,14 @@
           [:span.glyphicon.glyphicon-arrow-left {:aria-hidden true}]
           " Prev"]
          [:a#tag-samples-next.next-button.btn.btn-default {:style (str "display: " (if (:end data) "none;" "inline-block;"))
-                                                          :href  (str "/tags/" tag "?page=" (-> page inc inc))
-                                                          :title (str "Next page, " (-> page inc inc))}
+                                                           :href  (str "/tags/" tag "?page=" (-> page inc inc))
+                                                           :title (str "Next page, " (-> page inc inc))}
           "Next "
           [:span.glyphicon.glyphicon-arrow-right {:aria-hidden true}]]]]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
 
+     [:script {:src "/jquery/jquery.min.js"}]
+     [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]
      [:script {:src "/js/site.js" :type "text/javascript"}]
      [:script "playground.site.landing.startTagPage(" (:end data) ", " page ", '" tag "');"]]))

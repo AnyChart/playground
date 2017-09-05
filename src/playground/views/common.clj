@@ -40,16 +40,14 @@
            :name    "theme-color"}]
 
    "<!-- Latest compiled and minified CSS and Optional theme-->"
-   [:link {:href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" :rel "stylesheet"}]
+   [:link {:rel "stylesheet" :type "text/css" :href "/bootstrap-3.3.7-dist/css/bootstrap.min.css"}]
    [:link {:rel "stylesheet" :type "text/css" :href "https://cdn.anychart.com/fonts/2.7.2/anychart.css"}]
-   ;<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&amp;subset=greek" rel="stylesheet">
-   [:link {:href "https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&amp;subset=greek" :rel "stylesheet"}]
-   ;[:link {:href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" :rel "stylesheet"}]
-   [:script {:src "https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"}]
-   "<!-- Latest compiled and minified JavaScript -->"
-   [:script {:src "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"}]
+   [:link {:rel "stylesheet" :type "text/css" :href "https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&amp;subset=greek"}]
+
+   ;[:script {:src "/jquery/jquery.min.js"}]
+   ;[:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]
    (if (System/getProperty "local")
-     [:link {:href "/css/main.css" :rel "stylesheet"}]
+     [:link {:rel "stylesheet" :type "text/css" :href "/css/main.css"}]
      [:style main-style])])
 
 

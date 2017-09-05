@@ -29,4 +29,6 @@
             [:a.btn.btn-primary.usage-sample-button {:href   (:sample data-set)
                                                      :target "_blank"} "Usage Sample"]]])]]
 
-      (page/footer (:repos data) (:tags data) (:data-sets data))]]))
+      (page/footer (:repos data) (:tags data) (:data-sets data))]
+     [:script {:src "/jquery/jquery.min.js"}]
+     [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]]))
