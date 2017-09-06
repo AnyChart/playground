@@ -196,7 +196,6 @@ html {
         background-color: $footer-color;
         display: table-row;
         b {
-          color: #80a9bd;
           line-height: 20px;
         }
         a{
@@ -205,6 +204,9 @@ html {
         }
         .content-container {
           margin-top: 23px;
+        }
+        .caption {
+            color: #80a9bd;
         }
         .dataset{
           overflow: hidden;
