@@ -10,7 +10,7 @@
            (slurp
              (str "resources/chartopedia/data/chart-types/" (:id chart-type) ".json"))
            true)
-         {:img (str "http://www.anychart.com/chartopedia/chart-types/" (:id chart-type) "/thumb.png")}))
+         {:img (str "https://www.anychart.com/chartopedia/chart-types/" (:id chart-type) "/thumb.png")}))
 
 (defn parse-data []
   (let [base (json/parse-string (slurp "resources/chartopedia/data/main.json") true)

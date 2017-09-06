@@ -168,7 +168,7 @@
         [:span.icon-bar]
         [:span.icon-bar]]
        [:a.navbar-brand
-        {:href "/"}
+        {:href "/" :title "Playground Home"}
         [:img {:alt    "AnyChart"
                :height "26"
                :width  "26"
@@ -181,12 +181,13 @@
       [:div#navbar.navbar-collapse.collapse
        [:ul.nav.navbar-nav
 
-        [:li [:a {:href "/chart-types"} "Chart Types"]]
-        [:li [:a {:href "/tags"} "Tags"]]
-        [:li [:a {:href "/datasets"} "Data Sets"]]
+        [:li [:a {:href "/chart-types" :title "Playground Chart Types"} "Chart Types"]]
+        [:li [:a {:href "/tags"} "Tags" :title "Playground Tags"]]
+        [:li [:a {:href "/datasets"} "Data Sets" :title "Playground Data Sets"]]
 
         [:li {:class "dropdown"}
          [:a {:href          "#"
+              :title         "Playground Support Submenu"
               :class         "dropdown-toggle"
               :data-toggle   "dropdown"
               :role          "button"
@@ -195,11 +196,11 @@
           [:span {:class "caret"}]]
 
          [:ul {:class "dropdown-menu"}
-          [:li [:a {:href "/support"} "Support"]]
-          [:li [:a {:href "/roadmap"} "Roadmap"]]
-          [:li [:a {:href "/version-history"} "Version History"]]]]
-        [:li [:a {:href "/pricing"} "Pricing"]]
-        [:li [:a {:href "/about"} "About"]]
+          [:li [:a {:href "/support" :title "Playground Support"} "Support"]]
+          [:li [:a {:href "/roadmap" :title "Playground Roadmap"} "Roadmap"]]
+          [:li [:a {:href "/version-history" :title "Playground Version History"} "Version History"]]]]
+        [:li [:a {:href "/pricing" :title "Playground Pricing"} "Pricing"]]
+        [:li [:a {:href "/about" :title "About Playground"} "About"]]
 
         (when sample
           (nav-sample-menu-item sample))]
@@ -262,51 +263,44 @@
     [:div.row
 
      [:div.col-sm-2.col-xs-4
-      [:div [:b "Vendor"]]
-      [:div [:a {:href "https://anychart.com"} "AnyChart"]]
-      [:div [:a {:href "https://anychart.com/"} "Products"]]
-      [:div [:a {:href "https://anychart.com/features"} "Features"]]
-      [:div [:a {:href "https://anychart.com/"} "Resources"]]
-      [:div [:a {:href "https://anychart.com/download"} "Download"]]
-      [:div [:a {:href "https://anychart.com/buy"} "Buy"]]
-      [:div [:a {:href "https://anychart.com/blog"} "Blog"]]]
+      [:div [:a {:href "https://www.anychart.com" :title "AnyChart"} [:b "Vendor"]]]
+      [:div [:a {:href "https://www.anychart.com" :title "AnyChart"} "AnyChart"]]
+      [:div [:a {:href "https://www.anychart.com/features" :title "AnyChart Features"} "Features"]]
+      [:div [:a {:href "https://www.anychart.com/solutions/" :title "AnyChart Business Solutions"} "Business Solutions"]]
+      [:div [:a {:href "https://www.anychart.com/technical-integrations/" :title "AnyChart Technical Integrations"} "Technical Integrations"]]
+      [:div [:a {:href "https://www.anychart.com/chartopedia/" :title "AnyChart Chartopedia"} "Chartopedia"]]
+      [:div [:a {:href "https://www.anychart.com/download" :title "AnyChart Download"} "Download"]]
+      [:div [:a {:href "https://www.anychart.com/buy" :title "AnyChart Buy"} "Buy"]]
+      [:div [:a {:href "https://www.anychart.com/blog" :title "AnyChart Blog"} "Blog"]]]
 
      [:div.col-sm-2.col-xs-4
-      [:div [:b "Playground"]]
-      [:div [:a {:href "/chart-types"} "Chart Types"]]
-      [:div [:a {:href "/datasets"} "Data Sets"]]
-      [:div [:a {:href "/support"} "Support"]]
-      [:div [:a {:href "/roadmap"} "Roadmap"]]
-      [:div [:a {:href "/version-history"} "Version History"]]
-      [:div [:a {:href "/pricing"} "Pricing"]]
-      [:div [:a {:href "/about"} "About"]]]
+      [:div [:a {:href "/" :title "Playground Home"} [:b "Playground"]]]
+      [:div [:a {:href "/chart-types" :title "Playground Chart Types"} "Chart Types"]]
+      [:div [:a {:href "/datasets" :title " Playground Data Sets"} "Data Sets"]]
+      [:div [:a {:href "/support"  :title "Playground Support"} "Support"]]
+      [:div [:a {:href "/roadmap" :title "Playground Roadmap"} "Roadmap"]]
+      [:div [:a {:href "/version-history" :title "Playground Version History"} "Version History"]]
+      [:div [:a {:href "/pricing" :title "Playground Pricing"} "Pricing"]]
+      [:div [:a {:href "/about" :title "About Playground"} "About"]]]
 
      [:div.col-sm-2.col-xs-4
-      [:div [:b "Projects"]]
+      [:div [:a {:href "/projects" :title "Playground Projects"} [:b "Projects"]]]
       (for [repo (remove :templates repos)]
         [:div [:a {:href (str "/projects/" (:name repo))} (:title repo)]])]
 
      [:div.clearfix.visible-xs-block]
 
      [:div.col-sm-2.col-xs-4
-      [:div [:b "Tags"]]
+      [:div [:a {:href "/tags" :title "Playground Tags"} [:b "Tags"]]]
       (for [tag tags]
         [:div [:a {:href (str "/tags/" (:name tag))} (:name tag)]])]
 
      [:div.col-sm-4.col-xs-8
-      [:div [:b "Data Sets"]]
+      [:div [:a {:href "/datasets" :title "Playground Data Sets"} [:b "Data Sets"]]]
       (for [data-set data-sets]
         [:div.dataset [:a {:href  (str "/datasets/" (:data-source-name data-set) "/" (:name data-set))
                            :title (:title data-set)}
-                       (:title data-set)]])]
-
-     ;[:div.col-sm-2.col-xs-4
-     ; [:div [:b "Social"]]
-     ; [:div [:a {:href "https://www.facebook.com/AnyCharts"} "Facebook"]]
-     ; [:div [:a {:href "https://twitter.com/AnyChart"} "Twitter"]]
-     ; [:div [:a {:href "https://www.linkedin.com/company/386660"} "Linked In"]]]
-
-     ]
+                       (:title data-set)]])]]
     [:div.footer-bottom-box
      [:div.footer-inner
       [:a.soc-network
