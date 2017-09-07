@@ -225,7 +225,7 @@
               (:name template)]])
           [:li.divider {:role "separator"}]
           [:li
-           [:a {:href "/new"
+           [:a {:href  "/new"
                 :title "Create from scratch"}
             [:img {:src (str "icons/from-scratch.svg")
                    :alt "Create from scratch button icon"}]
@@ -277,7 +277,7 @@
       [:div [:a {:href "/" :title "Playground Home" :class "caption"} [:b "Playground"]]]
       [:div [:a {:href "/chart-types" :title "Playground Chart Types"} "Chart Types"]]
       [:div [:a {:href "/datasets" :title "Playground Data Sets"} "Data Sets"]]
-      [:div [:a {:href "/support"  :title "Playground Support"} "Support"]]
+      [:div [:a {:href "/support" :title "Playground Support"} "Support"]]
       [:div [:a {:href "/roadmap" :title "Playground Roadmap"} "Roadmap"]]
       [:div [:a {:href "/version-history" :title "Playground Version History"} "Version History"]]
       [:div [:a {:href "/pricing" :title "Playground Pricing"} "Pricing"]]
@@ -286,30 +286,47 @@
      [:div.col-sm-2.col-xs-4
       [:div [:a {:href "/projects" :title "Playground Projects" :class "caption"} [:b "Projects"]]]
       (for [repo (remove :templates repos)]
-        [:div [:a {:href (str "/projects/" (:name repo))} (:title repo)]])]
+        [:div [:a {:href  (str "/projects/" (:name repo))
+                   :title (str "Projects - " (:title repo))}
+               (:title repo)]])]
 
      [:div.clearfix.visible-xs-block]
 
      [:div.col-sm-2.col-xs-4
       [:div [:a {:href "/tags" :title "Playground Tags" :class "caption"} [:b "Tags"]]]
       (for [tag tags]
-        [:div [:a {:href (str "/tags/" (:name tag))} (:name tag)]])]
+        [:div [:a {:href  (str "/tags/" (:name tag))
+                   :title (str "Tags - " (:name tag))}
+               (:name tag)]])]
 
      [:div.col-sm-4.col-xs-8
       [:div [:a {:href "/datasets" :title "Playground Data Sets" :class "caption"} [:b "Data Sets"]]]
       (for [data-set data-sets]
         [:div.dataset [:a {:href  (str "/datasets/" (:data-source-name data-set) "/" (:name data-set))
-                           :title (:title data-set)}
+                           :title (str "Data Sets - " (:title data-set))}
                        (:title data-set)]])]]
     [:div.footer-bottom-box
      [:div.footer-inner
       [:a.soc-network
-       {:target "_blank" :rel "nofollow" :href "https://www.facebook.com/AnyCharts"}
+       {:title  "AnyChart Facebook"
+        :target "_blank"
+        :rel    "nofollow"
+        :href   "https://www.facebook.com/AnyCharts"}
        [:span.soc-network-icon.fb [:i.sn-mini-icon.ac.ac-facebook]]]
       [:a.soc-network
-       {:target "_blank" :rel "nofollow" :href "https://twitter.com/AnyChart"}
+       {:title  "AnyChart Twitter"
+        :target "_blank"
+        :rel    "nofollow"
+        :href   "https://twitter.com/AnyChart"}
        [:span.soc-network-icon.tw [:i.sn-mini-icon.ac.ac-twitter]]]
       [:a.soc-network
-       {:target "_blank" :rel "nofollow" :href "https://www.linkedin.com/company/386660"}
+       {:title  "AnyChart LinkedIn"
+        :target "_blank"
+        :rel    "nofollow"
+        :href   "https://www.linkedin.com/company/386660"}
        [:span.soc-network-icon.in [:i.sn-mini-icon.ac.ac-linkedin]]]]
-     [:span.copyright (str "&copy; " (t/year (t/now)) " AnyChart.com All rights reserved.")]]]])
+     [:span.copyright (str "&copy; " (t/year (t/now)) " ")
+      [:a {:href   "https://www.anychart.com"
+           :rel    "nofollow"
+           :target "_blank"} "AnyChart.com"]
+      " All rights reserved."]]]])
