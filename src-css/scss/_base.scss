@@ -13,12 +13,17 @@ html {
       display: table;
       height: 100%;
       width: 100%;
-
-      /* navbar */
+      // for fixed navbar
+      padding-top: 58px;
       header {
+        // for fixed navbar
+        position: fixed;
+        width: 100%;
+        z-index: 3;
+        top: 0;
+
         color: white;
         height: 58px;
-        //margin: 0 !important;
         background-color: $nav-bg-color;
         .navbar-header{
           padding: 5px 25px 0 0;
@@ -179,6 +184,9 @@ html {
       }
 
       .content {
+        /*.content-container{
+          margin-top: 58px;
+        }*/
         display: table-row;
         /* height is dynamic, and will expand... */
         height: 100%;
