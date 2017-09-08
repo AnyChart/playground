@@ -9,6 +9,12 @@ html {
     font-size: 13px;
     color: $text-color;
 
+    /* override bootstrap caret position to fit our default font-family and font-size */
+    .caret {
+        margin-top: -2px;
+        margin-left: 4px;
+    }
+
     .wrapper {
       display: table;
       height: 100%;
