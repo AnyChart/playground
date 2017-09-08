@@ -53,6 +53,8 @@
 (def *popular-samples-page (atom 0))
 (def *popular-samples-is-end (atom false))
 
+(def *landing-tag-samples-page (atom 0))
+(def *landing-tag-samples-is-end (atom false))
 
 (defn on-popular-samples-load [data]
   (dom/removeChildren (dom/getElement "popular-samples"))
@@ -92,9 +94,6 @@
 ;;======================================================================================================================
 ;; Landing page: tag block
 ;;======================================================================================================================
-(def *landing-tag-samples-page (atom 0))
-(def *landing-tag-samples-is-end (atom false))
-
 
 (defn on-landing-tag-samples-load [data]
   (dom/removeChildren (dom/getElement "popular-tags"))

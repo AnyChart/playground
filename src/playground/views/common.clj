@@ -233,28 +233,31 @@
         ]]]]]])
 
 
-
-
-
-
 (defn jumbotron [templates]
   [:div
    [:div.text
     [:h1 "AnyChart "
      [:b "Playground"]]
-    [:p.description "is a place where all your data visualization dreams come true"]]
-   ])
+    [:p.description "is a place where all your data visualization dreams come true"]]])
+
 
 (defn create-box [templates]
   [:div.create-buttons
-   (for [template templates]
+   (for [template (take 4 templates)]
      [:a.create-button {:href  (str "/new?template=" (:url template))
                         :title (str "Create " (:name template))}
       [:img {:src (str "icons/" (utils/name->url (:name template)) ".svg")
              :alt (str "Create " (:name template) " button icon")}]
       [:div.text
        [:div.create "create"]
-       [:div.name [:b (:name template)]]]])])
+       [:div.name [:b (:name template)]]]])
+   [:a.create-button {:href  "/new"
+                      :title (str "Create Other Types")}
+    [:img {:src (str "icons/from-scratch.svg")
+           :alt (str "Create Other Types button icon")}]
+    [:div.text
+     [:div.create "create"]
+     [:div.name [:b "Other Types"]]]]])
 
 
 (defn footer [repos tags data-sets]

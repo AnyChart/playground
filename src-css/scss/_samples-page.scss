@@ -66,17 +66,24 @@
     width: 270px;
     font-size: 12px;
     color: #222222;
-
+    
     display: block; /* or inline-block */
     text-overflow: ellipsis;
     word-wrap: break-word;
     overflow: hidden;
     max-height: 3.0em;
     line-height: 1.5em;
+    a {
+      color: #222222;
+      &:hover, &:focus{
+        text-decoration: none;
+        color: #222222;
+      }
+    }
   }
   .bottom-info {
     color: #80a9bd;
-    .likes {
+    .likes-and-views {
       float: right;
       padding-left: 10px;
       background-color: white;
@@ -85,6 +92,16 @@
       }
       .sample-icon {
         padding-right: 8px;
+      }
+      a {
+        color: #80a9bd;
+        &:hover, &:focus{
+          text-decoration: none;
+          color: #80a9bd;
+        }
+      }
+      .likes{
+        display: none;
       }
     }
     .author-and-date{
