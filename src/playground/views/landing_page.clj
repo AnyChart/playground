@@ -8,7 +8,7 @@
     {:lang "en"}
     (page/head)
     [:body
-     [:div.wrapper
+     [:div.wrapper.landing-page
 
       (page/nav (:templates data) (:user data))
 
@@ -16,17 +16,20 @@
        [:div.container-fluid.content-container
         [:div.row
          [:div.col-sm-12
-          (page/jumbotron (:templates data))]]]]
+          [:div
+           [:div.text
+            [:h1 "AnyChart "
+             [:b "Playground"]]
+            [:p.description "is a place where all your data visualization dreams come true"]]]]]]]
 
       [:div.create-box
        [:div.container-fluid.content-container
         [:div.row
          [:div.col-sm-12
-          (page/create-box (:templates data))]]]
-       ]
+          (page/create-box (:templates data))]]]]
 
       [:div.content
-       [:div.container-fluid.content-container.landing-page
+       [:div.container-fluid.content-container
 
         [:p.popular-label "Popular " [:b "samples"]]
         [:div#popular-samples.row.samples-container

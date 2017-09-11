@@ -233,14 +233,6 @@
         ]]]]]])
 
 
-(defn jumbotron [templates]
-  [:div
-   [:div.text
-    [:h1 "AnyChart "
-     [:b "Playground"]]
-    [:p.description "is a place where all your data visualization dreams come true"]]])
-
-
 (defn create-box [templates]
   [:div.create-buttons
    (for [template (take 4 templates)]

@@ -1,10 +1,80 @@
-/* tags page */
-.content {
-  .content-wrapper {
-    padding: 20px 0;
+html body .tags-page {
+
+  .intro {
+    height: 248px;
+    h1 {
+      font-size: 51px;
+    }
+    background-image: url('/tags-page/bg.png');
+    background-position: center;
   }
-  .flex-content {
-    display: flex;
-    flex-wrap: wrap;
+
+  .content {
+    .tabs {
+      display: none;
+      margin: 20px 0;
+      a {
+        padding: 4px 15px;
+        font-size: 13px;
+        color: #80a9bd;
+        border: none;
+        background: none;
+        text-decoration: none;
+        margin-right: 6px;
+        &.active{
+          color: #222222;
+          border: 1px solid #83bbcd;
+          border-radius: 4px;
+        }
+      }
+
+    }
+
+    .tags-box{
+      margin: 50px 0;
+    }
+
+    .popular-tags-box {
+      margin-bottom: 15px;
+
+      .popular-tag-button {
+        display: inline-block;
+        background-color: #95bfd3;
+        margin: 0 10px 10px 0;
+        color: white;
+        padding: 3px 10px;
+        border-radius: 4px;
+        font-weight: bold;
+        text-decoration: none;
+        cursor: pointer;
+        &:hover, &:focus {
+          background-color: #19a1ce;
+        }
+      }
+    }
+
+    .flex-content {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      height: 780px;
+      //justify-content: space-between;
+      .letter {
+        color: #df4e69;
+        font-size: 12px;
+        font-weight: bold;
+        margin: 10px 0;
+      }
+      .letter:first-child{
+        margin: 0 0 10px 0;
+      }
+      a {
+        color: #008ebe;
+        &:hover, &:focus {
+          color: #003d92;
+        }
+      }
+    }
   }
+
 }
