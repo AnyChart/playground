@@ -70,6 +70,7 @@ html body .tags-page {
       }
       a {
         color: #008ebe;
+        max-width: 200px;
         &:hover, &:focus {
           color: #003d92;
         }

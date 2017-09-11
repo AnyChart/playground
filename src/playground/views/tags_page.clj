@@ -21,7 +21,6 @@
   (let [sorted-tags (sort-by clojure.string/lower-case compare tags)
 
         blocks-tags (flatten (sort (group-by first sorted-tags)))]
-    (prn blocks-tags)
     (for [letter-or-tag blocks-tags]
       (if (char? letter-or-tag)
         (let [letter letter-or-tag]
