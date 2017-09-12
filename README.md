@@ -15,6 +15,19 @@ sudo apt-get install phantomjs
 sudo apt-get install pngquant
 ```
 
+## External Resources
+For now playground uses some of AnyChart resources, later we'll need to rework it to make Playground standalone project.
+| Resource | Description |
+| ------------- | ------------- |
+| Data Sets [source file](https://static.anychart.com/cdn/anydata/common/index.json)  | JSON file what contains lists of available data sets.|
+| [Tags list](https://static.anychart.com/utility/tag_list.json)  | JSON file what contains data for tags generating process. |
+| [New Gallery](git@github.com:AnyChart/playground.anychart.com-gallery)
+ [Chartopedia](git@github.com:AnyChart/Chartopedia.git)
+ [API Reference](git@github.com:AnyChart/api.anychart.com.git)
+ [Documentation](git@github.com:AnyChart/docs.anychart.com.git)
+ [Templates](git@github.com:AnyChart/playground-templates.git) | Repositories with predefined samples, some of them are private. |
+
+
 ## Usage
 Config file format:
 
