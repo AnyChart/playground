@@ -23,6 +23,7 @@ For now playground uses some of AnyChart resources, later we'll need to rework i
 | Data Sets [source file](https://static.anychart.com/cdn/anydata/common/index.json)  | JSON file what contains lists of available data sets.|
 | [Tags list](https://static.anychart.com/utility/tag_list.json)  | JSON file what contains data for tags generating process. |
 | [New Gallery](https://github.com/AnyChart/playground.anychart.com-gallery), [Chartopedia](https://github.com/AnyChart/Chartopedia.git), [API Reference](https://github.com/AnyChart/api.anychart.com.git), [Documentation](https://github.com/AnyChart/docs.anychart.com.git), [Templates](https://github.com/AnyChart/playground-templates.git) | Repositories with predefined samples, some of them are private. |
+| [Chartopedia](https://github.com/AnyChart/Chartopedia.git), [API Reference](https://github.com/AnyChart/api.anychart.com.git)  | Also chartopedia repo is used as a source for Chart Types pages. |
 
 
 ## Usage
