@@ -6,6 +6,8 @@ $footer-color: #ffffff;
 $text-color: #222222;
 $intro-color: #c3dfe8;
 
+@import "bootstrap_ext";
+
 @import "base";
 
 @import "landing-page";

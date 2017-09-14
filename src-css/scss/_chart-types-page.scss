@@ -1,40 +1,121 @@
-/*chart types page*/
-.chart-types-page {
-  a.chart {
-    display: block;
-    border: 1px solid #DDDDDD;
-    padding: 10px;
-  }
-  .chart {
-    cursor: pointer;
-    margin-bottom: 20px;
-    background-color: white;
-    span{
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      display: block;
+html body .chart-types-page{
+
+
+  .intro {
+    height: 248px;
+    h1 {
+      font-size: 51px;
     }
-    .chart-img {
-      display: block;
-      margin: 0 -20px 15px -20px;
-      height: 150px;
-      position: relative;
-      overflow: hidden;
-      text-align: center;
-      & > img {
-        display: inline-block;
-        vertical-align: bottom;
-        height: 100%;
-        width: auto;
-        max-width: 100%;
+    background-image: url('/tags-page/bg.png');
+    background-position: center;
+  }
+
+  .elements-container{
+    margin: 30px 0;
+
+    .toggle-tabs{
+      margin-left: 55px;
+    }
+
+    .search{
+      padding: 5px;
+      float:right;
+      display: inline-block;
+      color: #95bfd3;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  }
+
+  .tabs{
+    display: inline-block;
+    a {
+      display: inline-block;
+      text-transform: uppercase;
+      color: #008ebe;
+      padding: 7px 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-right: 17px;
+      &:hover{
+        text-decoration: none;
+      }
+      span {
+        border-bottom: 1px dotted;
+      }
+      &.active {
+        color: white;
+        background-color: #19a1ce;
+        text-decoration: none;
+        span{
+          border: none;
+        }
       }
     }
-    .chart-content {
+  }
+
+  .chart-type-container{
+    /*display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;*/
+    padding-bottom: 60px;
+  }
+
+  .fake-chart-block{
+    width: 165px;
+    display: inline-block;
+  }
+  .chart-type-block{
+    //width: 165px;
+    //height: 165px;
+    display: inline-block;
+    margin: 10px 0;
+    //margin-right: 20px;
+    a.chart {
       display: block;
-      font-size: 13px;
-      line-height: 1.3333333;
+      border: 1px solid #DDDDDD;
+      padding: 10px;
+      cursor: pointer;
+      background-color: white;
+      //width: 165px;
+      //height: 165px;
+
+      color: #008ebe;
+      box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+
+      &:hover, &:focus {
+        color: #003d92;
+      }
+
+      span{
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        display: block;
+      }
+      .chart-img {
+        display: block;
+        //margin: 0 -20px 15px -20px;
+        margin-bottom: 5px;
+        height: 120px;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+
+        & > img {
+          display: inline-block;
+          vertical-align: bottom;
+          height: 100%;
+          width: auto;
+          max-width: 100%;
+        }
+      }
+      .chart-content {
+        display: block;
+        font-size: 13px;
+        line-height: 1.3333333;
+      }
     }
   }
-}
 
+}

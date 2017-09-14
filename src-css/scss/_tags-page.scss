@@ -10,24 +10,9 @@ html body .tags-page {
   }
 
   .content {
-    .tabs {
-      //display: none;
-      margin: 32px 0 0;
-      a {
-        padding: 4px 15px;
-        font-size: 13px;
-        color: #80a9bd;
-        border: none;
-        background: none;
-        text-decoration: none;
-        margin-right: 6px;
-        &.active{
-          color: #222222;
-          border: 1px solid #83bbcd;
-          border-radius: 4px;
-        }
-      }
 
+    .toggle-tabs{
+      margin: 32px 0 0;
     }
 
     .tags-box{
