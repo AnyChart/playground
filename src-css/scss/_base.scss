@@ -211,6 +211,12 @@ html {
           background: none;
           text-decoration: none;
           margin-right: 6px;
+          span {
+            border-bottom: 1px dotted;
+          }
+          &:hover{
+            color: #19a1ce;
+          }
           &.active{
             color: #222222;
             border: 1px solid #83bbcd;
@@ -218,6 +224,39 @@ html {
           }
         }
       }
+
+      .tabs{
+        display: inline-block;
+        a {
+          display: inline-block;
+          text-transform: uppercase;
+          color: #008ebe;
+          padding: 7px 12px;
+          font-weight: 600;
+          cursor: pointer;
+          margin-right: 17px;
+          span {
+            border-bottom: 1px dotted;
+          }
+          &:hover{
+            text-decoration: none;
+            background-color: #c2dae5;
+            span {
+              border: none;
+            }
+          }
+          &.active {
+            color: white;
+            background-color: #19a1ce;
+            text-decoration: none;
+            span{
+              border: none;
+            }
+          }
+        }
+      }
+
+
 
 
       footer {

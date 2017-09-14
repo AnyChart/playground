@@ -32,7 +32,7 @@
         [:div.elements-container
 
          [:div.tabs
-          [:a.active {:title "Show all types chart\""
+          [:a.active {:title "Show all types chart"
                       :href  "/chart-types"}
            [:span "Show all types chart"]]
           [:a {:title "Group by usage type"
@@ -41,8 +41,10 @@
 
          [:div.toggle-tabs.btn-group {:role "group"}
           [:a.active.btn.btn-link {:type "button"} "Application"]
-          [:a.btn.btn-link {:type "button"} "Data formats"]
-          [:a.btn.btn-link {:type "button"} "Popular"]]
+          [:a.btn.btn-link {:type "button"}
+           [:span "Data formats"]]
+          [:a.btn.btn-link {:type "button"}
+           [:span "Popular"]]]
 
          [:div.search
           [:span.glyphicon.glyphicon-search]]
