@@ -17,6 +17,7 @@
             [playground.web.middleware :as mw]
             [playground.web.auth-base :as auth-base]
             [playground.web.helpers :refer :all]
+            [playground.web.chartopedia :as chartopedia]
     ;; pages
             [playground.views.landing-page :as landing-view]
             [playground.views.version-page :as version-view]
@@ -30,6 +31,7 @@
             [playground.views.standalone-sample-page :as standalone-sample-view]
             [playground.views.marketing.chart-types-page :as chart-types-view]
             [playground.views.marketing.chart-type-page :as chart-type-view]
+            [playground.views.marketing.chart-types-categories-page :as chart-type-categories-view]
             [playground.views.marketing.data-sets-page :as data-sets-view]
             [playground.views.marketing.data-set-page :as data-set-view]
             [playground.views.marketing.about-page :as about-view]
@@ -187,14 +189,17 @@
 ;; Marketing pages
 ;; =====================================================================================================================
 (defn chart-types-page [request]
-  (chart-types-view/page (get-app-data request)))
+  (chart-types-view/page (get-app-data request) chartopedia/chart-types))
 
 (defn chart-type-page [request]
   (let [chart-name (-> request :params :chart-type)]
-    (when-let [chart-type (chart-types-view/get-chart chart-name)]
+    (when-let [chart-type (chartopedia/get-chart chart-name)]
       (chart-type-view/page (get-app-data request)
                             chart-type
-                            (chart-types-view/get-relations chart-type)))))
+                            (chartopedia/get-relations chart-type)))))
+
+(defn chart-types-categories-page [request]
+  (chart-type-categories-view/page (get-app-data request) chartopedia/categories))
 
 (defn data-sets-page [request]
   (data-sets-view/page (get-app-data request)))
@@ -441,6 +446,9 @@
 
            (GET "/chart-types/:chart-type" [] (-> chart-type-page
                                                   mw/base-page-middleware))
+
+           (GET "/chart-types/categories" [] (-> chart-types-categories-page
+                                      mw/base-page-middleware))
 
            (GET "/datasets/" [] redirect-slash)
            (GET "/datasets" [] (-> data-sets-page

@@ -25,34 +25,37 @@ html body .chart-types-page{
       font-size: 16px;
       cursor: pointer;
     }
-  }
 
-  .tabs{
-    display: inline-block;
-    a {
+    .tabs{
       display: inline-block;
-      text-transform: uppercase;
-      color: #008ebe;
-      padding: 7px 12px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-right: 17px;
-      &:hover{
-        text-decoration: none;
-      }
-      span {
-        border-bottom: 1px dotted;
-      }
-      &.active {
-        color: white;
-        background-color: #19a1ce;
-        text-decoration: none;
-        span{
-          border: none;
+      a {
+        display: inline-block;
+        text-transform: uppercase;
+        color: #008ebe;
+        padding: 7px 12px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-right: 17px;
+        &:hover{
+          text-decoration: none;
+        }
+        span {
+          border-bottom: 1px dotted;
+        }
+        &.active {
+          color: white;
+          background-color: #19a1ce;
+          text-decoration: none;
+          span{
+            border: none;
+          }
         }
       }
     }
+
   }
+
+
 
   .chart-type-container{
     /*display: flex;
@@ -70,7 +73,6 @@ html body .chart-types-page{
     //height: 165px;
     display: inline-block;
     margin: 10px 0;
-    //margin-right: 20px;
     a.chart {
       display: block;
       border: 1px solid #DDDDDD;
