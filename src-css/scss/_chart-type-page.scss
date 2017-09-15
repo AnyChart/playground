@@ -1,8 +1,58 @@
 /*chart type page*/
 .chart-type-page {
-  a.btn.btn-default.btn-sm {
-    display: inline-block;
-    margin-right: 5px;
-    margin-bottom: 5px;
+
+  .info{
+    margin: 20px 0 40px 0;
+
+    h1{
+      font-size: 18px;
+      color: $red-color;
+    }
+    h2 {
+      font-size: 15px;
+      color: $red-color;
+    }
+
+    .description{
+      font-size: 12px;
+    }
+
+    a.btn.btn-default.btn-sm {
+      display: inline-block;
+      margin-right: 5px;
+      margin-bottom: 5px;
+    }
+
+
+    .column2{
+      margin-top: 2px;
+      .note {
+        margin-top: 15px;
+        &:nth-child(2){
+          margin-top: 24px;
+        }
+      }
+
+      .popular-tags-box {
+        margin: 18px 0 15px 0;
+        .popular-tag-button {
+          font-size: 12px;
+          display: inline-block;
+          background-color: #95bfd3;
+          margin: 0 8px 12px 0;
+          color: white;
+          padding: 2px 10px;
+          border-radius: 4px;
+          text-decoration: none;
+          cursor: pointer;
+          &:hover, &:focus {
+            background-color: #19a1ce;
+          }
+        }
+      }
+
+    }
+
+
   }
 }

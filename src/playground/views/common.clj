@@ -220,14 +220,14 @@
             [:li
              [:a {:href  (str "/new?template=" (:url template))
                   :title (str "Create " (:name template))}
-              [:img {:src (str "icons/" (utils/name->url (:name template)) ".svg")
+              [:img {:src (str "/icons/" (utils/name->url (:name template)) ".svg")
                      :alt (str "Create " (:name template) " button icon")}]
               (:name template)]])
           [:li.divider {:role "separator"}]
           [:li
            [:a {:href  "/new"
                 :title "Create from scratch"}
-            [:img {:src (str "icons/from-scratch.svg")
+            [:img {:src (str "/icons/from-scratch.svg")
                    :alt "Create from scratch button icon"}]
             "From scratch"]]]]
         ]]]]]])
