@@ -1,0 +1,42 @@
+html body .chart-types-category-page {
+
+  .category{
+    position: relative;
+    margin-top: 40px;
+    margin-bottom: 30px;
+    min-height: 135px;
+    .img-box{
+      position: absolute;
+      width: 135px;
+      display: inline-block;
+      img {
+        width: 135px;
+        height: 135px;
+      }
+    }
+    .info {
+      padding-left: 170px;
+      display: inline-block;
+      .name{
+        font-weight: bold;
+        margin: 0 0 5px 0;
+        font-size: 18px;
+      }
+      .description{
+        margin: 0 0 18px 0;
+        font-size: 12px;
+      }
+      .learn-more-label{
+        color: #008ebe;
+        border: 1px solid #008ebe;
+        padding: 5px 11px;
+        border-radius: 3px;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+    }
+  }
+
+
+}
+

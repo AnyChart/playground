@@ -3,7 +3,7 @@
             [playground.views.common :as page]))
 
 
-(defn page [{:keys [page] :as data} chart-types]
+(defn page [data chart-types]
   (hiccup-page/html5
     {:lang "en"}
     (page/head)

@@ -3,7 +3,7 @@
             [me.raynes.fs :as fs]))
 
 
-(defn get-chart-type [chart-type]
+(defn parse-chart-type [chart-type]
   (merge chart-type
          (json/parse-string
            (slurp
@@ -12,7 +12,7 @@
          {:img (str "/chartopedia/images/chart-type/" (:id chart-type) ".png")}))
 
 
-(defn get-category [category]
+(defn parse-category [category]
   (merge category
          (json/parse-string
            (slurp
@@ -20,12 +20,21 @@
            true)
          {:img (str "/chartopedia/images/categories/" (:id category) ".png")}))
 
+(defn get-chart-by-name [name charts]
+  (first (filter #(= (:name %) name) charts)))
 
 (defn parse-data []
   (let [base (json/parse-string (slurp "resources/chartopedia/data/main.json") true)
-        chart-types (map #(get-chart-type %) (:chartTypes base))
+        chart-types (map #(parse-chart-type %) (:chartTypes base))
         relations (:relations base)
-        categories (map #(get-category %) (:categories base))]
+        categories (map #(parse-category %) (:categories base))
+        categories (map (fn [category]
+                          (update category :charts
+                                  (fn [charts]
+                                    (map (fn [chart-name]
+                                           (get-chart-by-name chart-name chart-types))
+                                         charts))))
+                        categories)]
     {:chart-types chart-types
      :relations   relations
      :categories  categories}))
@@ -52,6 +61,10 @@
 
 (defn get-chart [name]
   (first (filter #(= (:id %) name) chart-types)))
+
+
+(defn get-category [name]
+  (first (filter #(= (:id %) name) categories)))
 
 
 (defn get-relations [chart]

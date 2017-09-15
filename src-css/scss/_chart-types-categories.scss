@@ -1,6 +1,5 @@
 html body .chart-types-categories-page {
 
-
   .intro {
     height: 248px;
     h1 {
@@ -13,11 +12,9 @@ html body .chart-types-categories-page {
 
   .elements-container{
     margin: 30px 0;
-
     .toggle-tabs{
       margin-left: 55px;
     }
-
     .search{
       padding: 5px;
       float:right;
@@ -30,6 +27,7 @@ html body .chart-types-categories-page {
 
   .categories-container{
     padding-top: 7px;
+    min-height: 135px;
     .category{
       position: relative;
       margin-bottom: 70px;
@@ -51,6 +49,7 @@ html body .chart-types-categories-page {
         }
         .description{
           margin: 0 0 18px 0;
+          font-size: 12px;
         }
         .learn-more-label{
           color: #008ebe;
@@ -63,7 +62,6 @@ html body .chart-types-categories-page {
       }
     }
   }
-
 
 
 }

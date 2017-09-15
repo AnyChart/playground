@@ -32,6 +32,7 @@
             [playground.views.marketing.chart-types-page :as chart-types-view]
             [playground.views.marketing.chart-type-page :as chart-type-view]
             [playground.views.marketing.chart-types-categories-page :as chart-type-categories-view]
+            [playground.views.marketing.chart-types-category-page :as chart-type-category-view]
             [playground.views.marketing.data-sets-page :as data-sets-view]
             [playground.views.marketing.data-set-page :as data-set-view]
             [playground.views.marketing.about-page :as about-view]
@@ -200,6 +201,11 @@
 
 (defn chart-types-categories-page [request]
   (chart-type-categories-view/page (get-app-data request) chartopedia/categories))
+
+(defn chart-types-category-page [request]
+  (let [category-name (-> request :params :category)]
+    (when-let [category (chartopedia/get-category category-name)]
+      (chart-type-category-view/page (get-app-data request) category))))
 
 (defn data-sets-page [request]
   (data-sets-view/page (get-app-data request)))
@@ -448,7 +454,10 @@
                                                   mw/base-page-middleware))
 
            (GET "/chart-types/categories" [] (-> chart-types-categories-page
-                                      mw/base-page-middleware))
+                                                 mw/base-page-middleware))
+
+           (GET "/chart-types/categories/:category" [] (-> chart-types-category-page
+                                                           mw/base-page-middleware))
 
            (GET "/datasets/" [] redirect-slash)
            (GET "/datasets" [] (-> data-sets-page

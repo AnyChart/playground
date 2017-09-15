@@ -4,7 +4,7 @@
             [playground.views.common :as page]))
 
 
-(defn page [{:keys [page] :as data} categories]
+(defn page [data categories]
   (hiccup-page/html5
     {:lang "en"}
     (page/head)

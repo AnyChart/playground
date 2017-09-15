@@ -7,7 +7,7 @@
 (defn get-id [text]
   (string/replace (string/lower-case text) #" " "-"))
 
-(defn page [{:keys [page] :as data} chart-type relations]
+(defn page [data chart-type relations]
   (hiccup-page/html5
     {:lang "en"}
     (page/head)
