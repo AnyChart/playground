@@ -58,8 +58,10 @@
 
         [:div.toggle-tabs.btn-group {:role "group"}
          [:a.active.btn.btn-link {:type "button"} "Popular tags"]
-         [:a.btn.btn-link {:type "button"} "Unknown tags"]
-         [:a.btn.btn-link {:type "button"} "Knonw tags"]]
+         [:a.btn.btn-link {:type "button"}
+          [:span "Unknown tags"]]
+         [:a.btn.btn-link {:type "button"}
+          [:span "Knonw tags"]]]
 
         [:p.popular-label "Popular " [:b "tags"]]
 
