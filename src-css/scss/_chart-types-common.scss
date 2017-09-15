@@ -1,3 +1,17 @@
+@mixin transition ($time, $func){
+  -webkit-transition: all $time $func;
+  -ms-transition: all $time $func;
+  -moz-transition: all $time $func;
+  transition: all $time $func;
+}
+
+@mixin transform ($effect){
+  -webkit-transform: $effect;
+  -ms-transform: $effect;
+  -moz-transform: $effect;
+  transform: $effect;
+}
+
 .chart-type-container{
   /*display: flex;
   flex-wrap: wrap;
@@ -22,8 +36,13 @@
       //height: 165px;
       color: #008ebe;
       box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+
+      @include transition(150ms, ease);
+      @include transform(scale(1));
       &:hover, &:focus {
-        color: #003d92;
+        text-decoration: none;
+        @include transition(150ms, ease);
+        @include transform(scale(1.1));
       }
       span{
         overflow: hidden;
@@ -54,3 +73,5 @@
     }
   }
 }
+
+
