@@ -58,6 +58,11 @@ html body .chart-types-categories-page {
           border-radius: 3px;
           text-transform: uppercase;
           cursor: pointer;
+          &:hover{
+            text-decoration: none;
+            color: white;
+            background-color: #19a1ce;
+          }
         }
       }
     }
