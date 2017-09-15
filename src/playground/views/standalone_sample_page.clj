@@ -10,7 +10,7 @@
     {:lang "en"}
     (page/head)
     [:body
-     [:div.wrapper
+     [:div.wrapper.standalone-sample-page
 
       (page/nav (:templates data) (:user data) sample)
 

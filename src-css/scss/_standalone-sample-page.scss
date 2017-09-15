@@ -1,0 +1,17 @@
+.standalone-sample-page{
+  .iframe-standalone-box {
+    height: 100%;
+    width: 100%;
+    .iframe-standalone {
+      border: none;
+      width: 100%;
+      height: 100%
+    }
+  }
+  .info{
+    padding: 0 10px;
+    .tag{
+      margin-right: 5px;
+    }
+  }
+}
