@@ -190,7 +190,10 @@
 ;; Marketing pages
 ;; =====================================================================================================================
 (defn chart-types-page [request]
-  (chart-types-view/page (get-app-data request) chartopedia/chart-types))
+  (let [page (dec (try (-> request :params :page Integer/parseInt) (catch Exception _ 1)))
+        chart-types chartopedia/chart-types
+        is-end (chart-types-view/is-end (count chart-types) page)]
+    (chart-types-view/page (get-app-data request) chart-types is-end page)))
 
 (defn chart-type-page [request]
   (let [chart-name (-> request :params :chart-type)]

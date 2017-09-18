@@ -57,10 +57,11 @@
 
         (when (seq (:samples data))
           [:h2.popular-label.samples-label "Samples"])
+
         [:div#tag-samples.row.samples-container
          (for [sample (:samples data)]
            (sample-view/sample-landing sample))]
-                [:div.prev-next-buttons
+        [:div.prev-next-buttons
          [:a#tag-samples-prev.prev-button.btn.btn-default {:style (str "display: " (if (zero? page) "none;" "inline-block;"))
                                                            :href  (str "/tags/" tag "?page=" page)
                                                            :title (str "Prev page, " page)}

@@ -35,17 +35,17 @@
 (defn init-buttons [prev-btn-name
                     next-btn-name
                     *page
-                    load-samples]
+                    load-samples-fn]
   (let [prev-button (dom/getElement prev-btn-name)
         next-button (dom/getElement next-btn-name)]
     (event/listen prev-button "click" (fn [e]
                                         (.preventDefault e)
                                         (swap! *page dec)
-                                        (load-samples)))
+                                        (load-samples-fn)))
     (event/listen next-button "click" (fn [e]
                                         (.preventDefault e)
                                         (swap! *page inc)
-                                        (load-samples)))))
+                                        (load-samples-fn)))))
 
 ;;======================================================================================================================
 ;; Landing page
@@ -196,8 +196,8 @@
 
 (defn load-tag-samples [samples-count]
   (POST "/tag-samples.json"
-        {:params        {:offset (* samples-count @*tag-samples-page)
-                         :tag    @*tag
+        {:params        {:offset        (* samples-count @*tag-samples-page)
+                         :tag           @*tag
                          :samples-count samples-count}
          :handler       on-tag-samples-load
          :error-handler #(utils/log "Error!" %)}))
@@ -218,4 +218,47 @@
                           "tag-samples-next"
                           @*tag-samples-page
                           @*tag-samples-is-end
+                          "page"))
+
+;;======================================================================================================================
+;; Chart types page
+;;======================================================================================================================
+(def *chart-types-page (atom 0))
+(def *chart-types-is-end (atom false))
+(def ^:const chart-types-count 25)
+
+(defn is-end [all-charts page]
+  (let [pages (int (.ceil js/Math (/ all-charts 25)))]
+    (>= page (dec pages))))
+
+
+(defn chart-types-buttons-click []
+  (let [box (first (array-seq (.getElementsByClassName js/document "chart-type-container")))
+        els (array-seq (.-childNodes box))]
+    (dotimes [i (count els)]
+      (if (and
+            (>= i (* @*chart-types-page 25))
+            (< i (+ 25 (* @*chart-types-page 25))))
+        (set! (.-display (.-style (nth els i))) "block")
+        (set! (.-display (.-style (nth els i))) "none")))
+    (reset! *chart-types-is-end (is-end (count els) @*chart-types-page)))
+  (.pushState (.-history js/window) nil nil (str "?page=" (inc @*chart-types-page)))
+  (set-buttons-visibility "tag-samples-prev"
+                          "tag-samples-next"
+                          @*chart-types-page
+                          @*chart-types-is-end
+                          "page"))
+
+
+(defn ^:export startChartTypesPage [_end _page]
+  (reset! *chart-types-page _page)
+  (reset! *chart-types-is-end _end)
+  (init-buttons "tag-samples-prev"
+                "tag-samples-next"
+                *chart-types-page
+                chart-types-buttons-click)
+  (set-buttons-visibility "tag-samples-prev"
+                          "tag-samples-next"
+                          @*chart-types-page
+                          @*chart-types-is-end
                           "page"))
