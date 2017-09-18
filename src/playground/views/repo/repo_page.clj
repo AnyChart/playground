@@ -1,4 +1,4 @@
-(ns playground.views.repo-page
+(ns playground.views.repo.repo-page
   (:require [playground.views.common :as page]
             [hiccup.page :as hiccup-page]))
 

@@ -1,4 +1,4 @@
-(ns playground.views.marketing.data-sets-page
+(ns playground.views.marketing.data-set.data-sets-page
   (:require [hiccup.page :as hiccup-page]
             [playground.views.common :as page]))
 

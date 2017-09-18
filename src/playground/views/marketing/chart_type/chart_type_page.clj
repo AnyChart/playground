@@ -1,4 +1,4 @@
-(ns playground.views.marketing.chart-type-page
+(ns playground.views.marketing.chart-type.chart-type-page
   (:require [hiccup.page :as hiccup-page]
             [playground.views.common :as page]
             [cheshire.core :as json]

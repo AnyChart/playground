@@ -20,21 +20,26 @@
             [playground.web.chartopedia :as chartopedia]
     ;; pages
             [playground.views.landing-page :as landing-view]
-            [playground.views.version-page :as version-view]
             [playground.views.register-page :as register-view]
             [playground.views.auth-page :as auth-view]
-            [playground.views.repo-page :as repo-view]
-            [playground.views.repos-page :as repos-view]
             [playground.views.profile-page :as profile-view]
-            [playground.views.tags-page :as tags-view]
-            [playground.views.tag-page :as tag-view]
+
+            [playground.views.repo.repo-page :as repo-view]
+            [playground.views.repo.repos-page :as repos-view]
+            [playground.views.repo.version-page :as version-view]
+
+            [playground.views.tag.tags-page :as tags-view]
+            [playground.views.tag.tag-page :as tag-view]
+
+            [playground.views.marketing.chart-type.chart-types-page :as chart-types-view]
+            [playground.views.marketing.chart-type.chart-type-page :as chart-type-view]
+            [playground.views.marketing.chart-type.chart-types-categories-page :as chart-type-categories-view]
+            [playground.views.marketing.chart-type.chart-types-category-page :as chart-type-category-view]
+
+            [playground.views.marketing.data-set.data-sets-page :as data-sets-view]
+            [playground.views.marketing.data-set.data-set-page :as data-set-view]
+
             [playground.views.standalone-sample-page :as standalone-sample-view]
-            [playground.views.marketing.chart-types-page :as chart-types-view]
-            [playground.views.marketing.chart-type-page :as chart-type-view]
-            [playground.views.marketing.chart-types-categories-page :as chart-type-categories-view]
-            [playground.views.marketing.chart-types-category-page :as chart-type-category-view]
-            [playground.views.marketing.data-sets-page :as data-sets-view]
-            [playground.views.marketing.data-set-page :as data-set-view]
             [playground.views.marketing.about-page :as about-view]
             [playground.views.marketing.pricing-enterprise-page :as pricing-enterprise-view]
             [playground.views.marketing.pricing-page :as pricing-view]
@@ -300,7 +305,6 @@
                                                          :offset offset})
         result {:samples (take samples-count samples)
                 :end     (< (count samples) (inc samples-count))}]
-    (prn samples-count offset* (count samples))
     (response result)))
 
 (def empty-sample

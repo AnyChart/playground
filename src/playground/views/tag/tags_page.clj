@@ -1,4 +1,4 @@
-(ns playground.views.tags-page
+(ns playground.views.tag.tags-page
   (:require [playground.views.common :as page]
             [hiccup.page :as hiccup-page]))
 

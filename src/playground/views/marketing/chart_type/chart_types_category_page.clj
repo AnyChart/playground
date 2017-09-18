@@ -1,4 +1,4 @@
-(ns playground.views.marketing.chart-types-category-page
+(ns playground.views.marketing.chart-type.chart-types-category-page
   (:require [hiccup.page :as hiccup-page]
             [playground.views.common :as page]))
 
