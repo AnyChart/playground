@@ -195,9 +195,20 @@
 (defn chart-type-page [request]
   (let [chart-name (-> request :params :chart-type)]
     (when-let [chart-type (chartopedia/get-chart chart-name)]
-      (chart-type-view/page (get-app-data request)
-                            chart-type
-                            (chartopedia/get-relations chart-type)))))
+      (let [
+            ;TODO: emliminate addin 's' to end of chart-type-name
+            tag (str (:name chart-type) "s")
+            page (dec (try (-> request :params :page Integer/parseInt) (catch Exception _ 1)))
+            samples (db-req/samples-by-tag (get-db request) {:count  (inc samples-per-block)
+                                                             :offset (* samples-per-block page)
+                                                             :tag    tag})]
+        (chart-type-view/page (merge {:samples (take samples-per-block samples)
+                                      :end     (< (count samples) (inc samples-per-block))
+                                      :page    page
+                                      :tag     tag}
+                                     (get-app-data request))
+                              chart-type
+                              (chartopedia/get-relations chart-type))))))
 
 (defn chart-types-categories-page [request]
   (chart-type-categories-view/page (get-app-data request) chartopedia/categories))
@@ -279,12 +290,14 @@
 (defn top-tag-samples [request]
   (let [offset* (-> request :params :offset)
         offset (if (int? offset*) offset* (Integer/parseInt offset*))
+        samples-count (-> request :params :samples-count)
         tag (-> request :params :tag)
         samples (db-req/samples-by-tag (get-db request) {:tag    tag
-                                                         :count  (inc samples-per-page)
+                                                         :count  (inc samples-count)
                                                          :offset offset})
-        result {:samples (take samples-per-page samples)
-                :end     (< (count samples) (inc samples-per-page))}]
+        result {:samples (take samples-count samples)
+                :end     (< (count samples) (inc samples-count))}]
+    (prn samples-count offset* (count samples))
     (response result)))
 
 (def empty-sample

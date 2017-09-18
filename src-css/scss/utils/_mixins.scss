@@ -1,0 +1,13 @@
+@mixin transition ($time, $func){
+  -webkit-transition: all $time $func;
+  -ms-transition: all $time $func;
+  -moz-transition: all $time $func;
+  transition: all $time $func;
+}
+
+@mixin transform ($effect){
+  -webkit-transform: $effect;
+  -ms-transform: $effect;
+  -moz-transform: $effect;
+  transform: $effect;
+}

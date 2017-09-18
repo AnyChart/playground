@@ -44,6 +44,16 @@
   min-height: 271px;
   position: relative;
   box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+
+  @include transition(150ms, ease);
+  @include transform(scale(1));
+  &:hover, &:focus {
+    text-decoration: none;
+    @include transition(150ms, ease);
+    @include transform(scale(1.08));
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  }
+
   .sample-info{
     position: absolute;
     bottom: 6px;

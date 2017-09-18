@@ -194,98 +194,28 @@
                           "page"))
 
 
-(defn load-tag-samples []
+(defn load-tag-samples [samples-count]
   (POST "/tag-samples.json"
-        {:params        {:offset (* samples-per-page @*tag-samples-page)
-                         :tag    @*tag}
+        {:params        {:offset (* samples-count @*tag-samples-page)
+                         :tag    @*tag
+                         :samples-count samples-count}
          :handler       on-tag-samples-load
          :error-handler #(utils/log "Error!" %)}))
 
 
-(defn ^:export startTagPage [_end _page _tag]
-  ;(utils/log "Start tag page: " _end _page _tag)
+(defn ^:export startTagPage [_end _page _tag _full-page]
+  ;(utils/log "Start tag page: " _end _page _tag _full-page)
   (reset! *tag-samples-is-end _end)
   (reset! *tag-samples-page _page)
   (reset! *tag _tag)
   (init-buttons "tag-samples-prev"
                 "tag-samples-next"
                 *tag-samples-page
-                load-tag-samples)
+                #(if _full-page
+                   (load-tag-samples samples-per-page)
+                   (load-tag-samples samples-per-block)))
   (set-buttons-visibility "tag-samples-prev"
                           "tag-samples-next"
                           @*tag-samples-page
                           @*tag-samples-is-end
                           "page"))
-
-
-;(def page (atom 0))
-;(def end (atom false))
-;
-;;; when some? version-id, it's version-page
-;(def version-id (atom nil))
-;;; when some? tag it's tag page
-;(def tag (atom nil))
-;;; else it's landing page
-
-
-;(defn set-buttons-visibility []
-;  ;(utils/log "set visibitlity: page, end: " @page @end)
-;  (let [prevButton (dom/getElement "prevButton")
-;        nextButton (dom/getElement "nextButton")]
-;    (style/setElementShown prevButton (pos? @page))
-;    (.setAttribute prevButton "href" (str "/?page=" @page))
-;    (.setAttribute prevButton "title" (str "Prev page, " @page))
-;    (style/setElementShown nextButton (not @end))
-;    (.setAttribute nextButton "href" (str "/?page=" (inc (inc @page))))
-;    (.setAttribute nextButton "title" (str "Next page, " (inc (inc @page))))))
-
-;(defn on-samples-load [data]
-;  (dom/removeChildren (dom/getElement "samples-container"))
-;  (set! (.-innerHTML (.getElementById js/document "samples-container"))
-;        (apply str (map #(-> % sample-view/sample-landing h/html) (:samples data))))
-;  (reset! end (:end data))
-;  (.pushState (.-history js/window) nil nil (str
-;                                              (when (not= (.-pathname (.-location js/window)) "/")
-;                                                (.-pathname (.-location js/window)))
-;                                              "?page=" (inc @page)))
-;  (set-buttons-visibility))
-;
-;(defn load-samples []
-;  (if @version-id
-;    (POST "/version-samples.json"
-;          {:params        {:offset     (* samples-per-page @page)
-;                           :version_id @version-id}
-;           :handler       on-samples-load
-;           :error-handler #(utils/log "Error!" %)})
-;    (if @tag
-;      (POST "/tag-samples.json"
-;            {:params        {:offset (* samples-per-page @page)
-;                             :tag    @tag}
-;             :handler       on-samples-load
-;             :error-handler #(utils/log "Error!" %)})
-;      (POST "/landing-samples.json"
-;            {:params        {:offset (* samples-per-page @page)}
-;             :handler       on-samples-load
-;             :error-handler #(utils/log "Error!" %)}))))
-
-;(defn init-buttons []
-;  (let [prevButton (dom/getElement "prevButton")
-;        nextButton (dom/getElement "nextButton")]
-;    (event/listen prevButton "click" (fn [e]
-;                                       (.preventDefault e)
-;                                       (swap! page dec)
-;                                       (load-samples)))
-;    (event/listen nextButton "click" (fn [e]
-;                                       (.preventDefault e)
-;                                       (swap! page inc)
-;                                       (load-samples)))))
-
-;(defn ^:export start [end-val page-val & [version-id-val tag-val]]
-;  (utils/log "Start site: " end-val version-id-val tag-val)
-;  (reset! end end-val)
-;  (reset! page page-val)
-;  (when version-id-val (reset! version-id version-id-val))
-;  (when tag-val (reset! tag tag-val))
-;  (init-buttons)
-;  (set-buttons-visibility))
-

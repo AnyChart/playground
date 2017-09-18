@@ -1,5 +1,3 @@
-@import "ie";
-
 $red-color: #df4e69;
 $nav-bg-color: #2c4b76;
 $main-bg-color: #e7edef;
@@ -7,7 +5,12 @@ $footer-color: #ffffff;
 $text-color: #222222;
 $intro-color: #c3dfe8;
 
-@import "bootstrap_ext";
+@import "utils/ie";
+
+@import "utils/mixins";
+
+@import "utils/bootstrap_ext";
+
 
 @import "base";
 
@@ -23,16 +26,18 @@ $intro-color: #c3dfe8;
 
 @import "data-sets-page";
 
-@import "tags-page";
 
-@import "tag-page";
+@import "tags/tags-page";
 
-@import "chart-types-page";
+@import "tags/tag-page";
 
-@import "chart-type-page";
 
-@import "chart-types-categories";
+@import "chart-type/chart-types-page";
 
-@import "chart-types-category-page";
+@import "chart-type/chart-type-page";
 
-@import "chart-types-common";
+@import "chart-type/chart-types-categories";
+
+@import "chart-type/chart-types-category-page";
+
+@import "chart-type/chart-types-common";

@@ -2,12 +2,13 @@
   (:require [hiccup.page :as hiccup-page]
             [playground.views.common :as page]
             [cheshire.core :as json]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [playground.views.sample :as sample-view]))
 
 (defn get-id [text]
   (string/replace (string/lower-case text) #" " "-"))
 
-(defn page [data chart-type relations]
+(defn page [{:keys [page tag] :as data} chart-type relations]
   (hiccup-page/html5
     {:lang "en"}
     (page/head)
@@ -45,17 +46,36 @@
           ]
          ]
 
-        [:iframe {:style       "height:350px; width: 100%; border: 1px solid #DDDDDD;"
-                  :class       "clear-iFrame"
-                  :scrolling   "no"
-                  :src         (str "http://playground.anychart.com/chartopedia-gallery/latest/samples/"
-                                    (string/replace (:name chart-type) #" " "_")
-                                    "-iframe")
-                  :id          "pg-frame"
-                  :frameborder "0"}]
+        ;[:iframe {:style       "height:350px; width: 100%; border: 1px solid #DDDDDD;"
+        ;          :class       "clear-iFrame"
+        ;          :scrolling   "no"
+        ;          :src         (str "http://playground.anychart.com/chartopedia-gallery/latest/samples/"
+        ;                            (string/replace (:name chart-type) #" " "_")
+        ;                            "-iframe")
+        ;          :id          "pg-frame"
+        ;          :frameborder "0"}]
+
+        (when (seq (:samples data))
+          [:h2.popular-label.samples-label "Samples"])
+        [:div#tag-samples.row.samples-container
+         (for [sample (:samples data)]
+           (sample-view/sample-landing sample))]
+                [:div.prev-next-buttons
+         [:a#tag-samples-prev.prev-button.btn.btn-default {:style (str "display: " (if (zero? page) "none;" "inline-block;"))
+                                                           :href  (str "/tags/" tag "?page=" page)
+                                                           :title (str "Prev page, " page)}
+          [:span.glyphicon.glyphicon-arrow-left {:aria-hidden true}]
+          " Prev"]
+         [:a#tag-samples-next.next-button.btn.btn-default {:style (str "display: " (if (:end data) "none;" "inline-block;"))
+                                                           :href  (str "/tags/" tag "?page=" (-> page inc inc))
+                                                           :title (str "Next page, " (-> page inc inc))}
+          "Next "
+          [:span.glyphicon.glyphicon-arrow-right {:aria-hidden true}]]]
 
         ]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
      [:script {:src "/jquery/jquery.min.js"}]
-     [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]]))
+     [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]
+     [:script {:src "/js/site.js" :type "text/javascript"}]
+     [:script "playground.site.landing.startTagPage(" (:end data) ", " page ", '" tag "', false);"]]))
