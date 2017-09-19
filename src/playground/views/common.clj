@@ -252,6 +252,34 @@
      [:div.name [:b "Other Types"]]]]])
 
 
+(defn bottom-footer []
+  [:div.footer-bottom-box
+   [:div.footer-inner
+    [:a.soc-network
+     {:title  "AnyChart Facebook"
+      :target "_blank"
+      :rel    "nofollow"
+      :href   "https://www.facebook.com/AnyCharts"}
+     [:span.soc-network-icon.fb [:i.sn-mini-icon.ac.ac-facebook]]]
+    [:a.soc-network
+     {:title  "AnyChart Twitter"
+      :target "_blank"
+      :rel    "nofollow"
+      :href   "https://twitter.com/AnyChart"}
+     [:span.soc-network-icon.tw [:i.sn-mini-icon.ac.ac-twitter]]]
+    [:a.soc-network
+     {:title  "AnyChart LinkedIn"
+      :target "_blank"
+      :rel    "nofollow"
+      :href   "https://www.linkedin.com/company/386660"}
+     [:span.soc-network-icon.in [:i.sn-mini-icon.ac.ac-linkedin]]]]
+   [:span.copyright (str "&copy; " (t/year (t/now)) " ")
+    [:a {:href   "https://www.anychart.com"
+         :rel    "nofollow"
+         :target "_blank"} "AnyChart.com"]
+    " All rights reserved."]])
+
+
 (defn footer [repos tags data-sets]
   [:footer.footer
    [:div.container-fluid.content-container
@@ -300,28 +328,4 @@
         [:div.dataset [:a {:href  (str "/datasets/" (:data-source-name data-set) "/" (:name data-set))
                            :title (str "Data Sets - " (:title data-set))}
                        (:title data-set)]])]]
-    [:div.footer-bottom-box
-     [:div.footer-inner
-      [:a.soc-network
-       {:title  "AnyChart Facebook"
-        :target "_blank"
-        :rel    "nofollow"
-        :href   "https://www.facebook.com/AnyCharts"}
-       [:span.soc-network-icon.fb [:i.sn-mini-icon.ac.ac-facebook]]]
-      [:a.soc-network
-       {:title  "AnyChart Twitter"
-        :target "_blank"
-        :rel    "nofollow"
-        :href   "https://twitter.com/AnyChart"}
-       [:span.soc-network-icon.tw [:i.sn-mini-icon.ac.ac-twitter]]]
-      [:a.soc-network
-       {:title  "AnyChart LinkedIn"
-        :target "_blank"
-        :rel    "nofollow"
-        :href   "https://www.linkedin.com/company/386660"}
-       [:span.soc-network-icon.in [:i.sn-mini-icon.ac.ac-linkedin]]]]
-     [:span.copyright (str "&copy; " (t/year (t/now)) " ")
-      [:a {:href   "https://www.anychart.com"
-           :rel    "nofollow"
-           :target "_blank"} "AnyChart.com"]
-      " All rights reserved."]]]])
+    (bottom-footer)]])
