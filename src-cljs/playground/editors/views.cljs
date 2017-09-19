@@ -85,7 +85,7 @@
                          :reagent-render      (fn []
                                                 (let [[markup-percent style-percent] @(rf/subscribe [:editors/splitter-percents])]
                                                   [h-split
-                                                   :class "cont1"
+                                                   :class "splitter"
                                                    :splitter-size "8px"
                                                    :panel-1 [v-split
                                                              :margin "0px"
@@ -105,7 +105,7 @@
                          :reagent-render      (fn []
                                                 (let [[markup-percent style-percent] @(rf/subscribe [:editors/splitter-percents])]
                                                   [h-split
-                                                   :class "cont1"
+                                                   :class "splitter"
                                                    :splitter-size "8px"
                                                    :panel-2 [v-split
                                                              :margin "0px"
@@ -124,7 +124,7 @@
   (reagent/create-class {:component-did-mount #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
                          :reagent-render      (fn []
                                                 [v-split
-                                                 :class "cont1"
+                                                 :class "splitter"
                                                  :splitter-size "8px"
                                                  :panel-1 [h-split
                                                            :margin "0px"
@@ -142,7 +142,7 @@
   (reagent/create-class {:component-did-mount #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
                          :reagent-render      (fn []
                                                 [v-split
-                                                 :class "cont1"
+                                                 :class "splitter"
                                                  :splitter-size "8px"
                                                  :panel-2 [h-split
                                                            :margin "0px"
