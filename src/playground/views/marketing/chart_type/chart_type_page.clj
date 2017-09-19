@@ -46,14 +46,14 @@
           ]
          ]
 
-        ;[:iframe {:style       "height:350px; width: 100%; border: 1px solid #DDDDDD;"
-        ;          :class       "clear-iFrame"
-        ;          :scrolling   "no"
-        ;          :src         (str "http://playground.anychart.com/chartopedia-gallery/latest/samples/"
-        ;                            (string/replace (:name chart-type) #" " "_")
-        ;                            "-iframe")
-        ;          :id          "pg-frame"
-        ;          :frameborder "0"}]
+        ;[:iframe.clear-iFrame
+        ; {:style       "height:350px; width: 100%; border: 1px solid #DDDDDD;"
+        ;  :scrolling   "no"
+        ;  :src         (str "http://playground.anychart.com/chartopedia-gallery/latest/samples/"
+        ;                    (string/replace (:name chart-type) #" " "_")
+        ;                    "-iframe")
+        ;  :id          "pg-frame"
+        ;  :frameborder "0"}]
 
         (when (seq (:samples data))
           [:h2.popular-label.samples-label "Samples"])

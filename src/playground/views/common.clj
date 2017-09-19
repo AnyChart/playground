@@ -59,15 +59,14 @@
 
 
 (defn nav-sample-menu-item [sample]
-  [:li {:class "dropdown"}
-   [:a {:href          "#"
-        :class         "dropdown-toggle"
-        :data-toggle   "dropdown"
-        :role          "button"
-        :aria-haspopup "true"
-        :aria-expanded "false"} "View"
-    [:span {:class "caret"}]]
-   [:ul {:class "dropdown-menu"}
+  [:li.dropdown
+   [:a.dropdown-toggle {:href          "#"
+                        :data-toggle   "dropdown"
+                        :role          "button"
+                        :aria-haspopup "true"
+                        :aria-expanded "false"} "View"
+    [:span.caret]]
+   [:ul.dropdown-menu
     [:li [:a {:href (str (utils/sample-url sample) "?view=editor")} "Editor"]]
     [:li [:a {:href (str (utils/sample-url sample) "?view=standalone")} "Standalone"]]
     [:li [:a {:href (str (utils/sample-url sample) "?view=iframe")} "Iframe"]]]])
@@ -106,16 +105,15 @@
        [:li [:a {:href "/tags"} "Tags"]]
        [:li [:a {:href "/datasets"} "Data Sets"]]
 
-       [:li {:class "dropdown"}
-        [:a {:href          "#"
-             :class         "dropdown-toggle"
-             :data-toggle   "dropdown"
-             :role          "button"
-             :aria-haspopup "true"
-             :aria-expanded "false"} "Support"
-         [:span {:class "caret"}]]
+       [:li.dropdown
+        [:a.dropdown-toggle {:href          "#"
+                             :data-toggle   "dropdown"
+                             :role          "button"
+                             :aria-haspopup "true"
+                             :aria-expanded "false"} "Support"
+         [:span.caret]]
 
-        [:ul {:class "dropdown-menu"}
+        [:ul.dropdown-menu
          [:li [:a {:href "/support"} "Support"]]
          [:li [:a {:href "/roadmap"} "Roadmap"]]
          [:li [:a {:href "/version-history"} "Version History"]]]]
@@ -185,17 +183,16 @@
         [:li [:a {:href "/tags" :title "Playground Tags"} "Tags"]]
         [:li [:a {:href "/datasets" :title "Playground Data Sets"} "Data Sets"]]
 
-        [:li {:class "dropdown"}
-         [:a {:href          "#"
-              :title         "Playground Support Submenu"
-              :class         "dropdown-toggle"
-              :data-toggle   "dropdown"
-              :role          "button"
-              :aria-haspopup "true"
-              :aria-expanded "false"} "Support"
-          [:span {:class "caret"}]]
+        [:li.dropdown
+         [:a.dropdown-toggle {:href          "#"
+                              :title         "Playground Support Submenu"
+                              :data-toggle   "dropdown"
+                              :role          "button"
+                              :aria-haspopup "true"
+                              :aria-expanded "false"} "Support"
+          [:span.caret]]
 
-         [:ul {:class "dropdown-menu"}
+         [:ul.dropdown-menu
           [:li [:a {:href "/support" :title "Playground Support"} "Support"]]
           [:li [:a {:href "/roadmap" :title "Playground Roadmap"} "Roadmap"]]
           [:li [:a {:href "/version-history" :title "Playground Version History"} "Version History"]]]]
@@ -286,7 +283,7 @@
     [:div.row
 
      [:div.col-sm-2.col-xs-4
-      [:div [:a {:href "https://www.anychart.com" :title "AnyChart" :class "caption"} [:b "Vendor"]]]
+      [:div [:a.caption {:href "https://www.anychart.com" :title "AnyChart"} [:b "Vendor"]]]
       [:div [:a {:href "https://www.anychart.com" :title "AnyChart"} "AnyChart"]]
       [:div [:a {:href "https://www.anychart.com/features" :title "AnyChart Features"} "Features"]]
       [:div [:a {:href "https://www.anychart.com/solutions/" :title "AnyChart Business Solutions"} "Business Solutions"]]
@@ -297,7 +294,7 @@
       [:div [:a {:href "https://www.anychart.com/blog" :title "AnyChart Blog"} "Blog"]]]
 
      [:div.col-sm-2.col-xs-4
-      [:div [:a {:href "/" :title "Playground Home" :class "caption"} [:b "Playground"]]]
+      [:div [:a.caption {:href "/" :title "Playground Home"} [:b "Playground"]]]
       [:div [:a {:href "/chart-types" :title "Playground Chart Types"} "Chart Types"]]
       [:div [:a {:href "/datasets" :title "Playground Data Sets"} "Data Sets"]]
       [:div [:a {:href "/support" :title "Playground Support"} "Support"]]
@@ -307,7 +304,7 @@
       [:div [:a {:href "/about" :title "About Playground"} "About"]]]
 
      [:div.col-sm-2.col-xs-4
-      [:div [:a {:href "/projects" :title "Playground Projects" :class "caption"} [:b "Projects"]]]
+      [:div [:a.caption {:href "/projects" :title "Playground Projects"} [:b "Projects"]]]
       (for [repo (remove :templates repos)]
         [:div [:a {:href  (str "/projects/" (:name repo))
                    :title (str "Projects - " (:title repo))}
@@ -316,14 +313,14 @@
      [:div.clearfix.visible-xs-block]
 
      [:div.col-sm-2.col-xs-4
-      [:div [:a {:href "/tags" :title "Playground Tags" :class "caption"} [:b "Tags"]]]
+      [:div [:a.caption {:href "/tags" :title "Playground Tags"} [:b "Tags"]]]
       (for [tag tags]
         [:div [:a {:href  (str "/tags/" (:name tag))
                    :title (str "Tags - " (:name tag))}
                (:name tag)]])]
 
      [:div.col-sm-4.col-xs-8
-      [:div [:a {:href "/datasets" :title "Playground Data Sets" :class "caption"} [:b "Data Sets"]]]
+      [:div [:a.caption {:href "/datasets" :title "Playground Data Sets"} [:b "Data Sets"]]]
       (for [data-set data-sets]
         [:div.dataset [:a {:href  (str "/datasets/" (:data-source-name data-set) "/" (:name data-set))
                            :title (str "Data Sets - " (:title data-set))}
