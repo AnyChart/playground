@@ -18,7 +18,7 @@
            (slurp
              (str "resources/chartopedia/data/categories/" (:id category) ".json"))
            true)
-         {:img (str "/chartopedia/images/categories/" (:id category) ".png")}))
+         {:img (str "/chartopedia/images/categories/" (:id category) ".svg")}))
 
 (defn get-chart-by-name [name charts]
   (first (filter #(= (:name %) name) charts)))
