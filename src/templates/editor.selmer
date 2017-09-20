@@ -38,17 +38,28 @@
     <script src="/js/clipboard.min.js"></script>
 
     <link rel="stylesheet" href="/css/editor.css">
+    <link rel="stylesheet" href="https://cdn.anychart.com/fonts/2.7.2/anychart.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&amp;subset=greek">
+
 </head>
 <body>
 <div style="display: none;">
     <textarea id="transit-data">{{data|safe}}</textarea>
 </div>
 <div id="main-container"></div>
-<footer class="footer" style="margin-top: 40px;">
-    <div class="container">
-        <span class="text-muted">© {% now yyyy %} AnyChart.com All rights reserved.</span>
+
+<div class="footer-bottom-box">
+    <div class="footer-inner">
+        <a class="soc-network" href="https://www.facebook.com/AnyCharts" rel="nofollow" target="_blank" title="AnyChart Facebook">
+            <span class="soc-network-icon fb"><i class="sn-mini-icon ac ac-facebook"></i></span></a>
+        <a class="soc-network" href="https://twitter.com/AnyChart" rel="nofollow" target="_blank" title="AnyChart Twitter">
+            <span class="soc-network-icon tw"><i class="sn-mini-icon ac ac-twitter"></i></span></a>
+        <a class="soc-network" href="https://www.linkedin.com/company/386660" rel="nofollow" target="_blank" title="AnyChart LinkedIn">
+            <span class="soc-network-icon in"><i class="sn-mini-icon ac ac-linkedin"></i></span></a>
     </div>
-</footer>
+    <span class="copyright">&copy; 2017 <a href="https://www.anychart.com" rel="nofollow" target="_blank">AnyChart.com</a> All rights reserved.</span>
+</div>
+
 <script type="text/javascript" src="/js/playground.js"></script>
 <script type="text/javascript">
     playground.core.run(document.getElementById("transit-data").innerText);

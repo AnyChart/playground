@@ -23,7 +23,10 @@
 
 
 (defn editors-height []
-  (- (window-height) 102))
+  (- (window-height)
+     58  ; header height
+     70  ; foother height
+     ))
 
 
 (defn init []

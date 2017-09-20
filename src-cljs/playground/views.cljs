@@ -5,12 +5,13 @@
             [playground.embed-window.views :as embed-window]
             [playground.editors.views :as editors]
             [playground.tips.views :as tips]
-            [playground.utils :as utils]))
+            [playground.utils :as utils]
+            [playground.utils.utils :as utils-main]))
 
 (defn navbar []
-  [:nav {:class "navbar navbar-default"}
-   [:div {:class "container-fluid"}
-    [:div {:class "navbar-header"}
+  [:header
+   [:nav {:class "navbar navbar-default"}
+   [:div {:class "navbar-header"}
      [:button {:type          "button"
                :class         "navbar-toggle collapsed"
                :data-toggle   "collapse"
@@ -27,7 +28,7 @@
              :width  "30"
              :height "30"
              :alt    "AnyChart"}]
-      "AnyChart Playground"]]
+      "AnyChart " [:b "Playground"]]]
     [:div {:id "navbar" :class "navbar-collapse collapse"}
      [:ul {:class "nav navbar-nav"}
       [:li [:a {:href     "javascript:;"
@@ -63,6 +64,7 @@
         [:li [:a {:href     "javascript:;"
                   :on-click #(rf/dispatch [:view/top])} "Top"]]]]]
      [:ul {:class "nav navbar-nav navbar-right"}
+
       [:li {:class "dropdown"}
        [:a {:href          "#"
             :class         "dropdown-toggle"
@@ -71,16 +73,30 @@
             :aria-haspopup "true"
             :aria-expanded "false"} "Create"
         [:span {:class "caret"}]]
-       [:ul {:class "dropdown-menu"}
+       [:ul.dropdown-menu
         (for [template @(rf/subscribe [:templates])]
-          ^{:key (:name template)} [:li [:a {:href (str "/new?template=" (:url template))} (:name template)]])
-        [:li {:role "separator" :class "divider"}]
-        [:li [:a {:href "/new"} "From scratch"]]]]
-      (if @(rf/subscribe [:can-signin])
-        [:li [:a {:href "/signin"} "Log In"]]
-        [:li [:a {:href "/signout"} "Log Out"]])
-      (when @(rf/subscribe [:can-signup])
-        [:li [:a {:href "/signup"} "Sign Up"]])]]]])
+          ^{:key (:name template)}
+          [:li
+           [:a {:href  (str "/new?template=" (:url template))
+                :title (str "Create " (:name template))}
+            [:img {:src (str "/icons/" (utils-main/name->url (:name template)) ".svg")
+                   :alt (str "Create " (:name template) " button icon")}]
+            (:name template)]])
+        [:li.divider {:role "separator"}]
+        [:li
+         [:a {:href  "/new"
+              :title "Create from scratch"}
+          [:img {:src (str "/icons/from-scratch.svg")
+                 :alt "Create from scratch button icon"}]
+          "From scratch"]]]
+       ]
+
+      ;(if @(rf/subscribe [:can-signin])
+      ;  [:li [:a {:href "/signin"} "Log In"]]
+      ;  [:li [:a {:href "/signout"} "Log Out"]])
+      ;(when @(rf/subscribe [:can-signup])
+      ;  [:li [:a {:href "/signup"} "Sign Up"]])
+      ]]]])
 
 (defn footer [])
 
