@@ -1,5 +1,5 @@
 {
-    "name": "playground.anychart.com",
+    "name": "AnyChart Playground",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
@@ -7,12 +7,12 @@
             "type": "image/png"
         },
         {
-            "src": "/android-chrome-384x384.png",
-            "sizes": "384x384",
+            "src": "/android-chrome-512x512.png",
+            "sizes": "512x512",
             "type": "image/png"
         }
     ],
-    "theme_color": "#2c4b76",
-    "background_color": "#2c4b76",
+    "theme_color": "#334c73",
+    "background_color": "#334c73",
     "display": "standalone"
 }
