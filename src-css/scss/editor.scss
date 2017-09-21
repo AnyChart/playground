@@ -11,55 +11,177 @@ html {
 
     font-family: 'Open Sans', sans-serif;;
 
-    header{
+    header {
       height: 58px;
       border-bottom: 1px solid #b6d4e0;
 
-      nav.navbar {
-        border: none;
-        background-color: white;
-        margin: 0 !important;
-
-        .navbar-nav > li > a {
-          color: #19a1ce;
-        }
-        .navbar-brand {
-          color: #19a1ce;
-          img {
-            margin-right: 5px;
+      .logo{
+        display: inline-block;
+        .logo-img{
+          height: 58px;
+          width: 56px;
+          background-color:  #1e87b4;
+          display: inline-block;
+          img{
+            height: 28px;
+            width: 28px;
+            margin: 15px 14px;
           }
+        }
+
+        .logo-label{
+          color: #19a1ce;
+          font-size: 18px;
+          margin-left: 13px;
           b {
             font-weight: 600;
+          }
+          &:hover, &:focus{
+            text-decoration: none;
+          }
+        }
+      }
+
+      img.icon{
+        width: 20px;
+        height: 20px;
+        margin-right: 15px;
+      }
+      div.icon {
+        height: 20px;
+        width: 20px;
+        display: inline-block;
+        background-color: #19a1ce;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        margin-right: 4px;
+        &.icon-embed {
+          mask-image: url(/icons/editor/embed.svg);
+          mask-size: 20px 20px;
+          -webkit-mask-image: url(/icons/editor/embed.svg);
+          -webkit-mask-size: 20px 20px;
+        }
+        &.icon-settings {
+          mask-image: url(/icons/editor/setting.svg);
+          mask-size: 16px 16px;
+          -webkit-mask-image: url(/icons/editor/settings.svg);
+          -webkit-mask-size: 16px 16px;
+          width: 16px;
+          height: 16px;
+          margin-top: 2px;
+        }
+        &.icon-run {
+          height: 12px;
+          width: 12px;
+          mask-image: url(/icons/editor/run.svg);
+          mask-size: 12px 12px;
+          -webkit-mask-image: url(/icons/editor/run.svg);
+          -webkit-mask-size: 12px 12px;
+          margin-top: 3px;
+        }
+        &.icon-fork {
+          mask-image: url(/icons/editor/fork.svg);
+          mask-size: 16px 16px;
+          -webkit-mask-image: url(/icons/editor/fork.svg);
+          -webkit-mask-size: 16px 16px;
+          width: 16px;
+          height: 16px;
+          margin-top: 2px;
+        }
+        &.icon-view {
+          mask-image: url(/icons/editor/view.svg);
+          mask-size: 16px 16px;
+          -webkit-mask-image: url(/icons/editor/view.svg);
+          -webkit-mask-size: 16px 16px;
+          width: 16px;
+          height: 16px;
+          margin-top: 2px;
+        }
+        &.icon-editor {
+          mask-image: url(/icons/editor/editor.svg);
+          mask-size: 20px 20px;
+          -webkit-mask-image: url(/icons/editor/editor.svg);
+          -webkit-mask-size: 20px 20px;
+          width: 20px;
+          height: 20px;
+          margin-top: 2px;
+        }
+      }
+
+      div.header-box {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #a8c9d6;//#b6d4e0;
+        background-color: white;
+        margin: 0 !important;
+        display: flex;
+        justify-content: space-between;
+        .left-navbar{
+          padding-right: 150px;
+        }
+        .navbar-nav > li > a {
+          color: #19a1ce;
+          display: flex;
+          span.caret{
+            margin-top: 8px;
+          }
+          &:hover, &:active, &:focus{
+            div.icon {
+              background-color: #0e5f89;
+            }
+          }
+        }
+        .navbar-nav > li.dropdown > a{
+          &:active, &:focus{
+          background-color: #c2eaf7;
+          }
+        }
+
+        .navbar-header{
+          margin-right: 200px;
+          .navbar-brand {
+            color: #19a1ce;
+            padding: 0;
+            img {
+              margin-right: 5px;
+            }
+            b {
+              font-weight: 600;
+            }
           }
         }
 
         ul.nav.navbar-nav {
+          float: none;
+          display: inline-block;
           margin-top: 11px;
-          ul{
+          ul {
             padding: 15px 0;
             a {
               font-size: 13px;
               font-weight: 600;
               color: #19a1ce;
               line-height: 30px;
-              &:hover{
+              &:hover {
                 background-color: #c2eaf7;
               }
             }
           }
           & > li > a {
-            //color: white;
             padding: 7px 12px;
-            background-color: rgba(0,0,0,0);
-            &:hover, &:active, &:focus{
-              //color: #58cdf5;
+            background-color: rgba(0, 0, 0, 0);
+            &:hover, &:active, &:focus {
               color: #0e5f89;
             }
           }
         }
 
-        ul.nav.navbar-nav.navbar-right{
-          & > li > a{
+        ul.nav.navbar-nav.navbar-right {
+          .caret{
+            margin-left: 10px;
+          }
+          margin-right: 20px;
+          & > li > a {
             font-size: 14px;
           }
           a {
@@ -80,18 +202,9 @@ html {
         }
       }
     }
-    //footer {
-    //  color: #555555;
-    //  position: absolute;
-    //  bottom: 0;
-    //  width: 100%;
-    //  height: 50px;
-    //  line-height: 50px;
-    //  background-color: #f2f2f2;
-    //}
 
 
-    .footer-bottom-box{
+    .footer-bottom-box {
       height: 70px;
       width: 100%;
       position: absolute;
@@ -100,7 +213,6 @@ html {
       display: flex;
       justify-content: center;
       align-items: center;
-      //margin: 70px 0 50px;
 
       margin: 0;
       padding: 23px 0;
@@ -121,7 +233,7 @@ html {
           &:hover, &:focus {
             text-decoration: none;
             color: #fff;
-            .soc-network-icon{
+            .soc-network-icon {
               border-color: #85caff;
               color: #85caff;
             }
@@ -138,14 +250,14 @@ html {
             border-radius: 50%;
             color: #95bfd3;
             background-color: #d5e3e8;
-            &.tw{
+            &.tw {
               font-size: 17px;
               line-height: 26px;
             }
             &.in {
               font-size: 13px;
             }
-            &:hover, &:focus{
+            &:hover, &:focus {
               color: white;
               background-color: #19a1ce;
             }
@@ -156,7 +268,6 @@ html {
 
   }
 }
-
 
 .column-container {
   display: flex;
@@ -178,22 +289,56 @@ html {
 
       // Copy and other editors buttons
       .editor-label {
-        background: rgba(255, 255, 255, .8);
+        background-color: rgba(236,242,244,0.8);
         position: absolute;
-        top: 7px;
+        top: 11px;
         z-index: 100;
-        font-size: 12px;
-        letter-spacing: 1.2px;
-        color: #999999;
-        display: inline-block;
+        font-size: 11px;
+        //letter-spacing: 1.2px;
+        color: #80a9bd;
+        display: flex;
         cursor: pointer;
         text-transform: uppercase;
         user-select: none;
         &.editor-label-gear {
-          right: 64px;
+          right: 77px;
         }
         &.editor-label-copy {
-          right: 7px;
+          right: 15px;
+        }
+        &:hover, &:focus {
+          text-decoration: none;
+          color: #008ebe;
+          div.icon{
+            background-color: #008ebe;
+          }
+        }
+        /*span.glyphicon {
+          margin-left: 10px;
+        }*/
+
+        div.icon {
+          height: 14px;
+          width: 14px;
+          display: inline-block;
+          background-color: #80a9bd;
+          -webkit-mask-size: contain;
+          mask-size: contain;
+          margin-left: 5px;
+          &.icon-copy {
+            mask-image: url(/icons/editor/copy.svg);
+            mask-size: 14px 14px;
+            -webkit-mask-image: url(/icons/editor/copy.svg);
+            -webkit-mask-size: 14px 14px;
+          }
+          &.icon-settings {
+            mask-image: url(/icons/editor/settings.svg);
+            mask-size: 14px 14px;
+            -webkit-mask-image: url(/icons/editor/settings.svg);
+            -webkit-mask-size: 15px 15px;
+            width: 15px;
+            height: 15px;
+          }
         }
       }
 
@@ -220,13 +365,20 @@ html {
   height: 100%;
   font-size: 12px;
   word-wrap: break-word;
+  background-color: #ecf2f4;
+  .CodeMirror-gutters {
+    background-color: #ecf2f4;
+    border-right: 1px solid #95bfd3;
+  }
+  .CodeMirror-linenumber {
+    color: #80a9bd;
+  }
 }
 
 .editor-box-embed {
   height: 126px;
   width: 350px;
 }
-
 
 /*=================== Iframe result ==================*/
 .result {
@@ -239,7 +391,6 @@ html {
     border: none;
   }
 }
-
 
 /*=================== Settings window ==================*/
 .settings-window {
@@ -310,7 +461,6 @@ html {
     }
   }
 }
-
 
 /*=================== Embed window ==================*/
 textarea.embed-iframe {

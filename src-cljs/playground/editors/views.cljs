@@ -23,7 +23,7 @@
    ; [:span.glyphicon.glyphicon-cog {:aria-hidden true}]]
    [:a.editor-label.editor-label-copy {:id "markup-editor-copy"}
     [:span "copy"]
-    [:span.glyphicon.glyphicon-copy {:aria-hidden true}]]
+    [:div.icon.icon-copy]]
    [:div#markup-editor {:class "editor-box"}]])
 
 
@@ -32,10 +32,10 @@
    [:a.editor-label.editor-label-gear {:id       "code-editor-settings-button"
                                        :on-click #(rf/dispatch [:editors.code-settings/show])}
     [:span "javascript"]
-    [:span.glyphicon.glyphicon-cog {:aria-hidden true}]]
+    [:div.icon.icon-settings]]
    [:a.editor-label.editor-label-copy {:id "code-editor-copy"}
     [:span "copy"]
-    [:span.glyphicon.glyphicon-copy {:aria-hidden true}]]
+    [:div.icon.icon-copy]]
    (when @(rf/subscribe [:editors.code-settings/show])
      [:div.code-context-menu {:id "code-context-menu"}
       [:h4 "Added resources"]
@@ -76,7 +76,7 @@
    ; [:span.glyphicon.glyphicon-cog {:aria-hidden true}]]
    [:a.editor-label.editor-label-copy {:id "style-editor-copy"}
     [:span "copy"]
-    [:span.glyphicon.glyphicon-copy {:aria-hidden true}]]
+    [:div.icon.icon-copy]]
    [:div#style-editor {:class "editor-box"}]])
 
 
