@@ -49,24 +49,22 @@
   (fn [query_v _] (rf/subscribe [:sample-url]))
   (fn [sample-url _] (str sample-url "?view=editor")))
 
-(rf/reg-sub :name (fn [db _] (-> db :sample :name)))
-(rf/reg-sub :description (fn [db _] (-> db :sample :description)))
-(rf/reg-sub :short-description (fn [db _] (-> db :sample :short-description)))
-(rf/reg-sub :tags (fn [db _] (-> db :sample :tags)))
+(rf/reg-sub :sample (fn [db _] (-> db :sample)))
+(rf/reg-sub :sample/name (fn [db _] (-> db :sample :name)))
+(rf/reg-sub :sample/description (fn [db _] (-> db :sample :description)))
+(rf/reg-sub :sample/short-description (fn [db _] (-> db :sample :short-description)))
+(rf/reg-sub :sample/tags (fn [db _] (-> db :sample :tags)))
 
+(rf/reg-sub :sample/scripts (fn [db _] (-> db :sample :scripts)))
+(rf/reg-sub :sample/styles (fn [db _] (-> db :sample :styles)))
+(rf/reg-sub :sample/tags-str (fn [db _] (-> db :settings :tags-str)))
 
-(rf/reg-sub :scripts (fn [db _] (-> db :sample :scripts)))
-(rf/reg-sub :styles (fn [db _] (-> db :sample :styles)))
-(rf/reg-sub :tags-str (fn [db _] (-> db :settings :tags-str)))
-
-
-
-(rf/reg-sub :code-type (fn [db _] (-> db :sample :code-type code-type->str)))
-(rf/reg-sub :code (fn [db _] (-> db :sample :code)))
-(rf/reg-sub :markup-type (fn [db _] (-> db :sample :markup-type makrup-type->str)))
-(rf/reg-sub :markup (fn [db _] (-> db :sample :markup)))
-(rf/reg-sub :style-type (fn [db _] (-> db :sample :style-type style-type->str)))
-(rf/reg-sub :style (fn [db _] (-> db :sample :style)))
+(rf/reg-sub :sample/code-type (fn [db _] (-> db :sample :code-type code-type->str)))
+(rf/reg-sub :sample/code (fn [db _] (-> db :sample :code)))
+(rf/reg-sub :sample/markup-type (fn [db _] (-> db :sample :markup-type makrup-type->str)))
+(rf/reg-sub :sample/markup (fn [db _] (-> db :sample :markup)))
+(rf/reg-sub :sample/style-type (fn [db _] (-> db :sample :style-type style-type->str)))
+(rf/reg-sub :sample/style (fn [db _] (-> db :sample :style)))
 
 
 (rf/reg-sub :data-sets (fn [db _] (-> db :data-sets)))

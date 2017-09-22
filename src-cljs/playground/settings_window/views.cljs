@@ -30,23 +30,23 @@
           [:div.form-group
            [:label {:for "settings-name"} "Name"]
            [:input.form-control {:id            "settings-name"
-                                 :default-value @(rf/subscribe [:name])
+                                 :default-value @(rf/subscribe [:sample/name])
                                  :on-change     #(rf/dispatch [:settings/change-name (-> % .-target .-value)])}]]
           [:div.form-group
            [:label {:for "settings-short-desc"} "Short Description"]
            [:input.form-control {:id            "settings-short-desc"
-                                 :default-value @(rf/subscribe [:short-description])
+                                 :default-value @(rf/subscribe [:sample/short-description])
                                  :on-change     #(rf/dispatch [:settings/change-short-desc (-> % .-target .-value)])}]]
           [:div.form-group
            [:label {:for "settings-desc"} "Description"]
            [:textarea.form-control {:id            "settings-desc"
-                                    :default-value @(rf/subscribe [:description])
+                                    :default-value @(rf/subscribe [:sample/description])
                                     :on-change     #(rf/dispatch [:settings/change-desc (-> % .-target .-value)])}]]
           [:div.form-group
            [:label {:for "settings-tags"} "Tags"]
            [:textarea.form-control {:id        "settings-tags"
                                     :on-change #(rf/dispatch [:settings/change-tags (-> % .-target .-value)])
-                                    :value     @(rf/subscribe [:tags-str])}]]
+                                    :value     @(rf/subscribe [:sample/tags-str])}]]
 
 
           ;[:div.form-inline
@@ -83,7 +83,7 @@
          [:div
           [:div.form-group
            [:label {:for "settings-styles"} "Styles"]
-           (for [style @(rf/subscribe [:styles])]
+           (for [style @(rf/subscribe [:sample/styles])]
              ^{:key style}
              [:div.settings-resource
               [:div.title [:a {:href style :target "_blank"} style]]
@@ -93,7 +93,7 @@
 
           [:div.form-group
            [:label {:for "settings-scripts"} "Scripts"]
-           (for [script @(rf/subscribe [:scripts])]
+           (for [script @(rf/subscribe [:sample/scripts])]
              ^{:key script}
              [:div.settings-resource
               [:div.title [:a {:href script :target "_blank"} script]]

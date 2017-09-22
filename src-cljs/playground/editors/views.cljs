@@ -4,7 +4,8 @@
             [playground.utils :as utils]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
-            [playground.settings-window.data :as external-resources]))
+            [playground.settings-window.data :as external-resources]
+            [playground.standalone.views :as standalone-view]))
 
 (defn iframe-result []
   [:div.result
@@ -162,4 +163,5 @@
      :left [editors-left]
      :right [editors-right]
      :top [editors-top]
-     :bottom [editors-bottom])])
+     :bottom [editors-bottom]
+     :standalone [standalone-view/view])])

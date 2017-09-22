@@ -143,7 +143,7 @@
         ;; add dataset
         (do
           ;; TODO: make event handler clean
-          (.setValue (.getDoc  (-> db :editors :code-editor))
+          (.setValue (.getDoc (-> db :editors :code-editor))
                      (str "anychart.data.loadJsonFile('" (:url dataset) "', function(data) {\n"
                           "  // use data object has following format\n"
                           "  // {\n"

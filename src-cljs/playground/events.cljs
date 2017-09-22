@@ -12,7 +12,6 @@
             [alandipert.storage-atom :refer [local-storage]]))
 
 
-;; -- Event Handlers -----------------------------------------------
 (rf/reg-event-db
   :init
   (fn [_ [_ data]]
@@ -57,9 +56,21 @@
     (assoc-in db [:sample type] code)))
 
 
+(defn dispatch-view [db]
+  (when (= :standalone (-> db :editors :view))
+    (.pushState (.-history js/window) nil nil (common-utils/sample-url (:sample db)))
+    (case (-> db :editors :prev-view)
+      :left (rf/dispatch [:view/left])
+      :right (rf/dispatch [:view/right])
+      :top (rf/dispatch [:view/top])
+      :bottom (rf/dispatch [:view/bottom])
+      (rf/dispatch [:view/left]))))
+
+
 (rf/reg-event-db
   :run
   (fn [db _]
+    (dispatch-view db)
     (.submit (.getElementById js/document "run-form"))
     db))
 
@@ -67,6 +78,7 @@
   :save
   (fn [db _]
     (utils/log "Save")
+    (dispatch-view db)
     (POST "/save"
           {:params        {:sample (:sample db)}
            :handler       #(rf/dispatch [:save-response %1])
@@ -85,7 +97,6 @@
         (.pushState (.-history js/window) nil nil (str "/" (:hash data)
                                                        (when (pos? (:version data))
                                                          (str "/" (:version data)))))
-
         (-> db
             (assoc-in [:sample :version-id] nil)
             (assoc-in [:sample :new] false)
@@ -108,6 +119,7 @@
   :fork
   (fn [db _]
     (utils/log "Fork")
+    (dispatch-view db)
     (POST "/fork"
           {:params        {:sample (:sample db)}
            :handler       #(rf/dispatch [:fork-response %1])

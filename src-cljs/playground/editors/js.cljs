@@ -24,8 +24,8 @@
 
 (defn editors-height []
   (- (window-height)
-     58  ; header height
-     70  ; foother height
+     58                                                     ; header height
+     70                                                     ; foother height
      ))
 
 

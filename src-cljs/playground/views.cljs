@@ -59,7 +59,8 @@
        [:li [:a {:href @(rf/subscribe [:sample-editor-url])}
              [:img.icon {:src "/icons/editor/editor.svg"}]
              [:span "Editor"]]]
-       [:li [:a {:href @(rf/subscribe [:sample-standalone-url])}
+       [:li [:a {:href     "javascript:;"                   ;@(rf/subscribe [:sample-standalone-url])
+                 :on-click #(rf/dispatch [:view/standalone])}
              [:img.icon {:src "/icons/editor/standalone.svg"}]
              "Standalone"]]
        [:li [:a {:href @(rf/subscribe [:sample-iframe-url])}
@@ -126,19 +127,19 @@
     :target "result-iframe"
     :method "POST"}
    [:input {:name  "code"
-            :value @(rf/subscribe [:code])
+            :value @(rf/subscribe [:sample/code])
             :type  "hidden"}]
    [:input {:name  "markup"
-            :value @(rf/subscribe [:markup])
+            :value @(rf/subscribe [:sample/markup])
             :type  "hidden"}]
    [:input {:name  "style"
-            :value @(rf/subscribe [:style])
+            :value @(rf/subscribe [:sample/style])
             :type  "hidden"}]
    [:input {:name  "styles"
-            :value @(rf/subscribe [:styles])
+            :value @(rf/subscribe [:sample/styles])
             :type  "hidden"}]
    [:input {:name  "scripts"
-            :value @(rf/subscribe [:scripts])
+            :value @(rf/subscribe [:sample/scripts])
             :type  "hidden"}]])
 
 
