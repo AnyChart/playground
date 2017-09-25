@@ -22,7 +22,7 @@
     ;  (utils/log (clj->js @prefs)))
 
     {:editors       {:editors-height (editors-js/editors-height)
-                     :view           :left
+                     :view           (or (:view data) :left)
                      :code-settings  {:show false}}
 
      :sample        (:sample data)
@@ -55,22 +55,10 @@
   (fn [db [_ type code]]
     (assoc-in db [:sample type] code)))
 
-
-(defn dispatch-view [db]
-  (when (= :standalone (-> db :editors :view))
-    (.pushState (.-history js/window) nil nil (common-utils/sample-url (:sample db)))
-    (case (-> db :editors :prev-view)
-      :left (rf/dispatch [:view/left])
-      :right (rf/dispatch [:view/right])
-      :top (rf/dispatch [:view/top])
-      :bottom (rf/dispatch [:view/bottom])
-      (rf/dispatch [:view/left]))))
-
-
 (rf/reg-event-db
   :run
   (fn [db _]
-    (dispatch-view db)
+    (rf/dispatch [:view/editor])
     (.submit (.getElementById js/document "run-form"))
     db))
 
@@ -78,7 +66,7 @@
   :save
   (fn [db _]
     (utils/log "Save")
-    (dispatch-view db)
+    (rf/dispatch [:view/editor])
     (POST "/save"
           {:params        {:sample (:sample db)}
            :handler       #(rf/dispatch [:save-response %1])
@@ -119,7 +107,7 @@
   :fork
   (fn [db _]
     (utils/log "Fork")
-    (dispatch-view db)
+    (rf/dispatch [:view/editor])
     (POST "/fork"
           {:params        {:sample (:sample db)}
            :handler       #(rf/dispatch [:fork-response %1])

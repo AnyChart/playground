@@ -36,6 +36,11 @@
 ;;======================================================================================================================
 ;; Editors views
 ;;======================================================================================================================
+(rf/reg-event-db
+  :view/editor
+  (fn [db _]
+    (.pushState (.-history js/window) nil nil (utils/sample-url (:sample db)))
+    (assoc-in db [:editors :view] (-> db :editors :prev-view))))
 
 (rf/reg-event-db
   :view/left

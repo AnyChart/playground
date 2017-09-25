@@ -67,11 +67,19 @@
 
 (defn show-sample-standalone [sample request]
   (db-req/update-sample-views! (get-db request) {:id (:id sample)})
-  (let [templates (db-req/templates (get-db request))]
-    (response (standalone-sample-view/page (merge (get-app-data request)
-                                                  {:templates templates
-                                                   :sample    sample
-                                                   :url       (str (common-utils/sample-url sample) "?view=iframe")})))))
+  (let [templates (db-req/templates (get-db request))
+        data-sets (db-req/data-sets (get-db request))]
+    ;; site page
+    ;(response (standalone-sample-view/page (merge (get-app-data request)
+    ;                                              {:templates templates
+    ;                                               :sample    sample
+    ;                                               :url       (str (common-utils/sample-url sample) "?view=iframe")})))
+    (response (render-file "templates/editor.selmer" {:canonical-url (utils/canonical-url sample)
+                                                      :data          (web-utils/pack {:sample    sample
+                                                                                      :templates templates
+                                                                                      :data-sets data-sets
+                                                                                      :user      (get-safe-user request)
+                                                                                      :view      :standalone})}))))
 
 (defn show-sample-editor [sample request]
   (db-req/update-sample-views! (get-db request) {:id (:id sample)})

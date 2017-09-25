@@ -56,7 +56,8 @@
        [:span "View"]
        [:span.caret]]
       [:ul.dropdown-menu
-       [:li [:a {:href @(rf/subscribe [:sample-editor-url])}
+       [:li [:a {:href     "javascript:;"                   ;@(rf/subscribe [:sample-editor-url])
+                 :on-click #(rf/dispatch [:view/editor])}
              [:img.icon {:src "/icons/editor/editor.svg"}]
              [:span "Editor"]]]
        [:li [:a {:href     "javascript:;"                   ;@(rf/subscribe [:sample-standalone-url])
