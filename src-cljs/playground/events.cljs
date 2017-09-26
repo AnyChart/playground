@@ -23,6 +23,7 @@
 
     {:editors       {:editors-height (editors-js/editors-height)
                      :view           (or (:view data) :left)
+                     :prev-view      :left
                      :code-settings  {:show false}}
 
      :sample        (:sample data)

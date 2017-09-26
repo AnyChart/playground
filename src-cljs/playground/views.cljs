@@ -5,6 +5,7 @@
             [playground.embed-window.views :as embed-window]
             [playground.editors.views :as editors]
             [playground.tips.views :as tips]
+            [playground.sidemenu.views :as sidemenu]
             [playground.utils :as utils]
             [playground.utils.utils :as utils-main]))
 
@@ -13,7 +14,7 @@
    [:div.header-box
 
     [:div.logo
-     [:div.logo-img
+     [:div.logo-img {:on-click #(rf/dispatch [:left-menu/toggle])}
       [:img {:src "/icons/editor/logo.svg"}]]
      [:a.logo-label {:href "/"}
       "AnyChart " [:b "Playground"]]]
@@ -151,4 +152,5 @@
    [editors/editors]
    [tips/tips]
    [settings-window/settings-window]
-   [embed-window/embed-window]])
+   [embed-window/embed-window]
+   [sidemenu/view]])
