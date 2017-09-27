@@ -35,7 +35,12 @@
     <script src="/codemirror/mode/xml/xml.js"></script>
     <script src="/codemirror/mode/htmlmixed/htmlmixed.js"></script>
 
+    <!-- clipboard -->
     <script src="/js/clipboard.min.js"></script>
+
+    <!-- splitter -->
+    <script type="text/javascript" src="/splitter/splitter.js"></script>
+    <link rel="stylesheet" type="text/css" href="/splitter/splitter.css"/>
 
     <link rel="stylesheet" href="/css/editor.css">
     <link rel="stylesheet" href="https://cdn.anychart.com/fonts/2.7.2/anychart.css">

@@ -280,19 +280,19 @@ html {
   display: flex;
   flex-direction: row;
   overflow-y: scroll;
-  .splitter {
+  /*.splitter {
     display: flex;
     flex-direction: row;
-    margin: 0 ! important;
+    margin: 0 ! important;*/
     .editor-container {
-      width: 100%;
-      height: 100%;
+      //width: 100%;
+      //height: 100%;
       position: relative;
 
       .editor-box {
         width: 100%;
         height: 100%;
-        border: solid 1px #DDDDDD;
+        //border: solid 1px #DDDDDD;
       }
 
       // Copy and other editors buttons
@@ -363,7 +363,7 @@ html {
           cursor: pointer;
         }
       }
-    }
+    //}
   }
 }
 
@@ -383,6 +383,46 @@ html {
   }
 }
 
+
+/*div.re-v-split-splitter{
+  position: relative;
+  z-indez: 1;
+  &:after{
+    display: block;
+    background-color: #ecf2f4;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width:100%;
+    height:100%;
+  }
+  &:before{
+    display: block;
+    background-color: #ecf2f4;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width:100%;
+    height:100%;
+  }
+}*/
+.divider_vertical {
+  width: 1px;
+  background-color: #95bfd3;
+  z-index: 10;
+  &.dragged {
+    background-color: #627e8b;
+  }
+}
+.divider_horizontal {
+  height: 1px;
+  background-color: #95bfd3;
+  z-index: 10;
+  &.dragged {
+    background-color: #627e8b;
+  }
+}
+
 .editor-box-embed {
   height: 126px;
   width: 350px;
@@ -390,9 +430,9 @@ html {
 
 /*=================== Iframe result ==================*/
 .result {
-  width: 100%;
-  height: 100%;
-  border: solid 1px #DDDDDD;
+  //width: 100%;
+  //height: 100%;
+  //border: solid 1px #DDDDDD;
   .iframe-result {
     width: 100%;
     height: 100%;

@@ -81,7 +81,7 @@
    [:div#style-editor {:class "editor-box"}]])
 
 
-(defn editors-left []
+(defn editors-left-old []
   (reagent/create-class {:component-did-mount #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
                          :reagent-render      (fn []
                                                 (let [[markup-percent style-percent] @(rf/subscribe [:editors/splitter-percents])]
@@ -101,7 +101,7 @@
                                                                        :panel-2 [code-editor]]]
                                                    :panel-2 [iframe-result]]))}))
 
-(defn editors-right []
+(defn editors-right-old []
   (reagent/create-class {:component-did-mount #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
                          :reagent-render      (fn []
                                                 (let [[markup-percent style-percent] @(rf/subscribe [:editors/splitter-percents])]
@@ -121,7 +121,7 @@
                                                                        :panel-2 [code-editor]]]
                                                    :panel-1 [iframe-result]]))}))
 
-(defn editors-top []
+(defn editors-top-old []
   (reagent/create-class {:component-did-mount #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
                          :reagent-render      (fn []
                                                 [v-split
@@ -139,7 +139,7 @@
                                                                      :panel-2 [code-editor]]]
                                                  :panel-2 [iframe-result]])}))
 
-(defn editors-bottom []
+(defn editors-bottom-old []
   (reagent/create-class {:component-did-mount #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
                          :reagent-render      (fn []
                                                 [v-split
@@ -156,6 +156,69 @@
                                                                      :panel-1 [style-editor]
                                                                      :panel-2 [code-editor]]]
                                                  :panel-1 [iframe-result]])}))
+
+
+(defn editors-left []
+  (reagent/create-class {:component-did-mount #(do
+                                                 (utils/log "Did mount!") (rf/dispatch [:create-editors])
+                                                 (.init js/splitMe))
+                         :reagent-render      (fn []
+                                                (let [[markup-percent style-percent] @(rf/subscribe [:editors/splitter-percents])]
+                                                  [:div.vertically_divided {:data-percent 50
+                                                                            :style        {:width "100%" :height "100%"}}
+                                                   [:div.horizontally_divided {:data-percent markup-percent}
+                                                    [markup-editor]
+                                                    [:div.horizontally_divided {:data-percent style-percent}
+                                                     [style-editor]
+                                                     [code-editor]]]
+                                                   [iframe-result]]))}))
+
+(defn editors-right []
+  (reagent/create-class {:component-did-mount #(do
+                                                 (utils/log "Did mount!") (rf/dispatch [:create-editors])
+                                                 (.init js/splitMe))
+                         :reagent-render      (fn []
+                                                (let [[markup-percent style-percent] @(rf/subscribe [:editors/splitter-percents])]
+                                                  [:div.vertically_divided {:data-percent 50
+                                                                            :style        {:width "100%" :height "100%"}}
+                                                   [iframe-result]
+                                                   [:div.horizontally_divided {:data-percent markup-percent}
+                                                    [markup-editor]
+                                                    [:div.horizontally_divided {:data-percent style-percent}
+                                                     [style-editor]
+                                                     [code-editor]]]]))}))
+
+
+(defn editors-top []
+  (reagent/create-class {:component-did-mount #(do
+                                                 (utils/log "Did mount!") (rf/dispatch [:create-editors])
+                                                 (.init js/splitMe))
+                         :reagent-render      (fn []
+                                                [:div.horizontally_divided {:data-percent 50
+                                                                            :style        {:width "100%" :height "100%"}}
+                                                 [:div.vertically_divided {:data-percent 33}
+                                                  [markup-editor]
+                                                  [:div.vertically_divided {:data-percent 50}
+                                                   [style-editor]
+                                                   [code-editor]]]
+                                                 [iframe-result]])}))
+
+
+(defn editors-bottom []
+  (reagent/create-class {:component-did-mount #(do
+                                                 (utils/log "Did mount!") (rf/dispatch [:create-editors])
+                                                 (.init js/splitMe))
+                         :reagent-render      (fn []
+                                                [:div.horizontally_divided {:data-percent 50
+                                                                            :style        {:width "100%" :height "100%"}}
+                                                 [iframe-result]
+                                                 [:div.vertically_divided {:data-percent 33}
+                                                  [markup-editor]
+                                                  [:div.vertically_divided {:data-percent 50}
+                                                   [style-editor]
+                                                   [code-editor]]]
+                                                 ])}))
+
 
 (defn editors []
   [:div.column-container {:style {:height @(rf/subscribe [:editors/height])}}
