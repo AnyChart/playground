@@ -5,3 +5,6 @@ CodeMirror.getDoc = function(){}
 CodeMirror.getDoc.prototype.setValue = function(code){}
 
 var Clipboard = function(elem, settings) {}
+
+var splitMe = {}
+splitMe.init = function(){}
