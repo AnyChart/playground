@@ -9,7 +9,6 @@
      ;[:div.settings-window-background {:on-click #(rf/dispatch [:settings/hide])}]
      [:div.settings-window-container
 
-
       [:ul.nav.nav-tabs.settings-tabs
        [:li {:class (when @(rf/subscribe [:settings/general-tab?]) "active")}
         [:a {:href     "javascript:;"
@@ -22,7 +21,7 @@
        [:li {:class (when @(rf/subscribe [:settings/data-sets-tab?]) "active")}
         [:a {:href     "javascript:;"
              :on-click #(rf/dispatch [:settings/data-sets-tab])} "Data Sets"]]]
-      [:form
+      [:form.content
 
        (when @(rf/subscribe [:settings/general-tab?])
 

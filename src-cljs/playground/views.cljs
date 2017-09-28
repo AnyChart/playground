@@ -38,27 +38,20 @@
            [:span "Fork"]]]
 
      [:li.dropdown
-      [:a.dropdown-toggle {:href        "#"
-                           :data-toggle "dropdown"
-                           :on-click    #(rf/dispatch [:settings/show])
-                           :class (when @(rf/subscribe [:settings/show]) "active")
-                           }
+      [:a {:href     "#"
+           :on-click #(rf/dispatch [:settings/show])
+           :class    (when @(rf/subscribe [:settings/show]) "active")}
        [:div.icon.icon-settings]
        [:span "Settings"]
-       [:span.caret]]
-      ;[:div.dropdown-menu {:on-click #(do
-      ;                                  (utils/log "lick!")
-      ;                                  (utils/log (.-target %))
-      ;                                  ;(.stopPropagation %)
-      ;                                  )}
-      ; [settings-window/settings-window]
-      ; ]
-      ]
+       [:span.caret]]]
 
-     [:li [:a {:href     "javascript:;"
-               :on-click #(rf/dispatch [:embed/show])}
-           [:div.icon.icon-embed]
-           [:span "Embed"]]]
+     [:li.dropdown
+      [:a {:href     "javascript:;"
+           :on-click #(rf/dispatch [:embed/show])
+           :class    (when @(rf/subscribe [:embed/show]) "active")}
+       [:div.icon.icon-embed]
+       [:span "Embed"]
+       [:span.caret]]]
 
      [:li.dropdown
       [:a.dropdown-toggle {:href          "#"

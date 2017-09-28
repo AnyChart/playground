@@ -7,6 +7,7 @@
   (when (zero? (.-length (.closest (js/$ (.-target e)) ".hide-outside")))
     ;(utils/log "Hide!")
     (rf/dispatch [:settings/hide])
+    (rf/dispatch [:embed/hide])
     (rf/dispatch [:left-menu/close])))
 
 (defn init []

@@ -23,8 +23,8 @@
 
 (defn embed-window []
   (when @(rf/subscribe [:embed/show])
-    [:div.settings-window
-     [:div.settings-window-background {:on-click #(rf/dispatch [:embed/hide])}]
+    [:div.settings-window.hide-outside
+     ;[:div.settings-window-background {:on-click #(rf/dispatch [:embed/hide])}]
      [:div.settings-window-container
 
       [:ul.nav.nav-tabs.settings-tabs
@@ -36,7 +36,7 @@
         [:a {:href     "javascript:;"
              :on-click #(rf/dispatch [:embed/download-tab])} "Download"]]]
 
-      [:form
+      [:form.content
 
        (when @(rf/subscribe [:embed/embed-tab?])
          [:div
@@ -110,7 +110,8 @@
             " HTML"]]])
 
 
-       [:button.btn.btn-default {:type     "button"
-                                 :on-click #(rf/dispatch [:embed/hide])} "Close"]]
+       ;[:button.btn.btn-default {:type     "button"
+       ;                          :on-click #(rf/dispatch [:embed/hide])} "Close"]
+       ]
 
       ]]))

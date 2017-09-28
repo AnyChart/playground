@@ -59,7 +59,8 @@
 (rf/reg-event-db
   :run
   (fn [db _]
-    (rf/dispatch [:view/editor])
+    (when (= :standalone (-> db :editors :view))
+      (rf/dispatch [:view/editor]))
     (.submit (.getElementById js/document "run-form"))
     db))
 
@@ -67,7 +68,8 @@
   :save
   (fn [db _]
     (utils/log "Save")
-    (rf/dispatch [:view/editor])
+    (when (= :standalone (-> db :editors :view))
+      (rf/dispatch [:view/editor]))
     (POST "/save"
           {:params        {:sample (:sample db)}
            :handler       #(rf/dispatch [:save-response %1])
@@ -108,7 +110,8 @@
   :fork
   (fn [db _]
     (utils/log "Fork")
-    (rf/dispatch [:view/editor])
+    (when (= :standalone (-> db :editors :view))
+      (rf/dispatch [:view/editor]))
     (POST "/fork"
           {:params        {:sample (:sample db)}
            :handler       #(rf/dispatch [:fork-response %1])
