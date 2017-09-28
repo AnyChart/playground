@@ -4,7 +4,7 @@
 
 (defn view []
   (when @(rf/subscribe [:left-menu/show])
-    [:div.leftmenu
+    [:div.leftmenu.hide-outside
      [:span.glyphicon-remove.glyphicon.close
       {:on-click #(rf/dispatch [:left-menu/close])}]
      [:ul

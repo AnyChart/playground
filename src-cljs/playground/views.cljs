@@ -37,10 +37,23 @@
            [:div.icon.icon-fork]
            [:span "Fork"]]]
 
-     [:li [:a {:href     "javascript:;"
-               :on-click #(rf/dispatch [:settings/show])}
-           [:div.icon.icon-settings]
-           [:span "Settings"]]]
+     [:li.dropdown
+      [:a.dropdown-toggle {:href        "#"
+                           :data-toggle "dropdown"
+                           :on-click    #(rf/dispatch [:settings/show])
+                           :class (when @(rf/subscribe [:settings/show]) "active")
+                           }
+       [:div.icon.icon-settings]
+       [:span "Settings"]
+       [:span.caret]]
+      ;[:div.dropdown-menu {:on-click #(do
+      ;                                  (utils/log "lick!")
+      ;                                  (utils/log (.-target %))
+      ;                                  ;(.stopPropagation %)
+      ;                                  )}
+      ; [settings-window/settings-window]
+      ; ]
+      ]
 
      [:li [:a {:href     "javascript:;"
                :on-click #(rf/dispatch [:embed/show])}

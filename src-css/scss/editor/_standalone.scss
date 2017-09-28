@@ -1,0 +1,65 @@
+//======================================================================================================================
+//  Standalone view
+//======================================================================================================================
+.standalone-sample-page{
+
+  &.content-container {
+    max-width: 972px;
+    margin: 0 auto;
+  }
+
+  background-color: white;
+  font-size: 13px;
+
+  h1{
+    color: $red-color;
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  h2{
+    color: $red-color;
+    font-size: 15px;
+  }
+
+  .popular-label{
+    text-transform: none;
+    margin: 0;
+  }
+
+  .iframe-standalone-box {
+    height: 450px;
+    width: 100%;
+    margin-top: 10px;
+    .iframe-standalone {
+      border: none;
+      width: 100%;
+      height: 100%
+    }
+  }
+  .info{
+    .tag{
+      margin-right: 5px;
+    }
+  }
+
+  .popular-tags-box{
+    margin: 12px 0 12px;
+    .popular-tag-button-box{
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      .popular-tag-button{
+        white-space: nowrap;
+        margin-bottom: 9px;
+      }
+    }
+  }
+
+  .footer-bottom-box{
+    margin: 0;
+    padding: 23px 0;
+    border-top: 1px solid #e6edf1;
+  }
+
+}

@@ -30,7 +30,7 @@
 
 
 (defn init []
-  (.addEventListener js/window "resize" (fn [_] (rf/dispatch [:resize-window]))) \
+  (.addEventListener js/window "resize" (fn [_] (rf/dispatch [:resize-window])))
   ;; for closing code editor context menu
   (.addEventListener js/window "mouseup"
                      (fn [e]

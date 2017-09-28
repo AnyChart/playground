@@ -5,8 +5,8 @@
 
 (defn settings-window []
   (when @(rf/subscribe [:settings/show])
-    [:div.settings-window
-     [:div.settings-window-background {:on-click #(rf/dispatch [:settings/hide])}]
+    [:div.settings-window.hide-outside
+     ;[:div.settings-window-background {:on-click #(rf/dispatch [:settings/hide])}]
      [:div.settings-window-container
 
 
@@ -26,7 +26,7 @@
 
        (when @(rf/subscribe [:settings/general-tab?])
 
-         [:div
+         [:div.general-tab
           [:div.form-group
            [:label {:for "settings-name"} "Name"]
            [:input.form-control {:id            "settings-name"
@@ -34,9 +34,9 @@
                                  :on-change     #(rf/dispatch [:settings/change-name (-> % .-target .-value)])}]]
           [:div.form-group
            [:label {:for "settings-short-desc"} "Short Description"]
-           [:input.form-control {:id            "settings-short-desc"
-                                 :default-value @(rf/subscribe [:sample/short-description])
-                                 :on-change     #(rf/dispatch [:settings/change-short-desc (-> % .-target .-value)])}]]
+           [:textarea.form-control {:id            "settings-short-desc"
+                                    :default-value @(rf/subscribe [:sample/short-description])
+                                    :on-change     #(rf/dispatch [:settings/change-short-desc (-> % .-target .-value)])}]]
           [:div.form-group
            [:label {:for "settings-desc"} "Description"]
            [:textarea.form-control {:id            "settings-desc"
@@ -44,9 +44,19 @@
                                     :on-change     #(rf/dispatch [:settings/change-desc (-> % .-target .-value)])}]]
           [:div.form-group
            [:label {:for "settings-tags"} "Tags"]
-           [:textarea.form-control {:id        "settings-tags"
-                                    :on-change #(rf/dispatch [:settings/change-tags (-> % .-target .-value)])
-                                    :value     @(rf/subscribe [:sample/tags-str])}]]
+           ;[:textarea.form-control {:id        "settings-tags"
+           ;                         :on-change #(rf/dispatch [:settings/change-tags (-> % .-target .-value)])
+           ;                         :value     @(rf/subscribe [:sample/tags-str])}
+           ; [:a "hello1"]
+           ; [:a "hello2"]
+           ; ]
+           [:div.tags-box
+            (for [tag @(rf/subscribe [:sample/tags])]
+              ^{:key tag} [:a.tag {} tag]
+              )
+            ]
+
+           ]
 
 
           ;[:div.form-inline
@@ -80,7 +90,7 @@
 
 
        (when @(rf/subscribe [:settings/external-tab?])
-         [:div
+         [:div.external-tab
           [:div.form-group
            [:label {:for "settings-styles"} "Styles"]
            (for [style @(rf/subscribe [:sample/styles])]
@@ -177,7 +187,8 @@
                                                               :on-click #(rf/dispatch [:settings/add-dataset data-set])}
                "Quick Add"]]])])
 
-       [:button.btn.btn-default {:type     "button"
-                                 :on-click #(rf/dispatch [:settings/hide])} "Close"]]
+       ;[:button.btn.btn-default {:type     "button"
+       ;                          :on-click #(rf/dispatch [:settings/hide])} "Close"]
+       ]
 
       ]]))
