@@ -115,7 +115,7 @@ html {
       div.header-box {
         display: flex;
         justify-content: space-between;
-        border-bottom: 1px solid #a8c9d6; //#b6d4e0;
+        border-bottom: 1px solid #a8c9d6;
         background-color: white;
         margin: 0 !important;
 
@@ -128,27 +128,31 @@ html {
           display: inline-block;
           margin-top: 11px;
 
-          & > li > a {
+          & > li > button {
+            outline: none;
             color: #19a1ce;
             display: flex;
             padding: 7px 12px;
+            border: none;
             span.caret {
               margin-top: 8px;
+              margin-left: 2px;
             }
             &:hover, &:active, &:focus, &.active {
               color: #0e5f89;
               background-color: rgba(0, 0, 0, 0);
+              text-decoration: none;
               div.icon {
                 background-color: #0e5f89;
               }
             }
           }
-          & > li.dropdown > a{
+          & > li.dropdown > button {
             &:active, &:focus, &.active {
               background-color: #c2eaf7;
             }
           }
-          & > li.open > a {
+          & > li.open > button {
             background-color: #c2eaf7;
             color: #0e5f89;
             div.icon {
@@ -158,13 +162,17 @@ html {
           ul {
             padding: 15px 0;
             border-color: #95bfd3;
-            a {
+            button, a {
               font-size: 13px;
               font-weight: 600;
               color: #19a1ce;
               line-height: 30px;
+              padding: 3px 20px;
+              width: 100%;
+              text-align: left;
               &:hover {
                 background-color: #c2eaf7;
+                text-decoration: none;
               }
             }
             .divider {
@@ -178,15 +186,15 @@ html {
             margin-left: 10px;
           }
           margin-right: 20px;
-          & > li > a {
+          & > li > a, & > li > button {
             font-size: 14px;
           }
-          a {
+          a, button {
             text-transform: uppercase;
           }
           ul {
             padding: 13px 0;
-            li a {
+            li a, li button {
               padding: 3px 20px 3px 15px;
               img {
                 height: 22px;
