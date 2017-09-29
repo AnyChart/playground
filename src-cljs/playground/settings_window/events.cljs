@@ -86,6 +86,19 @@
         (assoc-in [:sample :tags] (filter seq (map string/trim (string/split value #"\s"))))
         (assoc-in [:settings :tags-str] value))))
 
+(rf/reg-event-db
+  :settings/remove-tag
+  (fn [db [_ value]]
+    (-> db
+        (update-in [:sample :tags] #(remove (partial = value) %)))))
+
+(rf/reg-event-db
+  :settings/add-tag
+  (fn [db [_ value]]
+    (if (every? (partial not= value) (-> db :sample :tags))
+      (-> db
+          (update-in [:sample :tags] concat [value]))
+      db)))
 
 ;;======================================================================================================================
 ;; External resources add/remove

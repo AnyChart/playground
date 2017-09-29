@@ -512,7 +512,7 @@ html {
       }
       .tags-box {
         padding: 10px 10px 0;
-        border: 1px solid #74b0b1;
+        border: 1px solid #c2cdd3; // #74b0b1;
         .tag {
           font-size: 12px;
           display: inline-block;
@@ -522,10 +522,21 @@ html {
           padding: 2px 10px;
           border-radius: 4px;
           text-decoration: none;
+          span.glyphicon{
+            margin-left: 5px;
+            cursor: pointer;
+          }
+        }
+        input{
+          display: inline-block;
+          border: none;
+          width: 100px;
+          padding: 6px 0;
+          height: 21px;
+          margin-bottom: 10px;
         }
       }
     }
-
   }
 }
 

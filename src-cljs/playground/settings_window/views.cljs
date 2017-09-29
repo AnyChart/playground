@@ -51,12 +51,15 @@
            ; ]
            [:div.tags-box
             (for [tag @(rf/subscribe [:sample/tags])]
-              ^{:key tag} [:a.tag {} tag]
-              )
-            ]
-
-           ]
-
+              ^{:key tag}
+              [:a.tag {}
+               [:span tag]
+               [:span.glyphicon.glyphicon-remove
+                {:on-click #(rf/dispatch [:settings/remove-tag tag])}]])
+            [:input.form-control {:placeholder "Add new tag"
+                                  :on-key-down #(when (= 13 (.-keyCode %))
+                                                  (rf/dispatch [:settings/add-tag (-> % .-target .-value)])
+                                                  (set! (-> % .-target .-value) ""))}]]]
 
           ;[:div.form-inline
           ; {:style {:padding-right "10px"}}
