@@ -23,6 +23,10 @@
 (defn get-chart-by-name [name charts]
   (first (filter #(= (:name %) name) charts)))
 
+(defn get-chart-by-id [id charts]
+  (first (filter #(= (:id %) id) charts)))
+
+
 (defn parse-data []
   (let [base (json/parse-string (slurp "resources/chartopedia/data/main.json") true)
         chart-types (map #(parse-chart-type %) (:chartTypes base))
@@ -31,8 +35,8 @@
         categories (map (fn [category]
                           (update category :charts
                                   (fn [charts]
-                                    (map (fn [chart-name]
-                                           (get-chart-by-name chart-name chart-types))
+                                    (map (fn [chart-id]
+                                           (get-chart-by-id chart-id chart-types))
                                          charts))))
                         categories)]
     {:chart-types chart-types
