@@ -15,40 +15,39 @@
 (rf/reg-event-db
   :init
   (fn [_ [_ data]]
-    ; clear prefs
-    ;(let [prefs (local-storage (atom {:hidden-tips []}) :prefs)]
-    ;  (swap! prefs assoc :hidden-tips [])
-    ;  (swap! prefs assoc :hidden-types [])
-    ;  (utils/log (clj->js @prefs)))
+    (let [ls (local-storage (atom {:hidden-tips  []
+                                   :hidden-types []
+                                   :view         :left}) :prefs)]
+      ; clear localstorage
+      ; (swap! ls assoc :hidden-tips [])
+      ; (swap! ls assoc :hidden-types [])
+      ; (utils/log (clj->js @ls))
+      {:editors       {:editors-height (editors-js/editors-height)
+                       :view           (or (:view data) (:view @ls) :left)
+                       :code-settings  {:show false}}
 
-    {:editors       {:editors-height (editors-js/editors-height)
-                     :view           (or (:view data) :left)
-                     :prev-view      :left
-                     :code-settings  {:show false}}
+       :sample        (:sample data)
+       :templates     (:templates data)
+       :user          (:user data)
+       :data-sets     (:data-sets data)
 
-     :sample        (:sample data)
-     :templates     (:templates data)
-     :user          (:user data)
-     :data-sets     (:data-sets data)
-
-     :settings      {:show               false
-                     :tab                :general
-                     :tags-str           (string/join " " (-> data :sample :tags))
-                     :external-resources {:binary (first external-resources/binaries)
-                                          :theme  (first external-resources/themes)
-                                          :locale (first external-resources/locales)
-                                          :map    (first external-resources/maps)}}
-     :embed         {:show  false
-                     :tab   :embed
-                     :props {:id     (common-utils/embed-name (-> data :sample))
-                             :class  "anychart-embed"
-                             :width  "600px"
-                             :height "450px"}}
-     :tips          {:current []                            ;[(second data/all-data)]
-                     :queue   []}
-     :local-storage (local-storage (atom {:hidden-tips  []
-                                          :hidden-types []}) :prefs)
-     :data          (data/compose-all-data (:data-sets data))}))
+       :settings      {:show               false
+                       :tab                :general
+                       :tags-str           (string/join " " (-> data :sample :tags))
+                       :external-resources {:binary (first external-resources/binaries)
+                                            :theme  (first external-resources/themes)
+                                            :locale (first external-resources/locales)
+                                            :map    (first external-resources/maps)}}
+       :embed         {:show  false
+                       :tab   :embed
+                       :props {:id     (common-utils/embed-name (-> data :sample))
+                               :class  "anychart-embed"
+                               :width  "600px"
+                               :height "450px"}}
+       :tips          {:current []
+                       :queue   []}
+       :local-storage ls
+       :data          (data/compose-all-data (:data-sets data))})))
 
 
 (rf/reg-event-db
@@ -105,7 +104,6 @@
     db))
 
 
-;; fork
 (rf/reg-event-db
   :fork
   (fn [db _]

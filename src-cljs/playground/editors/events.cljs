@@ -36,34 +36,38 @@
 ;;======================================================================================================================
 ;; Editors views
 ;;======================================================================================================================
+(defn update-view [db view]
+  (.pushState (.-history js/window) nil nil (utils/sample-url (:sample db)))
+  (swap! (:local-storage db) assoc :view view))
+
 (rf/reg-event-db
   :view/editor
   (fn [db _]
     (.pushState (.-history js/window) nil nil (utils/sample-url (:sample db)))
-    (assoc-in db [:editors :view] (-> db :editors :prev-view))))
+    (assoc-in db [:editors :view] (-> db :local-storage deref :view))))
 
 (rf/reg-event-db
   :view/left
   (fn [db _]
-    (.pushState (.-history js/window) nil nil (utils/sample-url (:sample db)))
+    (update-view db :left)
     (assoc-in db [:editors :view] :left)))
 
 (rf/reg-event-db
   :view/right
   (fn [db _]
-    (.pushState (.-history js/window) nil nil (utils/sample-url (:sample db)))
+    (update-view db :right)
     (assoc-in db [:editors :view] :right)))
 
 (rf/reg-event-db
   :view/bottom
   (fn [db _]
-    (.pushState (.-history js/window) nil nil (utils/sample-url (:sample db)))
+    (update-view db :bottom)
     (assoc-in db [:editors :view] :bottom)))
 
 (rf/reg-event-db
   :view/top
   (fn [db _]
-    (.pushState (.-history js/window) nil nil (utils/sample-url (:sample db)))
+    (update-view db :top)
     (assoc-in db [:editors :view] :top)))
 
 (rf/reg-event-db
@@ -72,8 +76,6 @@
     (let [sample-standalone-url (utils/sample-standalone-url (:sample db))]
       (.pushState (.-history js/window) nil nil sample-standalone-url)
       (-> db
-          (assoc-in [:editors :prev-view] (when (not= :standalone (-> db :editors :view))
-                                            (-> db :editors :view)))
           (assoc-in [:editors :view] :standalone)))))
 
 ;;======================================================================================================================
