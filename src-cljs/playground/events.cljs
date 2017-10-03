@@ -15,9 +15,13 @@
 (rf/reg-event-db
   :init
   (fn [_ [_ data]]
-    (let [ls (local-storage (atom {:hidden-tips  []
-                                   :hidden-types []
-                                   :view         :left}) :prefs)]
+    (let [default-prefs {:hidden-tips  []
+                         :hidden-types []
+                         :view         :left}
+          ls (local-storage (atom default-prefs) :prefs)]
+      ;; add default props
+      (when (not= (merge default-prefs @ls) @ls)
+        (reset! ls (merge default-prefs @ls)))
       ; clear localstorage
       ; (swap! ls assoc :hidden-tips [])
       ; (swap! ls assoc :hidden-types [])
