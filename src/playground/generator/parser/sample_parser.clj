@@ -3,7 +3,8 @@
             [taoensso.timbre :refer [info error]]
             [clojure.string :as s :refer (trim-newline)]
             [clojure.java.io :refer [file]]
-            [toml.core :as toml]))
+            [toml.core :as toml]
+            [playground.tags :as tags-data]))
 
 (defn- ^String trim-newline-left [^CharSequence s]
   (loop [index 0]
@@ -84,12 +85,13 @@
         tags (if (and tags-content
                       (seq tags-content))
                (clojure.string/split tags-content #"\s*,\s*")
-               [])]
+               [])
+        all-tags (sort (distinct (concat tags (tags-data/get-tags-by-code code))))]
     {:name              name
      :description       description
      :short-description short-description
 
-     :tags              tags
+     :tags              all-tags
      :exports           exports
 
      :scripts           scripts
