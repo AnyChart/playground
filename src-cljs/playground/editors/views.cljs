@@ -166,9 +166,9 @@
                                                 (let [[markup-percent style-percent] @(rf/subscribe [:editors/splitter-percents])]
                                                   [:div.vertically_divided {:data-percent 50
                                                                             :style        {:width "100%" :height "100%"}}
-                                                   [:div.horizontally_divided {:data-percent markup-percent}
+                                                   [:div.horizontally_divided.z1 {:data-percent markup-percent}
                                                     [markup-editor]
-                                                    [:div.horizontally_divided {:data-percent style-percent}
+                                                    [:div.horizontally_divided.z2 {:data-percent style-percent}
                                                      [style-editor]
                                                      [code-editor]]]
                                                    [iframe-result]]))}))
@@ -182,9 +182,9 @@
                                                   [:div.vertically_divided {:data-percent 50
                                                                             :style        {:width "100%" :height "100%"}}
                                                    [iframe-result]
-                                                   [:div.horizontally_divided {:data-percent markup-percent}
+                                                   [:div.horizontally_divided.z1 {:data-percent markup-percent}
                                                     [markup-editor]
-                                                    [:div.horizontally_divided {:data-percent style-percent}
+                                                    [:div.horizontally_divided.z2 {:data-percent style-percent}
                                                      [style-editor]
                                                      [code-editor]]]]))}))
 
@@ -196,9 +196,9 @@
                          :reagent-render      (fn []
                                                 [:div.horizontally_divided {:data-percent 50
                                                                             :style        {:width "100%" :height "100%"}}
-                                                 [:div.vertically_divided {:data-percent 33}
+                                                 [:div.vertically_divided.z1 {:data-percent 33}
                                                   [markup-editor]
-                                                  [:div.vertically_divided {:data-percent 50}
+                                                  [:div.vertically_divided.z2 {:data-percent 50}
                                                    [style-editor]
                                                    [code-editor]]]
                                                  [iframe-result]])}))
@@ -212,9 +212,9 @@
                                                 [:div.horizontally_divided {:data-percent 50
                                                                             :style        {:width "100%" :height "100%"}}
                                                  [iframe-result]
-                                                 [:div.vertically_divided {:data-percent 33}
+                                                 [:div.vertically_divided.z1 {:data-percent 33}
                                                   [markup-editor]
-                                                  [:div.vertically_divided {:data-percent 50}
+                                                  [:div.vertically_divided.z2 {:data-percent 50}
                                                    [style-editor]
                                                    [code-editor]]]
                                                  ])}))

@@ -378,6 +378,9 @@ html {
   &.dragged {
     background-color: #627e8b;
   }
+  &:after, &:before{
+    width: 6px;
+  }
 }
 
 .divider_horizontal {
@@ -387,6 +390,17 @@ html {
   &.dragged {
     background-color: #627e8b;
   }
+  &:after, &:before{
+    height: 6px;
+  }
+}
+
+.horizontally_divided.z1 .divider_horizontal, .vertically_divided.z1 .divider_vertical{
+  z-index: 10;
+}
+
+.horizontally_divided.z2 .divider_horizontal, .vertically_divided.z2 .divider_vertical{
+  z-index: 11;
 }
 
 .editor-box-embed {
