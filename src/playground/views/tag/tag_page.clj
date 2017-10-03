@@ -3,7 +3,7 @@
             [playground.views.sample :as sample-view]
             [hiccup.page :as hiccup-page]))
 
-(defn page [{:keys [page tag] :as data}]
+(defn page [{:keys [page tag tag-data] :as data}]
   (hiccup-page/html5
     {:lang "en"}
     (page/head)
@@ -17,12 +17,10 @@
 
         [:h1 [:b tag]]
 
-        (when-not :description
-          [:p.tag-description "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec scelerisque urna, eget lobortis felis. Nullam vel est semper, pellentesque dolor fringilla, imperdiet sem. Morbi accumsan vel neque vel scelerisque. Sed suscipit dictum erat eget hendrerit. In magna nunc, faucibus eu fringilla eu, dapibus vel ex. Aliquam mollis sollicitudin varius. In vulputate pretium nulla. Phasellus odio elit, interdum quis vestibulum eu, malesuada in massa. Vivamus pretium pulvinar arcu, a scelerisque nunc. Praesent a magna vitae est suscipit convallis placerat eu metus."]
-          )
-        (when-not :description
-          [:h2 "Samples"]
-          )
+        (when (seq (:description tag-data))
+          [:p.tag-description (:description tag-data)])
+        (when (seq (:description tag-data))
+          [:h2 "Samples"])
 
         [:div#tag-samples.row.samples-container
          (for [sample (:samples data)]

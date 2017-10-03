@@ -18,6 +18,7 @@
             [playground.web.auth-base :as auth-base]
             [playground.web.helpers :refer :all]
             [playground.web.chartopedia :as chartopedia]
+            [playground.tags :as tags-data]
     ;; pages
             [playground.views.landing-page :as landing-view]
             [playground.views.register-page :as register-view]
@@ -191,10 +192,11 @@
                                                          :offset (* samples-per-page page)
                                                          :tag    tag})]
     ;(prn "tag-page: " (count samples))
-    (tag-view/page (merge {:samples (take samples-per-page samples)
-                           :end     (< (count samples) (inc samples-per-page))
-                           :page    page
-                           :tag     tag}
+    (tag-view/page (merge {:samples  (take samples-per-page samples)
+                           :end      (< (count samples) (inc samples-per-page))
+                           :page     page
+                           :tag      tag
+                           :tag-data (tags-data/get-tag-data tag)}
                           (get-app-data request)))))
 
 (defn repos-page [request]

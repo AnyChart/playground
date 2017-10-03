@@ -1,12 +1,14 @@
 (ns playground.views.sample
   (:require [clojure.string :as s]
             [playground.utils.utils :as utils]
-    #?(:cljs [cljs-time.coerce :as c]
+    #?(:cljs
+       [cljs-time.coerce :as c]
        :clj
             [clj-time.coerce :as c])
     #?(:clj
             [clj-time.format :as f]
-       :cljs [cljs-time.format :as f])))
+       :cljs
+       [cljs-time.format :as f])))
 
 (defn date [date]
   #?(:clj  (f/unparse (f/formatter "MMM d") (c/from-sql-date date))
