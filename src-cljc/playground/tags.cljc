@@ -1,4 +1,5 @@
 (ns playground.tags
+  (:require [clojure.string :as string])
   #?(:clj
      (:require [playground.web.tags-macros :as macros])
      :cljs
@@ -28,7 +29,11 @@
 (defn get-tags-by-code [code]
   (let [rules (:rules tags-data)
         tags-code (reduce (fn [res {:keys [regexp tags]}]
-                            (if (.contains code regexp)
+                            (if (string/includes? code regexp)
                               (concat res tags)
                               res)) [] rules)]
     (sort (distinct tags-code))))
+
+;; whether anychart tag or user tag
+(defn anychart-tag? [tag]
+  (some (partial = tag) all-tags))

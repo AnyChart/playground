@@ -21,21 +21,27 @@
 
     [:ul.nav.navbar-nav.left-navbar
 
-     [:li [:button.btn.btn-link {:on-click #(rf/dispatch [:run])}
+     [:li [:button.btn.btn-link {:on-click #(do (rf/dispatch [:run]))}
            [:div.icon.icon-run]
            [:span "Run"]]]
 
      (when @(rf/subscribe [:show-save-button])
-       [:li [:button.btn.btn-link {:on-click #(rf/dispatch [:save])}
+       [:li [:button.btn.btn-link {:on-click #(do
+                                                (rf/dispatch [:settings/refresh-tags])
+                                                (rf/dispatch [:save]))}
              [:div.icon.icon-save]
              [:span "Save"]]])
 
-     [:li [:button.btn.btn-link {:on-click #(rf/dispatch [:fork])}
+     [:li [:button.btn.btn-link {:on-click #(do
+                                              (rf/dispatch [:settings/refresh-tags])
+                                              (rf/dispatch [:fork]))}
            [:div.icon.icon-fork]
            [:span "Fork"]]]
 
      [:li.dropdown
-      [:button.btn.btn-link {:on-click #(rf/dispatch [:settings/show])
+      [:button.btn.btn-link {:on-click #(do
+                                          (rf/dispatch [:settings/refresh-tags])
+                                          (rf/dispatch [:settings/show]))
                              :class    (when @(rf/subscribe [:settings/show]) "active")}
        [:div.icon.icon-settings]
        [:span "Settings"]

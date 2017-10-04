@@ -3,7 +3,7 @@
             [clojure.string :as string]
             [playground.settings-window.data :as external-resources]
             [playground.utils :as utils]
-            ))
+            [playground.tags :as tags]))
 
 ;;======================================================================================================================
 ;; Settings
@@ -79,25 +79,45 @@
     (update-in db [:sample :styles] (fn [styles] (remove #(= value %) styles)))))
 
 
+;(rf/reg-event-db
+;  :settings/change-tags
+;  (fn [db [_ value]]
+;    (-> db
+;        (assoc-in [:sample :tags] (filter seq (map string/trim (string/split value #"\s"))))
+;        (assoc-in [:settings :tags-str] value))))
+
 (rf/reg-event-db
-  :settings/change-tags
-  (fn [db [_ value]]
-    (-> db
-        (assoc-in [:sample :tags] (filter seq (map string/trim (string/split value #"\s"))))
-        (assoc-in [:settings :tags-str] value))))
+  :settings/refresh-tags
+  (fn [db _]
+    (utils/log "Refresh tags")
+    (let [tags-by-code (tags/get-tags-by-code (-> db :sample :code))
+          deleted-tags (-> db :sample :deleted-tags)
+          new-tags (distinct (concat (-> db :sample :tags)
+                                     (vec (clojure.set/difference
+                                            (set tags-by-code)
+                                            (set deleted-tags)))))]
+      (-> db
+          (assoc-in [:sample :tags] new-tags)))))
 
 (rf/reg-event-db
   :settings/remove-tag
   (fn [db [_ value]]
     (-> db
-        (update-in [:sample :tags] #(remove (partial = value) %)))))
+        (update-in [:sample :tags] #(remove (partial = value) %))
+        ;; add to deleted tags
+        (update-in [:sample :deleted-tags] (fn [del-tags]
+                                             (if (tags/anychart-tag? value)
+                                               (distinct (conj del-tags value))
+                                               del-tags))))))
 
 (rf/reg-event-db
   :settings/add-tag
   (fn [db [_ value]]
     (if (every? (partial not= value) (-> db :sample :tags))
       (-> db
-          (update-in [:sample :tags] concat [value]))
+          (update-in [:sample :tags] concat [value])
+          (update-in [:sample :deleted-tags] (fn [del-tags]
+                                               (remove (partial = value) del-tags))))
       db)))
 
 ;;======================================================================================================================

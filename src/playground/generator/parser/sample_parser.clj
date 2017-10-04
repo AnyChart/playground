@@ -92,6 +92,7 @@
      :short-description short-description
 
      :tags              all-tags
+     :deleted-tags      []
      :exports           exports
 
      :scripts           scripts

@@ -60,6 +60,7 @@
 (defn parse-sample [sample]
   (-> sample
       (assoc :tags (parse-string (:tags sample)))
+      (assoc :deleted-tags (parse-string (:deleted_tags sample)))
       (assoc :scripts (parse-string (:scripts sample)))
       (assoc :styles (parse-string (:styles sample)))
       underscore->dash
@@ -93,6 +94,7 @@
 
    :url               (:url sample)
    :tags              (generate-string (:tags sample))
+   :deleted_tags      (generate-string (:deleted-tags sample))
    :exports           (:exports sample)
 
    :owner_id          (:owner-id sample)

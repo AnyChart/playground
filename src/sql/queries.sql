@@ -65,10 +65,10 @@ SELECT samples.id, samples.name, samples.views, samples.likes, samples.create_da
 SELECT version FROM samples WHERE url = :url ORDER BY version DESC;
 
 -- name: sql-add-sample<!
-INSERT INTO samples (`name`, `short_description`, `description`, `tags`, `styles`, `scripts`,
+INSERT INTO samples (`name`, `short_description`, `description`, `tags`, `deleted_tags`, `styles`, `scripts`,
                       `markup`, `markup_type`, `style`, `style_type`, `code`, `code_type`,
                       `url`, `version`, `owner_id`) VALUES
-                      (:name, :short_description, :description, :tags, :styles, :scripts,
+                      (:name, :short_description, :description, :tags, :deleted_tags, :styles, :scripts,
                       :markup, :markup_type, :style, :style_type, :code, :code_type,
                       :url, :version, :owner_id);
 
