@@ -183,7 +183,10 @@ SELECT  7  UNION
 SELECT  8  UNION
 SELECT  9  UNION
 SELECT  10) AS indexes
-WHERE samples.latest AND JSON_EXTRACT(tags, CONCAT('$[', idx, ']')) IS NOT NULL) as t1 GROUP BY tag ORDER BY count DESC;
+WHERE samples.latest AND JSON_EXTRACT(tags, CONCAT('$[', idx, ']')) IS NOT NULL) as t1
+GROUP BY tag
+HAVING name NOT IN (SELECT tag FROM banned_tags)
+ORDER BY count DESC;
 
 --name: sql-top-tags
 SELECT substring(tag, 2, LENGTH(tag)-2) name, count(*) count FROM (
@@ -200,7 +203,10 @@ SELECT  7  UNION
 SELECT  8  UNION
 SELECT  9  UNION
 SELECT  10) AS indexes
-WHERE samples.latest AND JSON_EXTRACT(tags, CONCAT('$[', idx, ']')) IS NOT NULL) as t1 GROUP BY tag ORDER BY count DESC LIMIT :limit;
+WHERE samples.latest AND JSON_EXTRACT(tags, CONCAT('$[', idx, ']')) IS NOT NULL) as t1
+GROUP BY tag
+HAVING name NOT IN (SELECT tag FROM banned_tags)
+ORDER BY count DESC LIMIT :limit;
 
 
 -- name: sql-samples-by-tag

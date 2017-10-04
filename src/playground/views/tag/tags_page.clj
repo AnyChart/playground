@@ -19,7 +19,6 @@
 
 (defn divide-tags-by-blocks [tags]
   (let [sorted-tags (sort-by clojure.string/lower-case compare tags)
-
         blocks-tags (flatten (sort (group-by first sorted-tags)))]
     (for [letter-or-tag blocks-tags]
       (if (char? letter-or-tag)
