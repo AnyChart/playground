@@ -1,83 +1,117 @@
 html body .roadmap-page {
+  .content {
+    font-size: 14px;
 
-  h1 {
-    color: $red-color;
-    font-size: 18px;
-    font-weight: bold;
-  }
+    p {
+      position: relative;
+      margin: 6px 0 6px 28px;
+      span.glyphicon.glyphicon-ok {
+        color: #1ba2ce;
+        position: absolute;
+        left: -28px;
+      }
+    }
+    ul + p {
+      margin-top: 20px;
+    }
+    ul {
+      list-style: none;
+      li {
+        position: relative;
+        line-height: 24px;
+        &:before {
+          content: '\2022';
+          font-size: 15px;
+          padding-right: 8px;
+          line-height: 15px;
+          color: #67beda;
+          position: absolute;
+          left: -12px;
+          top: 6px;
+        }
+      }
+    }
 
-  h2 {
-    color: $red-color;
-    font-size: 15px;
-    font-weight: bold;
-    text-transform: uppercase;
-    position: relative;
-    .muted {
-      font-weight: normal;
+    h1 {
+      color: $red-color;
+      font-size: 18px;
+      font-weight: bold;
+      margin: 30px 0 23px;
+    }
+
+    h2 {
+      color: $red-color;
+      font-size: 15px;
+      font-weight: bold;
+      text-transform: uppercase;
+      position: relative;
+      margin-bottom: 15px;
+      &:not(:first-child) {
+        margin-top: 50px;
+      }
+      .muted {
+        font-weight: normal;
+        margin-left: 5px;
+      }
+      &:before {
+        border-radius: 100%;
+        counter-increment: section;
+        content: ''; //counter(section);
+        background: #95bfd3;
+        color: #fff;
+        padding: 2px;
+        border: none;
+        text-align: center;
+        width: 18px;
+        height: 18px;
+        display: inline-block;
+        position: absolute;
+        left: -39px;
+      }
+      &:after {
+        /*Add another block-level blank space*/
+        content: '';
+        display: block;
+
+        /*Make it a small rectangle so the border will create an L-shape*/
+        width: 6px;
+        height: 6px;
+
+        /*Add a white border on the bottom and left, creating that 'L' */
+        border: solid white;
+        border-width: 0 1px 1px 0;
+
+        /*Rotate the L 45 degrees to turn it into a checkmark*/
+        transform: rotate(-135deg);
+        position: absolute;
+        left: -33px;
+        top: 8px;
+      }
+    }
+
+    .line-container {
+      padding-left: 30px;
       margin-left: 5px;
-    }
-    &:before {
-      border-radius: 100%;
-      counter-increment: section;
-      content: ''; //counter(section);
+      position: relative;
+      border-left: 1px solid #99c1d4;
+      margin-bottom: 30px;
 
-      background: #95bfd3;
-      color: #fff;
-      padding: 2px;
-      border: none;
-      text-align: center;
-      width: 18px;
-      height: 18px;
-      //border-radius: 50%;
-      display: inline-block;
-      position: absolute;
-      left: -39px;
-    }
-    &:after {
-      /*Add another block-level blank space*/
-      content: '';
-      display: block;
-
-      /*Make it a small rectangle so the border will create an L-shape*/
-      width: 6px;
-      height: 6px;
-
-      /*Add a white border on the bottom and left, creating that 'L' */
-      border: solid white;
-      border-width: 0 1px 1px 0;
-
-      /*Rotate the L 45 degrees to turn it into a checkmark*/
-      transform: rotate(-135deg);
-      position: absolute;
-      left: -33px;
-      top: 8px;
+      &:before {
+        border-radius: 100%;
+        counter-increment: section;
+        content: ''; //counter(section);
+        background: #95bfd3;
+        color: #fff;
+        padding: 2px;
+        border: none;
+        text-align: center;
+        width: 18px;
+        height: 18px;
+        display: inline-block;
+        position: absolute;
+        left: -9px;
+        bottom: 0;
+      }
     }
   }
-
-  .line-container {
-    padding-left: 30px;
-    margin-left: 5px;
-    position: relative;
-    border-left: 1px solid #99c1d4;
-    margin-bottom: 30px;
-    &::before {
-      display: block;
-      position: absolute;
-      border: 1px solid red;
-      left: 0;
-      top: 0;
-      height: 150px;
-      width: 100px;
-    }
-    &:after {
-      display: block;
-      position: absolute;
-      border: 1px solid red;
-      left: 0;
-      top: 0;
-      height: 150px;
-      width: 100px;
-    }
-  }
-
 }

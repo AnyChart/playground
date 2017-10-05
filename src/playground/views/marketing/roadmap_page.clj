@@ -16,46 +16,43 @@
 
         [:h1.page-caption "Roadmap"]
 
-        ;[:p.page-caption-desc "Тут бутет информация о грядущих обновлениях и возможность зареквестить фичу."]
         [:div.line-container
-
          [:div
           [:h2 "Version 0.1.0" [:span.muted "First release (beta)"]]
-          [:ul
-           [:li "Прячем все что не работает"
+          [:div
+           [:p [:span.glyphicon.glyphicon-ok] "Прячем все что не работает"
             [:ul
              [:li "регистарцию/авторизацию"]
              [:li "лайки"]
              [:li "прайсинг"]
              [:li "все маркетинговые страницы которые не готовы к релизу"]]]
-           [:li "При помощи автоматической утилиты ENV-544, переделываем все примеры на новый формат"]
-           [:li "Имплементим дизайн"]
-           [:li "Итерация по SEO: мета теги, sitemap, альты, тайтлы, описания, итд (после дизайна)"]]]
+           [:p "При помощи автоматической утилиты ENV-544, переделываем все примеры на новый формат"]
+           [:p "Имплементим дизайн"]
+           [:p "Итерация по SEO: мета теги, sitemap, альты, тайтлы, описания, итд (после дизайна)"]]]
 
          [:h2 "Version 1.0.0" [:span.muted "Stable release"]]
          [:div
-          [:ul
-           [:li "Фиксим баги если они есть"]
-           [:li "Берем один - два итема из Features list"]]]
+          [:p "Фиксим баги если они есть"]
+          [:p [:span.glyphicon.glyphicon-ok] "Берем один - два итема из Features list"]]
 
          [:h2 "Drop list"]
          [:p "Вещи которые есть на старом PG и их планируется дропнуть"]
          [:div.row
-          [:div.col-md-3
-           [:h5 "Tag Manager (текущий конфиг)"]
+          [:div.col-md-4
+           [:p [:span.glyphicon.glyphicon-ok] "Tag Manager (текущий конфиг)"]
            [:ul
             [:li "Кнопка LiveChart'a не уместна"]
             [:li "Holdon Stranger тут не уместен"]
             [:li "Тормозит загрузку страницы"]]]
-          [:div.col-md-3
-           [:h5 "Chart related buttons"]
+          [:div.col-md-4
+           [:p "Chart related buttons"]
            [:ul
             [:li "PNG/PDF/JPG/SVG"]
             [:li "CSV/XLSX"]
             [:li "Вкладка JSON"]
             [:li "Смена темы"]]]
-          [:div.col-md-3
-           [:h5 "Переработано/не актуально"]
+          [:div.col-md-4
+           [:p "Переработано/не актуально"]
            [:ul
             [:li "Список примеров и категорий"]
             [:li "Интеграция с jsfiddle"]]]]
@@ -64,20 +61,20 @@
          [:h2 "Features list"]
          [:div.row
           [:div.col-md-3
-           [:h5 "Embeding"]
+           [:p [:span.glyphicon.glyphicon-ok] "Embeding"]
            [:ul
             [:li "Embed as iframe"]
             [:li "Embed as Script with code"]
             [:li "Embed as Script with src"]]]
           [:div.col-md-3
-           [:h5 "Export to image"]
+           [:p "Export to image"]
            [:ul
             [:li "PNG"]
             [:li "JPG"]
             [:li "PDF"]
             [:li "SVG"]]]
           [:div.col-md-3
-           [:h5 "Sharing"]
+           [:p "Sharing"]
            [:ul
             [:li "Facebook"]
             [:li "Twitter"]
@@ -85,7 +82,7 @@
             [:li "Pinterest"]
             [:li "Instagram"]]]
           [:div.col-md-3
-           [:h5 "Search"]
+           [:p "Search"]
            [:ul
             [:li "По примерам (имена/описания)"]
             [:li "По тегам"]
@@ -93,7 +90,7 @@
             [:li "По коду"]
             [:li "С фильтрами по проекту/тегу/дата сету"]]]
           [:div.col-md-3
-           [:h5 "User related"]
+           [:p "User related"]
            [:ul
             [:li "Мои примеры"]
             [:li "Проекты"]
@@ -101,7 +98,7 @@
             [:li "Платные вещи + билинг/оплата"]
             [:li "Assets"]]]
           [:div.col-md-3
-           [:h5 "Разное"]
+           [:p [:span.glyphicon.glyphicon-ok] "Разное"]
            [:ul
             [:li "Copy btn for HTML/CSS/JS/Result windows"]
             [:li "Full source as text/gist"]
@@ -111,7 +108,7 @@
             [:li "Console"]
             [:li "Keyboard/Keymap"]]]
           [:div.col-md-3
-           [:h5 "Preprocessors"]
+           [:p "Preprocessors"]
            [:ul
             [:li "JS -CofeScript, TypesScript, CljoreScript, more?"]
             [:li "CSS - LESS, SASS, more?"]
