@@ -9,6 +9,13 @@
 (rf/reg-sub :embed/download-tab? (fn [db _] (= :download (-> db :embed :tab))))
 
 ;;======================================================================================================================
+;; Sub tabs
+;;======================================================================================================================
+(rf/reg-sub :embed/html-sub-tab? (fn [db _] (= :html (-> db :embed :sub-tab))))
+(rf/reg-sub :embed/iframe-sub-tab? (fn [db _] (= :iframe (-> db :embed :sub-tab))))
+(rf/reg-sub :embed/iframe2-sub-tab? (fn [db _] (= :iframe2 (-> db :embed :sub-tab))))
+
+;;======================================================================================================================
 ;; Download tab
 ;;======================================================================================================================
 (rf/reg-sub
@@ -24,3 +31,4 @@
 (rf/reg-sub :embed.props/class (fn [db _] (-> db :embed :props :class)))
 (rf/reg-sub :embed.props/width (fn [db _] (-> db :embed :props :width)))
 (rf/reg-sub :embed.props/height (fn [db _] (-> db :embed :props :height)))
+

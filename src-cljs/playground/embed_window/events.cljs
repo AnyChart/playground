@@ -29,13 +29,29 @@
   (fn [db _]
     (assoc-in db [:embed :tab] :download)))
 
+;;======================================================================================================================
+;; Sub tabs
+;;======================================================================================================================
+(rf/reg-event-db
+  :embed/html-sub-tab
+  (fn [db _] (assoc-in db [:embed :sub-tab] :html)))
+
+(rf/reg-event-db
+  :embed/iframe-sub-tab
+  (fn [db _] (assoc-in db [:embed :sub-tab] :iframe)))
+
+(rf/reg-event-db
+  :embed/iframe2-sub-tab
+  (fn [db _] (assoc-in db [:embed :sub-tab] :iframe2)))
+
 
 (defn create-editor [editor-name text]
   (let [cm (js/CodeMirror (.getElementById js/document editor-name)
-                          (clj->js {:value       text
-                                    :lineNumbers false
-                                    :readOnly    true
-                                    :mode        "text/html"}))]
+                          (clj->js {:value          text
+                                    :lineNumbers    false
+                                    :readOnly       true
+                                    :mode           "text/html"
+                                    :scrollbarStyle "overlay"}))]
     cm))
 
 

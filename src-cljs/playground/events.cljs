@@ -42,12 +42,13 @@
                                             :theme  (first external-resources/themes)
                                             :locale (first external-resources/locales)
                                             :map    (first external-resources/maps)}}
-       :embed         {:show  false
-                       :tab   :embed
-                       :props {:id     (common-utils/embed-name (-> data :sample))
-                               :class  "anychart-embed"
-                               :width  "600px"
-                               :height "450px"}}
+       :embed         {:show    false
+                       :tab     :embed
+                       :sub-tab :html
+                       :props   {:id     (common-utils/embed-name (-> data :sample))
+                                 :class  "anychart-embed"
+                                 :width  "600px"
+                                 :height "450px"}}
        :tips          {:current []
                        :queue   []}
        :local-storage ls

@@ -7,9 +7,10 @@
   ;(utils/log "create-editor: " type value mode)
   (let [editor-name (str (name type) "-editor")
         cm (js/CodeMirror (.getElementById js/document editor-name)
-                          (clj->js {:value       value
-                                    :lineNumbers true
-                                    :mode        {:name mode}}))]
+                          (clj->js {:value          value
+                                    :lineNumbers    true
+                                    :mode           {:name mode}
+                                    :scrollbarStyle "overlay"}))]
     (.on cm "change" (fn [cm change]
                        (rf/dispatch [:change-code type (.getValue cm)])))
     (rf/dispatch [:change-code type (.getValue cm)])
