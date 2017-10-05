@@ -1,0 +1,116 @@
+html body .support-page {
+
+  .intro {
+    height: 248px;
+    h1 {
+      font-size: 51px;
+    }
+    background-image: url('/tags-page/bg.png');
+    background-position: center;
+  }
+
+  .content {
+
+    .content-container {
+      padding-bottom: 60px;
+    }
+
+    h1 {
+      font-size: 18px;
+      text-transform: uppercase;
+      color: $red-color;
+      font-weight: bold;
+      margin-top: 55px;
+      margin-bottom: 17px;
+    }
+
+    .text {
+      font-size: 12px;
+    }
+
+    .big-text {
+      font-size: 14px;
+      padding: 0 0 0 60px;
+      position: relative;
+      &:before {
+        position: absolute;
+        left: 0;
+        top: 5px;
+      }
+      &.block-24:before {
+        content: url('/icons/pie-chart.svg');
+      }
+      &.block-info:before {
+        content: url('/icons/pie-chart.svg');
+      }
+    }
+
+    a {
+      color: #008ebe;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 13px;
+      li {
+        position: relative;
+        line-height: 24px;
+        &:before {
+          content: '\2022';
+          font-size: 15px;
+          padding-right: 8px;
+          line-height: 15px;
+          //color: #67beda;
+          position: absolute;
+          left: -12px;
+          top: 6px;
+        }
+      }
+    }
+
+    .big-links {
+      margin: 30px 0;
+    }
+    .big-link {
+      a {
+        color: #19a1ce;
+        font-size: 18px;
+      }
+      display: block;
+      position: relative;
+      padding: 0 0 0 40px;
+      margin: 20px 0;
+      a:before {
+        position: absolute;
+        left: 0;
+      }
+      &.support a:before {
+        content: url('/icons/pie-chart.svg');
+      }
+      &.email a:before {
+        content: url('/icons/stock-chart.svg');
+      }
+      &.search a:before {
+        content: url('/icons/pie-chart.svg');
+      }
+      &.post a:before {
+        content: url('/icons/stock-chart.svg');
+      }
+    }
+
+    .yellow-label {
+      font-size: 14px;
+      font-weight: bold;
+      color: #edb340;
+    }
+
+    .tag {
+      color: white;
+      font-size: 13px;
+      font-weight: bold;
+      background-color: #95bfd3;
+      border-radius: 3px;
+      padding: 1px 8px;
+    }
+  }
+}
