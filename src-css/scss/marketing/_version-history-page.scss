@@ -1,0 +1,10 @@
+html body .version-history-page {
+  .content {
+    h2 {
+      &:after {
+        transform: rotate(-135deg);
+        top: 8px;
+      }
+    }
+  }
+}
