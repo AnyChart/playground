@@ -22,6 +22,9 @@ html body .support-page {
       font-weight: bold;
       margin-top: 55px;
       margin-bottom: 17px;
+      &:last-of-type{
+        margin-top: 30px;
+      }
     }
 
     .text {
@@ -30,7 +33,7 @@ html body .support-page {
 
     .big-text {
       font-size: 14px;
-      padding: 0 0 0 60px;
+      padding: 0 0 0 52px;
       position: relative;
       &:before {
         position: absolute;
@@ -38,10 +41,19 @@ html body .support-page {
         top: 5px;
       }
       &.block-24:before {
-        content: url('/icons/pie-chart.svg');
+        top: 0;
+        content: "";
+        background-image: url('/icons/support/24.svg');
+        background-size: 40px 40px;
+        width: 40px;
+        height: 40px;
       }
       &.block-info:before {
-        content: url('/icons/pie-chart.svg');
+        content: "";
+        background-image: url('/icons/support/xml.svg');
+        background-size: 44px 44px;
+        width: 44px;
+        height: 44px;
       }
     }
 
@@ -78,23 +90,41 @@ html body .support-page {
       }
       display: block;
       position: relative;
-      padding: 0 0 0 40px;
+      padding: 0 0 0 50px;
       margin: 20px 0;
       a:before {
         position: absolute;
         left: 0;
       }
       &.support a:before {
-        content: url('/icons/pie-chart.svg');
+        content: "";
+        background-image: url('/icons/support/online-support.svg');
+        background-size: 32px 32px;
+        width: 32px;
+        height: 32px;
       }
       &.email a:before {
-        content: url('/icons/stock-chart.svg');
+        content: "";
+        background-image: url('/icons/support/mail.svg');
+        background-size: 31px 31px;
+        width: 31px;
+        height: 31px;
       }
       &.search a:before {
-        content: url('/icons/pie-chart.svg');
+        left: 2px;
+        content: "";
+        background-image: url('/icons/support/search.svg');
+        background-size: 27px 27px;
+        width: 27px;
+        height: 27px;
       }
       &.post a:before {
-        content: url('/icons/stock-chart.svg');
+        left: 2px;
+        content: "";
+        background-image: url('/icons/support/post.svg');
+        background-size: 27px 27px;
+        width: 27px;
+        height: 27px;
       }
     }
 
