@@ -470,6 +470,9 @@ html {
       border-bottom: 1px solid #95bfd3;
       margin: 0;
       padding: 15px 15px 0;
+      li {
+        margin-bottom: 0;
+      }
     }
     li > a {
       text-transform: uppercase;
@@ -492,6 +495,27 @@ html {
       background-color: #19a1ce;
       border: none;
     }
+    // second sub menu (embed window)
+    &.sub-tabs{
+      padding-top: 12px;
+      li a {
+        color: #19a1ce;
+        text-transform: none;
+        span {
+          border-bottom: 1px dotted;
+        }
+        &:hover {
+          //background: none;
+        }
+      }
+      li.active a {
+        background-color: #c2eaf7;
+        color: #19a1ce;
+        span {
+          border-bottom: none;
+        }
+      }
+    }
   }
 
   .general-tab {
@@ -505,13 +529,13 @@ html {
     }
     input, textarea {
       border-radius: 0;
-      border-color: #c2cdd3;
+      border-color: #9bc3d6;
       box-shadow: none;
       font-size: 12px;
     }
     .tags-box {
       padding: 10px 10px 0;
-      border: 1px solid #c2cdd3; // #74b0b1;
+      border: 1px solid #9bc3d6;
       .tag {
         font-size: 12px;
         display: inline-block;
@@ -543,8 +567,16 @@ html {
 //======================================================================================================================
 .embed-window {
   width: 516px;
-  margin-left: -258px;
+  //margin-left: -258px;
+  margin-left: -145px;
   font-size: 12px;
+
+  p.intro {
+    margin: 4px 0 16px;
+  }
+  p.sub-intro{
+    margin-bottom: 13px;
+  }
 
   .form-inline .form-group {
     margin-right: 15px;
@@ -561,14 +593,32 @@ html {
   }
 
   .editor-box-embed {
-    height: 126px;
+    height: 80px;
+    margin-bottom: 17px;
   }
-
-
 
   textarea.embed-iframe {
     min-height: 110px;
     margin-bottom: 5px;
+  }
+
+  input[type='text']{
+    border-radius: 0;
+    box-shadow: none;
+    padding: 5px 7px;
+    border-color: #9bc3d6;
+  }
+  input[type='button'], a.btn {
+    //margin-top: 17px;
+    background-color: #19a1ce;
+    border: none;
+    text-transform: uppercase;
+    padding: 5px 20px;
+    font-size: 13px;
+    &:active{
+      background-color: #1796bf;
+      outline: none;
+    }
   }
 }
 
