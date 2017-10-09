@@ -470,6 +470,9 @@ html {
       border-bottom: 1px solid #95bfd3;
       margin: 0;
       padding: 15px 15px 0;
+      li {
+        margin-bottom: 0;
+      }
     }
     li > a {
       text-transform: uppercase;
