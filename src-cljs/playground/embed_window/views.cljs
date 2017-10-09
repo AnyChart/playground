@@ -41,89 +41,85 @@
      (when @(rf/subscribe [:embed/embed-tab?])
        [:div
         [:div.content
-         [:p "To place the chart in a web page, copy one of the code snippets below. We recommend using the first option as far as it doesn't bother your page with using external services to load the chart."]
+         [:p.intro "To place the chart in a web page, copy one of the code snippets below. We recommend using the first option as far as it doesn't bother your page with using external services to load the chart."]
 
-         [:p
-          [:form.form-inline
+         [:form.form-inline
 
-           [:div.form-group
-            [:label "ID"]
-            [:input.form-control {:style     {:width "70px"}
-                                  :value     @(rf/subscribe [:embed.props/id])
-                                  :on-change #(rf/dispatch [:embed.props/change-id (-> % .-target .-value)])}]]
-           [:div.form-group
-            [:label "class"]
-            [:input.form-control {:style     {:width "110px"}
-                                  :value     @(rf/subscribe [:embed.props/class])
-                                  :on-change #(rf/dispatch [:embed.props/change-class (-> % .-target .-value)])}]]
-           [:div.form-group
-            [:label "width"]
-            [:input.form-control {:style     {:width "55px"}
-                                  :value     @(rf/subscribe [:embed.props/width])
-                                  :on-change #(rf/dispatch [:embed.props/change-width (-> % .-target .-value)])}]]
-           [:div.form-group
-            [:label "height"]
-            [:input.form-control {:style     {:width "55px"}
-                                  :value     @(rf/subscribe [:embed.props/height])
-                                  :on-change #(rf/dispatch [:embed.props/change-height (-> % .-target .-value)])}]]
-           ]]
+          [:div.form-group
+           [:label "ID"]
+           [:input.form-control {:style     {:width "74px"}
+                                 :value     @(rf/subscribe [:embed.props/id])
+                                 :type      "text"
+                                 :on-change #(rf/dispatch [:embed.props/change-id (-> % .-target .-value)])}]]
+          [:div.form-group
+           [:label "class"]
+           [:input.form-control {:style     {:width "112px"}
+                                 :value     @(rf/subscribe [:embed.props/class])
+                                 :type      "text"
+                                 :on-change #(rf/dispatch [:embed.props/change-class (-> % .-target .-value)])}]]
+          [:div.form-group
+           [:label "width"]
+           [:input.form-control {:style     {:width "57px"}
+                                 :value     @(rf/subscribe [:embed.props/width])
+                                 :type      "text"
+                                 :on-change #(rf/dispatch [:embed.props/change-width (-> % .-target .-value)])}]]
+          [:div.form-group
+           [:label "height"]
+           [:input.form-control {:style     {:width "57px"}
+                                 :value     @(rf/subscribe [:embed.props/height])
+                                 :type      "text"
+                                 :on-change #(rf/dispatch [:embed.props/change-height (-> % .-target .-value)])}]]
+          ]
          ]
 
 
-        [:ul.nav.nav-tabs.settings-tabs
+        [:ul.nav.nav-tabs.settings-tabs.sub-tabs
          [:li {:class (when @(rf/subscribe [:embed/html-sub-tab?]) "active")}
           [:a {:href     "javascript:;"
-               :on-click #(rf/dispatch [:embed/html-sub-tab])} "Plain HTML"]]
+               :on-click #(rf/dispatch [:embed/html-sub-tab])}
+           [:span "Plain HTML"]]]
 
          [:li {:class (when @(rf/subscribe [:embed/iframe-sub-tab?]) "active")}
           [:a {:href     "javascript:;"
-               :on-click #(rf/dispatch [:embed/iframe-sub-tab])} "HTML iframe"]]
+               :on-click #(rf/dispatch [:embed/iframe-sub-tab])}
+           [:span "HTML iframe"]]]
 
          [:li {:class (when @(rf/subscribe [:embed/iframe2-sub-tab?]) "active")}
           [:a {:href     "javascript:;"
-               :on-click #(rf/dispatch [:embed/iframe2-sub-tab])} "HTML iframe (auto update)"]]
-         ]
+               :on-click #(rf/dispatch [:embed/iframe2-sub-tab])}
+           [:span "HTML iframe (auto update)"]]]]
 
         (when @(rf/subscribe [:embed/html-sub-tab?])
           [:div.content
-           [:div
-            [:p
-             "Please, make sure that IDs of HTML elements and CSS styles defined in the sample does not corrupt your page content."]
-            [:div
-             [plain-html-editor]
-             [:input.btn.btn-primary {:id    "copy-embed-plain-html"
-                                      :type  "button"
-                                      :value "Copy"}]]]])
+           [:p.sub-intro
+            "Please, make sure that IDs of HTML elements and CSS styles defined in the sample does not corrupt your page content."]
+           [plain-html-editor]
+           [:input.btn.btn-primary {:id    "copy-embed-plain-html"
+                                    :type  "button"
+                                    :value "Copy"}]])
 
         (when @(rf/subscribe [:embed/iframe-sub-tab?])
           [:div.content
-           [:div
-            [:p
-             "This option doesn't use external resources and protect your page content from the ID's and CSS used in the sample, but usage of HTML iframe is not convenient to use from the page loading speed perspective."]
-            [:div
-             [iframe-internal-editor]
-             [:input.btn.btn-primary {:id    "copy-embed-internal-iframe"
-                                      :type  "button"
-                                      :value "Copy"}]]]])
+           [:p.sub-intro
+            "This option doesn't use external resources and protect your page content from the ID's and CSS used in the sample, but usage of HTML iframe is not convenient to use from the page loading speed perspective."]
+           [iframe-internal-editor]
+           [:input.btn.btn-primary {:id    "copy-embed-internal-iframe"
+                                    :type  "button"
+                                    :value "Copy"}]])
 
         (when @(rf/subscribe [:embed/iframe2-sub-tab?])
           [:div.content
-           [:div
-            [:p
-             "The advantage of this option is auto-update of the sample embedded on your page then you're updating the sample on playground."]
-            [:div
-             [embed-editor]
-             [:input.btn.btn-primary {:id    "copy-embed-iframe"
-                                      :type  "button"
-                                      :value "Copy"}]]]])
-
-        ]
-
-       )
+           [:p.sub-intro
+            "The advantage of this option is auto-update of the sample embedded on your page then you're updating the sample on playground."]
+           [embed-editor]
+           [:input.btn.btn-primary {:id    "copy-embed-iframe"
+                                    :type  "button"
+                                    :value "Copy"}]])
+        ])
 
      (when @(rf/subscribe [:embed/download-tab?])
        [:div.content
-        [:div.form-group
+        [:div                                               ;.form-group
          [:a.btn.btn-primary {:role "button"
                               :href @(rf/subscribe [:embed/download-html-link])}
           [:span.glyphicon.glyphicon-download-alt {:aria-hidden true}]
