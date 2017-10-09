@@ -76,16 +76,19 @@
         [:ul.nav.nav-tabs.settings-tabs.sub-tabs
          [:li {:class (when @(rf/subscribe [:embed/html-sub-tab?]) "active")}
           [:a {:href     "javascript:;"
+               :role     "button"
                :on-click #(rf/dispatch [:embed/html-sub-tab])}
            [:span "Plain HTML"]]]
 
          [:li {:class (when @(rf/subscribe [:embed/iframe-sub-tab?]) "active")}
           [:a {:href     "javascript:;"
+               :role     "button"
                :on-click #(rf/dispatch [:embed/iframe-sub-tab])}
            [:span "HTML iframe"]]]
 
          [:li {:class (when @(rf/subscribe [:embed/iframe2-sub-tab?]) "active")}
           [:a {:href     "javascript:;"
+               :role     "button"
                :on-click #(rf/dispatch [:embed/iframe2-sub-tab])}
            [:span "HTML iframe (auto update)"]]]]
 

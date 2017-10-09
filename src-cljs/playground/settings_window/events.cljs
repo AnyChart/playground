@@ -33,9 +33,14 @@
     (assoc-in db [:settings :tab] :general)))
 
 (rf/reg-event-db
-  :settings/external-tab
+  :settings/javascript-tab
   (fn [db _]
-    (assoc-in db [:settings :tab] :external)))
+    (assoc-in db [:settings :tab] :javascript)))
+
+(rf/reg-event-db
+  :settings/css-tab
+  (fn [db _]
+    (assoc-in db [:settings :tab] :css)))
 
 (rf/reg-event-db
   :settings/data-sets-tab
