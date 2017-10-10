@@ -1,7 +1,7 @@
 (ns playground.core
   (:require [reagent.core :as reagent :refer [atom]]
             [re-frame.core :as rf]
-            [re-frisk.core :as re-frisk]
+    ;[re-frisk.core :as re-frisk]
             [playground.subs]
             [playground.events]
             [playground.utils :as utils]
@@ -23,7 +23,7 @@
   (reagent/render-component [views/app] (.getElementById js/document "main-container")))
 
 (defn ^:export run [data]
-  (re-frisk/enable-re-frisk!)
+  ;(re-frisk/enable-re-frisk!)
   (let [r (t/reader :json)
         data (t/read r data)]
     ;(utils/log "Data: " data)
