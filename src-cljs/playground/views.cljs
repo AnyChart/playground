@@ -41,6 +41,7 @@
      [:li.dropdown
       [:button.btn.btn-link {:on-click #(do
                                           (rf/dispatch [:settings/refresh-tags])
+                                          (rf/dispatch [:settings/update-datasets])
                                           (rf/dispatch [:settings/show]))
                              :class    (when @(rf/subscribe [:settings/show]) "active")}
        [:div.icon.icon-settings]

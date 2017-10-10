@@ -6,7 +6,7 @@
 (rf/reg-sub :settings/general-tab? (fn [db _] (= :general (-> db :settings :tab))))
 (rf/reg-sub :settings/javascript-tab? (fn [db _] (= :javascript (-> db :settings :tab))))
 (rf/reg-sub :settings/css-tab? (fn [db _] (= :css (-> db :settings :tab))))
-(rf/reg-sub :settings/data-sets-tab? (fn [db _] (= :data-sets (-> db :settings :tab))))
+(rf/reg-sub :settings/datasets-tab? (fn [db _] (= :datasets (-> db :settings :tab))))
 
 (rf/reg-sub :settings.external-resources/added?
             (fn [db [_ type]]

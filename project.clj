@@ -61,7 +61,7 @@
                  [re-frame "0.10.1"]
                  [re-com "2.1.0"]
                  [alandipert/storage-atom "2.0.1"]
-                 ;[re-frisk "0.5.0"]
+                 [re-frisk "0.5.0"]
                  ; [cljs-http "0.1.42"]
                  [cljs-ajax "0.7.1"]
                  [com.andrewmcveigh/cljs-time "0.5.1"]

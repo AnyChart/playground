@@ -67,7 +67,7 @@
 (rf/reg-sub :sample/style (fn [db _] (-> db :sample :style)))
 
 
-(rf/reg-sub :data-sets (fn [db _] (-> db :data-sets)))
+(rf/reg-sub :datasets (fn [db _] (-> db :datasets)))
 
 (rf/reg-sub :user-sample? (fn [db _] (-> db :sample :version-id not)))
 

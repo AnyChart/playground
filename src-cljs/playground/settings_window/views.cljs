@@ -21,14 +21,14 @@
          :role     "button"
          :on-click #(rf/dispatch [:settings/css-tab])} "CSS"]]
 
-   [:li {:class (when @(rf/subscribe [:settings/data-sets-tab?]) "active")}
+   [:li {:class (when @(rf/subscribe [:settings/datasets-tab?]) "active")}
     [:a {:href     "javascript:;"
          :role     "button"
-         :on-click #(rf/dispatch [:settings/data-sets-tab])} "Data Sets"]]])
+         :on-click #(rf/dispatch [:settings/datasets-tab])} "Data Sets"]]])
 
 
 (defn general-tab []
-  [:div.general-tab
+  [:div.general-tab.content
    [:div.form-group
     [:label {:for "settings-name"} "Name"]
     [:input.form-control {:id            "settings-name"
@@ -87,144 +87,137 @@
    ])
 
 
+(defn javascript-tab []
+  [:div.javascript-tab.content
+   [:p.section-label "Scripts"]
+   (for [script @(rf/subscribe [:sample/scripts])]
+     ^{:key script}
+     [:div.settings-resource
+      [:div.title [:a {:href script :target "_blank"} script]]
+      [:button.btn.btn-primary.btn-xs {:type     "button"
+                                       :on-click #(rf/dispatch [:settings/remove-script script])}
+       [:span.glyphicon.glyphicon-remove]]])
+
+   [:p.section-label "Quick Add"]
+
+   [:div.row
+    [:div.col-sm-6
+     [:div.form-group
+      [:label {:for "settings-select-bin"} "Binaries"]
+      [:div {:style {:display "flex"}}
+       [:select.form-control {:id        "settings-select-bin"
+                              :on-change #(rf/dispatch [:settings.external-resources/binaries-select (-> % .-target .-value)])}
+        (for [res external-resources/binaries]
+          ^{:key res} [:option {:value (:url res)} (:name res)])]
+       (if @(rf/subscribe [:settings.external-resources/added? :binary])
+         [:button.btn.btn-primary {:type     "button"
+                                   :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :binary])} "Remove"]
+         [:button.btn.btn-success {:type     "button"
+                                   :on-click #(rf/dispatch [:settings.external-resources/add-by-type :binary])} "Add"])]]
+     ]
+
+
+    [:div.col-sm-6
+     [:div.form-group
+      [:label {:for "settings-select-theme"} "Themes"]
+      [:div {:style {:display "flex"}}
+       [:select.form-control {:id        "settings-select-theme"
+                              :on-change #(rf/dispatch [:settings.external-resources/themes-select (-> % .-target .-value)])}
+        (for [res external-resources/themes]
+          ^{:key res} [:option {:value (:url res)} (:name res)])]
+       (if @(rf/subscribe [:settings.external-resources/added? :theme])
+         [:button.btn.btn-primary {:type     "button"
+                                   :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :theme])} "Remove"]
+         [:button.btn.btn-success {:type     "button"
+                                   :on-click #(rf/dispatch [:settings.external-resources/add-by-type :theme])} "Add"])]]
+     ]
+
+    [:div.col-sm-6
+     [:div.form-group
+      [:label {:for "settings-select-locale"} "Locales"]
+      [:div {:style {:display "flex"}}
+       [:select.form-control {:id        "settings-select-locale"
+                              :on-change #(rf/dispatch [:settings.external-resources/locales-select (-> % .-target .-value)])}
+        (for [res external-resources/locales]
+          ^{:key res} [:option {:value (:url res)} (:name res)])]
+       (if @(rf/subscribe [:settings.external-resources/added? :locale])
+         [:button.btn.btn-primary {:type     "button"
+                                   :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :locale])} "Remove"]
+         [:button.btn.btn-success {:type     "button"
+                                   :on-click #(rf/dispatch [:settings.external-resources/add-by-type :locale])} "Add"])]]
+     ]
+
+    [:div.col-sm-6
+     [:div.form-group
+      [:label {:for "settings-select-map"} "Maps"]
+      [:div {:style {:display "flex"}}
+       [:select.form-control {:id        "settings-select-map"
+                              :on-change #(rf/dispatch [:settings.external-resources/maps-select (-> % .-target .-value)])}
+        (for [res external-resources/maps]
+          ^{:key res} [:option {:value (:url res)} (:name res)])]
+       (if @(rf/subscribe [:settings.external-resources/added? :map])
+         [:button.btn.btn-primary {:type     "button"
+                                   :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :map])} "Remove"]
+         [:button.btn.btn-success {:type     "button"
+                                   :on-click #(rf/dispatch [:settings.external-resources/add-by-type :map])} "Add"])]]
+     ]]])
+
+
+(defn css-tab []
+  [:div.css-tab.content
+   [:div.form-group
+    [:label {:for "settings-styles"} "Styles"]
+    (for [style @(rf/subscribe [:sample/styles])]
+      ^{:key style}
+      [:div.settings-resource
+       [:div.title [:a {:href style :target "_blank"} style]]
+       [:button.btn.btn-primary.btn-xs {:type     "button"
+                                        :on-click #(rf/dispatch [:settings/remove-style style])}
+        [:span.glyphicon.glyphicon-remove]]])]])
+
+
+(defn datasets-tab []
+  [:div.datasets-tab.content
+   [:div.row
+    (for [dataset @(rf/subscribe [:datasets])]
+      ^{:key (:name dataset)}
+      [:div.col-sm-4
+       [:div.item
+        [:div.hover-box
+         [:img {:src (:logo dataset)}]
+         [:span.title (:title dataset)]
+         [:p.info (:description dataset)]]
+        [:div.usage-sample-line
+         [:a.usage-sample {:href   (:sample dataset)
+                           :target "_blank"} "Usage Sample"]
+         [:a.question {:href (:sample dataset)}]]
+        (if (:added dataset)
+          [:div.added-label
+           [:span.glyphicon.glyphicon-ok]
+           [:span "Already added"]]
+          [:input.btn.btn-primary.btn-xs.usage-sample-button {:type     "button"
+                                                              :value    "Quick Add"
+                                                              :on-click #(rf/dispatch [:settings/add-dataset dataset])}])
+        ;(for [tag (:tags dataset)]
+        ;  ^{:key tag} [:span.label.label-primary.tag tag])
+        ]
+       ]
+      )]])
+
+
 (defn settings-window []
   (when @(rf/subscribe [:settings/show])
     [:div.settings-window.hide-outside
      [nav-menu]
-     [:form.content
 
-      (when @(rf/subscribe [:settings/general-tab?])
-        [general-tab])
+     (when @(rf/subscribe [:settings/general-tab?])
+       [general-tab])
 
-      (when @(rf/subscribe [:settings/javascript-tab?])
-        [:div.javascript-tab
-         [:p.section-label "Scripts"]
-         (for [script @(rf/subscribe [:sample/scripts])]
-           ^{:key script}
-           [:div.settings-resource
-            [:div.title [:a {:href script :target "_blank"} script]]
-            [:button.btn.btn-primary.btn-xs {:type     "button"
-                                             :on-click #(rf/dispatch [:settings/remove-script script])}
-             [:span.glyphicon.glyphicon-remove]]])
+     (when @(rf/subscribe [:settings/javascript-tab?])
+       [javascript-tab])
 
-         [:p.section-label "Quick Add"]
+     (when @(rf/subscribe [:settings/css-tab?])
+       [css-tab])
 
-         [:div.row
-          [:div.col-sm-6
-           [:div.form-group
-            [:label {:for "settings-select-bin"} "Binaries"]
-            [:div {:style {:display "flex"}}
-             [:select.form-control {:id        "settings-select-bin"
-                                    :on-change #(rf/dispatch [:settings.external-resources/binaries-select (-> % .-target .-value)])}
-              (for [res external-resources/binaries]
-                ^{:key res} [:option {:value (:url res)} (:name res)])]
-             (if @(rf/subscribe [:settings.external-resources/added? :binary])
-               [:button.btn.btn-primary {:type     "button"
-                                         :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :binary])} "Remove"]
-               [:button.btn.btn-success {:type     "button"
-                                         :on-click #(rf/dispatch [:settings.external-resources/add-by-type :binary])} "Add"])]]
-           ]
-
-
-          [:div.col-sm-6
-           [:div.form-group
-            [:label {:for "settings-select-theme"} "Themes"]
-            [:div {:style {:display "flex"}}
-             [:select.form-control {:id        "settings-select-theme"
-                                    :on-change #(rf/dispatch [:settings.external-resources/themes-select (-> % .-target .-value)])}
-              (for [res external-resources/themes]
-                ^{:key res} [:option {:value (:url res)} (:name res)])]
-             (if @(rf/subscribe [:settings.external-resources/added? :theme])
-               [:button.btn.btn-primary {:type     "button"
-                                         :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :theme])} "Remove"]
-               [:button.btn.btn-success {:type     "button"
-                                         :on-click #(rf/dispatch [:settings.external-resources/add-by-type :theme])} "Add"])]]
-           ]
-
-          [:div.col-sm-6
-           [:div.form-group
-            [:label {:for "settings-select-locale"} "Locales"]
-            [:div {:style {:display "flex"}}
-             [:select.form-control {:id        "settings-select-locale"
-                                    :on-change #(rf/dispatch [:settings.external-resources/locales-select (-> % .-target .-value)])}
-              (for [res external-resources/locales]
-                ^{:key res} [:option {:value (:url res)} (:name res)])]
-             (if @(rf/subscribe [:settings.external-resources/added? :locale])
-               [:button.btn.btn-primary {:type     "button"
-                                         :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :locale])} "Remove"]
-               [:button.btn.btn-success {:type     "button"
-                                         :on-click #(rf/dispatch [:settings.external-resources/add-by-type :locale])} "Add"])]]
-           ]
-
-          [:div.col-sm-6
-           [:div.form-group
-            [:label {:for "settings-select-map"} "Maps"]
-            [:div {:style {:display "flex"}}
-             [:select.form-control {:id        "settings-select-map"
-                                    :on-change #(rf/dispatch [:settings.external-resources/maps-select (-> % .-target .-value)])}
-              (for [res external-resources/maps]
-                ^{:key res} [:option {:value (:url res)} (:name res)])]
-             (if @(rf/subscribe [:settings.external-resources/added? :map])
-               [:button.btn.btn-primary {:type     "button"
-                                         :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :map])} "Remove"]
-               [:button.btn.btn-success {:type     "button"
-                                         :on-click #(rf/dispatch [:settings.external-resources/add-by-type :map])} "Add"])]]
-           ]
-          ]
-         ])
-
-      (when @(rf/subscribe [:settings/css-tab?])
-        [:div.form-group
-         [:label {:for "settings-styles"} "Styles"]
-         (for [style @(rf/subscribe [:sample/styles])]
-           ^{:key style}
-           [:div.settings-resource
-            [:div.title [:a {:href style :target "_blank"} style]]
-            [:button.btn.btn-primary.btn-xs {:type     "button"
-                                             :on-click #(rf/dispatch [:settings/remove-style style])}
-             [:span.glyphicon.glyphicon-remove]]])]
-        )
-
-      (when @(rf/subscribe [:settings/data-sets-tab?])
-        [:div.datasets-tab
-
-         [:div.row
-          (for [data-set @(rf/subscribe [:data-sets])]
-            ^{:key (:name data-set)}
-            [:div.col-sm-4
-             [:div.item
-              [:img {:src (:logo data-set)}]
-              [:span.title (:title data-set)]
-              [:p (:description data-set)]
-              [:a.usage-sample {:href   (:sample data-set)
-                                :target "_blank"} "Usage Sample"]
-              [:input.btn.btn-primary.btn-xs.usage-sample-button {:type     "button"
-                                                                  :value    "Quick Add"
-                                                                  :on-click #(rf/dispatch [:settings/add-dataset data-set])}
-               ]
-              ]
-             ]
-
-
-
-
-            ;[:div.row.data-sets-item
-            ; [:div.col-md-2.data-sets-item-icon
-            ;  [:img {:src (:logo data-set)}]]
-            ; [:div.col-md-7
-            ;  [:h5 (:title data-set)]
-            ;  [:p (:description data-set)]
-            ;  (for [tag (:tags data-set)]
-            ;    ^{:key tag} [:span.label.label-primary.tag tag])]
-            ; [:div.col-md-3
-            ;  [:a.btn.btn-primary.btn-xs.usage-sample-button {:href   (:sample data-set)
-            ;                                                  :target "_blank"} "Usage Sample"]
-            ;  [:a.btn.btn-success.btn-xs.usage-sample-button {:href     "javascript:;"
-            ;                                                  :on-click #(rf/dispatch [:settings/add-dataset data-set])}
-            ;   "Quick Add"]]]
-
-            )]])
-
-      ]
-
-     ]))
+     (when @(rf/subscribe [:settings/datasets-tab?])
+       [datasets-tab])]))

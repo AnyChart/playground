@@ -89,7 +89,7 @@
     (response (render-file "templates/editor.selmer" {:canonical-url (utils/canonical-url sample)
                                                       :data          (web-utils/pack {:sample    sample
                                                                                       :templates templates
-                                                                                      :data-sets data-sets
+                                                                                      :datasets  data-sets
                                                                                       :user      (get-safe-user request)})}))))
 
 (defn show-sample-preview [sample request]

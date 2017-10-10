@@ -33,7 +33,7 @@
        :sample        (:sample data)
        :templates     (:templates data)
        :user          (:user data)
-       :data-sets     (:data-sets data)
+       :datasets      (:datasets data)
 
        :settings      {:show               false
                        :tab                :general
@@ -52,7 +52,7 @@
        :tips          {:current []
                        :queue   []}
        :local-storage ls
-       :data          (data/compose-all-data (:data-sets data))})))
+       :data          (data/compose-all-data (:datasets data))})))
 
 
 (rf/reg-event-db

@@ -43,9 +43,9 @@
     (assoc-in db [:settings :tab] :css)))
 
 (rf/reg-event-db
-  :settings/data-sets-tab
+  :settings/datasets-tab
   (fn [db _]
-    (assoc-in db [:settings :tab] :data-sets)))
+    (assoc-in db [:settings :tab] :datasets)))
 
 (rf/reg-event-db
   :settings/change-name
@@ -173,11 +173,25 @@
 ;;======================================================================================================================
 ;; Data sets
 ;;======================================================================================================================
+(defn dataset-added? [dataset code]
+  (> (.indexOf code (:url dataset)) -1))
+
 (rf/reg-event-db
+  :settings/update-datasets
+  (fn [db _]
+    (let [code (-> db :sample :code)
+          datasets (-> db :datasets)
+          updated-datasets (map (fn [dataset]
+                                  (assoc dataset :added (dataset-added? dataset code)))
+                                datasets)]
+      (assoc db :datasets updated-datasets))))
+
+
+(rf/reg-event-fx
   :settings/add-dataset
-  (fn [db [_ dataset]]
+  (fn [{:keys [db]} [_ dataset]]
     (let [code (.getValue (-> db :editors :code-editor))]
-      (if (= (.indexOf code (:url dataset)) -1)
+      (if-not (dataset-added? dataset code)
         ;; add dataset
         (do
           ;; TODO: make event handler clean
@@ -190,9 +204,10 @@
                           "  // }\n"
                           "});\n"
                           code))
-          (update-in db [:tips :queue] conj (:url dataset)))
+          {:db         (update-in db [:tips :queue] conj (:url dataset))
+           :dispatch-n (list [:settings/update-datasets])})
         ;; show alert
         (do
           ;; TODO: eliminate side-effect
           (js/alert "Dataset has been already added.")
-          db)))))
+          {:db db})))))
