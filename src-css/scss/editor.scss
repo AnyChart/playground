@@ -103,6 +103,15 @@ html {
           height: 16px;
           margin-top: 2px;
         }
+        &.icon-save {
+          mask-image: url(/icons/editor/save.svg);
+          mask-size: 16px 16px;
+          -webkit-mask-image: url(/icons/editor/save.svg);
+          -webkit-mask-size: 16px 16px;
+          width: 16px;
+          height: 16px;
+          margin-top: 2px;
+        }
         &.icon-view {
           mask-image: url(/icons/editor/view.svg);
           mask-size: 16px 16px;
