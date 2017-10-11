@@ -441,29 +441,6 @@ html {
   font-size: 13px;
   background-color: white;
 
-  .settings-tabs {
-    margin-bottom: 7px;
-  }
-
-  .content {
-    padding: 15px;
-  }
-
-  .settings-resource {
-    display: flex;
-    margin: 0 0 5px;
-    .title {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      width: 100%;
-    }
-  }
-
-  select {
-    margin-right: 10px;
-  }
-
   .nav {
     font-size: 13px;
     &.nav-tabs {
@@ -518,6 +495,69 @@ html {
     }
   }
 
+  .settings-tabs {
+    margin-bottom: 7px;
+  }
+
+  .content {
+    padding: 15px;
+  }
+
+  .line {
+    display: flex;
+    align-items: center;
+    button {
+      margin-left: 12px;
+    }
+    .script-input{
+      width: 482px;
+    }
+  }
+
+  input, textarea, select {
+    border-radius: 0;
+    border-color: #9bc3d6;
+    box-shadow: none !important;
+    font-size: 12px;
+    resize: none;
+  }
+  select {
+    width: 183px;
+  }
+
+  .ac-btn {
+    display: inline-block;
+    border: none;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 13px;
+    width: 73px;
+    height: 28px;
+    color: white;
+    border-radius: 4px;
+    outline: none;
+    padding: 0;
+    &:hover, &:active, &:focus {
+      text-decoration: none;
+    }
+  }
+  a.ac-btn{
+    line-height: 28px;
+  }
+  .add-btn {
+    background-color: #19a1ce;
+
+    &:active{
+      background-color: #1796bf;
+    }
+  }
+  .remove-btn {
+    background-color: #df4e69;
+    &:active{
+      background-color: #cf4861;
+    }
+  }
+
   .general-tab {
     .form-group {
       margin-top: 2px;
@@ -527,12 +567,7 @@ html {
       width: 260px;
       height: 32px;
     }
-    input, textarea {
-      border-radius: 0;
-      border-color: #9bc3d6;
-      box-shadow: none;
-      font-size: 12px;
-    }
+
     .tags-box {
       padding: 10px 10px 0;
       border: 1px solid #9bc3d6;
@@ -562,10 +597,57 @@ html {
   }
 
   .javascript-tab {
+    div.scripts-box{
+      margin-bottom: 26px;
+      div.script{
+        margin: 0 0 11px 0;
+        a {
+          background-color: white;
+          color: white;
+          font-size: 12px;
+          display: inline-block;
+          border-radius: 5px;
+          position: relative;
+          padding-left: 27px;
+          .in-box{
+            display: inline-block;
+            border-radius: 5px;
+            background-color: #95bfd3;
+            padding: 2px 5px 2px 8px;
+          }
+          span.glyphicon-align-justify {
+            margin-left: 10px;
+            margin-right: 10px;
+            font-size: 15px;
+            color: #95bfd3;
+            position: absolute;
+            left: -4px;
+            top: 3px;
+          }
+          span.glyphicon {
+            margin-left: 10px;
+          }
+          &:hover{
+            text-decoration: none;
+            background-color: #19a1ce;
+            .in-box{
+              background-color: #19a1ce;
+            }
+            span.glyphicon-align-justify{
+              color: white;
+            }
+          }
+        }
+      }
+    }
+
     .section-label {
       text-transform: uppercase;
       font-size: 13px;
       font-weight: 600;
+      &.quick-add {
+        margin: 33px 0 15px;
+      }
     }
   }
 
@@ -577,8 +659,6 @@ html {
     .item {
       margin: 24px 0 20px;
       height: 310px;
-
-
       .title {
         display: block;
         font-size: 12px;
@@ -607,6 +687,7 @@ html {
       }
       .usage-sample-line{
         display: flex;
+        margin-top: 10px;
       }
       a.usage-sample{
         display: inline-block;
@@ -658,6 +739,7 @@ html {
         text-transform: uppercase;
         padding: 5px 10px;
         font-size: 13px;
+        border-radius: 4px;
         &:hover{
           background-color: #00c6ff;
         }
@@ -676,18 +758,6 @@ html {
           @include transform(scale(1.1));
         }
       }
-      /*.hover-box {
-        cursor: pointer;
-        &:hover{
-          .title, .info {
-            color: #0e5f89;
-          }
-          img {
-            @include transition(150ms, ease);
-            @include transform(scale(1.1));
-          }
-        }
-      }*/
     }
   }
 
@@ -733,24 +803,13 @@ html {
     margin-bottom: 5px;
   }
 
-  input[type='text']{
+  /*input[type='text']{
     border-radius: 0;
     box-shadow: none;
     padding: 5px 7px;
     border-color: #9bc3d6;
-  }
-  input[type='button'], a.btn {
-    //margin-top: 17px;
-    background-color: #19a1ce;
-    border: none;
-    text-transform: uppercase;
-    padding: 5px 20px;
-    font-size: 13px;
-    &:active{
-      background-color: #1796bf;
-      outline: none;
-    }
-  }
+  }*/
+
 }
 
 

@@ -90,90 +90,138 @@
 (defn javascript-tab []
   [:div.javascript-tab.content
    [:p.section-label "Scripts"]
-   (for [script @(rf/subscribe [:sample/scripts])]
-     ^{:key script}
-     [:div.settings-resource
-      [:div.title [:a {:href script :target "_blank"} script]]
-      [:button.btn.btn-primary.btn-xs {:type     "button"
-                                       :on-click #(rf/dispatch [:settings/remove-script script])}
-       [:span.glyphicon.glyphicon-remove]]])
+   [:div.scripts-box
+    (for [script @(rf/subscribe [:sample/scripts])]
+      ^{:key script}
+      [:div.script
+       [:a {:href script :target "_blank"}
+        [:span.glyphicon.glyphicon-align-justify]
+        [:div.in-box
+         [:span script]
+         [:span.glyphicon.glyphicon-remove {:on-click #(do
+                                                         (.preventDefault %)
+                                                         (rf/dispatch [:settings/remove-script script]))}]]]])]
+   [:div.line
+    [:input.form-control.script-input {:id          "script-input"
+                                       :placeholder "Add new script"
+                                       :on-key-down #(when (= 13 (.-keyCode %))
+                                                       (rf/dispatch [:settings/add-script
+                                                                     (-> % .-target .-value)])
+                                                       (set! (.-value (.getElementById js/document "script-input")) ""))}]
 
-   [:p.section-label "Quick Add"]
+    [:button.ac-btn.add-btn {:type     "button"
+                             :on-click #(do (rf/dispatch [:settings/add-script
+                                                          (.-value (.getElementById js/document "script-input"))])
+                                            (set! (.-value (.getElementById js/document "script-input")) ""))}
+     "Add"]]
+
+   [:p.section-label.quick-add "Quick Add"]
 
    [:div.row
     [:div.col-sm-6
      [:div.form-group
-      [:label {:for "settings-select-bin"} "Binaries"]
-      [:div {:style {:display "flex"}}
+      [:label {:for "settings-select-bin"} "AnyChart Binaries"]
+      [:div.line
        [:select.form-control {:id        "settings-select-bin"
                               :on-change #(rf/dispatch [:settings.external-resources/binaries-select (-> % .-target .-value)])}
         (for [res external-resources/binaries]
           ^{:key res} [:option {:value (:url res)} (:name res)])]
        (if @(rf/subscribe [:settings.external-resources/added? :binary])
-         [:button.btn.btn-primary {:type     "button"
-                                   :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :binary])} "Remove"]
-         [:button.btn.btn-success {:type     "button"
-                                   :on-click #(rf/dispatch [:settings.external-resources/add-by-type :binary])} "Add"])]]
+         [:button.ac-btn.remove-btn {:type     "button"
+                                     :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :binary])} "Remove"]
+         [:button.ac-btn.add-btn {:type     "button"
+                                  :on-click #(rf/dispatch [:settings.external-resources/add-by-type :binary])} "Add"])]]
      ]
 
 
     [:div.col-sm-6
      [:div.form-group
-      [:label {:for "settings-select-theme"} "Themes"]
-      [:div {:style {:display "flex"}}
+      [:label {:for "settings-select-theme"} "AnyChart Themes"]
+      [:div.line
        [:select.form-control {:id        "settings-select-theme"
                               :on-change #(rf/dispatch [:settings.external-resources/themes-select (-> % .-target .-value)])}
         (for [res external-resources/themes]
           ^{:key res} [:option {:value (:url res)} (:name res)])]
        (if @(rf/subscribe [:settings.external-resources/added? :theme])
-         [:button.btn.btn-primary {:type     "button"
-                                   :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :theme])} "Remove"]
-         [:button.btn.btn-success {:type     "button"
-                                   :on-click #(rf/dispatch [:settings.external-resources/add-by-type :theme])} "Add"])]]
+         [:button.ac-btn.remove-btn {:type     "button"
+                                     :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :theme])} "Remove"]
+         [:button.ac-btn.add-btn {:type     "button"
+                                  :on-click #(rf/dispatch [:settings.external-resources/add-by-type :theme])} "Add"])]]
      ]
 
     [:div.col-sm-6
      [:div.form-group
-      [:label {:for "settings-select-locale"} "Locales"]
-      [:div {:style {:display "flex"}}
+      [:label {:for "settings-select-locale"} "AnyChart Locales"]
+      [:div.line
        [:select.form-control {:id        "settings-select-locale"
                               :on-change #(rf/dispatch [:settings.external-resources/locales-select (-> % .-target .-value)])}
         (for [res external-resources/locales]
           ^{:key res} [:option {:value (:url res)} (:name res)])]
        (if @(rf/subscribe [:settings.external-resources/added? :locale])
-         [:button.btn.btn-primary {:type     "button"
-                                   :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :locale])} "Remove"]
-         [:button.btn.btn-success {:type     "button"
-                                   :on-click #(rf/dispatch [:settings.external-resources/add-by-type :locale])} "Add"])]]
+         [:button.ac-btn.remove-btn {:type     "button"
+                                     :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :locale])} "Remove"]
+         [:button.ac-btn.add-btn {:type     "button"
+                                  :on-click #(rf/dispatch [:settings.external-resources/add-by-type :locale])} "Add"])]]
      ]
 
     [:div.col-sm-6
      [:div.form-group
-      [:label {:for "settings-select-map"} "Maps"]
-      [:div {:style {:display "flex"}}
+      [:label {:for "settings-select-map"} "AnyChart Geo Data"]
+      [:div.line
        [:select.form-control {:id        "settings-select-map"
                               :on-change #(rf/dispatch [:settings.external-resources/maps-select (-> % .-target .-value)])}
         (for [res external-resources/maps]
           ^{:key res} [:option {:value (:url res)} (:name res)])]
        (if @(rf/subscribe [:settings.external-resources/added? :map])
-         [:button.btn.btn-primary {:type     "button"
-                                   :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :map])} "Remove"]
-         [:button.btn.btn-success {:type     "button"
+         [:button.ac-btn.remove-btn {:type     "button"
+                                     :on-click #(rf/dispatch [:settings.external-resources/remove-by-type :map])} "Remove"]
+         [:button.ac-btn.add-btn. {:type     "button"
                                    :on-click #(rf/dispatch [:settings.external-resources/add-by-type :map])} "Add"])]]
      ]]])
 
 
 (defn css-tab []
-  [:div.css-tab.content
-   [:div.form-group
-    [:label {:for "settings-styles"} "Styles"]
+  [:div.javascript-tab.css-tab.content
+
+   [:p.section-label "Styles"]
+   [:div.scripts-box
     (for [style @(rf/subscribe [:sample/styles])]
       ^{:key style}
-      [:div.settings-resource
-       [:div.title [:a {:href style :target "_blank"} style]]
-       [:button.btn.btn-primary.btn-xs {:type     "button"
-                                        :on-click #(rf/dispatch [:settings/remove-style style])}
-        [:span.glyphicon.glyphicon-remove]]])]])
+      [:div.script
+       [:a {:href style :target "_blank"}
+        [:span.glyphicon.glyphicon-align-justify]
+        [:div.in-box
+         [:span style]
+         [:span.glyphicon.glyphicon-remove {:on-click #(do
+                                                         (.preventDefault %)
+                                                         (rf/dispatch [:settings/remove-style style]))}]]]])]
+   [:div.line
+    [:input.form-control.script-input {:id          "style-input"
+                                       :placeholder "Add new style"
+                                       :on-key-down #(when (= 13 (.-keyCode %))
+                                                       (rf/dispatch [:settings/add-style
+                                                                     (-> % .-target .-value)])
+                                                       (set! (.-value (.getElementById js/document "style-input")) ""))}]
+
+    [:button.ac-btn.add-btn {:type     "button"
+                             :on-click #(do (rf/dispatch [:settings/add-style
+                                                          (.-value (.getElementById js/document "style-input"))])
+                                            (set! (.-value (.getElementById js/document "style-input")) ""))}
+     "Add"]]
+
+
+
+   ;[:div.form-group
+   ; [:label {:for "settings-styles"} "Styles"]
+   ; (for [style @(rf/subscribe [:sample/styles])]
+   ;   ^{:key style}
+   ;   [:div.settings-resource
+   ;    [:div.title [:a {:href style :target "_blank"} style]]
+   ;    [:button.btn.btn-primary.btn-xs {:type     "button"
+   ;                                     :on-click #(rf/dispatch [:settings/remove-style style])}
+   ;     [:span.glyphicon.glyphicon-remove]]])]
+
+   ])
 
 
 (defn datasets-tab []

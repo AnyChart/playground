@@ -79,17 +79,19 @@
         (update-in [:tips :queue] (fn [tips-urls] (remove #(= value %) tips-urls))))))
 
 (rf/reg-event-db
+  :settings/add-style
+  (fn [db [_ value]]
+    (if (every? #(not= % value) (-> db :sample :styles))
+      (-> db
+          (update-in [:sample :styles] #(concat % [value]))
+          (update-in [:tips :queue] conj value))
+      db)))
+
+(rf/reg-event-db
   :settings/remove-style
   (fn [db [_ value]]
     (update-in db [:sample :styles] (fn [styles] (remove #(= value %) styles)))))
 
-
-;(rf/reg-event-db
-;  :settings/change-tags
-;  (fn [db [_ value]]
-;    (-> db
-;        (assoc-in [:sample :tags] (filter seq (map string/trim (string/split value #"\s"))))
-;        (assoc-in [:settings :tags-str] value))))
 
 (rf/reg-event-db
   :settings/refresh-tags

@@ -97,34 +97,34 @@
            [:p.sub-intro
             "Please, make sure that IDs of HTML elements and CSS styles defined in the sample does not corrupt your page content."]
            [plain-html-editor]
-           [:input.btn.btn-primary {:id    "copy-embed-plain-html"
-                                    :type  "button"
-                                    :value "Copy"}]])
+           [:input.ac-btn.add-btn {:id    "copy-embed-plain-html"
+                                   :type  "button"
+                                   :value "Copy"}]])
 
         (when @(rf/subscribe [:embed/iframe-sub-tab?])
           [:div.content
            [:p.sub-intro
             "This option doesn't use external resources and protect your page content from the ID's and CSS used in the sample, but usage of HTML iframe is not convenient to use from the page loading speed perspective."]
            [iframe-internal-editor]
-           [:input.btn.btn-primary {:id    "copy-embed-internal-iframe"
-                                    :type  "button"
-                                    :value "Copy"}]])
+           [:input.btn.btn-primary.ac-btn {:id    "copy-embed-internal-iframe"
+                                           :type  "button"
+                                           :value "Copy"}]])
 
         (when @(rf/subscribe [:embed/iframe2-sub-tab?])
           [:div.content
            [:p.sub-intro
             "The advantage of this option is auto-update of the sample embedded on your page then you're updating the sample on playground."]
            [embed-editor]
-           [:input.btn.btn-primary {:id    "copy-embed-iframe"
-                                    :type  "button"
-                                    :value "Copy"}]])
+           [:input.btn.btn-primary.ac-btn {:id    "copy-embed-iframe"
+                                           :type  "button"
+                                           :value "Copy"}]])
         ])
 
      (when @(rf/subscribe [:embed/download-tab?])
        [:div.content
         [:div                                               ;.form-group
-         [:a.btn.btn-primary {:role "button"
-                              :href @(rf/subscribe [:embed/download-html-link])}
+         [:a.ac-btn.add-btn {:role "button"
+                             :href @(rf/subscribe [:embed/download-html-link])}
           [:span.glyphicon.glyphicon-download-alt {:aria-hidden true}]
           " HTML"]]])
 
