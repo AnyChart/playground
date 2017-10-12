@@ -73,17 +73,17 @@
 
 (defn get-relations [chart]
   (let [result-relations (reduce (fn [res relation]
-                                   (if (some #(= (:name chart) %) (:charts relation))
-                                     (let [new-res (reduce (fn [res chart-name]
-                                                             (if (not= chart-name (:name chart))
-                                                               (update res chart-name conj (:name relation))
-                                                               res))
-                                                           res
-                                                           (:charts relation))]
-                                       new-res)
+                                   (if (some #(= (:id chart) %) (:charts relation))
+                                     (reduce (fn [res chart-id]
+                                               (if (not= chart-id (:id chart))
+                                                 (update res chart-id conj (:name relation))
+                                                 res))
+                                             res
+                                             (:charts relation))
                                      res))
                                  {}
                                  relations)
-        result-relations* (map (fn [[name relations]] {:name      name
-                                                       :relations (sort relations)}) result-relations)]
+        result-relations* (map (fn [[id relations]] {:name      (:name (get-chart-by-id id chart-types))
+                                                     :id        id
+                                                     :relations (sort relations)}) result-relations)]
     (sort-by :name result-relations*)))

@@ -1,7 +1,6 @@
 (ns playground.views.marketing.data-set.data-sets-page
   (:require [hiccup.page :as hiccup-page]
-            [playground.views.common :as page]
-            [clojure.string :as string]))
+            [playground.views.common :as page]))
 
 (defn page [{:keys [page] :as data}]
   (hiccup-page/html5
@@ -28,6 +27,13 @@
       [:div.content
        [:div.container-fluid.content-container
 
+        [:div.toggle-tabs.btn-group {:role "group"}
+         [:a.active.btn.btn-link {:type "button"} "Application"]
+         [:a.btn.btn-link {:type "button"}
+          [:span "Data formats"]]
+         [:a.btn.btn-link {:type "button"}
+          [:span "Popular"]]]
+
         [:div.row
          (for [data-set (:all-data-sets data)]
            [:div.col-md-4
@@ -38,15 +44,16 @@
 
              [:div.popular-tags-box
               (for [tag (:tags data-set)]
-                [:a.popular-tag-button {:href  (str "/tags/" tag)
+                [:a.popular-tag-button {:href  (str "/tags/" tag "s")
                                         :title (str tag)} tag])]
 
-             [:a.btn.btn-primary.usage-sample-button {:href   (:sample data-set)
-                                                      :target "_blank"} "Usage Sample"]
+             [:a.quick-add-btn {:href   (:sample data-set)
+                                :target "_blank"} "Usage Sample"]
+             [:a.learn-more {:title "Learn more"
+                             :href  (str "/data-sets/" (:name data-set))}
+              [:span "Learn more"]]
              ]
-
             ]
-
            )]]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]

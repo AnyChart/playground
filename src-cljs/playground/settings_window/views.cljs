@@ -207,21 +207,7 @@
                              :on-click #(do (rf/dispatch [:settings/add-style
                                                           (.-value (.getElementById js/document "style-input"))])
                                             (set! (.-value (.getElementById js/document "style-input")) ""))}
-     "Add"]]
-
-
-
-   ;[:div.form-group
-   ; [:label {:for "settings-styles"} "Styles"]
-   ; (for [style @(rf/subscribe [:sample/styles])]
-   ;   ^{:key style}
-   ;   [:div.settings-resource
-   ;    [:div.title [:a {:href style :target "_blank"} style]]
-   ;    [:button.btn.btn-primary.btn-xs {:type     "button"
-   ;                                     :on-click #(rf/dispatch [:settings/remove-style style])}
-   ;     [:span.glyphicon.glyphicon-remove]]])]
-
-   ])
+     "Add"]]])
 
 
 (defn datasets-tab []
@@ -243,9 +229,9 @@
           [:div.added-label
            [:span.glyphicon.glyphicon-ok]
            [:span "Already added"]]
-          [:input.btn.btn-primary.btn-xs.usage-sample-button {:type     "button"
-                                                              :value    "Quick Add"
-                                                              :on-click #(rf/dispatch [:settings/add-dataset dataset])}])
+          [:input.quick-add-btn {:type     "button"
+                                 :value    "Quick Add"
+                                 :on-click #(rf/dispatch [:settings/add-dataset dataset])}])
         ;(for [tag (:tags dataset)]
         ;  ^{:key tag} [:span.label.label-primary.tag tag])
         ]

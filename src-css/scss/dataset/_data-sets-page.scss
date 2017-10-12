@@ -1,4 +1,4 @@
-.datasets-page {
+html body .datasets-page {
 
   .intro {
     height: 248px;
@@ -9,6 +9,9 @@
     background-position: center;
   }
 
+  .toggle-tabs.btn-group {
+    margin: 22px 0 33px;
+  }
 
   .item {
     height: 460px;
@@ -17,15 +20,22 @@
       width: 100%;
       height: 187px;
       object-fit: contain;
-      margin-top: 20px;
       background-color: white;
-      box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-      margin-bottom: 22px;
+      box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+      margin-bottom: 18px;
+      cursor: pointer;
+      @include transition(150ms, ease);
+      @include transform(scale(1));
+      &:hover {
+        @include transition(150ms, ease);
+        @include transform(scale(1.1));
+      }
     }
     .title {
       font-size: 14px;
       color: #008ebe;
       font-weight: 600;
+      margin-bottom: 4px;
     }
     .description {
       font-size: 12px;
@@ -38,6 +48,47 @@
     .usage-sample-button {
       display: block;
       margin-bottom: 6px;
+    }
+
+    .quick-add-btn {
+      background-color: #19a1ce;
+      border: none;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      font-size: 13px;
+      border-radius: 4px;
+      color: white;
+      &:hover {
+        background-color: #00c6ff;
+        text-decoration: none;
+      }
+      &:active {
+        background-color: #00c6ff;
+        outline: none;
+      }
+    }
+
+    .learn-more {
+      display: inline-block;
+      text-transform: uppercase;
+      color: #008ebe;
+      padding: 7px 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-left: 9px;
+      span {
+        border-bottom: 1px dotted;
+      }
+      &:hover, &:focus {
+        text-decoration: none;
+      }
+    }
+  }
+
+  .popular-tags-box {
+    margin-top: 13px;
+    .popular-tag-button {
+      margin-bottom: 7px;
     }
   }
 
