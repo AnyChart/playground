@@ -237,7 +237,10 @@
       (chart-type-category-view/page (get-app-data request) category))))
 
 (defn data-sets-page [request]
-  (data-sets-view/page (get-app-data request)))
+  (let [page (dec (try (-> request :params :page Integer/parseInt) (catch Exception _ 1)))
+        all-datasets (:all-data-sets (get-app-data request))
+        is-end (data-sets-view/is-end (count all-datasets) page)]
+    (data-sets-view/page (get-app-data request) is-end page)))
 
 (defn data-set-page [request]
   (let [data-source-name (or (-> request :params :data-source)

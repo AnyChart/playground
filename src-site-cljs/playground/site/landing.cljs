@@ -227,8 +227,8 @@
 (def *chart-types-is-end (atom false))
 (def ^:const chart-types-count 25)
 
-(defn is-end [all-charts page]
-  (let [pages (int (.ceil js/Math (/ all-charts 25)))]
+(defn is-end [all-items-count on-page-count page]
+  (let [pages (int (.ceil js/Math (/ all-items-count on-page-count)))]
     (>= page (dec pages))))
 
 
@@ -241,7 +241,7 @@
             (< i (+ 25 (* @*chart-types-page 25))))
         (set! (.-display (.-style (nth els i))) "block")
         (set! (.-display (.-style (nth els i))) "none")))
-    (reset! *chart-types-is-end (is-end (count els) @*chart-types-page)))
+    (reset! *chart-types-is-end (is-end (count els) 25 @*chart-types-page)))
   (.pushState (.-history js/window) nil nil (str "?page=" (inc @*chart-types-page)))
   (set-buttons-visibility "tag-samples-prev"
                           "tag-samples-next"
@@ -261,4 +261,42 @@
                           "tag-samples-next"
                           @*chart-types-page
                           @*chart-types-is-end
+                          "page"))
+
+
+;;======================================================================================================================
+;; Datasets page
+;;======================================================================================================================
+(def *datasets-page (atom 0))
+(def *datasets-is-end (atom false))
+(def ^:const datasets-count 6)
+
+(defn datasets-buttons-click []
+  (let [box (first (array-seq (.getElementsByClassName js/document "datasets-container")))
+        els (array-seq (.-childNodes box))]
+    (dotimes [i (count els)]
+      (if (and
+            (>= i (* @*datasets-page 6))
+            (< i (+ 6 (* @*datasets-page 6))))
+        (set! (.-display (.-style (nth els i))) "block")
+        (set! (.-display (.-style (nth els i))) "none")))
+    (reset! *datasets-is-end (is-end (count els) 6 @*datasets-page)))
+  (.pushState (.-history js/window) nil nil (str "?page=" (inc @*datasets-page)))
+  (set-buttons-visibility "tag-samples-prev"
+                          "tag-samples-next"
+                          @*datasets-page
+                          @*datasets-is-end
+                          "page"))
+
+(defn ^:export startDatasetsPage [_end _page]
+  (reset! *datasets-page _page)
+  (reset! *datasets-is-end _end)
+  (init-buttons "tag-samples-prev"
+                "tag-samples-next"
+                *datasets-page
+                datasets-buttons-click)
+  (set-buttons-visibility "tag-samples-prev"
+                          "tag-samples-next"
+                          @*datasets-page
+                          @*datasets-is-end
                           "page"))
