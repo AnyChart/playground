@@ -15,3 +15,37 @@
     }
   }
 }
+
+.elements-container {
+  margin: 30px 0;
+  .toggle-tabs {
+    a {
+      padding: 4px 15px;
+      font-size: 13px;
+      color: #80a9bd;
+      border: none;
+      background: none;
+      text-decoration: none;
+      margin-right: 6px;
+      span {
+        border-bottom: 1px dotted;
+      }
+      &:hover{
+        color: #19a1ce;
+      }
+      &.active{
+        color: #222222;
+        border: 1px solid #83bbcd;
+        border-radius: 3px !important;
+      }
+    }
+  }
+  .search {
+    padding: 5px;
+    float: right;
+    display: inline-block;
+    color: #95bfd3;
+    font-size: 16px;
+    cursor: pointer;
+  }
+}

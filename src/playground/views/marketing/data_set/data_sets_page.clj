@@ -33,38 +33,41 @@
       [:div.content
        [:div.container-fluid.content-container
 
-        [:div.toggle-tabs.btn-group {:role "group"}
-         [:a.active.btn.btn-link {:type "button"} "Application"]
-         [:a.btn.btn-link {:type "button"}
-          [:span "Data formats"]]
-         [:a.btn.btn-link {:type "button"}
-          [:span "Popular"]]]
+        [:div.elements-container
+         [:div.toggle-tabs.btn-group {:role "group"}
+          [:a.active.btn.btn-link {:type "button"} "Application"]
+          [:a.btn.btn-link {:type "button"}
+           [:span "Data formats"]]
+          [:a.btn.btn-link {:type "button"}
+           [:span "Popular"]]]
+         [:div.search
+          [:span.glyphicon.glyphicon-search]]]
 
         [:div.row.datasets-container
          (let [current-datasets (nth (partition datasets-count datasets-count [] (:all-data-sets data)) page)]
            (for [data-set (:all-data-sets data)]
-            [:div.col-md-4
-             {:style (str "display: " (if (some (partial = data-set) current-datasets)
-                                        "block;" "none;"))}
-             [:div.item
-              [:a {:title (:title data-set)
-                   :href  (str "/datasets/" (:name data-set))}
-               [:img {:src (:logo data-set)}]]
-              [:p.title (:title data-set)]
-              [:p.description (:description data-set)]
+             [:div.col-md-4
+              {:style (str "display: " (if (some (partial = data-set) current-datasets)
+                                         "block;" "none;"))}
+              [:div.item
+               [:a {:title (:title data-set)
+                    :href  (str "/datasets/" (:name data-set))}
+                [:img {:src (:logo data-set)}]]
+               [:p.title (:title data-set)]
+               [:p.description (:description data-set)]
 
-              [:div.popular-tags-box
-               (for [tag (:tags data-set)]
-                 [:a.popular-tag-button {:href  (str "/tags/" tag "s")
-                                         :title (str tag)} tag])]
+               [:div.popular-tags-box
+                (for [tag (:tags data-set)]
+                  [:a.popular-tag-button {:href  (str "/tags/" tag "s")
+                                          :title (str tag)} tag])]
 
-              [:a.quick-add-btn {:href   (:sample data-set)
-                                 :target "_blank"} "Usage Sample"]
-              [:a.learn-more {:title "Learn more"
-                              :href  (str "/datasets/" (:name data-set))}
-               [:span "Learn more"]]
-              ]]
-            ))]
+               [:a.quick-add-btn {:href   (:sample data-set)
+                                  :target "_blank"} "Usage Sample"]
+               [:a.learn-more {:title "Learn more"
+                               :href  (str "/datasets/" (:name data-set))}
+                [:span "Learn more"]]
+               ]]
+             ))]
 
         [:div.prev-next-buttons
          [:a#tag-samples-prev.prev-button.btn.btn-default {:style (str "display: " (if (zero? page) "none;" "inline-block;"))

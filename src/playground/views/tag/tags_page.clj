@@ -55,12 +55,15 @@
       [:div.content
        [:div.container-fluid.content-container
 
-        [:div.toggle-tabs.btn-group {:role "group"}
-         [:a.active.btn.btn-link {:type "button"} "Popular tags"]
-         [:a.btn.btn-link {:type "button"}
-          [:span "Unknown tags"]]
-         [:a.btn.btn-link {:type "button"}
-          [:span "Knonw tags"]]]
+        [:div.elements-container
+         [:div.toggle-tabs.btn-group {:role "group"}
+          [:a.active.btn.btn-link {:type "button"} "Popular tags"]
+          [:a.btn.btn-link {:type "button"}
+           [:span "Unknown tags"]]
+          [:a.btn.btn-link {:type "button"}
+           [:span "Knonw tags"]]]
+         [:div.search
+          [:span.glyphicon.glyphicon-search]]]
 
         [:p.popular-label "Popular " [:b "tags"]]
 

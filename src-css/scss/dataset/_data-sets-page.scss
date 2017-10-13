@@ -11,10 +11,6 @@ html body .datasets-page {
 
   .content {
 
-    .toggle-tabs.btn-group {
-      margin: 22px 0 33px;
-    }
-
     .item {
       height: 460px;
       img {
@@ -57,13 +53,12 @@ html body .datasets-page {
         font-size: 13px;
         border-radius: 4px;
         color: white;
-        &:hover {
+        &:hover, &:focus {
           background-color: #00c6ff;
           text-decoration: none;
+          outline: none;
         }
         &:active {
-          background-color: #00c6ff;
-          outline: none;
         }
       }
 
@@ -83,7 +78,6 @@ html body .datasets-page {
         }
       }
     }
-
 
     .prev-next-buttons {
       margin-bottom: 50px;

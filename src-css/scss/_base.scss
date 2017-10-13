@@ -78,7 +78,6 @@ html {
           ul {
             padding: 13px 0;
             li a {
-
               padding: 3px 20px 3px 15px;
               img {
                 height: 22px;
@@ -195,36 +194,7 @@ html {
         /* height is dynamic, and will expand... */
         height: 100%;
         /* ...as content is added (won't scroll) */
-        .jumbotron button {
-          margin: 5px;
-        }
       }
-
-
-      .toggle-tabs {
-        //display: none;
-        a {
-          padding: 4px 15px;
-          font-size: 13px;
-          color: #80a9bd;
-          border: none;
-          background: none;
-          text-decoration: none;
-          margin-right: 6px;
-          span {
-            border-bottom: 1px dotted;
-          }
-          &:hover{
-            color: #19a1ce;
-          }
-          &.active{
-            color: #222222;
-            border: 1px solid #83bbcd;
-            border-radius: 3px !important;
-          }
-        }
-      }
-
 
       footer {
         font-size: 12px;
