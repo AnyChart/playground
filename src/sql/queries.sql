@@ -229,8 +229,8 @@ SELECT samples.id, samples.name, samples.views, samples.likes, samples.create_da
 INSERT INTO data_sources (name, title, type, sets, url) VALUES (:name, :title, :type, :sets, :url);
 
 --name: sql-add-data-set<!
-INSERT INTO data_sets (logo, name, title, description, tags, source, sample, data_source_id, url)
-              VALUES (:logo, :name, :title, :description, :tags, :source, :sample, :data_source_id, :url);
+INSERT INTO data_sets (logo, name, title, description, tags, source, sample, data_source_id, url, data)
+              VALUES (:logo, :name, :title, :description, :tags, :source, :sample, :data_source_id, :url, :data);
 
 --name: sql-delete-data-sources!
 DELETE FROM data_sources;

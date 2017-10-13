@@ -1,11 +1,10 @@
-/*chart type page*/
-.chart-type-page {
+.chart-type-page .content {
 
-  .info{
+  .info {
     margin-top: 20px;
     margin-bottom: 40px;
 
-    h1{
+    h1 {
       font-size: 18px;
       color: $red-color;
     }
@@ -14,7 +13,7 @@
       color: $red-color;
     }
 
-    .description{
+    .description {
       font-size: 12px;
     }
 
@@ -24,26 +23,21 @@
       margin-bottom: 5px;
     }
 
-
-    .column2{
+    .column2 {
       margin-top: 2px;
       .note {
         margin-top: 15px;
-        &:nth-child(2){
+        &:nth-child(2) {
           margin-top: 24px;
         }
       }
-
-      //popular-tags-box
-
     }
-
   }
 
-  .samples-label{
+  .samples-label {
     margin-bottom: 14px;
   }
-  .prev-next-buttons{
+  .prev-next-buttons {
     margin-top: 2px;
     margin-bottom: 80px;
   }

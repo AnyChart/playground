@@ -2,7 +2,8 @@
   (:require [cheshire.core :as json]
             [clojure.string :as string]
             [taoensso.timbre :as timbre]
-            [playground.db.request :as db-req])
+            [playground.db.request :as db-req]
+            [clj-http.client :as http])
   (:import (jdk.nashorn.internal.runtime.options Options)
            (jdk.nashorn.internal.runtime ErrorManager Source Context)
            (jdk.nashorn.internal.parser Parser)
@@ -28,6 +29,11 @@
     (.startsWith url "//") (str "http://" url)
     (.startsWith url "./") (relative-path full-url url)))
 
+(defn get-data [url]
+  (try
+    (:body (http/get url))
+    (catch Exception _ nil)))
+
 (defn parse-data-set [db data-source data-set]
   (let [data-set-url (:data data-set)
         full-data-set-url (full-url (:url data-source) data-set-url)
@@ -44,7 +50,8 @@
                  :description    (:description data-set)
                  :source         (:source data-set)
                  :sample         (:sample data-set)
-                 :url            full-data-set-url}]
+                 :url            full-data-set-url
+                 :data           (get-data full-data-set-url)}]
     (db-req/add-data-set<! db (update db-data :tags json/generate-string))))
 
 (defn parse-data-source [db data-sources]

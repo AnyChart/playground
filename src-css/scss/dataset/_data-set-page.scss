@@ -1,0 +1,87 @@
+html body .dataset-page .content {
+
+  .row {
+    margin-top: 30px;
+    margin-bottom: 40px;
+    .column1 {
+      h1 {
+        color: $red-color;
+        font-size: 18px;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+      .caption {
+        color: $red-color;
+        margin-top: 40px;
+        font-size: 15px;
+      }
+      pre {
+        font-size: 12px;
+        padding: 0;
+        color: #2c4b76;
+        background-color: transparent;
+        border: none;
+        white-space: pre-wrap; /* css-3 */
+        white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+        white-space: -pre-wrap; /* Opera 4-6 */
+        white-space: -o-pre-wrap; /* Opera 7 */
+        word-wrap: break-word; /* Internet Explorer 5.5+ */
+      }
+    }
+
+    .column2 {
+      .CodeMirror {
+        background: #d5e0e6;
+        height: 100px;
+        border: 1px solid #99c1d4;
+        white-space: pre-wrap; /* css-3 */
+        white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+        white-space: -pre-wrap; /* Opera 4-6 */
+        white-space: -o-pre-wrap; /* Opera 7 */
+        word-wrap: break-word; /* Internet Explorer 5.5+ */
+        pre {
+          white-space: pre-wrap;
+        }
+      }
+      img {
+        width: 100%;
+        box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        margin: 20px 0 30px;
+      }
+      .line-box {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin: 16px 0 10px;
+        .details {
+          color: #19a1ce;
+          font-size: 13px;
+          font-weight: 600;
+          &:hover, &:focus {
+            text-decoration: none;
+          }
+          span {
+            border-bottom: 1px dotted;
+          }
+        }
+        .quick-add-btn {
+          background-color: #19a1ce;
+          border: none;
+          text-transform: uppercase;
+          padding: 5px 10px;
+          font-size: 13px;
+          border-radius: 4px;
+          color: white;
+          &:hover {
+            background-color: #00c6ff;
+            text-decoration: none;
+          }
+          &:active {
+            background-color: #00c6ff;
+            outline: none;
+          }
+        }
+      }
+    }
+  }
+}

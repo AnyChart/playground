@@ -170,6 +170,7 @@
 (defn parse-data-set [data-set]
   (-> data-set
       (assoc :tags (parse-string (:tags data-set)))
+      ;(assoc :data (parse-string (:data data-set)))
       underscore->dash))
 
 (defsql add-data-source<!)

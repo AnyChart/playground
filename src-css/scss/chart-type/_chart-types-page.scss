@@ -1,4 +1,4 @@
-html body .chart-types-page{
+html body .chart-types-page {
 
   .intro {
     height: 248px;
@@ -9,29 +9,29 @@ html body .chart-types-page{
     background-position: center;
   }
 
-  .elements-container{
-    margin: 30px 0;
+  .content {
 
-    .toggle-tabs{
-      margin-left: 55px;
+    .elements-container {
+      margin: 30px 0;
+      .toggle-tabs {
+        margin-left: 55px;
+      }
+      .search {
+        padding: 5px;
+        float: right;
+        display: inline-block;
+        color: #95bfd3;
+        font-size: 16px;
+        cursor: pointer;
+      }
     }
 
-    .search{
-      padding: 5px;
-      float:right;
-      display: inline-block;
-      color: #95bfd3;
-      font-size: 16px;
-      cursor: pointer;
+    .chart-type-container {
+      padding-bottom: 28px;
+    }
+    .prev-next-buttons {
+      margin-bottom: 65px;
     }
 
   }
-
-  .chart-type-container{
-    padding-bottom: 28px;
-  }
-  .prev-next-buttons{
-    margin-bottom: 65px;
-  }
-
 }
