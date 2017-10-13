@@ -67,16 +67,15 @@
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
 
-     [:script {:src "/jquery/jquery.min.js"}]
-     [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]
      [:script {:src "/codemirror/lib/codemirror.js"}]
      [:script {:src "/codemirror/mode/javascript/javascript.js"}]
      [:link {:rel "stylesheet" :href "/codemirror/lib/codemirror.css"}]
-
      [:script "
         var editor = CodeMirror.fromTextArea(myTextarea, {
            lineNumbers: false,
            mode: 'javascript'
         });
      "]
+     [:script {:src "/jquery/jquery.min.js"}]
+     [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]
      ]))
