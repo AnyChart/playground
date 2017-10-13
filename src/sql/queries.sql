@@ -244,6 +244,9 @@ SELECT  data_sets.*,
  data_sources.id as data_source_id, data_sources.type
  FROM data_sets JOIN data_sources ON data_sets.data_source_id = data_sources.id;
 
+--name: sql-data-sources
+SELECT data_sources.* FROM data_sources;
+
 --name: sql-top-data-sets
 SELECT data_sets.*,
  data_sources.name as data_source_name, data_sources.title as data_source_title, data_sources.type as data_source_type,

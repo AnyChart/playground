@@ -37,12 +37,13 @@ html body .dataset-page .content {
       }
       textarea {
         width: 100%;
+        display: block;
+        resize: none;
+        padding: 4px;
         background: #d5e0e6;
         height: 100px;
         border: 1px solid #99c1d4;
         font-family: monospace;
-        padding: 4px;
-        display: block;
       }
       .CodeMirror {
         background: #d5e0e6;

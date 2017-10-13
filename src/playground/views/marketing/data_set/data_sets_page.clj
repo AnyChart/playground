@@ -38,7 +38,9 @@
          (for [data-set (:all-data-sets data)]
            [:div.col-md-4
             [:div.item
-             [:img {:src (:logo data-set)}]
+             [:a {:title (:title data-set)
+                  :href  (str "/datasets/" (:name data-set))}
+              [:img {:src (:logo data-set)}]]
              [:p.title (:title data-set)]
              [:p.description (:description data-set)]
 
@@ -50,7 +52,7 @@
              [:a.quick-add-btn {:href   (:sample data-set)
                                 :target "_blank"} "Usage Sample"]
              [:a.learn-more {:title "Learn more"
-                             :href  (str "/data-sets/" (:name data-set))}
+                             :href  (str "/datasets/" (:name data-set))}
               [:span "Learn more"]]
              ]
             ]

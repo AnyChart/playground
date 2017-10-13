@@ -240,7 +240,8 @@
   (data-sets-view/page (get-app-data request)))
 
 (defn data-set-page [request]
-  (let [data-source-name (-> request :params :data-source)
+  (let [data-source-name (or (-> request :params :data-source)
+                             (-> (db-req/data-sources (get-db request)) first :name))
         data-set-name (-> request :params :data-set)
         data-set (db-req/data-set-by-name (get-db request) {:data-source-name data-source-name
                                                             :name             data-set-name})]
@@ -496,6 +497,9 @@
 
            (GET "/datasets/:data-source/:data-set" [] (-> data-set-page
                                                           mw/base-page-middleware))
+
+           (GET "/datasets/:data-set" [] (-> data-set-page
+                                             mw/base-page-middleware))
 
            (GET "/support" [] (-> support-page
                                   mw/base-page-middleware))
