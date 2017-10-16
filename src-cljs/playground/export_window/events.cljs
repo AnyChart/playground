@@ -1,10 +1,11 @@
-(ns playground.embed-window.events
+(ns playground.export-window.events
   (:require-macros [hiccups.core :as h])
   (:require [re-frame.core :as rf]
             [playground.utils.utils :as common-utils]
             [playground.utils :as utils]
             [playground.views.iframe :as iframe-view]
-            [hiccups.runtime :as hiccupsrt]))
+            [hiccups.runtime :as hiccupsrt]
+            [clojure.string :as string]))
 
 ;;======================================================================================================================
 ;; Main
@@ -113,9 +114,10 @@ function ac_add_style(css){
 (defn internal-iframe-text [db]
   (let [sample-name (-> db :embed :props :id)
         html (str "<!DOCTYPE html>" (h/html (iframe-view/iframe (:sample db))))
-        html (clojure.string/replace html #"/" "\\/")
-        html (clojure.string/replace html #"\"" "\\\"")
-        html (clojure.string/replace html #"\n" "\\\n")]
+        html (string/replace html #"/" "\\/")
+        html (string/replace html #"\"" "\\\"")
+        html (string/replace html #"\\n" "\\\\n")
+        html (string/replace html #"\n" "\\n")]
     (str "<iframe id=\"anychart-iframe-embed-" sample-name "\" src=\"about:blank\" frameBorder=\"0\" class=\""
          (-> db :embed :props :class) " " (-> db :embed :props :class) "-" (-> db :embed :props :id) "\"></iframe>\n"
          "<script type=\"text/javascript\">(function(){\n"

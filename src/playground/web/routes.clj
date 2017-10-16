@@ -355,17 +355,19 @@
         style (-> request :params :style)
         markup (-> request :params :markup)
         styles (-> request :params :styles (clojure.string/split #","))
-        scripts (-> request :params :scripts (clojure.string/split #","))]
-    (response (render-file "templates/sample.selmer" {:name              "Default name"
-                                                      :tags              []
-                                                      :short-description "Default short desc"
+        scripts (-> request :params :scripts (clojure.string/split #","))
+        data {:name              "Default name"
+              :tags              []
+              :short-description "Default short desc"
 
-                                                      :scripts           scripts
-                                                      :styles            styles
+              :scripts           scripts
+              :styles            styles
 
-                                                      :markup            markup
-                                                      :code              code
-                                                      :style             style}))))
+              :markup            markup
+              :code              code
+              :style             style}]
+    ;(response (render-file "templates/sample.selmer" data))
+    (show-sample-iframe data nil)))
 
 (defn fork [request]
   ;(prn "Fork: " (-> request :session :user) (-> request :params :sample))

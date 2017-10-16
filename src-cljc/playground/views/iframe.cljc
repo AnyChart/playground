@@ -32,9 +32,6 @@
       [:script {:src script}])
 
     [:script {:type "text/javascript"}
-
-     #?(:cljs (clojure.string/replace (:code sample) #"\n" "\\n")
-        :clj  (:code sample))
-     ]
+     (:code sample)]
 
     ]])

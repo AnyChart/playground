@@ -117,7 +117,7 @@
          [:li [:a {:href "/support"} "Support"]]
          [:li [:a {:href "/roadmap"} "Roadmap"]]
          [:li [:a {:href "/version-history"} "Version History"]]]]
-       [:li [:a {:href "/pricing"} "Pricing"]]
+       ;[:li [:a {:href "/pricing"} "Pricing"]]
        [:li [:a {:href "/about"} "About"]]
 
        (when sample
@@ -196,7 +196,7 @@
           [:li [:a {:href "/support" :title "Playground Support"} "Support"]]
           [:li [:a {:href "/roadmap" :title "Playground Roadmap"} "Roadmap"]]
           [:li [:a {:href "/version-history" :title "Playground Version History"} "Version History"]]]]
-        [:li [:a {:href "/pricing" :title "Playground Pricing"} "Pricing"]]
+        ;[:li [:a {:href "/pricing" :title "Playground Pricing"} "Pricing"]]
         [:li [:a {:href "/about" :title "About Playground"} "About"]]
 
         (when sample
@@ -300,7 +300,7 @@
       [:div [:a {:href "/support" :title "Playground Support"} "Support"]]
       [:div [:a {:href "/roadmap" :title "Playground Roadmap"} "Roadmap"]]
       [:div [:a {:href "/version-history" :title "Playground Version History"} "Version History"]]
-      [:div [:a {:href "/pricing" :title "Playground Pricing"} "Pricing"]]
+      ;[:div [:a {:href "/pricing" :title "Playground Pricing"} "Pricing"]]
       [:div [:a {:href "/about" :title "About Playground"} "About"]]]
 
      [:div.col-sm-2.col-xs-4

@@ -14,7 +14,8 @@
                            :sandbox           "allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"
                            :allowTransparency "true"
                            :allowFullScreen   "true"
-                           :src               @(rf/subscribe [:sample-iframe-url])}]])
+                           ;:src               @(rf/subscribe [:sample-iframe-url])
+                           }]])
 
 
 (defn markup-editor []
@@ -157,25 +158,11 @@
                                                                      :panel-2 [code-editor]]]
                                                  :panel-1 [iframe-result]])}))
 
-
 (defn editors-left []
   (reagent/create-class {:component-did-mount #(do
-                                                 (utils/log "Did mount!") (rf/dispatch [:create-editors])
-                                                 (.init js/splitMe))
-                         :reagent-render      (fn []
-                                                (let [[markup-percent style-percent] @(rf/subscribe [:editors/splitter-percents])]
-                                                  [:div.vertically_divided {:data-percent 50
-                                                                            :style        {:width "100%" :height "100%"}}
-                                                   [:div.horizontally_divided.z1 {:data-percent markup-percent}
-                                                    [markup-editor]
-                                                    [:div.horizontally_divided.z2 {:data-percent style-percent}
-                                                     [style-editor]
-                                                     [code-editor]]]
-                                                   [iframe-result]]))}))
-
-(defn editors-right []
-  (reagent/create-class {:component-did-mount #(do
-                                                 (utils/log "Did mount!") (rf/dispatch [:create-editors])
+                                                 (utils/log "Did mount!")
+                                                 (rf/dispatch [:create-editors])
+                                                 (rf/dispatch [:run])
                                                  (.init js/splitMe))
                          :reagent-render      (fn []
                                                 (let [[markup-percent style-percent] @(rf/subscribe [:editors/splitter-percents])]
@@ -188,25 +175,28 @@
                                                      [style-editor]
                                                      [code-editor]]]]))}))
 
+(defn editors-right []
+  (reagent/create-class {:component-did-mount #(do
+                                                 (utils/log "Did mount!")
+                                                 (rf/dispatch [:create-editors])
+                                                 (rf/dispatch [:run])
+                                                 (.init js/splitMe))
+                         :reagent-render      (fn []
+                                                (let [[markup-percent style-percent] @(rf/subscribe [:editors/splitter-percents])]
+                                                  [:div.vertically_divided {:data-percent 50
+                                                                            :style        {:width "100%" :height "100%"}}
+                                                   [:div.horizontally_divided.z1 {:data-percent markup-percent}
+                                                    [markup-editor]
+                                                    [:div.horizontally_divided.z2 {:data-percent style-percent}
+                                                     [style-editor]
+                                                     [code-editor]]]
+                                                   [iframe-result]]))}))
 
 (defn editors-top []
   (reagent/create-class {:component-did-mount #(do
-                                                 (utils/log "Did mount!") (rf/dispatch [:create-editors])
-                                                 (.init js/splitMe))
-                         :reagent-render      (fn []
-                                                [:div.horizontally_divided {:data-percent 50
-                                                                            :style        {:width "100%" :height "100%"}}
-                                                 [:div.vertically_divided.z1 {:data-percent 33}
-                                                  [markup-editor]
-                                                  [:div.vertically_divided.z2 {:data-percent 50}
-                                                   [style-editor]
-                                                   [code-editor]]]
-                                                 [iframe-result]])}))
-
-
-(defn editors-bottom []
-  (reagent/create-class {:component-did-mount #(do
-                                                 (utils/log "Did mount!") (rf/dispatch [:create-editors])
+                                                 (utils/log "Did mount!")
+                                                 (rf/dispatch [:create-editors])
+                                                 (rf/dispatch [:run])
                                                  (.init js/splitMe))
                          :reagent-render      (fn []
                                                 [:div.horizontally_divided {:data-percent 50
@@ -218,6 +208,22 @@
                                                    [style-editor]
                                                    [code-editor]]]
                                                  ])}))
+
+(defn editors-bottom []
+  (reagent/create-class {:component-did-mount #(do
+                                                 (utils/log "Did mount!")
+                                                 (rf/dispatch [:create-editors])
+                                                 (rf/dispatch [:run])
+                                                 (.init js/splitMe))
+                         :reagent-render      (fn []
+                                                [:div.horizontally_divided {:data-percent 50
+                                                                            :style        {:width "100%" :height "100%"}}
+                                                 [:div.vertically_divided.z1 {:data-percent 33}
+                                                  [markup-editor]
+                                                  [:div.vertically_divided.z2 {:data-percent 50}
+                                                   [style-editor]
+                                                   [code-editor]]]
+                                                 [iframe-result]])}))
 
 
 (defn editors []

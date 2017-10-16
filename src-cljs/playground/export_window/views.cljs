@@ -1,4 +1,4 @@
-(ns playground.embed-window.views
+(ns playground.export-window.views
   (:require [re-frame.core :as rf]
             [playground.utils :as utils]
             [reagent.core :as reagent]))
@@ -22,21 +22,19 @@
                                                 [:div#embed-plain-html-editor {:class "editor-box editor-box-embed"}])}))
 
 
-
-
-
-(defn embed-window []
+(defn export-window []
   (when @(rf/subscribe [:embed/show])
-    [:div.settings-window.embed-window.hide-outside
+    [:div.settings-window.export-window.hide-outside
 
      [:ul.nav.nav-tabs.settings-tabs
       [:li {:class (when @(rf/subscribe [:embed/embed-tab?]) "active")}
        [:a {:href     "javascript:;"
             :on-click #(rf/dispatch [:embed/embed-tab])} "Embed"]]
-
-      [:li {:class (when @(rf/subscribe [:embed/download-tab?]) "active")}
-       [:a {:href     "javascript:;"
-            :on-click #(rf/dispatch [:embed/download-tab])} "Download"]]]
+      ;; TODO: redesign download tab
+      ;[:li {:class (when @(rf/subscribe [:embed/download-tab?]) "active")}
+      ; [:a {:href     "javascript:;"
+      ;      :on-click #(rf/dispatch [:embed/download-tab])} "Download"]]
+      ]
 
      (when @(rf/subscribe [:embed/embed-tab?])
        [:div
@@ -106,7 +104,7 @@
            [:p.sub-intro
             "This option doesn't use external resources and protect your page content from the ID's and CSS used in the sample, but usage of HTML iframe is not convenient to use from the page loading speed perspective."]
            [iframe-internal-editor]
-           [:input.btn.btn-primary.ac-btn {:id    "copy-embed-internal-iframe"
+           [:input.ac-btn.add-btn  {:id    "copy-embed-internal-iframe"
                                            :type  "button"
                                            :value "Copy"}]])
 
@@ -115,7 +113,7 @@
            [:p.sub-intro
             "The advantage of this option is auto-update of the sample embedded on your page then you're updating the sample on playground."]
            [embed-editor]
-           [:input.btn.btn-primary.ac-btn {:id    "copy-embed-iframe"
+           [:input.ac-btn.add-btn  {:id    "copy-embed-iframe"
                                            :type  "button"
                                            :value "Copy"}]])
         ])

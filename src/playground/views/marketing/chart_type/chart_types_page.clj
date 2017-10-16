@@ -57,35 +57,39 @@
          ]
 
         [:div.row.chart-type-container
-         (let [current-charts (nth (partition chart-count chart-count [] chart-types) page)]
-           (for [chart chart-types]
-             [:div.col-md-15.col-sm-3.col-xs-4.col-xxs.col-xxxs.text-center.chart-type-block
-              {:style (str "display: " (if (some (partial = chart) current-charts)
-                                         "block;" "none;"))}
-              [:a.chart
-               {:title (:name chart)
-                :href  (str "/chart-types/" (:id chart))}
-               [:div.chart-img
-                [:img {:alt (str "Chart type " (:name chart) " image")
-                       :src (:img chart)}]]
-               [:span (:name chart)]]]))]
+         ;; Disable pagination
+         ;let [current-charts (nth (partition chart-count chart-count [] chart-types) page)]
+         (for [chart chart-types]
+           [:div.col-md-15.col-sm-3.col-xs-4.col-xxs.col-xxxs.text-center.chart-type-block
+            ;{:style (str "display: " (if (some (partial = chart) current-charts)
+            ;                           "block;" "none;"))}
+            [:a.chart
+             {:title (:name chart)
+              :href  (str "/chart-types/" (:id chart))}
+             [:div.chart-img
+              [:img {:alt (str "Chart type " (:name chart) " image")
+                     :src (:img chart)}]]
+             [:span (:name chart)]]])]
 
-        [:div.prev-next-buttons
-         [:a#tag-samples-prev.prev-button.btn.btn-default {:style (str "display: " (if (zero? page) "none;" "inline-block;"))
-                                                           :href  (str "/chart-types?page=" page)
-                                                           :title (str "Prev page, " page)}
-          [:span.glyphicon.glyphicon-arrow-left {:aria-hidden true}]
-          " Prev"]
-         [:a#tag-samples-next.next-button.btn.btn-default {:style (str "display: " (if end "none;" "inline-block;"))
-                                                           :href  (str "/chart-types?page=" (-> page inc inc))
-                                                           :title (str "Next page, " (-> page inc inc))}
-          "Next "
-          [:span.glyphicon.glyphicon-arrow-right {:aria-hidden true}]]]
+        ;; Disable pagination
+        ;[:div.prev-next-buttons
+        ; [:a#tag-samples-prev.prev-button.btn.btn-default {:style (str "display: " (if (zero? page) "none;" "inline-block;"))
+        ;                                                   :href  (str "/chart-types?page=" page)
+        ;                                                   :title (str "Prev page, " page)}
+        ;  [:span.glyphicon.glyphicon-arrow-left {:aria-hidden true}]
+        ;  " Prev"]
+        ; [:a#tag-samples-next.next-button.btn.btn-default {:style (str "display: " (if end "none;" "inline-block;"))
+        ;                                                   :href  (str "/chart-types?page=" (-> page inc inc))
+        ;                                                   :title (str "Next page, " (-> page inc inc))}
+        ;  "Next "
+        ;  [:span.glyphicon.glyphicon-arrow-right {:aria-hidden true}]]]
 
         ]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
      [:script {:src "/jquery/jquery.min.js"}]
      [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]
-     [:script {:src "/js/site.js" :type "text/javascript"}]
-     [:script "playground.site.landing.startChartTypesPage(" end ", " page ");"]]))
+     ;; Disable pagination
+     ;[:script {:src "/js/site.js" :type "text/javascript"}]
+     ;[:script "playground.site.landing.startChartTypesPage(" end ", " page ");"]
+     ]))

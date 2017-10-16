@@ -1,4 +1,5 @@
 (ns playground.events
+  (:require-macros [hiccups.core :as h])
   (:require [reagent.core :as reagent :refer [atom]]
             [re-frame.core :as rf]
             [playground.utils :as utils]
@@ -9,7 +10,9 @@
             [playground.settings-window.data :as external-resources]
             [playground.utils.utils :as common-utils]
             [playground.settings-window.data :as data]
-            [alandipert.storage-atom :refer [local-storage]]))
+            [alandipert.storage-atom :refer [local-storage]]
+            [playground.views.iframe :as iframe-view]
+            [hiccups.runtime :as hiccupsrt]))
 
 
 (rf/reg-event-db
@@ -17,7 +20,7 @@
   (fn [_ [_ data]]
     (let [default-prefs {:hidden-tips  []
                          :hidden-types []
-                         :view         :left}
+                         :view         :right}
           ls (local-storage (atom default-prefs) :prefs)]
       ;; add default props
       (when (not= (merge default-prefs @ls) @ls)
@@ -27,7 +30,7 @@
       ; (swap! ls assoc :hidden-types [])
       ; (utils/log (clj->js @ls))
       {:editors       {:editors-height (editors-js/editors-height)
-                       :view           (or (:view data) (:view @ls) :left)
+                       :view           (or (:view data) (:view @ls) :right)
                        :code-settings  {:show false}}
 
        :sample        (:sample data)
@@ -60,12 +63,20 @@
   (fn [db [_ type code]]
     (assoc-in db [:sample type] code)))
 
+(defn set-iframe [sample]
+  (let [doc (.-document (.-contentWindow (.getElementById js/document "result-iframe")))
+        html (str "<!DOCTYPE html>" (h/html (iframe-view/iframe sample)))]
+    (.open doc)
+    (.write doc html)
+    (.close doc)))
+
 (rf/reg-event-db
   :run
   (fn [db _]
     (when (= :standalone (-> db :editors :view))
       (rf/dispatch [:view/editor]))
-    (.submit (.getElementById js/document "run-form"))
+    ;(.submit (.getElementById js/document "run-form"))
+    (set-iframe (-> db :sample))
     db))
 
 (rf/reg-event-db

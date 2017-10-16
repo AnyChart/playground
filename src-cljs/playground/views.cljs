@@ -2,7 +2,7 @@
   (:require [reagent.core :as reagent :refer [atom]]
             [re-frame.core :as rf]
             [playground.settings-window.views :as settings-window]
-            [playground.embed-window.views :as embed-window]
+            [playground.export-window.views :as export-window]
             [playground.editors.views :as editors]
             [playground.tips.views :as tips]
             [playground.sidemenu.views :as sidemenu]
@@ -52,7 +52,7 @@
       [:button.btn.btn-link {:on-click #(rf/dispatch [:embed/show])
                              :class    (when @(rf/subscribe [:embed/show]) "active")}
        [:div.icon.icon-embed]
-       [:span "Embed"]
+       [:span "Export"]
        [:span.caret]]]
 
      [:li.dropdown
@@ -153,5 +153,5 @@
    [editors/editors]
    [tips/tips]
    [settings-window/settings-window]
-   [embed-window/embed-window]
+   [export-window/export-window]
    [sidemenu/view]])
