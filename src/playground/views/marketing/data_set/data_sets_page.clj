@@ -52,18 +52,22 @@
               [:div.item
                [:a {:title (:title data-set)
                     :href  (str "/datasets/" (:name data-set))}
-                [:img {:src (:logo data-set)}]]
-               [:p.title (:title data-set)]
+                [:img {:alt (str (:title data-set) " - " (:description data-set))
+                       :src (:logo data-set)}]]
+               [:a.title {:title (:title data-set)
+                          :href  (str "/datasets/" (:name data-set))}
+                (:title data-set)]
                [:p.description (:description data-set)]
 
                [:div.popular-tags-box
                 (for [tag (:tags data-set)]
-                  [:a.popular-tag-button {:href  (str "/tags/" tag "s")
+                  [:a.popular-tag-button {:href  (str "/tags/" tag)
                                           :title (str tag)} tag])]
 
-               [:a.quick-add-btn {:href   (:sample data-set)
+               [:a.quick-add-btn {:title  (str (:title data-set) " usage sample")
+                                  :href   (:sample data-set)
                                   :target "_blank"} "Usage Sample"]
-               [:a.learn-more {:title "Learn more"
+               [:a.learn-more {:title (str "Learn more about " (:title data-set))
                                :href  (str "/datasets/" (:name data-set))}
                 [:span "Learn more"]]
                ]]

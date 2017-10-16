@@ -215,7 +215,7 @@
     (when-let [chart-type (chartopedia/get-chart chart-name)]
       (let [
             ;TODO: emliminate addin 's' to end of chart-type-name
-            tag (str (:name chart-type) "s")
+            tag (:name chart-type)
             page (dec (try (-> request :params :page Integer/parseInt) (catch Exception _ 1)))
             samples (db-req/samples-by-tag (get-db request) {:count  (inc samples-per-block)
                                                              :offset (* samples-per-block page)

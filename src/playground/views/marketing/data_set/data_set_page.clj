@@ -44,12 +44,13 @@
           [:p.caption "Tags"]
           [:div.popular-tags-box
            (for [tag (:tags data-set)]
-             [:a.popular-tag-button {:href  (str "/tags/" tag "s")
+             [:a.popular-tag-button {:href  (str "/tags/" tag)
                                      :title (str tag)} tag])]
           ]
 
          [:div.col-sm-6.column2
-          [:img {:src (:logo data-set)}]
+          [:img {:alt (str (:title data-set) " - " (:description data-set))
+                 :src (:logo data-set)}]
 
           [:textarea#myTextarea (get-code data-set)]
 
@@ -59,7 +60,8 @@
                          :href  "https://docs.anychart.com/Working_with_Data/Using_Data_Sets"}
              [:span "Sets usage article"]]
             " for more details"]
-           [:a.quick-add-btn {:href   (:sample data-set)
+           [:a.quick-add-btn {:title  (str (:title data-set) " usage sample")
+                              :href   (:sample data-set)
                               :target "_blank"} "Usage Sample"]]
           ]
          ]
