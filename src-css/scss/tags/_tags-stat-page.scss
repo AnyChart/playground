@@ -1,0 +1,23 @@
+html body .tags-stat-page {
+
+  .content {
+
+    .popular-tags-box {
+      margin-bottom: 40px;
+      .line-tag {
+        .tag-container {
+          display: inline-block;
+          min-width: 330px;
+          .popular-tag-button {
+            font-weight: bold;
+          }
+        }
+        .count {
+          font-weight: 600;
+        }
+      }
+    }
+
+  }
+
+}

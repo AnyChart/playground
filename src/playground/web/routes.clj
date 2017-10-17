@@ -31,6 +31,7 @@
 
             [playground.views.tag.tags-page :as tags-view]
             [playground.views.tag.tag-page :as tag-view]
+            [playground.views.tag.tags-stat-page :as tags-stat-view]
 
             [playground.views.marketing.chart-type.chart-types-page :as chart-types-view]
             [playground.views.marketing.chart-type.chart-type-page :as chart-type-view]
@@ -199,6 +200,10 @@
                            :tag-data (tags-data/get-tag-data tag)}
                           (get-app-data request)))))
 
+(defn tag-stat-page [request]
+  (tags-stat-view/page (get-app-data request)))
+
+
 (defn repos-page [request]
   (repos-view/page (get-app-data request)))
 ;; =====================================================================================================================
@@ -213,9 +218,7 @@
 (defn chart-type-page [request]
   (let [chart-name (-> request :params :chart-type)]
     (when-let [chart-type (chartopedia/get-chart chart-name)]
-      (let [
-            ;TODO: emliminate addin 's' to end of chart-type-name
-            tag (:name chart-type)
+      (let [tag (:name chart-type)
             page (dec (try (-> request :params :page Integer/parseInt) (catch Exception _ 1)))
             samples (db-req/samples-by-tag (get-db request) {:count  (inc samples-per-block)
                                                              :offset (* samples-per-block page)
@@ -529,6 +532,10 @@
            (GET "/tags" [] (-> tags-page
                                mw/all-tags-middleware
                                mw/base-page-middleware))
+
+           (GET "/tags/index" [] (-> tag-stat-page
+                                     mw/all-tags-middleware
+                                     mw/base-page-middleware))
 
            (GET "/tags/*" [] (-> tag-page
                                  mw/base-page-middleware))
