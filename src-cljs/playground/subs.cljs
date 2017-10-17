@@ -66,6 +66,9 @@
 (rf/reg-sub :sample/style-type (fn [db _] (-> db :sample :style-type style-type->str)))
 (rf/reg-sub :sample/style (fn [db _] (-> db :sample :style)))
 
+(rf/reg-sub :sample/show-close-warning? (fn [db _]
+                                          (not= (-> db :saved-sample)
+                                                (-> db :sample))))
 
 (rf/reg-sub :datasets (fn [db _] (-> db :datasets)))
 

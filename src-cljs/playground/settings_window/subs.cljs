@@ -13,3 +13,13 @@
               (let [url (-> db :settings :external-resources type :url)
                     scripts (-> db :sample :scripts)]
                 (some (fn [script] (= script url)) scripts))))
+
+(rf/reg-sub
+  :settings.general-tab/description-height
+  (fn [query_v _] (rf/subscribe [:editors/height]))
+  (fn [editor-height _]
+    (let [ ;y (.-y (.getBoundingClientRect (.getElementById js/document "settings-desc")))
+           max-editor-height (- editor-height 200)]
+      (if (< max-editor-height 80)
+       80
+       max-editor-height))))

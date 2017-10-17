@@ -34,6 +34,7 @@
                        :code-settings  {:show false}}
 
        :sample        (:sample data)
+       :saved-sample  (:sample data)
        :templates     (:templates data)
        :user          (:user data)
        :datasets      (:datasets data)
@@ -82,7 +83,6 @@
 (rf/reg-event-db
   :save
   (fn [db _]
-    (utils/log "Save")
     (when (= :standalone (-> db :editors :view))
       (rf/dispatch [:view/editor]))
     (POST "/save"
@@ -91,32 +91,26 @@
            :error-handler #(rf/dispatch [:save-error %1])})
     db))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   :save-response
-  (fn [db [_ data]]
-    (utils/log "Save ok!" data)
+  (fn [{db :db} [_ data]]
     (if (= :ok (:status data))
-      (do
-        ;(accountant/navigate! (str "/" (:hash data)
-        ;                             (when (pos? (:version data))
-        ;                               (str "/" (:version data)))))
-        (.pushState (.-history js/window) nil nil (str "/" (:hash data)
-                                                       (when (pos? (:version data))
-                                                         (str "/" (:version data)))))
-        (-> db
-            (assoc-in [:sample :version-id] nil)
-            (assoc-in [:sample :new] false)
-            (assoc-in [:sample :url] (:hash data))
-            (assoc-in [:sample :version] (:version data))
-            (assoc-in [:sample :owner-id] (:owner-id data))))
-      (do
-        (js/alert "Sample saving error")
-        db))))
+      {:db         (-> db
+                       (assoc-in [:sample :version-id] nil)
+                       (assoc-in [:sample :new] false)
+                       (assoc-in [:sample :url] (:hash data))
+                       (assoc-in [:sample :version] (:version data))
+                       (assoc-in [:sample :owner-id] (:owner-id data)))
+       :dispatch   [:sync-saved-sample]
+       :update-url data}
+      {:db       db
+       :dispatch [:save-error "bad status"]})))
 
 (rf/reg-event-db
   :save-error
   (fn [db [_ error]]
-    (utils/log "Save erro!" error)
+    (utils/log "Save error!" error)
+    (js/alert "Save error!")
     db))
 
 
@@ -132,30 +126,39 @@
            :error-handler #(rf/dispatch [:fork-error %1])})
     db))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   :fork-response
-  (fn [db [_ data]]
-    (utils/log "Fork ok!" data)
+  (fn [{db :db} [_ data]]
     (if (= :ok (:status data))
-      (do
-        ;(accountant/navigate! (str "/" (:hash data)
-        ;                             (when (pos? (:version data))
-        ;                               (str "/" (:version data)))))
-        (.pushState (.-history js/window) nil nil (str "/" (:hash data)
-                                                       (when (pos? (:version data))
-                                                         (str "/" (:version data)))))
-        (-> db
-            (assoc-in [:sample :version-id] nil)
-            (assoc-in [:sample :new] false)
-            (assoc-in [:sample :url] (:hash data))
-            (assoc-in [:sample :version] (:version data))
-            (assoc-in [:sample :owner-id] (:owner-id data))))
-      (do
-        (js/alert "Sample fork error")
-        db))))
+      {:db         (-> db
+                       (assoc-in [:sample :version-id] nil)
+                       (assoc-in [:sample :new] false)
+                       (assoc-in [:sample :url] (:hash data))
+                       (assoc-in [:sample :version] (:version data))
+                       (assoc-in [:sample :owner-id] (:owner-id data)))
+       :dispatch   [:sync-saved-sample]
+       :update-url data}
+      {:db       db
+       :dispatch [:fork-error "bad status"]})))
 
 (rf/reg-event-db
   :fork-error
   (fn [db [_ error]]
     (utils/log "Fork error!" error)
+    (js/alert "Fork error!")
     db))
+
+(rf/reg-event-db :sync-saved-sample
+                 (fn [db _]
+                   (assoc db :saved-sample (:sample db))))
+
+
+;;======================================================================================================================
+;; Effects
+;;======================================================================================================================
+(rf/reg-fx
+  :update-url
+  (fn [data]
+    (.pushState (.-history js/window) nil nil (str "/" (:hash data)
+                                                   (when (pos? (:version data))
+                                                     (str "/" (:version data)))))))

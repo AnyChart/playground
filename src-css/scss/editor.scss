@@ -566,6 +566,7 @@ html {
   }
 
   .general-tab {
+
     .form-group {
       margin-top: 2px;
       margin-bottom: 21px;
@@ -573,6 +574,13 @@ html {
     input {
       width: 260px;
       height: 32px;
+    }
+    #settings-short-desc {
+      height: 60px;
+    }
+    #settings-desc {
+      height: 80px;
+      resize: vertical;
     }
 
     .tags-box {

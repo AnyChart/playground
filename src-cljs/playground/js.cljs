@@ -13,4 +13,11 @@
 (defn init []
   (.addEventListener js/document "click" click-handler))
 
+(defn init-close []
+  (set! (.-onbeforeunload js/window)
+        (fn [_]
+          (let [show-close-warning @(rf/subscribe [:sample/show-close-warning?])]
+            (or show-close-warning nil)))))
+
 (init)
+(init-close)

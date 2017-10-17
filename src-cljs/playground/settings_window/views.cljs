@@ -42,6 +42,7 @@
    [:div.form-group
     [:label {:for "settings-desc"} "Description"]
     [:textarea.form-control {:id            "settings-desc"
+                             :style         {:max-height @(rf/subscribe [:settings.general-tab/description-height])}
                              :default-value @(rf/subscribe [:sample/description])
                              :on-change     #(rf/dispatch [:settings/change-desc (-> % .-target .-value)])}]]
    [:div.form-group
