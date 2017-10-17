@@ -35,7 +35,6 @@
        [:div.container-fluid.content-container
 
         [:div.elements-container
-
          [:div.tabs
           [:a.active {:title "Show all types chart"
                       :href  "/chart-types"}
@@ -52,9 +51,7 @@
            [:span "Popular"]]]
 
          [:div.search
-          [:span.glyphicon.glyphicon-search]]
-
-         ]
+          [:span.glyphicon.glyphicon-search]]]
 
         [:div.row.chart-type-container
          ;; Disable pagination

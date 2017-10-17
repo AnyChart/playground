@@ -9,64 +9,54 @@ html body .chart-types-categories-page {
     background-position: center;
   }
 
-
-  .elements-container{
-    margin: 30px 0;
-    .toggle-tabs{
-      margin-left: 55px;
-    }
-    .search{
-      padding: 5px;
-      float:right;
-      display: inline-block;
-      color: #95bfd3;
-      font-size: 16px;
-      cursor: pointer;
-    }
-  }
-
-  .categories-container{
-    padding-top: 7px;
-    min-height: 135px;
-    .category{
-      position: relative;
-      margin-bottom: 70px;
-      .img-box{
-        position: absolute;
-        width: 135px;
-        display: inline-block;
-        img {
-          width: 135px;
-          height: 135px;
-        }
+  .content {
+    .elements-container {
+      .toggle-tabs {
+        margin-left: 55px;
       }
-      .info {
-        padding-left: 170px;
-        display: inline-block;
-        .name{
-          font-weight: bold;
-          margin: 0 0 5px 0;
+    }
+
+    .categories-container {
+      padding-top: 7px;
+      min-height: 135px;
+      .category {
+        position: relative;
+        margin-bottom: 70px;
+        .img-box {
+          position: absolute;
+          width: 135px;
+          display: inline-block;
+          img {
+            width: 135px;
+            height: 135px;
+          }
         }
-        .description{
-          margin: 0 0 18px 0;
-          font-size: 12px;
-        }
-        .learn-more-label{
-          color: #008ebe;
-          border: 1px solid #008ebe;
-          padding: 5px 11px;
-          border-radius: 3px;
-          text-transform: uppercase;
-          cursor: pointer;
-          &:hover{
-            text-decoration: none;
-            color: white;
-            background-color: #19a1ce;
+        .info {
+          padding-left: 170px;
+          display: inline-block;
+          .name {
+            font-weight: bold;
+            margin: 0 0 5px 0;
+          }
+          .description {
+            margin: 0 0 18px 0;
+            font-size: 12px;
+          }
+          .learn-more-label {
+            color: #008ebe;
+            border: 1px solid #008ebe;
+            padding: 5px 11px;
+            border-radius: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            &:hover {
+              text-decoration: none;
+              color: white;
+              background-color: #19a1ce;
+            }
           }
         }
       }
     }
   }
-
-
 }
