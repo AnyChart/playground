@@ -55,10 +55,7 @@
           [:p [:span.glyphicon.glyphicon-ok] "Ready to Use Data Sets"]
           [:ul
            [:li "Мы подготовили для вас несколько десятков Data Set'ов чтобы можно было эксперементировать с разными типами графиков"]
-           [:li "Каждый дата сет по мимо его данных, содержит описание и пример использования"]]]]
-
-        ]
-
+           [:li "Каждый дата сет по мимо его данных, содержит описание и пример использования"]]]]]]
       (page/footer (:repos data) (:tags data) (:data-sets data))]
      [:script {:src "/jquery/jquery.min.js"}]
      [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]]))
