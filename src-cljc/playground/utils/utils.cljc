@@ -38,6 +38,15 @@
       (str "/" (:url sample))
       "")))
 
+(defn full-canonical-url [sample]
+  (str "https://pg.anychart.com" (canonical-url sample)))
+
+(defn full-canonical-url-iframe [sample]
+  (str (full-canonical-url sample) "/iframe"))
+
+(defn full-canonical-url-standalone [sample]
+  (str (full-canonical-url sample) "/view"))
+
 (defn url [sample]
   (if (:latest sample)
     (canonical-url sample)

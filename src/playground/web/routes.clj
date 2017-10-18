@@ -69,7 +69,9 @@
         data-sets (db-req/data-sets (get-db request))]
     (db-req/update-sample-views! (get-db request) {:id (:id sample)})
     (response (render-file "templates/editor.selmer"
-                           {:canonical-url (utils/canonical-url sample)
+                           {:canonical-url (if editor-view
+                                             (utils/full-canonical-url-standalone sample)
+                                             (utils/full-canonical-url sample))
                             :data          (web-utils/pack {:sample    sample
                                                             :templates templates
                                                             :datasets  data-sets
@@ -566,7 +568,7 @@
            (GET "/:repo/*/preview" [] (-> show-sample-preview1 mw/repo-sample))
            (GET "/:repo/*/download" [] (-> show-sample-download1 mw/repo-sample))
 
-           ;; last user samples
+           ;; canonical (last) user samples
            (GET "/:hash" [] (-> show-sample-editor1 mw/last-user-sample))
            (GET "/:hash/editor" [] (-> show-sample-editor1 mw/last-user-sample))
            (GET "/:hash/view" [] (-> show-sample-standalone1 mw/last-user-sample))

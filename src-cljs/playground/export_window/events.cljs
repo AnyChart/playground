@@ -145,7 +145,7 @@ function ac_add_style(css){
 ;;======================================================================================================================
 (defn iframe-embed-text [db]
   ;; TODO: change .stg to .com
-  (let [sample-iframe-url (str "http://pg.anychart.stg" (common-utils/canonical-url (:sample db)) "/iframe")]
+  (let [sample-iframe-url (common-utils/full-canonical-url-iframe (:sample db))]
     (str "<iframe sandbox=\"allow-scripts allow-pointer-lock allow-same-origin
                  allow-popups allow-modals allow-forms\" frameBorder=\"0\" class=\""
          (-> db :embed :props :class) " " (-> db :embed :props :class) "-" (-> db :embed :props :id) "\"

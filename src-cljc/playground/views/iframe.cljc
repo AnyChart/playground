@@ -1,4 +1,5 @@
-(ns playground.views.iframe)
+(ns playground.views.iframe
+  (:require [playground.utils.utils :as utils]))
 
 
 (defn iframe [sample]
@@ -10,6 +11,7 @@
     [:meta {:name    "viewport"
             :content "width=device-width, initial-scale=1"}]
     [:title (:name sample)]
+    [:link {:rel "canonical" :href (utils/full-canonical-url-iframe sample)}]
 
     (when (seq (:tags sample))
       [:meta {:name    "keywords"
