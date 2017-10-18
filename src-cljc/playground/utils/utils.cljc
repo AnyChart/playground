@@ -21,14 +21,14 @@
              (str "/" (:version sample))))
       "")))
 
+(defn sample-editor-url [sample]
+  (str (sample-url sample) "/editor"))
+
 (defn sample-standalone-url [sample]
-  (str (sample-url sample) "?view=standalone"))
+  (str (sample-url sample) "/view"))
 
 (defn sample-iframe-url [sample]
-  (str (sample-url sample) "?view=iframe"))
-
-(defn sample-editor-url [sample]
-  (str (sample-url sample) "?view=editor"))
+  (str (sample-url sample) "/iframe"))
 
 (defn canonical-url [sample]
   (if (:version-id sample)

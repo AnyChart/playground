@@ -60,77 +60,41 @@
 (def ^:const samples-per-block 6)
 
 ;; =====================================================================================================================
-;; Show samples
+;; Samples handlers
 ;; =====================================================================================================================
-(defn show-sample-iframe [sample request]
-  ;(response (render-file "templates/sample.selmer" sample))
+(defn show-sample-editor1 [request & [editor-view]]
+  (let [sample (get-sample request)
+        ;; Not need to get them in aggregations function via middleware, cause iframe-view e.g. doesn't need them
+        templates (db-req/templates (get-db request))
+        data-sets (db-req/data-sets (get-db request))]
+    (db-req/update-sample-views! (get-db request) {:id (:id sample)})
+    (response (render-file "templates/editor.selmer"
+                           {:canonical-url (utils/canonical-url sample)
+                            :data          (web-utils/pack {:sample    sample
+                                                            :templates templates
+                                                            :datasets  data-sets
+                                                            :user      (get-safe-user request)
+                                                            :view      editor-view})}))))
+
+(defn show-sample-standalone1 [request]
+  (show-sample-editor1 request :standalone))
+
+(defn show-sample-iframe-by-sample [sample]
   (response (str "<!DOCTYPE html>\n"
                  (hiccup/html (iframe-view/iframe sample)))))
 
-(defn show-sample-standalone [sample request]
-  (db-req/update-sample-views! (get-db request) {:id (:id sample)})
-  (let [templates (db-req/templates (get-db request))
-        data-sets (db-req/data-sets (get-db request))]
-    ;; site page
-    ;(response (standalone-sample-view/page (merge (get-app-data request)
-    ;                                              {:templates templates
-    ;                                               :sample    sample
-    ;                                               :url       (str (common-utils/sample-url sample) "?view=iframe")})))
-    (response (render-file "templates/editor.selmer" {:canonical-url (utils/canonical-url sample)
-                                                      :data          (web-utils/pack {:sample    sample
-                                                                                      :templates templates
-                                                                                      :data-sets data-sets
-                                                                                      :user      (get-safe-user request)
-                                                                                      :view      :standalone})}))))
+(defn show-sample-iframe1 [request]
+  (show-sample-iframe-by-sample (get-sample request)))
 
-(defn show-sample-editor [sample request]
-  (db-req/update-sample-views! (get-db request) {:id (:id sample)})
-  (let [templates (db-req/templates (get-db request))
-        data-sets (db-req/data-sets (get-db request))]
-    (response (render-file "templates/editor.selmer" {:canonical-url (utils/canonical-url sample)
-                                                      :data          (web-utils/pack {:sample    sample
-                                                                                      :templates templates
-                                                                                      :datasets  data-sets
-                                                                                      :user      (get-safe-user request)})}))))
+(defn show-sample-preview1 [request]
+  (let [sample (get-sample request)]
+    (if (:preview sample)
+      (file-response (phantom/image-path (-> request :component :conf :images-dir) sample))
+      (response "Preview is not available, try later."))))
 
-(defn show-sample-preview [sample request]
-  (if (:preview sample)
-    (file-response (phantom/image-path (-> request :component :conf :images-dir) sample))
-    (response "Preview is not available, try later.")))
-
-(defn download [resp sample]
-  (assoc resp :headers {"Content-Disposition" (str "attachment; filename=\"" (:name sample) ".html\"")}))
-
-(defn show-sample-by-view [view sample request]
-  (case view
-    :standalone (show-sample-standalone sample request)
-    :iframe (show-sample-iframe sample request)
-    :editor (show-sample-editor sample request)
-    :preview (show-sample-preview sample request)
-    :download (download (show-sample-iframe sample request) sample)
-    nil (show-sample-editor sample request)))
-
-(defn show-sample [request]
-  ;(prn "show sample: " (-> request :session))
-  (let [sample (get-sample request)
-        view (-> request :params :view keyword)]
-    (show-sample-by-view view sample request)))
-
-(defn show-user-sample [request]
-  (let [hash (-> request :route-params :hash)
-        version (try (-> request :route-params :version Integer/parseInt) (catch Exception _ 0))
-        sample (db-req/sample-by-hash (get-db request) {:url     hash
-                                                        :version version})
-        view (-> request :params :view keyword)]
-    (when sample
-      (show-sample-by-view view sample request))))
-
-(defn show-last-user-sample [request]
-  (let [hash (-> request :route-params :hash)
-        sample (db-req/sample-template-by-url (get-db request) {:url hash})
-        view (-> request :params :view keyword)]
-    (when sample
-      (show-sample-by-view view sample request))))
+(defn show-sample-download1 [request]
+  (assoc (show-sample-iframe1 request)
+    :headers {"Content-Disposition" (str "attachment; filename=\"" (:name (get-sample request)) ".html\"")}))
 
 ;; =====================================================================================================================
 ;; Pages
@@ -324,35 +288,6 @@
                 :end     (< (count samples) (inc samples-count))}]
     (response result)))
 
-(def empty-sample
-  {:name              ""
-   :tags              []
-   :short-description ""
-   :description       ""
-   :url               ""
-
-   :styles            []
-   :scripts           []
-
-   :markup            ""
-   :markup-type       "html"
-
-   :code              ""
-   :code-type         "js"
-
-   :style             ""
-   :style-type        "css"})
-
-(defn new [request]
-  (let [template-url (-> request :params :template)
-        view (-> request :params :view)
-        sample (if template-url
-                 (db-req/template-by-url (get-db request) {:url template-url})
-                 empty-sample)
-        sample* (assoc sample :new true)]
-    ;(prn "New: " template-url view sample)
-    (show-sample-by-view view sample* request)))
-
 (defn run [request]
   (let [code (-> request :params :code)
         style (-> request :params :style)
@@ -370,7 +305,7 @@
               :code              code
               :style             style}]
     ;(response (render-file "templates/sample.selmer" data))
-    (show-sample-iframe data nil)))
+    (show-sample-iframe-by-sample data)))
 
 (defn fork [request]
   ;(prn "Fork: " (-> request :session :user) (-> request :params :sample))
@@ -561,7 +496,14 @@
                                   ;(auth/permissions-middleware :signout)
                                   auth/check-anonymous-middleware))
 
-           (GET "/new" [] new)
+           (GET "/new" [] (-> show-sample-editor1 mw/check-template-middleware))
+           (GET "/new/editor" [] (-> show-sample-editor1 mw/check-template-middleware))
+           (GET "/new/view" [] (-> show-sample-standalone1 mw/check-template-middleware))
+           (GET "/new/iframe" [] (-> show-sample-iframe1 mw/check-template-middleware))
+           (GET "/new/preview" [] (-> show-sample-preview1 mw/check-template-middleware))
+           (GET "/new/download" [] (-> show-sample-download1 mw/check-template-middleware))
+
+
            (POST "/run" [] run)
            (POST "/save" [] save)
            (POST "/fork" [] fork)
@@ -608,24 +550,36 @@
                                                             mw/base-page-middleware) request)
                                                    (redirect-slash request))))
 
-           (GET "/:repo/:version/*" [] (-> show-sample
-                                           mw/check-sample-middleware
-                                           mw/check-version-middleware
-                                           mw/check-repo-middleware
-                                           auth/check-anonymous-middleware))
-           ;; for canonical links
-           (GET "/:repo/*" [] (-> show-sample
-                                  mw/check-sample-middleware
-                                  mw/check-version-middleware
-                                  mw/check-repo-middleware
-                                  auth/check-anonymous-middleware))
+           ;; projects samples
+           (GET "/:repo/:version/*" [] (-> show-sample-editor1 mw/repo-sample))
+           (GET "/:repo/:version/*/editor" [] (-> show-sample-editor1 mw/repo-sample))
+           (GET "/:repo/:version/*/view" [] (-> show-sample-standalone1 mw/repo-sample))
+           (GET "/:repo/:version/*/iframe" [] (-> show-sample-iframe1 mw/repo-sample))
+           (GET "/:repo/:version/*/preview" [] (-> show-sample-preview1 mw/repo-sample))
+           (GET "/:repo/:version/*/download" [] (-> show-sample-download1 mw/repo-sample))
 
-           (GET "/:hash/" [] (-> show-last-user-sample
-                                 auth/check-anonymous-middleware))
-           (GET "/:hash" [] (-> show-last-user-sample
-                                auth/check-anonymous-middleware))
-           (GET "/:hash/:version" [] (-> show-user-sample
-                                         auth/check-anonymous-middleware))
-           (GET "/:hash/:version/" [] (-> show-user-sample
-                                          auth/check-anonymous-middleware))
+           ;; canonical projects samples
+           (GET "/:repo/*" [] (-> show-sample-editor1 mw/repo-sample))
+           (GET "/:repo/*/editor" [] (-> show-sample-editor1 mw/repo-sample))
+           (GET "/:repo/*/view" [] (-> show-sample-standalone1 mw/repo-sample))
+           (GET "/:repo/*/iframe" [] (-> show-sample-iframe1 mw/repo-sample))
+           (GET "/:repo/*/preview" [] (-> show-sample-preview1 mw/repo-sample))
+           (GET "/:repo/*/download" [] (-> show-sample-download1 mw/repo-sample))
+
+           ;; last user samples
+           (GET "/:hash" [] (-> show-sample-editor1 mw/last-user-sample))
+           (GET "/:hash/editor" [] (-> show-sample-editor1 mw/last-user-sample))
+           (GET "/:hash/view" [] (-> show-sample-standalone1 mw/last-user-sample))
+           (GET "/:hash/iframe" [] (-> show-sample-iframe1 mw/last-user-sample))
+           (GET "/:hash/preview" [] (-> show-sample-preview1 mw/last-user-sample))
+           (GET "/:hash/download" [] (-> show-sample-download1 mw/last-user-sample))
+
+           ;; user samples with version
+           (GET "/:hash/:version" [] (-> show-sample-editor1 mw/user-sample))
+           (GET "/:hash/:version/editor" [] (-> show-sample-editor1 mw/user-sample))
+           (GET "/:hash/:version/view" [] (-> show-sample-standalone1 mw/user-sample))
+           (GET "/:hash/:version/iframe" [] (-> show-sample-iframe1 mw/user-sample))
+           (GET "/:hash/:version/preview" [] (-> show-sample-preview1 mw/user-sample))
+           (GET "/:hash/:version/download" [] (-> show-sample-download1 mw/user-sample))
+
            (route/not-found "404 Page not found"))

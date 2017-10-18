@@ -70,7 +70,7 @@
              [:span "Editor"]]]
        [:li [:button.btn.btn-link {:on-click #(rf/dispatch [:view/standalone])}
              [:img.icon {:src "/icons/editor/standalone.svg"}]
-             "Standalone"]]
+             "View only"]]
        [:li [:a {:href @(rf/subscribe [:sample-iframe-url])}
              [:img.icon {:src "/icons/editor/iframe.svg"}]
              "Iframe"]]

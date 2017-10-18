@@ -1,14 +1,14 @@
-.standalone-sample-page{
+.standalone-sample-page {
 
   background-color: white;
 
-  h1{
+  h1 {
     color: $red-color;
     font-weight: bold;
     font-size: 18px;
   }
 
-  .popular-label{
+  .popular-label {
     text-transform: none;
     margin: 0;
   }
@@ -23,26 +23,26 @@
       height: 100%
     }
   }
-  .info{
-    .tag{
+  .info {
+    .tag {
       margin-right: 5px;
     }
   }
 
-  .popular-tags-box{
+  .popular-tags-box {
     margin: 12px 0 12px;
-    .popular-tag-button-box{
+    .popular-tag-button-box {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      .popular-tag-button{
+      .popular-tag-button {
         white-space: nowrap;
         margin-bottom: 9px;
       }
     }
   }
 
-  .footer-bottom-box{
+  .footer-bottom-box {
     margin: 0;
     padding: 23px 0;
     border-top: 1px solid #e6edf1;

@@ -6,6 +6,26 @@
            (java.security SecureRandom)
            (java.util Base64)))
 
+(def empty-sample
+  {:name              ""
+   :tags              []
+   :short-description ""
+   :description       ""
+   :url               ""
+
+   :styles            []
+   :scripts           []
+
+   :markup            ""
+   :markup-type       "html"
+
+   :code              ""
+   :code-type         "js"
+
+   :style             ""
+   :style-type        "css"})
+
+
 (defn response [body]
   {:status  200
    :headers {"Content-Type" "text/html; charset=utf-8"}

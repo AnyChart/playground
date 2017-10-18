@@ -31,23 +31,23 @@
   (fn [db _]
     (common-utils/sample-url (:sample db))))
 
-;; make url like /acg/master/Column_Chart?view=iframe"
+;; make url like /acg/master/Column_Chart/iframe"
 (rf/reg-sub
   :sample-iframe-url
   (fn [query_v _] (rf/subscribe [:sample-url]))
   (fn [sample-url _]
     (when (seq sample-url)
-      (str sample-url "?view=iframe"))))
+      (str sample-url "/iframe"))))
 
 (rf/reg-sub
   :sample-standalone-url
   (fn [query_v _] (rf/subscribe [:sample-url]))
-  (fn [sample-url _] (str sample-url "?view=standalone")))
+  (fn [sample-url _] (str sample-url "/view")))
 
 (rf/reg-sub
   :sample-editor-url
   (fn [query_v _] (rf/subscribe [:sample-url]))
-  (fn [sample-url _] (str sample-url "?view=editor")))
+  (fn [sample-url _] (str sample-url "/editor")))
 
 (rf/reg-sub :sample (fn [db _] (-> db :sample)))
 (rf/reg-sub :sample/name (fn [db _] (-> db :sample :name)))

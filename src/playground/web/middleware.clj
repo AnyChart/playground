@@ -2,10 +2,12 @@
   (:require [playground.db.request :as db-req]
             [playground.web.helpers :refer :all]
             [version-clj.core :as version-clj :refer [version-compare]]
-            [playground.web.auth :as auth]))
+            [playground.web.auth :as auth]
+            [playground.web.utils :as web-utils]))
 
-;; middleware for getting repo, version, sample, all repos, templates,
-;; tags for footer and tags for tags-page
+;; =====================================================================================================================
+;; Repo, version middleware for projects info
+;; =====================================================================================================================
 (defn check-repo-middleware [handler]
   (fn [request]
     (let [repo-name (-> request :route-params :repo)
@@ -24,6 +26,9 @@
         (when version
           (handler (assoc-in request [:app :version] version)))))))
 
+;; =====================================================================================================================
+;; Samples middlewares
+;; =====================================================================================================================
 (defn check-sample-middleware [handler]
   (fn [request]
     (let [repo (get-repo request)
@@ -38,6 +43,36 @@
       (when sample
         (handler (assoc-in request [:app :sample] full-sample))))))
 
+(defn check-last-user-sample-middleware [handler]
+  (fn [request]
+    (let [hash (-> request :route-params :hash)
+          sample (db-req/sample-template-by-url (get-db request) {:url hash})]
+      (when sample
+        (handler (assoc-in request [:app :sample] sample))))))
+
+(defn check-user-sample-middleware [handler]
+  (fn [request]
+    (let [hash (-> request :route-params :hash)
+          version (try (-> request :route-params :version Integer/parseInt) (catch Exception _ 0))
+          sample (db-req/sample-by-hash (get-db request) {:url     hash
+                                                          :version version})]
+      (when sample
+        (handler (assoc-in request [:app :sample] sample))))))
+
+(defn check-template-middleware [handler]
+  (fn [request]
+    (let [template-url (-> request :params :template)
+          sample (if template-url
+                   (db-req/template-by-url (get-db request) {:url template-url})
+                   web-utils/empty-sample)
+          new-sample (assoc sample :new true)]
+      (when sample
+        (handler (assoc-in request [:app :sample] new-sample))))))
+
+;; =====================================================================================================================
+;; Middlewares for all repos, templates,
+;; tags for footer and tags for tags-page
+;; =====================================================================================================================
 (defn templates-middleware [handler]
   (fn [request]
     (handler (assoc-in request [:app :templates]
@@ -69,11 +104,13 @@
                        (db-req/data-sets (get-db request))))))
 
 
-;; aggregation functions
+;; =====================================================================================================================
+;; Aggregation functions
+;; =====================================================================================================================
 (defn base-page-middleware [handler & [action]]
   (let [check-perm-fn (if action
-                       (fn [handler] (auth/permissions-middleware handler action))
-                       identity)]
+                        (fn [handler] (auth/permissions-middleware handler action))
+                        identity)]
     (-> handler
         templates-middleware
         repos-middleware
@@ -81,3 +118,20 @@
         data-sets-middleware
         check-perm-fn
         auth/check-anonymous-middleware)))
+
+(defn repo-sample [handler]
+  (-> handler
+      check-sample-middleware
+      check-version-middleware
+      check-repo-middleware
+      auth/check-anonymous-middleware))
+
+(defn last-user-sample [handler]
+  (-> handler
+      check-last-user-sample-middleware
+      auth/check-anonymous-middleware))
+
+(defn user-sample [handler]
+  (-> handler
+      check-user-sample-middleware
+      auth/check-anonymous-middleware))
