@@ -48,16 +48,30 @@
    [:div.form-group
     [:label "Tags"]
     [:div.tags-box
-     (for [tag @(rf/subscribe [:sample/tags])]
-       ^{:key tag}
-       [:a.tag {}
-        [:span tag]
+     (for [tag @(rf/subscribe [:settings/tags])]
+       ^{:key (:name tag)}
+       [:a.tag {:on-click #(do
+                             (rf/dispatch [:settings/select-tag (:name tag)])
+                             (.focus (.getElementById js/document "tags-input")))
+                :class    (when (:selected tag) "selected")}
+        [:span (:name tag)]
         [:span.glyphicon.glyphicon-remove
-         {:on-click #(rf/dispatch [:settings/remove-tag tag])}]])
-     [:input.form-control {:placeholder "Add new tag"
-                           :on-key-down #(when (= 13 (.-keyCode %))
-                                           (rf/dispatch [:settings/add-tag (-> % .-target .-value)])
-                                           (set! (-> % .-target .-value) ""))}]]]
+         {:on-click #(rf/dispatch [:settings/remove-tag (:name tag)])}]])
+     [:input.form-control {:id          "tags-input"
+                           :placeholder "Add new tag"
+                           :on-key-down #(do                ;; TODO: move to somewhere else?
+                                           (when (= 13 (.-keyCode %))
+                                             (rf/dispatch [:settings/add-tag (-> % .-target .-value)])
+                                             (set! (-> % .-target .-value) ""))
+                                           (when (and (= 9 (.-keyCode %))
+                                                      (not= (-> % .-target .-value) ""))
+                                             (rf/dispatch [:settings/add-tag (-> % .-target .-value)])
+                                             (set! (-> % .-target .-value) "")
+                                             (.preventDefault %))
+                                           (when (and (= 8 (.-keyCode %))
+                                                      (= (-> % .-target .-value) ""))
+                                             (rf/dispatch [:settings/tags-backspace])))}]]]
+
    ;[:div.form-inline
    ; {:style {:padding-right "10px"}}
    ;

@@ -104,18 +104,18 @@
            [:p.sub-intro
             "This option doesn't use external resources and protect your page content from the ID's and CSS used in the sample, but usage of HTML iframe is not convenient to use from the page loading speed perspective."]
            [iframe-internal-editor]
-           [:input.ac-btn.add-btn  {:id    "copy-embed-internal-iframe"
-                                           :type  "button"
-                                           :value "Copy"}]])
+           [:input.ac-btn.add-btn {:id    "copy-embed-internal-iframe"
+                                   :type  "button"
+                                   :value "Copy"}]])
 
         (when @(rf/subscribe [:embed/iframe2-sub-tab?])
           [:div.content
            [:p.sub-intro
             "The advantage of this option is auto-update of the sample embedded on your page then you're updating the sample on playground."]
            [embed-editor]
-           [:input.ac-btn.add-btn  {:id    "copy-embed-iframe"
-                                           :type  "button"
-                                           :value "Copy"}]])
+           [:input.ac-btn.add-btn {:id    "copy-embed-iframe"
+                                   :type  "button"
+                                   :value "Copy"}]])
         ])
 
      (when @(rf/subscribe [:embed/download-tab?])

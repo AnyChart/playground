@@ -41,11 +41,11 @@
 
        :settings      {:show               false
                        :tab                :general
-                       :tags-str           (string/join " " (-> data :sample :tags))
                        :external-resources {:binary (first external-resources/binaries)
                                             :theme  (first external-resources/themes)
                                             :locale (first external-resources/locales)
-                                            :map    (first external-resources/maps)}}
+                                            :map    (first external-resources/maps)}
+                       :general-tab        {:tags (map (fn [tag] {:name tag :selected false}) (-> data :sample :tags))}}
        :embed         {:show    false
                        :tab     :embed
                        :sub-tab :html

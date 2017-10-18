@@ -587,6 +587,7 @@ html {
       padding: 10px 10px 0;
       border: 1px solid #9bc3d6;
       .tag {
+        cursor: pointer;
         font-size: 12px;
         display: inline-block;
         background-color: #95bfd3;
@@ -598,6 +599,10 @@ html {
         span.glyphicon {
           margin-left: 5px;
           cursor: pointer;
+        }
+        &.selected {
+          border: 1px solid #0e5f89;
+          padding: 1px 9px;
         }
       }
       input {

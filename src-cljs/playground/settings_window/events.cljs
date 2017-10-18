@@ -106,11 +106,35 @@
       (-> db
           (assoc-in [:sample :tags] new-tags)))))
 
+
+;;======================================================================================================================
+;; General tabs: tags
+;;======================================================================================================================
+(rf/reg-event-db
+  :settings/select-tag
+  (fn [db [_ tag-name]]
+    (-> db
+        (update-in [:settings :general-tab :tags]
+                   (fn [tags]
+                     (map (fn [tag]
+                            (if (= (:name tag) tag-name)
+                              (update tag :selected not)
+                              tag)) tags))))))
+
+(rf/reg-event-fx
+  :settings/tags-backspace
+  (fn [{db :db} _]
+    (let [last-tag (-> db :settings :general-tab :tags last)]
+      (if-not (:selected last-tag)
+        {:dispatch [:settings/select-tag (:name last-tag)]}
+        {:dispatch [:settings/remove-tag (:name last-tag)]}))))
+
 (rf/reg-event-db
   :settings/remove-tag
   (fn [db [_ value]]
     (-> db
         (update-in [:sample :tags] #(remove (partial = value) %))
+        (update-in [:settings :general-tab :tags] #(remove (fn [tag] (= value (:name tag))) %))
         ;; add to deleted tags
         (update-in [:sample :deleted-tags] (fn [del-tags]
                                              (if (tags/anychart-tag? value)
@@ -123,6 +147,7 @@
     (if (every? (partial not= value) (-> db :sample :tags))
       (-> db
           (update-in [:sample :tags] concat [value])
+          (update-in [:settings :general-tab :tags] concat [{:name value :selected false}])
           (update-in [:sample :deleted-tags] (fn [del-tags]
                                                (remove (partial = value) del-tags))))
       db)))
