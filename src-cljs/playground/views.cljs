@@ -21,7 +21,7 @@
 
     [:ul.nav.navbar-nav.left-navbar
 
-     [:li [:button.btn.btn-link {:on-click #(do (rf/dispatch [:run]))}
+     [:li [:button.btn.btn-link {:on-click #(do (rf/dispatch [:click-run]))}
            [:div.icon.icon-run]
            [:span "Run"]]]
 

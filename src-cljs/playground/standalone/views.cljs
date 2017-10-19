@@ -39,7 +39,10 @@
 
       [:div.col-sm-7
        [:div.iframe-standalone-box
-        [:iframe.iframe-standalone {:sandbox           "allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"
-                                    :allowTransparency "true"
-                                    :allowFullScreen   "true"
-                                    :src               @(rf/subscribe [:sample-iframe-url])}]]]]]))
+        [:iframe {:id                "result-iframe"
+                  :name              "result-iframe"
+                  :class             "iframe-standalone"
+                  :sandbox           "allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"
+                  :allowTransparency "true"
+                  :allowFullScreen   "true"
+                  :src               @(rf/subscribe [:sample-iframe-url])}]]]]]))

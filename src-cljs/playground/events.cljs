@@ -15,7 +15,7 @@
             [hiccups.runtime :as hiccupsrt]))
 
 
-(rf/reg-event-db
+(rf/reg-event-fx
   :init
   (fn [_ [_ data]]
     (let [default-prefs {:hidden-tips  []
@@ -29,34 +29,37 @@
       ; (swap! ls assoc :hidden-tips [])
       ; (swap! ls assoc :hidden-types [])
       ; (utils/log (clj->js @ls))
-      {:editors       {:editors-height (editors-js/editors-height)
-                       :view           (or (:view data) (:view @ls) :right)
-                       :code-settings  {:show false}}
+      (let [view (or (:view data) (:view @ls) :right)]
+        {:db {:editors       {:editors-height (editors-js/editors-height)
+                              :view           view
+                              :code-settings  {:show false}}
 
-       :sample        (:sample data)
-       :saved-sample  (:sample data)
-       :templates     (:templates data)
-       :user          (:user data)
-       :datasets      (:datasets data)
+              :sample        (:sample data)
+              :saved-sample  (:sample data)
+              :templates     (:templates data)
+              :user          (:user data)
+              :datasets      (:datasets data)
 
-       :settings      {:show               false
-                       :tab                :general
-                       :external-resources {:binary (first external-resources/binaries)
-                                            :theme  (first external-resources/themes)
-                                            :locale (first external-resources/locales)
-                                            :map    (first external-resources/maps)}
-                       :general-tab        {:tags (map (fn [tag] {:name tag :selected false}) (-> data :sample :tags))}}
-       :embed         {:show    false
-                       :tab     :embed
-                       :sub-tab :html
-                       :props   {:id     (common-utils/embed-name (-> data :sample))
-                                 :class  "anychart-embed"
-                                 :width  "600px"
-                                 :height "450px"}}
-       :tips          {:current []
-                       :queue   []}
-       :local-storage ls
-       :data          (data/compose-all-data (:datasets data))})))
+              :settings      {:show               false
+                              :tab                :general
+                              :external-resources {:binary (first external-resources/binaries)
+                                                   :theme  (first external-resources/themes)
+                                                   :locale (first external-resources/locales)
+                                                   :map    (first external-resources/maps)}
+                              :general-tab        {:tags (map (fn [tag] {:name tag :selected false}) (-> data :sample :tags))}}
+              :embed         {:show    false
+                              :tab     :embed
+                              :sub-tab :html
+                              :props   {:id     (common-utils/embed-name (-> data :sample))
+                                        :class  "anychart-embed"
+                                        :width  "600px"
+                                        :height "450px"}}
+              :tips          {:current []
+                              :queue   []}
+              :local-storage ls
+              :data          (data/compose-all-data (:datasets data))}
+         ;:dispatch-n (list (when (= view :standalone) [:run]))
+         }))))
 
 
 (rf/reg-event-db
@@ -64,21 +67,26 @@
   (fn [db [_ type code]]
     (assoc-in db [:sample type] code)))
 
-(defn set-iframe [sample]
-  (let [doc (.-document (.-contentWindow (.getElementById js/document "result-iframe")))
-        html (str "<!DOCTYPE html>" (h/html (iframe-view/iframe sample)))]
-    (.open doc)
-    (.write doc html)
-    (.close doc)))
+(rf/reg-fx
+  :update-iframe
+  (fn [sample]
+    (let [doc (.-document (.-contentWindow (.getElementById js/document "result-iframe")))
+          html (str "<!DOCTYPE html>" (h/html (iframe-view/iframe sample)))]
+      (.open doc)
+      (.write doc html)
+      (.close doc))))
 
-(rf/reg-event-db
+(rf/reg-event-fx
+  :click-run
+  (fn [{db :db} _]
+    (if (= :standalone (-> db :editors :view))
+      {:dispatch [:view/editor]}
+      {:dispatch [:run]})))
+
+(rf/reg-event-fx
   :run
-  (fn [db _]
-    (when (= :standalone (-> db :editors :view))
-      (rf/dispatch [:view/editor]))
-    ;(.submit (.getElementById js/document "run-form"))
-    (set-iframe (-> db :sample))
-    db))
+  (fn [{db :db} _]
+    {:update-iframe (-> db :sample)}))
 
 (rf/reg-event-db
   :save
@@ -156,6 +164,8 @@
 ;;======================================================================================================================
 ;; Effects
 ;;======================================================================================================================
+
+
 (rf/reg-fx
   :update-url
   (fn [data]

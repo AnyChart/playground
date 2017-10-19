@@ -6,27 +6,28 @@
 ;;======================================================================================================================
 ;; Editors
 ;;======================================================================================================================
-(rf/reg-event-db
+(rf/reg-event-fx
   :create-editors
-  (fn [db _]
+  (fn [{db :db} _]
     (let [markup-editor (editors-js/create-editor :markup (-> db :sample :markup) "text/html")
           style-editor (editors-js/create-editor :style (-> db :sample :style) "css")
           code-editor (editors-js/create-editor :code (-> db :sample :code) "javascript")]
-      (-> db
-          ;; editors
-          (assoc-in [:editors :markup-editor] markup-editor)
-          (assoc-in [:editors :style-editor] style-editor)
-          (assoc-in [:editors :code-editor] code-editor)
-          ;; copy to clipboard buttons
-          (assoc-in [:editors :markup-editor-clipboard]
-                    (js/Clipboard. "#markup-editor-copy"
-                                   (clj->js {:text (fn [] (.getValue markup-editor))})))
-          (assoc-in [:editors :style-editor-clipboard]
-                    (js/Clipboard. "#style-editor-copy"
-                                   (clj->js {:text (fn [] (.getValue style-editor))})))
-          (assoc-in [:editors :code-editor-clipboard]
-                    (js/Clipboard. "#code-editor-copy"
-                                   (clj->js {:text (fn [] (.getValue code-editor))})))))))
+      {:db       (-> db
+                     ;; editors
+                     (assoc-in [:editors :markup-editor] markup-editor)
+                     (assoc-in [:editors :style-editor] style-editor)
+                     (assoc-in [:editors :code-editor] code-editor)
+                     ;; copy to clipboard buttons
+                     (assoc-in [:editors :markup-editor-clipboard]
+                               (js/Clipboard. "#markup-editor-copy"
+                                              (clj->js {:text (fn [] (.getValue markup-editor))})))
+                     (assoc-in [:editors :style-editor-clipboard]
+                               (js/Clipboard. "#style-editor-copy"
+                                              (clj->js {:text (fn [] (.getValue style-editor))})))
+                     (assoc-in [:editors :code-editor-clipboard]
+                               (js/Clipboard. "#code-editor-copy"
+                                              (clj->js {:text (fn [] (.getValue code-editor))}))))
+       :dispatch [:run]})))
 
 (rf/reg-event-db
   :resize-window
@@ -43,6 +44,7 @@
 (rf/reg-event-db
   :view/editor
   (fn [db _]
+    ;; TODO : to effects
     (.pushState (.-history js/window) nil nil (utils/sample-url (:sample db)))
     (assoc-in db [:editors :view] (-> db :local-storage deref :view))))
 
@@ -70,13 +72,15 @@
     (update-view db :top)
     (assoc-in db [:editors :view] :top)))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   :view/standalone
-  (fn [db]
+  (fn [{db :db} _]
     (let [sample-standalone-url (utils/sample-standalone-url (:sample db))]
       (.pushState (.-history js/window) nil nil sample-standalone-url)
-      (-> db
-          (assoc-in [:editors :view] :standalone)))))
+      {:db (-> db
+               (assoc-in [:editors :view] :standalone))
+       ;:dispatch [:run]
+       })))
 
 ;;======================================================================================================================
 ;; Code context menu

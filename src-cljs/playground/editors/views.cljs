@@ -9,13 +9,12 @@
 
 (defn iframe-result []
   [:div.result
-   [:iframe#result-iframe {:name              "result-iframe"
-                           :class             "iframe-result"
-                           :sandbox           "allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"
-                           :allowTransparency "true"
-                           :allowFullScreen   "true"
-                           ;:src               @(rf/subscribe [:sample-iframe-url])
-                           }]])
+   [:iframe {:id                "result-iframe"
+             :name              "result-iframe"
+             :class             "iframe-result"
+             :sandbox           "allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"
+             :allowTransparency "true"
+             :allowFullScreen   "true"}]])
 
 
 (defn markup-editor []
@@ -162,7 +161,6 @@
   (reagent/create-class {:component-did-mount #(do
                                                  (utils/log "Did mount!")
                                                  (rf/dispatch [:create-editors])
-                                                 (rf/dispatch [:run])
                                                  (.init js/splitMe))
                          :reagent-render      (fn []
                                                 (let [[markup-percent style-percent] @(rf/subscribe [:editors/splitter-percents])]
@@ -179,7 +177,6 @@
   (reagent/create-class {:component-did-mount #(do
                                                  (utils/log "Did mount!")
                                                  (rf/dispatch [:create-editors])
-                                                 (rf/dispatch [:run])
                                                  (.init js/splitMe))
                          :reagent-render      (fn []
                                                 (let [[markup-percent style-percent] @(rf/subscribe [:editors/splitter-percents])]
@@ -196,7 +193,6 @@
   (reagent/create-class {:component-did-mount #(do
                                                  (utils/log "Did mount!")
                                                  (rf/dispatch [:create-editors])
-                                                 (rf/dispatch [:run])
                                                  (.init js/splitMe))
                          :reagent-render      (fn []
                                                 [:div.horizontally_divided {:data-percent 50
@@ -213,7 +209,6 @@
   (reagent/create-class {:component-did-mount #(do
                                                  (utils/log "Did mount!")
                                                  (rf/dispatch [:create-editors])
-                                                 (rf/dispatch [:run])
                                                  (.init js/splitMe))
                          :reagent-render      (fn []
                                                 [:div.horizontally_divided {:data-percent 50
