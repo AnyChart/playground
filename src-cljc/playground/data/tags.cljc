@@ -1,11 +1,9 @@
-(ns playground.tags
+(ns playground.data.tags
   (:require [clojure.string :as string])
-  #?(:clj
-     (:require [playground.web.tags-macros :as macros])
-     :cljs
-     (:require-macros [playground.web.tags-macros :as macros])))
+  #?(:clj (:require [playground.data.tags-macros :as tags-macros])
+     :cljs (:require-macros [playground.data.tags-macros :as tags-macros])))
 
-(def tags-data (macros/parse-data-compile-time))
+(def tags-data (tags-macros/parse-data-compile-time))
 
 (defn get-all-tags []
   (let [rules (:rules tags-data)

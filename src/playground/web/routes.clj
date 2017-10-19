@@ -17,8 +17,9 @@
             [playground.web.middleware :as mw]
             [playground.web.auth-base :as auth-base]
             [playground.web.helpers :refer :all]
+    ;; data
             [playground.web.chartopedia :as chartopedia]
-            [playground.tags :as tags-data]
+            [playground.data.tags :as tags-data]
     ;; pages
             [playground.views.landing-page :as landing-view]
             [playground.views.register-page :as register-view]

@@ -4,7 +4,7 @@
             [clojure.string :as s :refer (trim-newline)]
             [clojure.java.io :refer [file]]
             [toml.core :as toml]
-            [playground.tags :as tags-data]))
+            [playground.data.tags :as tags-data]))
 
 (defn- ^String trim-newline-left [^CharSequence s]
   (loop [index 0]

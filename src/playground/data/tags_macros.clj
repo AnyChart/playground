@@ -1,4 +1,4 @@
-(ns playground.web.tags-macros
+(ns playground.data.tags-macros
   (:require [cheshire.core :as json]))
 
 (defn prepare-data []

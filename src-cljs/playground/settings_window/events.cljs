@@ -2,8 +2,8 @@
   (:require [re-frame.core :as rf]
             [clojure.string :as string]
             [playground.data.external-resources :as external-resources]
-            [playground.utils :as utils]
-            [playground.tags :as tags]))
+            [playground.data.tags :as tags-data]
+            [playground.utils :as utils]))
 
 ;;======================================================================================================================
 ;; Settings
@@ -97,14 +97,21 @@
   :settings/refresh-tags
   (fn [db _]
     (utils/log "Refresh tags")
-    (let [tags-by-code (tags/get-tags-by-code (-> db :sample :code))
+    (let [tags-by-code (tags-data/get-tags-by-code (-> db :sample :code))
           deleted-tags (-> db :sample :deleted-tags)
           new-tags (distinct (concat (-> db :sample :tags)
                                      (vec (clojure.set/difference
                                             (set tags-by-code)
-                                            (set deleted-tags)))))]
+                                            (set deleted-tags)))))
+          ;; to set :settings :general-tab :tags
+          settings-tags (-> db :settings :general-tab :tags)
+          new-settings-tags (map (fn [tag-name]
+                                   {:name     tag-name
+                                    :selected (boolean (:selected (first (filter #(= tag-name (:name %)) settings-tags))))})
+                                 new-tags)]
       (-> db
-          (assoc-in [:sample :tags] new-tags)))))
+          (assoc-in [:sample :tags] new-tags)
+          (assoc-in [:settings :general-tab :tags] new-settings-tags)))))
 
 
 ;;======================================================================================================================
@@ -137,7 +144,7 @@
         (update-in [:settings :general-tab :tags] #(remove (fn [tag] (= value (:name tag))) %))
         ;; add to deleted tags
         (update-in [:sample :deleted-tags] (fn [del-tags]
-                                             (if (tags/anychart-tag? value)
+                                             (if (tags-data/anychart-tag? value)
                                                (distinct (conj del-tags value))
                                                del-tags))))))
 
