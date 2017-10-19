@@ -8,11 +8,17 @@
 (rf/reg-sub :settings/css-tab? (fn [db _] (= :css (-> db :settings :tab))))
 (rf/reg-sub :settings/datasets-tab? (fn [db _] (= :datasets (-> db :settings :tab))))
 
-(rf/reg-sub :settings.external-resources/added?
+(rf/reg-sub :settings.external-resources/added-js?
             (fn [db [_ type]]
               (let [url (-> db :settings :external-resources type :url)
                     scripts (-> db :sample :scripts)]
                 (some (fn [script] (= script url)) scripts))))
+
+(rf/reg-sub :settings.external-resources/added-css?
+            (fn [db [_ type]]
+              (let [url (-> db :settings :external-resources type :url)
+                    styles (-> db :sample :styles)]
+                (some (fn [script] (= script url)) styles))))
 
 (rf/reg-sub
   :settings.general-tab/description-height

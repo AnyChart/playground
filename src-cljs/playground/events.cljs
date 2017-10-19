@@ -7,9 +7,8 @@
     ;[accountant.core :as accountant]
             [clojure.string :as string]
             [playground.editors.js :as editors-js]
-            [playground.settings-window.data :as external-resources]
+            [playground.data.external-resources :as external-resources]
             [playground.utils.utils :as common-utils]
-            [playground.settings-window.data :as data]
             [alandipert.storage-atom :refer [local-storage]]
             [playground.views.iframe :as iframe-view]
             [hiccups.runtime :as hiccupsrt]))
@@ -45,7 +44,8 @@
                               :external-resources {:binary (first external-resources/binaries)
                                                    :theme  (first external-resources/themes)
                                                    :locale (first external-resources/locales)
-                                                   :map    (first external-resources/maps)}
+                                                   :map    (first external-resources/maps)
+                                                   :css    (first external-resources/css)}
                               :general-tab        {:tags (map (fn [tag] {:name tag :selected false}) (-> data :sample :tags))}}
               :embed         {:show    false
                               :tab     :embed
@@ -57,7 +57,7 @@
               :tips          {:current []
                               :queue   []}
               :local-storage ls
-              :data          (data/compose-all-data (:datasets data))}
+              :data          (external-resources/compose-all-data (:datasets data))}
          ;:dispatch-n (list (when (= view :standalone) [:run]))
          }))))
 

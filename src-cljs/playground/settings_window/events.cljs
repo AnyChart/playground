@@ -1,7 +1,7 @@
 (ns playground.settings-window.events
   (:require [re-frame.core :as rf]
             [clojure.string :as string]
-            [playground.settings-window.data :as external-resources]
+            [playground.data.external-resources :as external-resources]
             [playground.utils :as utils]
             [playground.tags :as tags]))
 
@@ -179,9 +179,17 @@
     (let [res (external-resources/get-map-by-url value)]
       (assoc-in db [:settings :external-resources :map] res))))
 
-
 (rf/reg-event-db
-  :settings.external-resources/add-by-type
+  :settings.external-resources/css-select
+  (fn [db [_ value]]
+    (let [res (external-resources/get-css-by-url value)]
+      (assoc-in db [:settings :external-resources :css] res))))
+
+;;======================================================================================================================
+;; Add/remove js
+;;======================================================================================================================
+(rf/reg-event-db
+  :settings.external-resources/add-js-by-type
   (fn [db [_ type]]
     (let [url (-> db :settings :external-resources type :url)]
       (-> db
@@ -189,11 +197,31 @@
           (update-in [:tips :queue] conj url)))))
 
 (rf/reg-event-db
-  :settings.external-resources/remove-by-type
+  :settings.external-resources/remove-js-by-type
   (fn [db [_ type]]
     (let [url (-> db :settings :external-resources type :url)]
       (-> db
           (update-in [:sample :scripts] (fn [scripts] (remove #(= url %) scripts)))
+          (update-in [:tips :queue] (fn [tips-urls] (remove #(= url %) tips-urls)))))))
+
+
+;;======================================================================================================================
+;; Add/remove css
+;;======================================================================================================================
+(rf/reg-event-db
+  :settings.external-resources/add-css-by-type
+  (fn [db [_ type]]
+    (let [url (-> db :settings :external-resources type :url)]
+      (-> db
+          (update-in [:sample :styles] #(concat % [url]))
+          (update-in [:tips :queue] conj url)))))
+
+(rf/reg-event-db
+  :settings.external-resources/remove-css-by-type
+  (fn [db [_ type]]
+    (let [url (-> db :settings :external-resources type :url)]
+      (-> db
+          (update-in [:sample :styles] (fn [scripts] (remove #(= url %) scripts)))
           (update-in [:tips :queue] (fn [tips-urls] (remove #(= url %) tips-urls)))))))
 
 

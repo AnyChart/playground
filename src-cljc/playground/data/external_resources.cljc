@@ -1,4 +1,4 @@
-(ns playground.settings-window.data)
+(ns playground.data.external-resources)
 
 ;;======================================================================================================================
 ;; Main data
@@ -53,6 +53,10 @@
    {:url "https://cdn.anychart.com/geodata/1.2.0/countries/united_states_of_america/united_states_of_america.topo.js", :name "USA" :js "usa"}
    {:url "https://cdn.anychart.com/geodata/1.2.0/countries/france/france.topo.js", :name "France" :js "france"}])
 
+(def ^:const css
+  [{:url "https://cdn.anychart.com/releases/latest-v8/css/anychart-ui.min.css", :name "AnyChart UI"}
+   {:url "https://cdn.anychart.com/releases/latest-v8/fonts/css/anychart-font.min.css", :name "AnyChart Font"}])
+
 
 ;;======================================================================================================================
 ;; Getters
@@ -72,6 +76,9 @@
 (defn get-map-by-url [url]
   (first (filter #(= url (:url %)) maps)))
 
+
+(defn get-css-by-url [url]
+  (first (filter #(= url (:url %)) css)))
 
 ;;======================================================================================================================
 ;; Composition for tips
@@ -120,6 +127,14 @@
            :type :dataset
            :example "TODO: Add example to http://static.anychart.com/cdn/anydata/common/index.json?")) datasets))
 
+(defn get-csss []
+  (map (fn [{:keys [url name] :as item}]
+         (assoc item
+           :title "CSS"
+           :description "TODO: css description"
+           :example (str "some code\nis needed here")
+           :type :css))
+       css))
 
 (defn compose-all-data [datasets]
   (concat
@@ -127,6 +142,7 @@
     (get-themes)
     (get-locales)
     (get-maps)
+    (get-csss)
     (get-datasets datasets)))
 
 

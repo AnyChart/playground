@@ -4,7 +4,7 @@
             [playground.utils :as utils]
             [re-frame.core :as rf]
             [reagent.core :as reagent]
-            [playground.settings-window.data :as external-resources]
+            [playground.data.external-resources :as external-resources]
             [playground.standalone.views :as standalone-view]))
 
 (defn iframe-result []

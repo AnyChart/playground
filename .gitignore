@@ -11,7 +11,7 @@ pom.xml.asc
 .hg/
 .idea
 playground.iml
-data/
+/data/
 resources/public/js/playground.js
 resources/public/js/site.js
 src-css/.sass-cache

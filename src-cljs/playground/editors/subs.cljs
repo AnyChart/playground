@@ -1,6 +1,6 @@
 (ns playground.editors.subs
   (:require [re-frame.core :as rf]
-            [playground.settings-window.data :as external-resources]
+            [playground.data.external-resources :as external-resources]
             [playground.utils :as utils]))
 
 (rf/reg-sub :editors/height

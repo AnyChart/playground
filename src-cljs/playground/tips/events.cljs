@@ -1,7 +1,7 @@
 (ns playground.tips.events
   (:require [re-frame.core :as rf]
             [playground.utils :as utils]
-            [playground.settings-window.data :as external-resources]))
+            [playground.data.external-resources :as external-resources]))
 
 (rf/reg-event-db
   :tips.tip/close
