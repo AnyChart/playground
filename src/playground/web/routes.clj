@@ -49,6 +49,8 @@
             [playground.views.marketing.support-page :as support-view]
             [playground.views.marketing.version-history-page :as version-history-view]
             [playground.views.iframe :as iframe-view]
+            [playground.views.page-404 :as view-404]
+
             [playground.utils.utils :as utils]
             [hiccup.core :as hiccup]
             [hiccup.page :as hiccup-page]))
@@ -409,6 +411,9 @@
 (defn redirect-slash [request]
   (redirect (web-utils/drop-slash (:uri request)) 301))
 
+(defn page-404 [request]
+  (view-404/page (get-app-data request)))
+
 ;; =====================================================================================================================
 ;; Routes
 ;; =====================================================================================================================
@@ -584,4 +589,5 @@
            (GET "/:hash/:version/preview" [] (-> show-sample-preview1 mw/user-sample))
            (GET "/:hash/:version/download" [] (-> show-sample-download1 mw/user-sample))
 
-           (route/not-found "404 Page not found"))
+           (route/not-found (-> page-404
+                                mw/base-page-middleware)))
