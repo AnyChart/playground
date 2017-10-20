@@ -630,10 +630,17 @@ html {
           position: relative;
           padding-left: 27px;
           .in-box {
-            display: inline-block;
             border-radius: 5px;
             background-color: #95bfd3;
             padding: 2px 5px 2px 8px;
+            display: flex;
+            align-items: baseline;
+            .url {
+              max-width: 505px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
           }
           span.glyphicon-align-justify {
             margin-left: 10px;
@@ -830,10 +837,10 @@ html {
   position: absolute;
   bottom: 20px;
   left: 20px;
-  z-index: 10;
+  z-index: 200;
   display: flex;
   flex-wrap: nowrap;
-  align-items: flex-start;
+  align-items: flex-end;
   .tip {
     background-color: white;
     padding: 10px 15px;
@@ -841,6 +848,7 @@ html {
     margin-right: 8px;
     margin-top: 8px;
     position: relative;
+    min-width: 300px;
     pre {
       max-width: 400px;
       max-height: 93px;

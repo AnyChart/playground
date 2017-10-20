@@ -1,38 +1,74 @@
-(ns playground.data.external-resources)
+(ns playground.data.external-resources
+  (:require [clojure.string :as string])
+  #?(:clj
+     (:require [playground.data.external-resources-parser :as external-resources-parser])
+     :cljs
+     (:require-macros [playground.data.external-resources-parser :as external-resources-parser])))
 
 ;;======================================================================================================================
 ;; Main data
 ;;======================================================================================================================
-(def ^:const binaries
-  [{:url         "https://cdn.anychart.com/js/latest/anychart-bundle.min.js"
-    :name        "AnyChart"
-    :description "AnyChart is a flexible JavaScript (HTML5) based charting solution which will fit any need for data visualization."
-    :example     "anychart.onDocumentLoad(function() {\n    // create an instance of pie chart with data\n    var chart = anychart.pie([\n        [\"Chocolate\", 5],\n        [\"Rhubarb compote\", 2],\n        [\"Crêpe Suzette\", 2],\n        [\"American blueberry\", 2],\n        [\"Buttermilk\", 1]\n    ]);\n    chart.title(\"Top 5 pancake fillings\");\n    // pass the container where chart will be drawn\n    chart.container(\"container\");\n    // call the chart draw() method to initiate chart drawing\n    chart.draw();\n});"}
 
-   {:url         "https://cdn.anychart.com/js/latest/data-adapter.min.js"
-    :name        "Data Adapter"
-    :description "TODO: Data Adapter description"
-    :example     "anychart.data.loadJsonFile(\"https://cdn.anychart.com/charts-data/data_json.json\", function (data) {\n  chart = anychart.column();\n  chart.data(data);\n  chart.container(\"container\");\n  chart.draw();\n});"}])
+(def data (external-resources-parser/parse-data-compile-time))
+
+(defn compose-themes []
+  (let [themes (:themes data)
+        themes (map (fn [[url-name data]]
+                      {:url         (str "http://cdn.anychart.com/releases/latest-v8/themes/" (name url-name) ".js")
+                       :name        (:name data)
+                       :icon        (:icon data)
+                       :description (:desc data)
+                       :js          (str
+                                      (string/lower-case (.substring (:name data) 0 1))
+                                      (string/replace (.substring (:name data) 1) #" " ""))})
+                    themes)]
+    themes))
 
 
-(def ^:const themes
-  [{:url "https://cdn.anychart.com/themes/latest/coffee.min.js", :name "Coffee" :js "coffee"}
-   {:url "https://cdn.anychart.com/themes/latest/dark_blue.min.js", :name "Dark Blue" :js "darkBlue"}
-   {:url "https://cdn.anychart.com/themes/latest/dark_earth.min.js", :name "Dark Earth" :js "darkEarth"}
-   {:url "https://cdn.anychart.com/themes/latest/dark_glamour.min.js", :name "Dark Glamour" :js "darkGlamour"}
-   {:url "https://cdn.anychart.com/themes/latest/dark_provence.min.js", :name "Dark Provence" :js "darkTurquoise"}
-   {:url "https://cdn.anychart.com/themes/latest/dark_turquoise.min.js", :name "Dark Turquoise" :js "darkTurquoise"}
-   {:url "https://cdn.anychart.com/themes/latest/defaultTheme.min.js", :name "Default Theme" :js "defaultTheme"}
-   {:url "https://cdn.anychart.com/themes/latest/light_blue.min.js", :name "Light Blue" :js "lightBlue"}
-   {:url "https://cdn.anychart.com/themes/latest/light_earth.min.js", :name "Light Earth" :js "lightEarth"}
-   {:url "https://cdn.anychart.com/themes/latest/light_glamour.min.js", :name "Light Glamour" :js "lightGlamour"}
-   {:url "https://cdn.anychart.com/themes/latest/light_provence.min.js", :name "Light Provence" :js "lightProvence"}
-   {:url "https://cdn.anychart.com/themes/latest/light_turquoise.min.js", :name "Light Turquoise" :js "lightTurquoise"}
-   {:url "https://cdn.anychart.com/themes/latest/monochrome.min.js", :name "Monochrome" :js "monochrome"}
-   {:url "https://cdn.anychart.com/themes/latest/morning.min.js", :name "Morning" :js "morning"}
-   {:url "https://cdn.anychart.com/themes/latest/pastel.min.js", :name "Pastel" :js "pastel"}
-   {:url "https://cdn.anychart.com/themes/latest/sea.min.js", :name "Sea" :js "sea"}
-   {:url "https://cdn.anychart.com/themes/latest/wines.min.js", :name "Wines" :js "wines"}])
+(def ^:const themes (compose-themes))
+
+(defn compose-modules []
+  (let [modules (remove (fn [[url-name data]] (:internal data)) (:modules data))
+        modules (map (fn [[url-name data]]
+                       {:name        (or (:name data) (str "Unnamed module with ID: " (name url-name)))
+                        :description (:desc data)
+                        :url         (str "http://cdn.anychart.com/releases/latest-v8/js/" (name url-name) ".min.js")
+                        :example     "TODO: modules examples"})
+                     modules)]
+    modules))
+
+(def ^:const binaries (compose-modules))
+
+;(def ^:const binaries
+;  [{:url         "https://cdn.anychart.com/js/latest/anychart-bundle.min.js"
+;    :name        "AnyChart"
+;    :description "AnyChart is a flexible JavaScript (HTML5) based charting solution which will fit any need for data visualization."
+;    :example     "anychart.onDocumentLoad(function() {\n    // create an instance of pie chart with data\n    var chart = anychart.pie([\n        [\"Chocolate\", 5],\n        [\"Rhubarb compote\", 2],\n        [\"Crêpe Suzette\", 2],\n        [\"American blueberry\", 2],\n        [\"Buttermilk\", 1]\n    ]);\n    chart.title(\"Top 5 pancake fillings\");\n    // pass the container where chart will be drawn\n    chart.container(\"container\");\n    // call the chart draw() method to initiate chart drawing\n    chart.draw();\n});"}
+;
+;   {:url         "https://cdn.anychart.com/js/latest/data-adapter.min.js"
+;    :name        "Data Adapter"
+;    :description "TODO: Data Adapter description"
+;    :example     "anychart.data.loadJsonFile(\"https://cdn.anychart.com/charts-data/data_json.json\", function (data) {\n  chart = anychart.column();\n  chart.data(data);\n  chart.container(\"container\");\n  chart.draw();\n});"}])
+
+
+;(def ^:const themes
+;  [{:url "https://cdn.anychart.com/themes/latest/coffee.min.js", :name "Coffee" :js "coffee"}
+;   {:url "https://cdn.anychart.com/themes/latest/dark_blue.min.js", :name "Dark Blue" :js "darkBlue"}
+;   {:url "https://cdn.anychart.com/themes/latest/dark_earth.min.js", :name "Dark Earth" :js "darkEarth"}
+;   {:url "https://cdn.anychart.com/themes/latest/dark_glamour.min.js", :name "Dark Glamour" :js "darkGlamour"}
+;   {:url "https://cdn.anychart.com/themes/latest/dark_provence.min.js", :name "Dark Provence" :js "darkTurquoise"}
+;   {:url "https://cdn.anychart.com/themes/latest/dark_turquoise.min.js", :name "Dark Turquoise" :js "darkTurquoise"}
+;   {:url "https://cdn.anychart.com/themes/latest/defaultTheme.min.js", :name "Default Theme" :js "defaultTheme"}
+;   {:url "https://cdn.anychart.com/themes/latest/light_blue.min.js", :name "Light Blue" :js "lightBlue"}
+;   {:url "https://cdn.anychart.com/themes/latest/light_earth.min.js", :name "Light Earth" :js "lightEarth"}
+;   {:url "https://cdn.anychart.com/themes/latest/light_glamour.min.js", :name "Light Glamour" :js "lightGlamour"}
+;   {:url "https://cdn.anychart.com/themes/latest/light_provence.min.js", :name "Light Provence" :js "lightProvence"}
+;   {:url "https://cdn.anychart.com/themes/latest/light_turquoise.min.js", :name "Light Turquoise" :js "lightTurquoise"}
+;   {:url "https://cdn.anychart.com/themes/latest/monochrome.min.js", :name "Monochrome" :js "monochrome"}
+;   {:url "https://cdn.anychart.com/themes/latest/morning.min.js", :name "Morning" :js "morning"}
+;   {:url "https://cdn.anychart.com/themes/latest/pastel.min.js", :name "Pastel" :js "pastel"}
+;   {:url "https://cdn.anychart.com/themes/latest/sea.min.js", :name "Sea" :js "sea"}
+;   {:url "https://cdn.anychart.com/themes/latest/wines.min.js", :name "Wines" :js "wines"}])
 
 
 (def ^:const locales

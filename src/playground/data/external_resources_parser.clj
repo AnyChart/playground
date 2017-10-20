@@ -1,11 +1,11 @@
-(ns playground.data.tags-macros
+(ns playground.data.external-resources-parser
   (:require [cheshire.core :as json]
             [clj-http.client :as http]))
 
 
 (defn get-data []
   (try
-    (json/parse-string (:body (http/get "https://static.anychart.com/utility/tags_list.json")) true)
+    (json/parse-string (:body (http/get "http://cdn.anychart.com/releases/latest-v8/js/modules.json")) true)
     (catch Exception _ nil)))
 
 

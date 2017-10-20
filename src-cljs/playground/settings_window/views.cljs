@@ -112,7 +112,7 @@
        [:a {:href script :target "_blank"}
         [:span.glyphicon.glyphicon-align-justify]
         [:div.in-box
-         [:span script]
+         [:span.url script]
          [:span.glyphicon.glyphicon-remove {:on-click #(do
                                                          (.preventDefault %)
                                                          (rf/dispatch [:settings/remove-script script]))}]]]])]
@@ -206,7 +206,7 @@
        [:a {:href style :target "_blank"}
         [:span.glyphicon.glyphicon-align-justify]
         [:div.in-box
-         [:span style]
+         [:span.url style]
          [:span.glyphicon.glyphicon-remove {:on-click #(do
                                                          (.preventDefault %)
                                                          (rf/dispatch [:settings/remove-style style]))}]]]])]
