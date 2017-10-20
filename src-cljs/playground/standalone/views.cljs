@@ -1,5 +1,19 @@
 (ns playground.standalone.views
-  (:require [re-frame.core :as rf]))
+  (:require [re-frame.core :as rf]
+            [reagent.core :as reagent]))
+
+
+(defn iframe-standalone []
+  (reagent/create-class {:component-did-mount #(rf/dispatch [:run])
+                         :reagent-render      (fn []
+                                                [:iframe {:id                "result-iframe"
+                                                          :name              "result-iframe"
+                                                          :class             "iframe-standalone"
+                                                          :sandbox           "allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"
+                                                          :allowTransparency "true"
+                                                          :allowFullScreen   "true"
+                                                          ;:src               @(rf/subscribe [:sample-iframe-url])
+                                                          }])}))
 
 
 (defn view []
@@ -39,10 +53,4 @@
 
       [:div.col-sm-7
        [:div.iframe-standalone-box
-        [:iframe {:id                "result-iframe"
-                  :name              "result-iframe"
-                  :class             "iframe-standalone"
-                  :sandbox           "allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"
-                  :allowTransparency "true"
-                  :allowFullScreen   "true"
-                  :src               @(rf/subscribe [:sample-iframe-url])}]]]]]))
+        [iframe-standalone]]]]]))
