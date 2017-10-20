@@ -72,22 +72,22 @@
 
 
 (def ^:const locales
-  [{:url "https://cdn.anychart.com/locale/1.1.0/en-us.js", :name "English" :js "en-us"}
-   {:url "https://cdn.anychart.com/locale/1.1.0/de-de.js", :name "German - Deutsch" :js "de-de"}
-   {:url "https://cdn.anychart.com/locale/1.1.0/ru-ru.js", :name "Russian - Русский" :js "ru-ru"}
-   {:url "https://cdn.anychart.com/locale/1.1.0/es-es.js", :name "Spanish - Español" :js "es-es"}
-   {:url "https://cdn.anychart.com/locale/1.1.0/he-il.js", :name "Israel - עברית" :js "he-il"}
-   {:url "https://cdn.anychart.com/locale/1.1.0/zh-cn.js", :name "Chinese - 中文" :js "zh-cn"}
-   {:url "https://cdn.anychart.com/locale/1.1.0/hi-in.js", :name "India (Hindi) - हिंदी" :js "hi-in"}
-   {:url "https://cdn.anychart.com/locale/1.1.0/zh-hk.js", :name "Chinese (Hong Kong) - 中文" :js "zh-hk"}])
+  [{:url "https://cdn.anychart.com/releases/latest-v8/locales/en-us.js", :name "English" :js "en-us"}
+   {:url "https://cdn.anychart.com/releases/latest-v8/locales/de-de.js", :name "German - Deutsch" :js "de-de"}
+   {:url "https://cdn.anychart.com/releases/latest-v8/locales/ru-ru.js", :name "Russian - Русский" :js "ru-ru"}
+   {:url "https://cdn.anychart.com/releases/latest-v8/locales/es-es.js", :name "Spanish - Español" :js "es-es"}
+   {:url "https://cdn.anychart.com/releases/latest-v8/locales/he-il.js", :name "Israel - עברית" :js "he-il"}
+   {:url "https://cdn.anychart.com/releases/latest-v8/locales/zh-cn.js", :name "Chinese - 中文" :js "zh-cn"}
+   {:url "https://cdn.anychart.com/releases/latest-v8/locales/hi-in.js", :name "India (Hindi) - हिंदी" :js "hi-in"}
+   {:url "https://cdn.anychart.com/releases/latest-v8/locales/zh-hk.js", :name "Chinese (Hong Kong) - 中文" :js "zh-hk"}])
 
 
 (def ^:const maps
-  [{:url "https://cdn.anychart.com/geodata/1.2.0/custom/world/world.js", :name "World" :js "world"}
-   {:url "https://cdn.anychart.com/geodata/1.2.0/custom/world_source/world_source.js", :name "World Origin" :js "worldOrigin"}
-   {:url "https://cdn.anychart.com/geodata/1.2.0/countries/australia/australia.topo.js", :name "Australia" :js "australia"}
-   {:url "https://cdn.anychart.com/geodata/1.2.0/countries/united_states_of_america/united_states_of_america.topo.js", :name "USA" :js "usa"}
-   {:url "https://cdn.anychart.com/geodata/1.2.0/countries/france/france.topo.js", :name "France" :js "france"}])
+  [{:url "https://cdn.anychart.com/releases/latest-v8/geodata/custom/world/world.js", :name "World" :js "world"}
+   {:url "https://cdn.anychart.com/releases/latest-v8/geodata/custom/world_source/world_source.js", :name "World Origin" :js "worldOrigin"}
+   {:url "https://cdn.anychart.com/releases/latest-v8/geodata/countries/australia/australia.topo.js", :name "Australia" :js "australia"}
+   {:url "https://cdn.anychart.com/releases/latest-v8/geodata/countries/united_states_of_america/united_states_of_america.topo.js", :name "USA" :js "usa"}
+   {:url "https://cdn.anychart.com/releases/latest-v8/geodata/countries/france/france.topo.js", :name "France" :js "france"}])
 
 (def ^:const css
   [{:url "https://cdn.anychart.com/releases/latest-v8/css/anychart-ui.min.css", :name "AnyChart UI"}
