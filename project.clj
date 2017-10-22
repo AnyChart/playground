@@ -61,7 +61,6 @@
                  [re-frame "0.10.1"]
                  [re-com "2.1.0"]
                  [alandipert/storage-atom "2.0.1"]
-                 ;[re-frisk "0.5.0"]
                  ; [cljs-http "0.1.42"]
                  [cljs-ajax "0.7.1"]
                  [com.andrewmcveigh/cljs-time "0.5.1"]
@@ -77,14 +76,16 @@
   :sass {:source-paths ["src-css/scss"]
          :target-path  "resources/public/css"
          :output-style :compressed}
-  :profiles {:local {:jvm-opts ["-Dlocal=true"]}}
+  :profiles {:dev {:jvm-opts     ["-Dlocal=true"]
+                   :dependencies [[re-frisk "0.5.0"]]}}
   :cljsbuild {:builds [
                        ;; editor
                        {:id           "dev"
                         :source-paths ["src-cljs" "src-cljc"]
                         :compiler     {:output-to     "resources/public/js/playground.js"
                                        :optimizations :whitespace
-                                       :pretty-print  true}}
+                                       :pretty-print  true
+                                       :preloads      [re-frisk.preload]}}
                        {:id           "prod"
                         :source-paths ["src-cljs" "src-cljc"]
                         :compiler     {
