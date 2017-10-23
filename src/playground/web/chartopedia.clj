@@ -1,16 +1,24 @@
 (ns playground.web.chartopedia
   (:require [cheshire.core :as json]
-            [me.raynes.fs :as fs]))
+            [me.raynes.fs :as fs]
+            [clojure.string :as string]
+            [playground.utils.utils :as utils]))
 
 
 (defn parse-chart-type [chart-type]
-  (merge chart-type
-         (json/parse-string
-           (slurp
-             (str "resources/chartopedia/data/chart-types/" (:id chart-type) ".json"))
-           true)
-         {:img (str "/chartopedia/images/chart-type/" (:id chart-type) ".png")}))
-
+  (let [chart-data (json/parse-string
+                     (slurp
+                       (str "resources/chartopedia/data/chart-types/" (:id chart-type) ".json"))
+                     true)]
+    (update
+      (merge chart-type
+             chart-data
+             {:img (str "/chartopedia/images/chart-type/" (:id chart-type) ".png")})
+      :description (fn [desc]
+                     (string/replace (string/join "" desc) #"%%([^%]+)%%"
+                                     #(str "<a href=\"/chart-types/" (utils/name->url (second %))
+                                           "\" title=\"" (second %)
+                                           "\">" (second %) "</a>"))))))
 
 (defn parse-category [category]
   (merge category
