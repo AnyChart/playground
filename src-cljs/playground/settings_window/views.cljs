@@ -51,7 +51,7 @@
      (for [tag @(rf/subscribe [:settings/tags])]
        ^{:key (:name tag)}
        [:a.tag {:on-click #(do
-                             (rf/dispatch [:settings/select-tag (:name tag)])
+                             ;(rf/dispatch [:settings/select-tag (:name tag)])
                              (.focus (.getElementById js/document "tags-input")))
                 :class    (when (:selected tag) "selected")}
         [:span (:name tag)]
