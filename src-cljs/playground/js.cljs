@@ -1,6 +1,9 @@
 (ns playground.js
   (:require [playground.utils :as utils]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [goog.events :as events])
+  (:import [goog History]
+           [goog.history EventType]))
 
 
 (defn click-handler [e]
@@ -19,5 +22,17 @@
           (let [show-close-warning @(rf/subscribe [:sample/show-close-warning?])]
             (or show-close-warning nil)))))
 
+(defn init-history []
+  (set! (.-onpopstate js/window)
+        (fn [event]
+          (utils/log "popstate")
+          (utils/log (.-location js/document))
+          (let [current-url (.-href (.-location js/document))]
+            (cond
+              (.endsWith current-url "/editor") (rf/dispatch [:view/editor])
+              (.endsWith current-url "/view") (rf/dispatch [:view/standalone])
+              :else (rf/dispatch [:view/editor]))))))
+
 (init)
 (init-close)
+(init-history)

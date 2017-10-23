@@ -1,6 +1,7 @@
 (ns playground.editors.events
   (:require [re-frame.core :as rf]
             [playground.editors.js :as editors-js]
+            [playground.utils :as js-utils]
             [playground.utils.utils :as utils]))
 
 ;;======================================================================================================================
@@ -37,15 +38,20 @@
 ;;======================================================================================================================
 ;; Editors views
 ;;======================================================================================================================
+(defn push-state [url]
+  (when (not= (.-pathname (.-location js/document)) url)
+    ;(js-utils/log "Push state" url " : " (.-pathname (.-location js/document)))
+    (.pushState (.-history js/window) nil nil url)))
+
 (defn update-view [db view]
-  (.pushState (.-history js/window) nil nil (utils/sample-url (:sample db)))
+  (push-state (utils/sample-url (:sample db)))
   (swap! (:local-storage db) assoc :view view))
 
 (rf/reg-event-db
   :view/editor
   (fn [db _]
     ;; TODO : to effects
-    (.pushState (.-history js/window) nil nil (utils/sample-url (:sample db)))
+    (push-state (utils/sample-url (:sample db)))
     (assoc-in db [:editors :view] (-> db :local-storage deref :view))))
 
 (rf/reg-event-db
@@ -76,11 +82,9 @@
   :view/standalone
   (fn [{db :db} _]
     (let [sample-standalone-url (utils/sample-standalone-url (:sample db))]
-      (.pushState (.-history js/window) nil nil sample-standalone-url)
+      (push-state sample-standalone-url)
       {:db (-> db
-               (assoc-in [:editors :view] :standalone))
-       ;:dispatch [:run]
-       })))
+               (assoc-in [:editors :view] :standalone))})))
 
 ;;======================================================================================================================
 ;; Code context menu
