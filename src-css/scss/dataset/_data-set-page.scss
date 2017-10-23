@@ -3,6 +3,13 @@ html body .dataset-page .content {
   .row {
     margin-top: 30px;
     margin-bottom: 40px;
+
+    .caption {
+      color: $red-color;
+      margin-top: 40px;
+      font-size: 15px;
+    }
+
     .column1 {
       h1 {
         color: $red-color;
@@ -10,11 +17,7 @@ html body .dataset-page .content {
         font-weight: bold;
         text-transform: uppercase;
       }
-      .caption {
-        color: $red-color;
-        margin-top: 40px;
-        font-size: 15px;
-      }
+
       pre {
         font-size: 12px;
         padding: 0;
@@ -34,6 +37,9 @@ html body .dataset-page .content {
         width: 100%;
         box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
         margin: 20px 0 30px;
+      }
+      .caption {
+        margin-top: 10px;
       }
       textarea {
         width: 100%;

@@ -49,9 +49,13 @@
           ]
 
          [:div.col-sm-6.column2
-          [:img {:alt (str (:title data-set) " - " (:description data-set))
-                 :src (:logo data-set)}]
+          [:a {:title  (str (:title data-set) " usage sample")
+               :href   (:sample data-set)
+               :target "_blank"}
+           [:img {:alt (str (:title data-set) " - " (:description data-set))
+                  :src (:logo data-set)}]]
 
+          [:p.caption "Usage code"]
           [:textarea#myTextarea (get-code data-set)]
 
           [:div.line-box
