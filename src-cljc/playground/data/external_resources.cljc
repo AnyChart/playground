@@ -21,7 +21,8 @@
                        :js          (str
                                       (string/lower-case (.substring (:name data) 0 1))
                                       (string/replace (.substring (:name data) 1) #" " ""))})
-                    themes)]
+                    themes)
+        themes (sort-by :name themes)]
     themes))
 
 
@@ -30,14 +31,26 @@
 (defn compose-modules []
   (let [modules (remove (fn [[url-name data]] (:internal data)) (:modules data))
         modules (map (fn [[url-name data]]
-                       {:name        (or (:name data) (str "Unnamed module with ID: " (name url-name)))
-                        :description (:desc data)
-                        :url         (str "http://cdn.anychart.com/releases/latest-v8/js/" (name url-name) ".min.js")
-                        :example     "TODO: modules examples"})
-                     modules)]
-    modules))
+                       {:name          (or (:name data) (str "Unnamed module with ID: " (name url-name)))
+                        :description   (:desc data)
+                        :url           (str "http://cdn.anychart.com/releases/latest-v8/js/" (name url-name) ".min.js")
+                        :example       "TODO: modules examples"
+                        :internal-type (:type data)})
+                     modules)
+        modules (sort-by :name modules)
+        ;groups (group-by :internal-type modules)
+        chart-types-modules (filter #(= "chart-type" (:internal-type %)) modules)
+        feature-modules (filter #(= "feature" (:internal-type %)) modules)
+        misc-modules (filter #(and (not= "feature" (:internal-type %))
+                                   (not= "chart-type" (:internal-type %))) modules)]
 
-(def ^:const binaries (compose-modules))
+    [chart-types-modules feature-modules misc-modules]))
+
+(def ^:const all-modules (compose-modules))
+(def ^:const chart-types-modules (first all-modules))
+(def ^:const feature-modules (second all-modules))
+(def ^:const misc-modules (last all-modules))
+(def ^:const binaries (flatten all-modules))
 
 ;(def ^:const binaries
 ;  [{:url         "https://cdn.anychart.com/js/latest/anychart-bundle.min.js"

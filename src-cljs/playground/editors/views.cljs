@@ -53,8 +53,14 @@
                               ])
        [:h4 "External recources"]
        [:select {:on-change #(rf/dispatch [:settings/add-script (-> % .-target .-value)])}
-        [:optgroup {:label "Binaries"}
-         (for [res external-resources/binaries]
+        [:optgroup {:label "Chart Types Binaries"}
+         (for [res external-resources/chart-types-modules]
+           ^{:key (:url res)} [:option {:value (:url res)} (:name res)])]
+        [:optgroup {:label "Features Binaries"}
+         (for [res external-resources/feature-modules]
+           ^{:key (:url res)} [:option {:value (:url res)} (:name res)])]
+        [:optgroup {:label "Misc Binaries"}
+         (for [res external-resources/misc-modules]
            ^{:key (:url res)} [:option {:value (:url res)} (:name res)])]
         [:optgroup {:label "Themes"}
          (for [res external-resources/themes]

@@ -139,8 +139,15 @@
       [:div.line
        [:select.form-control {:id        "settings-select-bin"
                               :on-change #(rf/dispatch [:settings.external-resources/binaries-select (-> % .-target .-value)])}
-        (for [res external-resources/binaries]
-          ^{:key res} [:option {:value (:url res)} (:name res)])]
+        [:optgroup {:label "Chart Types"}
+         (for [res external-resources/chart-types-modules]
+           ^{:key (:url res)} [:option {:value (:url res)} (:name res)])]
+        [:optgroup {:label "Features"}
+         (for [res external-resources/feature-modules]
+           ^{:key (:url res)} [:option {:value (:url res)} (:name res)])]
+        [:optgroup {:label "Misc"}
+         (for [res external-resources/misc-modules]
+           ^{:key (:url res)} [:option {:value (:url res)} (:name res)])]]
        (if @(rf/subscribe [:settings.external-resources/added-js? :binary])
          [:button.ac-btn.remove-btn {:type     "button"
                                      :on-click #(rf/dispatch [:settings.external-resources/remove-js-by-type :binary])} "Remove"]
