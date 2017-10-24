@@ -37,20 +37,27 @@
                         :example       "TODO: modules examples"
                         :internal-type (:type data)})
                      modules)
-        modules (sort-by :name modules)
+        modules (remove #(= (:internal-type %) "internal")
+                        (sort-by :name modules))
         ;groups (group-by :internal-type modules)
         chart-types-modules (filter #(= "chart-type" (:internal-type %)) modules)
         feature-modules (filter #(= "feature" (:internal-type %)) modules)
+        bundle-modules (filter #(= "bundle" (:internal-type %)) modules)
         misc-modules (filter #(and (not= "feature" (:internal-type %))
-                                   (not= "chart-type" (:internal-type %))) modules)]
-
-    [chart-types-modules feature-modules misc-modules]))
+                                   (not= "chart-type" (:internal-type %))
+                                   (not= "bundle" (:internal-type %)))
+                             modules)]
+    {:chart-types-modules chart-types-modules
+     :features-modules    feature-modules
+     :bundle-modules      bundle-modules
+     :misc-moduls         misc-modules}))
 
 (def ^:const all-modules (compose-modules))
-(def ^:const chart-types-modules (first all-modules))
-(def ^:const feature-modules (second all-modules))
-(def ^:const misc-modules (last all-modules))
-(def ^:const binaries (flatten all-modules))
+(def ^:const chart-types-modules (:chart-types-modules all-modules))
+(def ^:const feature-modules (:features-modules all-modules))
+(def ^:const bundle-modules (:bundle-modules all-modules))
+(def ^:const misc-modules (:misc-moduls all-modules))
+(def ^:const binaries (flatten (map second all-modules)))
 
 ;(def ^:const binaries
 ;  [{:url         "https://cdn.anychart.com/js/latest/anychart-bundle.min.js"
