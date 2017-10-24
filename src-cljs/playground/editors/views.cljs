@@ -59,7 +59,7 @@
         [:optgroup {:label "Features Binaries"}
          (for [res external-resources/feature-modules]
            ^{:key (:url res)} [:option {:value (:url res)} (:name res)])]
-        [:optgroup {:label "Bundle Binaries"}
+        [:optgroup {:label "Bundles Binaries"}
          (for [res external-resources/bundle-modules]
            ^{:key (:url res)} [:option {:value (:url res)} (:name res)])]
         [:optgroup {:label "Misc Binaries"}

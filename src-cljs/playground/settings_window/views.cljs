@@ -145,7 +145,7 @@
         [:optgroup {:label "Features"}
          (for [res external-resources/feature-modules]
            ^{:key (:url res)} [:option {:value (:url res)} (:name res)])]
-        [:optgroup {:label "Bundle"}
+        [:optgroup {:label "Bundles"}
          (for [res external-resources/bundle-modules]
            ^{:key (:url res)} [:option {:value (:url res)} (:name res)])]
         [:optgroup {:label "Misc"}
