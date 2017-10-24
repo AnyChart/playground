@@ -60,6 +60,7 @@
 ;; Consts
 ;; =====================================================================================================================
 (def ^:const samples-per-page 12)
+(def ^:const samples-per-landing 9)
 (def ^:const samples-per-block 6)
 
 ;; =====================================================================================================================
@@ -107,19 +108,22 @@
 (defn landing-page [request]
   ;(prn "landing: " (get-user request))
   (let [samples-page (dec (try (-> request :params :samples Integer/parseInt) (catch Exception _ 1)))
-        tags-page (dec (try (-> request :params :tags Integer/parseInt) (catch Exception _ 1)))
-        samples (db-req/top-samples (get-db request) {:count  (inc samples-per-block)
-                                                      :offset (* samples-per-block samples-page)})
-        tags-samples (db-req/get-top-tags-samples (get-db request) {:count  (inc samples-per-block)
-                                                                    :offset (* samples-per-block tags-page)})]
+        ;tags-page (dec (try (-> request :params :tags Integer/parseInt) (catch Exception _ 1)))
+        samples (db-req/top-samples (get-db request) {:count  (inc samples-per-landing)
+                                                      :offset (* samples-per-landing samples-page)})
+
+        ;tags-samples (db-req/get-top-tags-samples (get-db request) {:count  (inc samples-per-landing)
+        ;                                                            :offset (* samples-per-landing tags-page)})
+        ]
     (response (landing-view/page (merge (get-app-data request)
-                                        {:samples      (take samples-per-block samples)
-                                         :end          (< (count samples) (inc samples-per-block))
+                                        {:samples      (take samples-per-landing samples)
+                                         :end          (< (count samples) (inc samples-per-landing))
                                          :page         samples-page
 
-                                         :tags-samples (take samples-per-block tags-samples)
-                                         :tags-end     (< (count tags-samples) (inc samples-per-block))
-                                         :tags-page    tags-page})))))
+                                         ;:tags-samples (take samples-per-landing tags-samples)
+                                         ;:tags-end     (< (count tags-samples) (inc samples-per-block))
+                                         ;:tags-page    tags-page
+                                         })))))
 
 (defn repo-page [request]
   (let [repo (get-repo request)
@@ -255,10 +259,10 @@
 (defn top-landing-samples [request]
   (let [offset* (-> request :params :offset)
         offset (if (int? offset*) offset* (Integer/parseInt offset*))
-        samples (db-req/top-samples (get-db request) {:count  (inc samples-per-block)
+        samples (db-req/top-samples (get-db request) {:count  (inc samples-per-landing)
                                                       :offset offset})
-        result {:samples (take samples-per-block samples)
-                :end     (< (count samples) (inc samples-per-block))}]
+        result {:samples (take samples-per-landing samples)
+                :end     (< (count samples) (inc samples-per-landing))}]
     (response result)))
 
 (defn top-landing-tag-samples [request]
@@ -422,6 +426,7 @@
            (route/resources "/")
 
            (GET "/" [] (-> landing-page
+                           mw/all-tags-middleware
                            mw/base-page-middleware))
 
            (GET "/generate-preview/:id" [] (fn [request]

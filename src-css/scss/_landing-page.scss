@@ -4,4 +4,21 @@
     height: 219px;
   }
 
+  .popular-tags-label {
+    margin-top: 50px;
+  }
+
+  .popular-tags-box {
+    overflow: hidden;
+    height: 160px;
+    margin-bottom: 50px;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    .popular-tag-button {
+      font-weight: 600;
+    }
+  }
+
 }

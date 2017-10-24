@@ -3,7 +3,7 @@
             [playground.views.common :as page]
             [hiccup.page :as hiccup-page]))
 
-(defn page [{:keys [page tags-page] :as data}]
+(defn page [{:keys [page tags-page all-tags] :as data}]
   (hiccup-page/html5
     {:lang "en"}
     (page/head)
@@ -50,21 +50,14 @@
 
 
 
-        [:p.popular-label "Popular " [:b "tags"]]
-        [:div#popular-tags.row.samples-container
-         (for [sample (:tags-samples data)]
-           (sample-view/sample-landing sample))]
-        [:div.prev-next-buttons
-         [:a#popular-tags-prev.prev-button.btn.btn-default {:style (str "display: " (if (zero? tags-page) "none;" "inline-block;"))
-                                                            :href  (str "/?tags=" tags-page)
-                                                            :title (str "Prev page, " tags-page)}
-          [:span.glyphicon.glyphicon-arrow-left {:aria-hidden true}]
-          " Prev"]
-         [:a#popular-tags-next.next-button.btn.btn-default {:style (str "display: " (if (:tags-end data) "none;" "inline-block;"))
-                                                            :href  (str "/?tags=" (-> tags-page inc inc))
-                                                            :title (str "Next page, " (-> tags-page inc inc))}
-          "Next "
-          [:span.glyphicon.glyphicon-arrow-right {:aria-hidden true}]]]
+        [:p.popular-label.popular-tags-label "Popular " [:b "tags"]]
+
+        [:div.popular-tags-box
+         (for [tag (take 60 all-tags)]
+           [:a.popular-tag-button
+            {:title (str "Tag - " (:name tag))
+             :href  (str "/tags/" (:name tag))}
+            (:name tag)])]
 
         ]]
 
@@ -73,6 +66,7 @@
      [:script {:src "/jquery/jquery.min.js"}]
      [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]
      [:script {:src "/js/site.js" :type "text/javascript"}]
-     [:script "playground.site.landing.startLanding(" (:end data) ", " page ");
-               playground.site.landing.startLandingTag(" (:tags-end data) ", " tags-page ");"]
+     [:script "playground.site.landing.startLanding(" (:end data) ", " page ");"
+      ;"playground.site.landing.startLandingTag(" (:tags-end data) ", " tags-page ");"
+      ]
      ]))

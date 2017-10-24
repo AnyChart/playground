@@ -13,6 +13,7 @@
 ;; Main consts and funcs
 ;;======================================================================================================================
 (def ^:const samples-per-page 12)
+(def ^:const samples-per-landing 9)
 (def ^:const samples-per-block 6)
 
 
@@ -53,8 +54,8 @@
 (def *popular-samples-page (atom 0))
 (def *popular-samples-is-end (atom false))
 
-(def *landing-tag-samples-page (atom 0))
-(def *landing-tag-samples-is-end (atom false))
+;(def *landing-tag-samples-page (atom 0))
+;(def *landing-tag-samples-is-end (atom false))
 
 (defn on-popular-samples-load [data]
   (dom/removeChildren (dom/getElement "popular-samples"))
@@ -62,7 +63,8 @@
         (apply str (map #(-> % sample-view/sample-landing h/html) (:samples data))))
   (reset! *popular-samples-is-end (:end data))
   (.pushState (.-history js/window) nil nil (str "?samples=" (inc @*popular-samples-page)
-                                                 "&tags=" (inc @*landing-tag-samples-page)))
+                                                 ;"&tags=" (inc @*landing-tag-samples-page)
+                                                 ))
   (set-buttons-visibility "popular-samples-prev"
                           "popular-samples-next"
                           @*popular-samples-page
@@ -72,13 +74,12 @@
 
 (defn load-popular-samples []
   (POST "/landing-samples.json"
-        {:params        {:offset (* samples-per-block @*popular-samples-page)}
+        {:params        {:offset (* samples-per-landing @*popular-samples-page)}
          :handler       on-popular-samples-load
          :error-handler #(utils/log "Error!" %)}))
 
 
 (defn ^:export startLanding [_end _page]
-  ;;(utils/log "Start landing: " _end _page)
   (reset! *popular-samples-is-end _end)
   (reset! *popular-samples-page _page)
   (init-buttons "popular-samples-prev"
@@ -95,40 +96,39 @@
 ;; Landing page: tag block
 ;;======================================================================================================================
 
-(defn on-landing-tag-samples-load [data]
-  (dom/removeChildren (dom/getElement "popular-tags"))
-  (set! (.-innerHTML (.getElementById js/document "popular-tags"))
-        (apply str (map #(-> % sample-view/sample-landing h/html) (:samples data))))
-  (reset! *landing-tag-samples-is-end (:end data))
-  (.pushState (.-history js/window) nil nil (str "?samples=" (inc @*popular-samples-page)
-                                                 "&tags=" (inc @*landing-tag-samples-page)))
-  (set-buttons-visibility "popular-tags-prev"
-                          "popular-tags-next"
-                          @*landing-tag-samples-page
-                          @*landing-tag-samples-is-end
-                          "tags"))
-
-
-(defn load-landing-tag-samples []
-  (POST "/landing-tag-samples.json"
-        {:params        {:offset (* samples-per-block @*landing-tag-samples-page)}
-         :handler       on-landing-tag-samples-load
-         :error-handler #(utils/log "Error!" %)}))
-
-
-(defn ^:export startLandingTag [_end _page]
-  ;(utils/log "Start landing: " _end _page)
-  (reset! *landing-tag-samples-is-end _end)
-  (reset! *landing-tag-samples-page _page)
-  (init-buttons "popular-tags-prev"
-                "popular-tags-next"
-                *landing-tag-samples-page
-                load-landing-tag-samples)
-  (set-buttons-visibility "popular-tags-prev"
-                          "popular-tags-next"
-                          @*landing-tag-samples-page
-                          @*landing-tag-samples-is-end
-                          "tags"))
+;(defn on-landing-tag-samples-load [data]
+;  (dom/removeChildren (dom/getElement "popular-tags"))
+;  (set! (.-innerHTML (.getElementById js/document "popular-tags"))
+;        (apply str (map #(-> % sample-view/sample-landing h/html) (:samples data))))
+;  (reset! *landing-tag-samples-is-end (:end data))
+;  (.pushState (.-history js/window) nil nil (str "?samples=" (inc @*popular-samples-page)
+;                                                 "&tags=" (inc @*landing-tag-samples-page)))
+;  (set-buttons-visibility "popular-tags-prev"
+;                          "popular-tags-next"
+;                          @*landing-tag-samples-page
+;                          @*landing-tag-samples-is-end
+;                          "tags"))
+;
+;
+;(defn load-landing-tag-samples []
+;  (POST "/landing-tag-samples.json"
+;        {:params        {:offset (* samples-per-block @*landing-tag-samples-page)}
+;         :handler       on-landing-tag-samples-load
+;         :error-handler #(utils/log "Error!" %)}))
+;
+;
+;(defn ^:export startLandingTag [_end _page]
+;  (reset! *landing-tag-samples-is-end _end)
+;  (reset! *landing-tag-samples-page _page)
+;  (init-buttons "popular-tags-prev"
+;                "popular-tags-next"
+;                *landing-tag-samples-page
+;                load-landing-tag-samples)
+;  (set-buttons-visibility "popular-tags-prev"
+;                          "popular-tags-next"
+;                          @*landing-tag-samples-page
+;                          @*landing-tag-samples-is-end
+;                          "tags"))
 
 
 ;;======================================================================================================================
