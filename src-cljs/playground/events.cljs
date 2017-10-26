@@ -56,6 +56,9 @@
                                         :height "450px"}}
               :tips          {:current []
                               :queue   []}
+              :left-meu      {:show false}
+              :view-menu     {:show false}
+              :create-menu   {:show false}
               :local-storage ls
               :data          (external-resources/compose-all-data (:datasets data))}
          ;:dispatch-n (list (when (= view :standalone) [:run]))
@@ -160,6 +163,14 @@
                  (fn [db _]
                    (assoc db :saved-sample (:sample db))))
 
+
+(rf/reg-event-db :view-menu/toggle (fn [db _] (update-in db [:view-menu :show] not)))
+(rf/reg-event-db :view-menu/close (fn [db _] (assoc-in db [:view-menu :show] false)))
+(rf/reg-event-db :view-menu/show (fn [db _] (assoc-in db [:view-menu :show] true)))
+
+(rf/reg-event-db :create-menu/toggle (fn [db _] (update-in db [:create-menu :show] not)))
+(rf/reg-event-db :create-menu/close (fn [db _] (assoc-in db [:create-menu :show] false)))
+(rf/reg-event-db :create-menu/show (fn [db _] (assoc-in db [:create-menu :show] true)))
 
 ;;======================================================================================================================
 ;; Effects

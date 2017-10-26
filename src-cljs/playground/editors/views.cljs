@@ -9,6 +9,7 @@
 
 (defn iframe-result []
   [:div.result
+   [:div.iframe-hider {:style {:display (if @(rf/subscribe [:editors/iframe-hider-show]) "block" "none")}}]
    [:iframe {:id                "result-iframe"
              :name              "result-iframe"
              :class             "iframe-result"

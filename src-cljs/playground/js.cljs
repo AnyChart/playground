@@ -11,7 +11,9 @@
     ;(utils/log "Hide!")
     (rf/dispatch [:settings/hide])
     (rf/dispatch [:embed/hide])
-    (rf/dispatch [:left-menu/close])))
+    (rf/dispatch [:left-menu/close])
+    (rf/dispatch [:view-menu/close])
+    (rf/dispatch [:create-menu/close])))
 
 (defn init []
   (.addEventListener js/document "click" click-handler))

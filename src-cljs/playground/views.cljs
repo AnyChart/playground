@@ -57,14 +57,16 @@
 
      [:li.dropdown
       [:button.btn.btn-link.dropdown-toggle {:href          "#"
-                                             :data-toggle   "dropdown"
+                                             ;:data-toggle   "dropdown"
                                              :role          "button"
                                              :aria-haspopup "true"
-                                             :aria-expanded "false"}
+                                             :aria-expanded "false"
+                                             :on-click      #(rf/dispatch [:view-menu/show])}
        [:div.icon.icon-view]
        [:span "View"]
        [:span.caret]]
       [:ul.dropdown-menu
+       {:style {:display (if @(rf/subscribe [:view-menu/show]) "block" "none")}}
        [:li [:button.btn.btn-link {:on-click #(rf/dispatch [:view/editor])}
              [:img.icon {:src "/icons/editor/editor.svg"}]
              [:span "Editor"]]]
@@ -90,12 +92,14 @@
     [:ul.nav.navbar-nav.navbar-right
 
      [:li.dropdown
-      [:button.btn.btn-link.dropdown-toggle {:data-toggle   "dropdown"
+      [:button.btn.btn-link.dropdown-toggle {;:data-toggle   "dropdown"
                                              :role          "button"
                                              :aria-haspopup "true"
-                                             :aria-expanded "false"} "Create"
+                                             :aria-expanded "false"
+                                             :on-click      #(rf/dispatch [:create-menu/show])} "Create"
        [:span.caret]]
       [:ul.dropdown-menu
+       {:style {:display (if @(rf/subscribe [:create-menu/show]) "block" "none")}}
        (for [template @(rf/subscribe [:templates])]
          ^{:key (:name template)}
          [:li

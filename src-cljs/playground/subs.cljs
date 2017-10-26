@@ -86,3 +86,5 @@
 (rf/reg-sub :can-signup (fn [db _] (auth-base/can (-> db :user) :signup)))
 
 
+(rf/reg-sub :view-menu/show (fn [db _] (-> db :view-menu :show)))
+(rf/reg-sub :create-menu/show (fn [db _] (-> db :create-menu :show)))

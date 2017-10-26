@@ -47,3 +47,11 @@
 
 (rf/reg-sub :editors.code-settings/show
             (fn [db _] (-> db :editors :code-settings :show)))
+
+(rf/reg-sub :editors/iframe-hider-show
+            (fn [db _]
+              (or (-> db :settings :show)
+                  (-> db :embed :show)
+                  (-> db :left-menu :show)
+                  (-> db :view-menu :show)
+                  (-> db :create-menu :show))))
