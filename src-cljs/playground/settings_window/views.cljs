@@ -197,8 +197,12 @@
       [:div.line
        [:select.form-control {:id        "settings-select-map"
                               :on-change #(rf/dispatch [:settings.external-resources/maps-select (-> % .-target .-value)])}
-        (for [res external-resources/maps]
-          ^{:key res} [:option {:value (:url res)} (:name res)])]
+        ;(for [res external-resources/maps]
+        ;  ^{:key res} [:option {:value (:url res)} (:name res)])
+        (for [res external-resources/maps-html]
+          [:optgroup {:label (:name res)}
+           (for [item (:items res)]
+             ^{:key item} [:option {:value (:url item)} (:name item)])])]
        (if @(rf/subscribe [:settings.external-resources/added-js? :map])
          [:button.ac-btn.remove-btn {:type     "button"
                                      :on-click #(rf/dispatch [:settings.external-resources/remove-js-by-type :map])} "Remove"]

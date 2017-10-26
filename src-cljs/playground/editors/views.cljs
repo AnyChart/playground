@@ -69,9 +69,15 @@
         [:optgroup {:label "Locales"}
          (for [res external-resources/locales]
            ^{:key (:url res)} [:option {:value (:url res)} (:name res)])]
-        [:optgroup {:label "Maps"}
-         (for [res external-resources/maps]
-           ^{:key (:url res)} [:option {:value (:url res)} (:name res)])]]
+        ;[:optgroup {:label "Maps"}
+        ; (for [res external-resources/maps]
+        ;   ^{:key (:url res)} [:option {:value (:url res)} (:name res)])]
+
+        (for [res external-resources/maps-html]
+          [:optgroup {:label (:name res)}
+           (for [item (:items res)]
+             ^{:key item} [:option {:value (:url item)} (:name item)])])
+        ]
        ]
       ])
    [:div#code-editor {:class "editor-box"}]])

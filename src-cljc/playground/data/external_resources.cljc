@@ -1,5 +1,6 @@
 (ns playground.data.external-resources
-  (:require [clojure.string :as string])
+  (:require [clojure.string :as string]
+            [camel-snake-kebab.core :as kebab])
   #?(:clj
      (:require [playground.data.external-resources-parser :as external-resources-parser])
      :cljs
@@ -11,6 +12,9 @@
 
 (def data (external-resources-parser/parse-data-compile-time))
 
+;;======================================================================================================================
+;; Themes
+;;======================================================================================================================
 (defn compose-themes []
   (let [themes (:themes data)
         themes (map (fn [[url-name data]]
@@ -28,6 +32,9 @@
 
 (def ^:const themes (compose-themes))
 
+;;======================================================================================================================
+;; Modules
+;;======================================================================================================================
 (defn compose-modules []
   (let [modules (remove (fn [[url-name data]] (:internal data)) (:modules data))
         modules (map (fn [[url-name data]]
@@ -91,24 +98,64 @@
 ;   {:url "https://cdn.anychart.com/themes/latest/wines.min.js", :name "Wines" :js "wines"}])
 
 
-(def ^:const locales
-  [{:url "https://cdn.anychart.com/releases/latest-v8/locales/en-us.js", :name "English" :js "en-us"}
-   {:url "https://cdn.anychart.com/releases/latest-v8/locales/de-de.js", :name "German - Deutsch" :js "de-de"}
-   {:url "https://cdn.anychart.com/releases/latest-v8/locales/ru-ru.js", :name "Russian - Русский" :js "ru-ru"}
-   {:url "https://cdn.anychart.com/releases/latest-v8/locales/es-es.js", :name "Spanish - Español" :js "es-es"}
-   {:url "https://cdn.anychart.com/releases/latest-v8/locales/he-il.js", :name "Israel - עברית" :js "he-il"}
-   {:url "https://cdn.anychart.com/releases/latest-v8/locales/zh-cn.js", :name "Chinese - 中文" :js "zh-cn"}
-   {:url "https://cdn.anychart.com/releases/latest-v8/locales/hi-in.js", :name "India (Hindi) - हिंदी" :js "hi-in"}
-   {:url "https://cdn.anychart.com/releases/latest-v8/locales/zh-hk.js", :name "Chinese (Hong Kong) - 中文" :js "zh-hk"}])
+;(def ^:const locales
+;  [{:url "https://cdn.anychart.com/releases/latest-v8/locales/en-us.js", :name "English" :js "en-us"}
+;   {:url "https://cdn.anychart.com/releases/latest-v8/locales/de-de.js", :name "German - Deutsch" :js "de-de"}
+;   {:url "https://cdn.anychart.com/releases/latest-v8/locales/ru-ru.js", :name "Russian - Русский" :js "ru-ru"}
+;   {:url "https://cdn.anychart.com/releases/latest-v8/locales/es-es.js", :name "Spanish - Español" :js "es-es"}
+;   {:url "https://cdn.anychart.com/releases/latest-v8/locales/he-il.js", :name "Israel - עברית" :js "he-il"}
+;   {:url "https://cdn.anychart.com/releases/latest-v8/locales/zh-cn.js", :name "Chinese - 中文" :js "zh-cn"}
+;   {:url "https://cdn.anychart.com/releases/latest-v8/locales/hi-in.js", :name "India (Hindi) - हिंदी" :js "hi-in"}
+;   {:url "https://cdn.anychart.com/releases/latest-v8/locales/zh-hk.js", :name "Chinese (Hong Kong) - 中文" :js "zh-hk"}])
+
+;;======================================================================================================================
+;; Locales
+;;======================================================================================================================
+(defn compose-locales [data]
+  (let [locales (:locales data)
+        locales (map (fn [[js-name item]]
+                       (merge
+                         item
+                         {:name (str (:eng-name item) " - " (:native-name item))
+                          :js   (name js-name)
+                          :url  (str "https://cdn.anychart.com/releases/latest-v8/locales/" (name js-name) ".js")}))
+                     locales)]
+    (sort-by :name locales)))
+
+(def ^:const locales (compose-locales data))
+
+;;======================================================================================================================
+;; Maps
+;;======================================================================================================================
+;(def ^:const maps
+;  [{:url "https://cdn.anychart.com/releases/latest-v8/geodata/custom/world/world.js", :name "World" :js "world"}
+;   {:url "https://cdn.anychart.com/releases/latest-v8/geodata/custom/world_source/world_source.js", :name "World Origin" :js "worldOrigin"}
+;   {:url "https://cdn.anychart.com/releases/latest-v8/geodata/countries/australia/australia.topo.js", :name "Australia" :js "australia"}
+;   {:url "https://cdn.anychart.com/releases/latest-v8/geodata/countries/united_states_of_america/united_states_of_america.topo.js", :name "USA" :js "usa"}
+;   {:url "https://cdn.anychart.com/releases/latest-v8/geodata/countries/france/france.topo.js", :name "France" :js "france"}])
+
+(defn compose-maps [data]
+  (->> (:geodata data)
+       (map
+         (fn [[type-name type-items]]
+           {:type  type-name
+            :name  (string/replace (kebab/->HTTP-Header-Case (name type-name)) #"-" " ")
+            :items (->> type-items
+                        (map (fn [[js item]]
+                               {:js   (name js)
+                                :name (:name item)
+                                :url  (str "https://cdn.anychart.com/releases/latest-v8/geodata/"
+                                           (name type-name) "/" (name js) "/" (name js) ".js")}))
+                        (sort-by :name))}))
+       (sort-by :name)))
+
+(def ^:const maps-html (compose-maps data))
+(def ^:const maps (mapcat :items maps-html))
 
 
-(def ^:const maps
-  [{:url "https://cdn.anychart.com/releases/latest-v8/geodata/custom/world/world.js", :name "World" :js "world"}
-   {:url "https://cdn.anychart.com/releases/latest-v8/geodata/custom/world_source/world_source.js", :name "World Origin" :js "worldOrigin"}
-   {:url "https://cdn.anychart.com/releases/latest-v8/geodata/countries/australia/australia.topo.js", :name "Australia" :js "australia"}
-   {:url "https://cdn.anychart.com/releases/latest-v8/geodata/countries/united_states_of_america/united_states_of_america.topo.js", :name "USA" :js "usa"}
-   {:url "https://cdn.anychart.com/releases/latest-v8/geodata/countries/france/france.topo.js", :name "France" :js "france"}])
-
+;;======================================================================================================================
+;; CSS
+;;======================================================================================================================
 (def ^:const css
   [{:url "https://cdn.anychart.com/releases/latest-v8/css/anychart-ui.min.css", :name "AnyChart UI"}
    {:url "https://cdn.anychart.com/releases/latest-v8/fonts/css/anychart-font.min.css", :name "AnyChart Font"}])
