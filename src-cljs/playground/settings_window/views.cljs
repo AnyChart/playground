@@ -21,6 +21,7 @@
          :role     "button"
          :on-click #(rf/dispatch [:settings/css-tab])} "CSS"]]
 
+   ;; TODO: wait datasests texts
    ;[:li {:class (when @(rf/subscribe [:settings/datasets-tab?]) "active")}
    ; [:a {:href     "javascript:;"
    ;      :role     "button"

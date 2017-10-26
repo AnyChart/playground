@@ -30,10 +30,11 @@
 
 (defn code-editor []
   [:div.editor-container
-   [:a.editor-label.editor-label-gear {:id       "code-editor-settings-button"
-                                       :on-click #(rf/dispatch [:editors.code-settings/show])}
-    [:span "javascript"]
-    [:div.icon.icon-settings]]
+   ; TODO: wait js button design
+   ;[:a.editor-label.editor-label-gear {:id       "code-editor-settings-button"
+   ;                                    :on-click #(rf/dispatch [:editors.code-settings/show])}
+   ; [:span "javascript"]
+   ; [:div.icon.icon-settings]]
    [:a.editor-label.editor-label-copy {:id "code-editor-copy"}
     [:span "copy"]
     [:div.icon.icon-copy]]
@@ -45,12 +46,8 @@
          ^{:key (:name res)} [:div.settings-resource
                               [:a.title {:href   (:url res)
                                          :target "_blank"} (:name res)]
-                              ;[:button.btn.btn-primary.btn-xs {:type     "button"
-                              ;                                 :on-click #(rf/dispatch [:settings/remove-script (:url res)])}
-                              ; [:span.glyphicon.glyphicon-remove]]
                               [:span.glyphicon.glyphicon-remove.code-context-menu-close-icon
-                               {:on-click #(rf/dispatch [:settings/remove-script (:url res)])}]
-                              ])
+                               {:on-click #(rf/dispatch [:settings/remove-script (:url res)])}]])
        [:h4 "External recources"]
        [:select {:on-change #(rf/dispatch [:settings/add-script (-> % .-target .-value)])}
         [:optgroup {:label "Chart Types Binaries"}

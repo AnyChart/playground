@@ -282,7 +282,7 @@
    [:div.container-fluid.content-container
     [:div.row
 
-     ;; for centering footer without dataset block
+     ;; TODO: wait datasets text (for centering footer)
      [:div.col-sm-2.col-xs-4]
      [:div.col-sm-2.col-xs-4
       [:div [:a.caption {:href "https://www.anychart.com" :title "AnyChart"} [:b "Vendor"]]]
