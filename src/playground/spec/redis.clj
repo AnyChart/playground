@@ -1,6 +1,5 @@
 (ns playground.spec.redis
-  (:require [clojure.spec :as s]
-            [clojure.spec.test :as stest]))
+  (:require [clojure.spec.alpha :as s]))
 
 (s/def ::host string?)
 (s/def ::port int?)

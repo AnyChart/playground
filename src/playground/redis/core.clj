@@ -3,7 +3,7 @@
             [taoensso.carmine :as car]
             [taoensso.carmine.message-queue :as car-mq]
             [taoensso.timbre :as timbre]
-            [clojure.spec :as s]
+            [clojure.spec.alpha :as s]
             [playground.spec.redis :as redis-spec]))
 
 (defrecord Redis [config conn]

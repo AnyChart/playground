@@ -5,7 +5,6 @@
             [clojure.java.io :refer [file]]
             [toml.core :as toml]
             [cheshire.core :as json]
-            [playground-samples-parser.fs :as samples-fs]
             [playground.generator.parser.group-parser :as group-parser]
             [playground.generator.data-sets :as data-sets]
             [playground.generator.utils :refer [copy-dir]]

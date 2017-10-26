@@ -1,6 +1,5 @@
 (ns playground.spec.app-config
-  (:require [clojure.spec :as s]
-            [clojure.spec.test :as stest]))
+  (:require [clojure.spec.alpha :as s]))
 
 ;;=================== App .toml config file spec ==================
 (s/def ::mode #{"full" "web" "generator" "preview-generator"})

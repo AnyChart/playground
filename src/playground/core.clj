@@ -2,7 +2,7 @@
   (:require [toml.core :as toml]
             [com.stuartsierra.component :as component]
             [taoensso.timbre :as timbre]
-            [clojure.spec :as s]
+            [clojure.spec.alpha :as s]
             [playground.spec.app-config :as core-spec]
             [playground.db.core :as db]
             [playground.web.core :as web]
