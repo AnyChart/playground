@@ -238,15 +238,15 @@
       [:img {:src (str "icons/" (utils/name->url (:name template)) ".svg")
              :alt (str "Create " (:name template) " button icon")}]
       [:div.text
-       [:div.create "create"]
-       [:div.name [:b (:name template)]]]])
+       [:div.name [:b (:name template)]]
+       [:div.template "template"]]])
    [:a.create-button {:href  "/new"
                       :title (str "Create Other Types")}
     [:img {:src (str "icons/from-scratch.svg")
            :alt (str "Create Other Types button icon")}]
     [:div.text
-     [:div.create "create"]
-     [:div.name [:b "Other Types"]]]]])
+     [:div.name [:b "Other Types"]]
+     [:div.template "template"]]]])
 
 
 (defn bottom-footer []

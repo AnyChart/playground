@@ -11,8 +11,8 @@ html {
 
     /* override bootstrap caret position to fit our default font-family and font-size */
     .caret {
-        margin-top: -2px;
-        margin-left: 4px;
+      margin-top: -2px;
+      margin-left: 4px;
     }
 
     .wrapper {
@@ -31,7 +31,7 @@ html {
         color: white;
         height: 58px;
         background-color: $nav-bg-color;
-        .navbar-header{
+        .navbar-header {
           padding: 5px 25px 0 0;
           .navbar-brand {
             color: white;
@@ -40,21 +40,21 @@ html {
             img {
               margin-right: 22px;
             }
-            &:hover{
+            &:hover {
               color: white;
             }
           }
         }
         ul.nav.navbar-nav {
           margin-top: 11px;
-          ul{
+          ul {
             padding: 15px 0;
             a {
               font-size: 13px;
               font-weight: 600;
               color: #19a1ce;
               line-height: 30px;
-              &:hover{
+              &:hover {
                 background-color: #c2eaf7;
               }
             }
@@ -62,14 +62,14 @@ html {
           & > li > a {
             color: white;
             padding: 7px 12px;
-            background-color: rgba(0,0,0,0);
-            &:hover, &:active, &:focus{
+            background-color: rgba(0, 0, 0, 0);
+            &:hover, &:active, &:focus {
               color: #58cdf5;
             }
           }
         }
-        ul.nav.navbar-nav.navbar-right{
-          & > li > a{
+        ul.nav.navbar-nav.navbar-right {
+          & > li > a {
             font-size: 14px;
           }
           a {
@@ -90,25 +90,25 @@ html {
         }
       }
 
-      .intro{
+      .intro {
         background-color: $nav-bg-color;
         color: $intro-color;
         background-image: url('/shapes.png');
         background-position: center;
-        .text{
+        .text {
           padding: 0 40px;
-          .description{
+          .description {
             font-size: 18px;
           }
         }
-        h1{
+        h1 {
           font-size: 50px;
         }
       }
 
-      .create-box{
+      .create-box {
         position: relative;
-        &:before{
+        &:before {
           top: 0;
           left: 0;
           width: 50%;
@@ -118,7 +118,7 @@ html {
           background-color: #264571;
           position: absolute;
         }
-        &:after{
+        &:after {
           top: 0;
           right: 0;
           width: 50%;
@@ -129,55 +129,50 @@ html {
           position: absolute;
           z-index: 1;
         }
-        .container-fluid{
+        .container-fluid {
           position: relative;
           z-index: 2;
         }
-        .create-buttons{
+        .create-buttons {
           z-index: 2;
           display: flex;
-          a{
+          a {
             padding: 25px;
           }
-          .create-button{
+          .create-button {
             flex-grow: 1;
             height: 96px;
             display: flex;
             position: relative;
             background-color: #264571;
-            //width: 20%;
             cursor: pointer;
             font-size: 15px;
-            img{
+            img {
               margin: 0 10px 0 0;
-              //position: absolute;
-              //display: inline-block;
             }
-            div.text{
-              //display: inline-block;
+            div.text {
               text-transform: uppercase;
               color: white;
-              //padding: 0 0 0 40px;
-              .create{
+              .template {
 
               }
             }
-            &:nth-child(1){
+            &:nth-child(1) {
               background-color: #264571;
             }
-            &:nth-child(2){
+            &:nth-child(2) {
               background-color: #203f6c;
             }
-            &:nth-child(3){
+            &:nth-child(3) {
               background-color: #193a66;
             }
-            &:nth-child(4){
+            &:nth-child(4) {
               background-color: #133461;
             }
-            &:nth-child(5){
+            &:nth-child(5) {
               background-color: #0d2e5c;
             }
-            &:hover{
+            &:hover {
               background-color: #1978a4;
               text-decoration: none;
             }
@@ -206,7 +201,7 @@ html {
         b {
           line-height: 20px;
         }
-        a{
+        a {
           color: $text-color;
           line-height: 20px;
         }
@@ -214,9 +209,9 @@ html {
           margin-top: 23px;
         }
         .caption {
-            color: #80a9bd;
+          color: #80a9bd;
         }
-        .dataset{
+        .dataset {
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
@@ -227,8 +222,7 @@ html {
   }
 }
 
-
-.footer-bottom-box{
+.footer-bottom-box {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -248,7 +242,7 @@ html {
       &:hover, &:focus {
         text-decoration: none;
         color: #fff;
-        .soc-network-icon{
+        .soc-network-icon {
           border-color: #85caff;
           color: #85caff;
         }
@@ -265,14 +259,14 @@ html {
         border-radius: 50%;
         color: #95bfd3;
         background-color: #d5e3e8;
-        &.tw{
+        &.tw {
           font-size: 17px;
           line-height: 26px;
         }
         &.in {
           font-size: 13px;
         }
-        &:hover, &:focus{
+        &:hover, &:focus {
           color: white;
           background-color: #19a1ce;
         }
