@@ -21,10 +21,11 @@
          :role     "button"
          :on-click #(rf/dispatch [:settings/css-tab])} "CSS"]]
 
-   [:li {:class (when @(rf/subscribe [:settings/datasets-tab?]) "active")}
-    [:a {:href     "javascript:;"
-         :role     "button"
-         :on-click #(rf/dispatch [:settings/datasets-tab])} "Data Sets"]]])
+   ;[:li {:class (when @(rf/subscribe [:settings/datasets-tab?]) "active")}
+   ; [:a {:href     "javascript:;"
+   ;      :role     "button"
+   ;      :on-click #(rf/dispatch [:settings/datasets-tab])} "Data Sets"]]
+   ])
 
 
 (defn general-tab []

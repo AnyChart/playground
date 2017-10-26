@@ -181,7 +181,7 @@
 
         [:li [:a {:href "/chart-types" :title "Playground Chart Types"} "Chart Types"]]
         [:li [:a {:href "/tags" :title "Playground Tags"} "Tags"]]
-        [:li [:a {:href "/datasets" :title "Playground Data Sets"} "Data Sets"]]
+        ;[:li [:a {:href "/datasets" :title "Playground Data Sets"} "Data Sets"]]
 
         [:li.dropdown
          [:a.dropdown-toggle {:href          "#"
@@ -282,6 +282,8 @@
    [:div.container-fluid.content-container
     [:div.row
 
+     ;; for centering footer without dataset block
+     [:div.col-sm-2.col-xs-4]
      [:div.col-sm-2.col-xs-4
       [:div [:a.caption {:href "https://www.anychart.com" :title "AnyChart"} [:b "Vendor"]]]
       [:div [:a {:href "https://www.anychart.com" :title "AnyChart"} "AnyChart"]]
@@ -319,10 +321,13 @@
                    :title (str "Tags - " (:name tag))}
                (:name tag)]])]
 
-     [:div.col-sm-4.col-xs-8
-      [:div [:a.caption {:href "/datasets" :title "Playground Data Sets"} [:b "Data Sets"]]]
-      (for [data-set data-sets]
-        [:div.dataset [:a {:href  (str "/datasets/" (:data-source-name data-set) "/" (:name data-set))
-                           :title (str "Data Sets - " (:title data-set))}
-                       (:title data-set)]])]]
+     ;[:div.col-sm-4.col-xs-8
+     ; [:div [:a.caption {:href "/datasets" :title "Playground Data Sets"} [:b "Data Sets"]]]
+     ; (for [data-set data-sets]
+     ;   [:div.dataset [:a {:href  (str "/datasets/" (:data-source-name data-set) "/" (:name data-set))
+     ;                      :title (str "Data Sets - " (:title data-set))}
+     ;                  (:title data-set)]])]
+
+
+     ]
     (bottom-footer)]])
