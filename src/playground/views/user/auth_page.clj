@@ -1,11 +1,11 @@
-(ns playground.views.auth-page
+(ns playground.views.user.auth-page
   (:require [playground.views.common :as page]
             [hiccup.page :as hiccup-page]))
 
 (defn page [data]
   (hiccup-page/html5
     {:lang "en"}
-    (page/head)
+    (page/head {:title "Authorizaton | AnyChart Playground"})
     [:body
      [:div.wrapper
 

@@ -6,7 +6,7 @@
 (defn page [{:keys [repo version page] :as data}]
   (hiccup-page/html5
     {:lang "en"}
-    (page/head)
+    (page/head {:title (str (:name version) " | " (:title (:repo data)) " | AnyChart Playground")})
     [:body
      [:div.wrapper
 

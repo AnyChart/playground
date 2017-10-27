@@ -6,7 +6,7 @@
 (defn page [data]
   (hiccup-page/html5
     {:lang "en"}
-    (page/head)
+    (page/head {:title "Projects | AnyChart Playground"})
     [:body
      [:div.wrapper
 

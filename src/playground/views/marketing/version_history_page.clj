@@ -5,7 +5,8 @@
 (defn page [{:keys [page] :as data}]
   (hiccup-page/html5
     {:lang "en"}
-    (page/head)
+    (page/head {:title       "Version History | AnyChart Playground"
+                :description "The place where all your data visualization dreams come true"})
     [:body
      [:div.wrapper.version-history-page.roadmap-page
 

@@ -1,11 +1,12 @@
-(ns playground.views.marketing.chart-type.chart-types-category-page
+(ns playground.views.chart-type.chart-types-category-page
   (:require [hiccup.page :as hiccup-page]
             [playground.views.common :as page]))
 
 (defn page [data category]
   (hiccup-page/html5
     {:lang "en"}
-    (page/head)
+    (page/head {:title       (str (:name category) " | Chart Type Categories | AnyChart Playground")
+                :description (page/desc (:description category))})
     [:body
      [:div.wrapper.chart-types-category-page
 

@@ -1,4 +1,4 @@
-(ns playground.views.marketing.chart-type.chart-type-page
+(ns playground.views.chart-type.chart-type-page
   (:require [hiccup.page :as hiccup-page]
             [playground.views.common :as page]
             [cheshire.core :as json]
@@ -11,7 +11,8 @@
 (defn page [{:keys [page tag] :as data} chart-type relations]
   (hiccup-page/html5
     {:lang "en"}
-    (page/head)
+    (page/head {:title       (str (:name chart-type) " | Chart Types | AnyChart Playground")
+                :description (page/desc (:description chart-type))})
     [:body
      [:div.wrapper.chart-type-page
 

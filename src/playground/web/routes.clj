@@ -22,9 +22,9 @@
             [playground.data.tags :as tags-data]
     ;; pages
             [playground.views.landing-page :as landing-view]
-            [playground.views.register-page :as register-view]
-            [playground.views.auth-page :as auth-view]
-            [playground.views.profile-page :as profile-view]
+            [playground.views.user.register-page :as register-view]
+            [playground.views.user.auth-page :as auth-view]
+            [playground.views.user.profile-page :as profile-view]
 
             [playground.views.repo.repo-page :as repo-view]
             [playground.views.repo.repos-page :as repos-view]
@@ -34,13 +34,13 @@
             [playground.views.tag.tag-page :as tag-view]
             [playground.views.tag.tags-stat-page :as tags-stat-view]
 
-            [playground.views.marketing.chart-type.chart-types-page :as chart-types-view]
-            [playground.views.marketing.chart-type.chart-type-page :as chart-type-view]
-            [playground.views.marketing.chart-type.chart-types-categories-page :as chart-type-categories-view]
-            [playground.views.marketing.chart-type.chart-types-category-page :as chart-type-category-view]
+            [playground.views.chart-type.chart-types-page :as chart-types-view]
+            [playground.views.chart-type.chart-type-page :as chart-type-view]
+            [playground.views.chart-type.chart-types-categories-page :as chart-type-categories-view]
+            [playground.views.chart-type.chart-types-category-page :as chart-type-category-view]
 
-            [playground.views.marketing.data-set.data-sets-page :as data-sets-view]
-            [playground.views.marketing.data-set.data-set-page :as data-set-view]
+            [playground.views.data-set.data-sets-page :as data-sets-view]
+            [playground.views.data-set.data-set-page :as data-set-view]
 
             [playground.views.standalone-sample-page :as standalone-sample-view]
             [playground.views.marketing.about-page :as about-view]

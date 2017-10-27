@@ -5,6 +5,19 @@
             [clojure.java.io :as io]
             [clojure.string :as string]))
 
+(defn desc [text]
+  (let [text (-> text
+                 (string/replace #"<br/>" " ")
+                 (string/replace #"<[^>]*>" ""))
+        words (string/split (subs text 0 (min (count text) 160)) #" ")
+        result (reduce (fn [res part]
+                         (if (empty? res)
+                           part
+                           (if (< (count (str res " " part)) 155)
+                             (str res " " part)
+                             res))) "" words)]
+    (string/trim result)))
+
 
 (def main-style (slurp (io/resource "public/css/main.css")))
 (def bootstrap-style
@@ -14,12 +27,19 @@
     "/bootstrap-3.3.7-dist/fonts"))
 
 
-(defn head []
+(defn head [data]
   [:head
    [:meta {:charset "UTF-8"}]
    [:meta {:content "IE=edge" :http-equiv "X-UA-Compatible"}]
    [:meta {:content "width=device-width, initial-scale=1" :name "viewport"}]
-   [:title "AnyChart Playground"]
+
+   [:title (or (:title data) "AnyChart Playground")]
+   [:meta {:property "og:title" :content (or (:title data) "AnyChart Playground")}]
+   (when (seq (:description data)) [:meta {:property "og:description" :content (:description data)}])
+   (when (seq (:description data)) [:meta {:name "description" :content (:description data)}])
+   [:meta {:name "twitter:title" :content (or (:title data) "AnyChart Playground")}]
+   [:meta {:name "author" :content (or (:author data) "AnyChart")}]
+
    "<!--[if lt IE 9]><script src=\"https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js\"></script><script src=\"https://oss.maxcdn.com/respond/1.4.2/respond.min.js\"></script><![endif]-->"
 
    [:link {:href  "/apple-touch-icon.png"
@@ -327,7 +347,6 @@
      ;   [:div.dataset [:a {:href  (str "/datasets/" (:data-source-name data-set) "/" (:name data-set))
      ;                      :title (str "Data Sets - " (:title data-set))}
      ;                  (:title data-set)]])]
-
 
      ]
     (bottom-footer)]])

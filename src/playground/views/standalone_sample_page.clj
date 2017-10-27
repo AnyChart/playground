@@ -5,10 +5,11 @@
             [hiccup.page :as hiccup-page]
             [clj-time.core :as t]))
 
+;; Deprecated: shown by editor
 (defn page [{:keys [url sample] :as data}]
   (hiccup-page/html5
     {:lang "en"}
-    (page/head)
+    (page/head {:title "AnyChart Playground"})
     [:body
      [:div.wrapper.standalone-sample-page
 

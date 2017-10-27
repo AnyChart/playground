@@ -1,4 +1,4 @@
-(ns playground.views.marketing.chart-type.chart-types-categories-page
+(ns playground.views.chart-type.chart-types-categories-page
   (:require [cheshire.core :as json]
             [hiccup.page :as hiccup-page]
             [playground.views.common :as page]))
@@ -7,7 +7,8 @@
 (defn page [data categories]
   (hiccup-page/html5
     {:lang "en"}
-    (page/head)
+    (page/head {:title       "Chart Type Categories | AnyChart Playground"
+                :description "The place where all your data visualization dreams come true"})
     [:body
      [:div.wrapper.chart-types-categories-page
 

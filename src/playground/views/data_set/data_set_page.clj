@@ -1,4 +1,4 @@
-(ns playground.views.marketing.data-set.data-set-page
+(ns playground.views.data-set.data-set-page
   (:require [hiccup.page :as hiccup-page]
             [playground.views.common :as page]
             [cheshire.core :as json]
@@ -22,7 +22,8 @@
 (defn page [{:keys [page data-set] :as data}]
   (hiccup-page/html5
     {:lang "en"}
-    (page/head)
+    (page/head {:title       (str (:title data-set) " | Data Sets | AnyChart Playground")
+                :description (page/desc (:description data-set))})
     [:body
      [:div.wrapper.dataset-page
 

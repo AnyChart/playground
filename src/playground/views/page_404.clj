@@ -6,7 +6,8 @@
 (defn page [data]
   (hiccup-page/html5
     {:lang "en"}
-    (page/head)
+    (page/head {:title       "404 error | AnyChart Playground"
+                :description "Page not found"})
     [:body
      [:div.wrapper.page-404
 
@@ -26,7 +27,6 @@
 
       [:div.content
        [:div.container-fluid.content-container
-
 
         ]]
 

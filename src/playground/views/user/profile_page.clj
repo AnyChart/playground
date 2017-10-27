@@ -1,11 +1,11 @@
-(ns playground.views.profile-page
+(ns playground.views.user.profile-page
   (:require [playground.views.common :as page]
             [hiccup.page :as hiccup-page]))
 
 (defn page [{:keys [user] :as data}]
   (hiccup-page/html5
     {:lang "en"}
-    (page/head)
+    (page/head {:title "Profile | AnyChart Playground"})
     [:body
      [:div.wrapper
 

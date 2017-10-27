@@ -33,7 +33,7 @@
 (defn page [data]
   (hiccup-page/html5
     {:lang "en"}
-    (page/head)
+    (page/head {:title "Tags | AnyChart Playground"})
     [:body
      [:div.wrapper.tags-page
 

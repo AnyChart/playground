@@ -1,4 +1,4 @@
-(ns playground.views.marketing.chart-type.chart-types-page
+(ns playground.views.chart-type.chart-types-page
   (:require [hiccup.page :as hiccup-page]
             [playground.views.common :as page]))
 
@@ -11,7 +11,8 @@
 (defn page [data chart-types end page]
   (hiccup-page/html5
     {:lang "en"}
-    (page/head)
+    (page/head {:title       "Chart Types | AnyChart Playground"
+                :description "The place where all your data visualization dreams come true"})
     [:body
      [:div.wrapper.chart-types-page
 

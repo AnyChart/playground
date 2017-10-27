@@ -1,4 +1,4 @@
-(ns playground.views.marketing.data-set.data-sets-page
+(ns playground.views.data-set.data-sets-page
   (:require [hiccup.page :as hiccup-page]
             [playground.views.common :as page]))
 
@@ -11,7 +11,8 @@
 (defn page [data end page]
   (hiccup-page/html5
     {:lang "en"}
-    (page/head)
+    (page/head {:title       "Data Sets | AnyChart Playground"
+                :description "The place where all your data visualization dreams come true"})
     [:body
      [:div.wrapper.datasets-page
 

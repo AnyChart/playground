@@ -1,11 +1,11 @@
-(ns playground.views.register-page
+(ns playground.views.user.register-page
   (:require [playground.views.common :as page]
             [hiccup.page :as hiccup-page]))
 
 (defn page [data]
   (hiccup-page/html5
     {:lang "en"}
-    (page/head)
+    (page/head {:title "Registration | AnyChart Playground"})
     [:body
      [:div.wrapper
 

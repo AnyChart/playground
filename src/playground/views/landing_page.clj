@@ -6,7 +6,8 @@
 (defn page [{:keys [page tags-page all-tags] :as data}]
   (hiccup-page/html5
     {:lang "en"}
-    (page/head)
+    (page/head {:title       "AnyChart Playground"
+                :description "The place where all your data visualization dreams come true"})
     [:body
      [:div.wrapper.landing-page
 
