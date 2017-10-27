@@ -7,7 +7,7 @@
     {:lang "en"}
     (page/head {:title       "Version History | AnyChart Playground"
                 :description "The place where all your data visualization dreams come true"})
-    [:body
+    [:body page/body-tag-manager
      [:div.wrapper.version-history-page.roadmap-page
 
       (page/nav (:templates data) (:user data))

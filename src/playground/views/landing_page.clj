@@ -9,6 +9,7 @@
     (page/head {:title       "AnyChart Playground"
                 :description "The place where all your data visualization dreams come true"})
     [:body
+     page/body-tag-manager
      [:div.wrapper.landing-page
 
       (page/nav (:templates data) (:user data))

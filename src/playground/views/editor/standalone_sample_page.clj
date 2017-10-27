@@ -10,7 +10,7 @@
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title "AnyChart Playground"})
-    [:body
+    [:body page/body-tag-manager
      [:div.wrapper.standalone-sample-page
 
       (page/nav (:templates data) (:user data) sample)

@@ -8,7 +8,7 @@
     {:lang "en"}
     (page/head {:title       (str tag " | Tags | AnyChart Playground")
                 :description (page/desc (:description tag-data))})
-    [:body
+    [:body page/body-tag-manager
      [:div.wrapper.tag-page
 
       (page/nav (:templates data) (:user data))

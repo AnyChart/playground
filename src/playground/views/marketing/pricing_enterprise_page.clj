@@ -7,7 +7,7 @@
     {:lang "en"}
     (page/head {:title       "Pricing Enterprise | AnyChart Playground"
                 :description "The place where all your data visualization dreams come true"})
-    [:body
+    [:body page/body-tag-manager
      [:div.wrapper
 
       (page/nav (:templates data) (:user data))

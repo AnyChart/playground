@@ -7,7 +7,7 @@
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title (str (:name version) " | " (:title (:repo data)) " | AnyChart Playground")})
-    [:body
+    [:body page/body-tag-manager
      [:div.wrapper
 
       (page/nav (:templates data) (:user data))

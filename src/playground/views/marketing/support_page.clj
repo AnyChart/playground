@@ -7,7 +7,7 @@
     {:lang "en"}
     (page/head {:title       "Support | AnyChart Playground"
                 :description "The place where all your data visualization dreams come true"})
-    [:body
+    [:body page/body-tag-manager
      [:div.wrapper.support-page
 
       (page/nav (:templates data) (:user data))

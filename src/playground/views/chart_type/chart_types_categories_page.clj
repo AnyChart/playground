@@ -9,7 +9,7 @@
     {:lang "en"}
     (page/head {:title       "Chart Type Categories | AnyChart Playground"
                 :description "The place where all your data visualization dreams come true"})
-    [:body
+    [:body page/body-tag-manager
      [:div.wrapper.chart-types-categories-page
 
       (page/nav (:templates data) (:user data))

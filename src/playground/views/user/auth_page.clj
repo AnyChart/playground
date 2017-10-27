@@ -6,7 +6,7 @@
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title "Authorizaton | AnyChart Playground"})
-    [:body
+    [:body page/body-tag-manager
      [:div.wrapper
 
       (page/nav (:templates data) (:user data))

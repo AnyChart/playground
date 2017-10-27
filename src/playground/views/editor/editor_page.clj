@@ -88,9 +88,10 @@
      [:link {:href "/splitter/splitter.css" :type "text/css" :rel "stylesheet"}]
      [:link {:href "/css/editor.css" :rel "stylesheet"}]
      [:link {:href "https://cdn.anychart.com/fonts/2.7.2/anychart.css" :rel "stylesheet"}]
-     [:link {:href "https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&subset=greek" :type "text/css" :rel "stylesheet"}]]
+     [:link {:href "https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&subset=greek" :type "text/css" :rel "stylesheet"}]
+     page/head-tag-manager]
 
-    [:body
+    [:body page/body-tag-manager
 
      [:div {:style "display: none;"}
       [:textarea#transit-data data]]

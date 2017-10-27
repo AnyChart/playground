@@ -8,7 +8,7 @@
     {:lang "en"}
     (page/head {:title       "Tags Statistics | AnyChart Playground"
                 :description "Tags Statisitics"})
-    [:body
+    [:body page/body-tag-manager
      [:div.wrapper.tags-stat-page
 
       (page/nav (:templates data) (:user data))

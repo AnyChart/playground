@@ -24,7 +24,7 @@
     {:lang "en"}
     (page/head {:title       (str (:title data-set) " | Data Sets | AnyChart Playground")
                 :description (page/desc (:description data-set))})
-    [:body
+    [:body page/body-tag-manager
      [:div.wrapper.dataset-page
 
       (page/nav (:templates data) (:user data))

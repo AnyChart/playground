@@ -13,7 +13,7 @@
     {:lang "en"}
     (page/head {:title       (str (:name chart-type) " | Chart Types | AnyChart Playground")
                 :description (page/desc (:description chart-type))})
-    [:body
+    [:body page/body-tag-manager
      [:div.wrapper.chart-type-page
 
       (page/nav (:templates data) (:user data))

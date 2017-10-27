@@ -7,7 +7,7 @@
     {:lang "en"}
     (page/head {:title       "Roadmap | AnyChart Playground"
                 :description "The place where all your data visualization dreams come true"})
-    [:body
+    [:body page/body-tag-manager
      [:div.wrapper.roadmap-page
 
       (page/nav (:templates data) (:user data))

@@ -7,7 +7,7 @@
     {:lang "en"}
     (page/head {:title       (str (:name category) " | Chart Type Categories | AnyChart Playground")
                 :description (page/desc (:description category))})
-    [:body
+    [:body page/body-tag-manager
      [:div.wrapper.chart-types-category-page
 
       (page/nav (:templates data) (:user data))

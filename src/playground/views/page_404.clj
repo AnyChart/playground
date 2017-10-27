@@ -8,7 +8,7 @@
     {:lang "en"}
     (page/head {:title       "404 error | AnyChart Playground"
                 :description "Page not found"})
-    [:body
+    [:body page/body-tag-manager
      [:div.wrapper.page-404
 
       (page/nav (:templates data) (:user data))

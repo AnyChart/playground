@@ -13,7 +13,7 @@
     {:lang "en"}
     (page/head {:title       "Data Sets | AnyChart Playground"
                 :description "The place where all your data visualization dreams come true"})
-    [:body
+    [:body page/body-tag-manager
      [:div.wrapper.datasets-page
 
       (page/nav (:templates data) (:user data))
