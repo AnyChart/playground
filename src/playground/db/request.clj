@@ -77,6 +77,8 @@
                        :row-fn        parse-sample})
 (defsql sample-by-hash {:result-set-fn first
                         :row-fn        parse-sample})
+(defsql last-sample-by-hash {:result-set-fn first
+                             :row-fn        parse-sample})
 (defsql sample-template-by-url {:result-set-fn first
                                 :row-fn        parse-sample})
 
@@ -194,7 +196,7 @@
   (doall (distinct (map #(dissoc % :tag-count) res))))
 
 (defsql top-tags-samples {:result-set-fn top-tags-samples-transformer
-                          :row-fn parse-sample})
+                          :row-fn        parse-sample})
 
 (defn get-top-tags-samples [db {:keys [offset count]}]
   (let [samples (top-tags-samples db)]

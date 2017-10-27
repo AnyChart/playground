@@ -73,14 +73,32 @@ INSERT INTO samples (`name`, `short_description`, `description`, `tags`, `delete
                       :url, :version, :owner_id);
 
 -- name: sql-sample-by-url
-SELECT * FROM samples WHERE version_id = :version_id AND url = :url;
+SELECT samples.*,
+       users.fullname AS owner_fullname
+FROM samples
+JOIN users ON samples.owner_id = users.id
+WHERE version_id = :version_id
+  AND url = :url;
 
 -- name: sql-sample-template-by-url
 SELECT samples.*, templates.id AS template_id FROM samples LEFT JOIN templates ON samples.id = templates.sample_id
   WHERE url = :url ORDER BY version DESC;
 
 -- name: sql-sample-by-hash
-SELECT * FROM samples WHERE version_id IS NULL AND url = :url AND version = :version;
+SELECT samples.*,
+  users.fullname AS owner_fullname
+FROM samples
+  JOIN users ON samples.owner_id = users.id
+WHERE version_id IS NULL AND url = :url AND version = :version;
+
+-- name: sql-last-sample-by-hash
+SELECT samples.*,
+  users.fullname AS owner_fullname
+FROM samples
+  JOIN users ON samples.owner_id = users.id
+WHERE version_id IS NULL AND url = :url
+ORDER BY version DESC;
+
 
 -- name: sql-add-samples!
 -- INSERT INTO samples (name, description, short_description, tags, export, scripts, local_scripts, styles, code_type, code, style_type, style, markup_type, markup) VALUES :values;

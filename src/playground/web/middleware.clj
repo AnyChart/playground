@@ -38,6 +38,7 @@
                                                          :url        sample-url})
           full-sample (-> sample
                           (assoc :repo-name (:name repo))
+                          (assoc :repo-title (:title repo))
                           (assoc :version-name (:name version))
                           db-req/add-full-url)]
       (when sample
@@ -46,7 +47,7 @@
 (defn check-last-user-sample-middleware [handler]
   (fn [request]
     (let [hash (-> request :route-params :hash)
-          sample (db-req/sample-template-by-url (get-db request) {:url hash})]
+          sample (db-req/last-sample-by-hash (get-db request) {:url hash})]
       (when sample
         (handler (assoc-in request [:app :sample] sample))))))
 

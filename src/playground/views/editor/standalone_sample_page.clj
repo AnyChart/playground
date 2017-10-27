@@ -1,4 +1,4 @@
-(ns playground.views.standalone-sample-page
+(ns playground.views.editor.standalone-sample-page
   (:require [playground.views.common :as page]
             [playground.views.sample :as sample-view]
             [clojure.string :as string]

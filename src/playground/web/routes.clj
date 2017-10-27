@@ -22,6 +22,7 @@
             [playground.data.tags :as tags-data]
     ;; pages
             [playground.views.landing-page :as landing-view]
+
             [playground.views.user.register-page :as register-view]
             [playground.views.user.auth-page :as auth-view]
             [playground.views.user.profile-page :as profile-view]
@@ -42,13 +43,16 @@
             [playground.views.data-set.data-sets-page :as data-sets-view]
             [playground.views.data-set.data-set-page :as data-set-view]
 
-            [playground.views.standalone-sample-page :as standalone-sample-view]
             [playground.views.marketing.about-page :as about-view]
             [playground.views.marketing.pricing-enterprise-page :as pricing-enterprise-view]
             [playground.views.marketing.pricing-page :as pricing-view]
             [playground.views.marketing.roadmap-page :as roadmap-view]
             [playground.views.marketing.support-page :as support-view]
             [playground.views.marketing.version-history-page :as version-history-view]
+
+    ;[playground.views.editor.standalone-sample-page :as standalone-sample-view]
+            [playground.views.editor.editor-page :as editor-view]
+
             [playground.views.iframe :as iframe-view]
             [playground.views.page-404 :as view-404]
 
@@ -70,17 +74,19 @@
   (let [sample (get-sample request)
         ;; Not need to get them in aggregations function via middleware, cause iframe-view e.g. doesn't need them
         templates (db-req/templates (get-db request))
-        data-sets (db-req/data-sets (get-db request))]
+        data-sets (db-req/data-sets (get-db request))
+        data {:canonical-url (if editor-view
+                               (utils/full-canonical-url-standalone sample)
+                               (utils/full-canonical-url sample))
+              :sample sample
+              :data          (web-utils/pack {:sample    sample
+                                              :templates templates
+                                              :datasets  (map #(dissoc % :data) data-sets)
+                                              :user      (get-safe-user request)
+                                              :view      editor-view})}]
     (db-req/update-sample-views! (get-db request) {:id (:id sample)})
-    (response (render-file "templates/editor.selmer"
-                           {:canonical-url (if editor-view
-                                             (utils/full-canonical-url-standalone sample)
-                                             (utils/full-canonical-url sample))
-                            :data          (web-utils/pack {:sample    sample
-                                                            :templates templates
-                                                            :datasets  data-sets
-                                                            :user      (get-safe-user request)
-                                                            :view      editor-view})}))))
+    ;(response (render-file "templates/editor.selmer" data))
+    (response (editor-view/page data))))
 
 (defn show-sample-standalone1 [request]
   (show-sample-editor1 request :standalone))
@@ -116,9 +122,9 @@
         ;                                                            :offset (* samples-per-landing tags-page)})
         ]
     (response (landing-view/page (merge (get-app-data request)
-                                        {:samples      (take samples-per-landing samples)
-                                         :end          (< (count samples) (inc samples-per-landing))
-                                         :page         samples-page
+                                        {:samples (take samples-per-landing samples)
+                                         :end     (< (count samples) (inc samples-per-landing))
+                                         :page    samples-page
 
                                          ;:tags-samples (take samples-per-landing tags-samples)
                                          ;:tags-end     (< (count tags-samples) (inc samples-per-block))
