@@ -19,16 +19,18 @@
 
 (defn divide-tags-by-blocks [tags]
   (let [sorted-tags (sort-by clojure.string/lower-case compare tags)
-        blocks-tags (flatten (sort (group-by first sorted-tags)))]
-    (for [letter-or-tag blocks-tags]
-      (if (char? letter-or-tag)
-        (let [letter letter-or-tag]
-          [:p.letter (if (<= (int \0) (int letter) (int \9))
-                       (str "1 — " letter)
-                       letter)])
-        [:a {:title (str "Tag - " letter-or-tag)
-             :href  (str "/tags/" letter-or-tag)}
-         (str letter-or-tag)]))))
+        blocks-tags (flatten (sort (group-by (fn [tag]
+                                               (if (<= (int \0) (int (first tag)) (int \9))
+                                                 \0
+                                                 (first tag)))
+                                             sorted-tags)))]
+    (for [letter-tag blocks-tags]
+      (cond
+        (= letter-tag \0) [:p.letter "1 — 9"]
+        (char? letter-tag) [:p.letter letter-tag]
+        (string? letter-tag) [:a {:title (str "Tag - " letter-tag)
+                                  :href  (str "/tags/" letter-tag)}
+                              (str letter-tag)]))))
 
 (defn page [data]
   (hiccup-page/html5
