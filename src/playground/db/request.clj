@@ -14,7 +14,12 @@
 (defn dash->underscore [data]
   (kebab-extra/transform-keys kebab/->snake_case data))
 
-(defqueries "sql/queries.sql")
+(defqueries "sql/queries/samples.sql")
+(defqueries "sql/queries/repos.sql")
+(defqueries "sql/queries/versions.sql")
+(defqueries "sql/queries/session.sql")
+(defqueries "sql/queries/datasets.sql")
+(defqueries "sql/queries/tags.sql")
 
 (defn sql-sym [sym]
   (symbol (str 'sql- (name sym))))
@@ -26,9 +31,24 @@
   [fn-name & [opts]]
   (if (ends-with? fn-name "<!")
     `(defn ~fn-name [db# & [params#]]
-       (:generated_key (~(sql-sym fn-name) (dash->underscore params#) (merge {:connection (:conn db#)} ~opts))))
+       (:generated_key
+         (~(sql-sym fn-name) (dash->underscore params#) (merge {:connection (:conn db#)} ~opts))))
     `(defn ~fn-name [db# & [params#]]
        (~(sql-sym fn-name) (dash->underscore params#) (merge {:connection (:conn db#)} ~opts)))))
+
+(defmacro sql
+  "generate for each request something like:
+  (defn versions [db & [params]
+   (sql-versions params {:connection (:conn db)}))"
+  [opts]
+  (let [fn-name (:name opts)
+        opts (dissoc opts :name)]
+    (if (ends-with? fn-name "<!")
+     `(fn [db# & [params#]]
+        (:generated_key
+          (~fn-name (dash->underscore params#) (merge {:connection (:conn db#)} ~opts))))
+     `(fn [db# & [params#]]
+        (~fn-name (dash->underscore params#) (merge {:connection (:conn db#)} ~opts))))))
 
 ;; repos
 (defsql add-repo<!)
@@ -201,3 +221,7 @@
 (defn get-top-tags-samples [db {:keys [offset count]}]
   (let [samples (top-tags-samples db)]
     (take count (drop offset samples))))
+
+;(defsql sitemap-sample-urls {:row-fn underscore->dash})
+(def sitemap-sample-urls (sql {:name sql-sitemap-sample-urls
+                               :row-fn underscore->dash}))

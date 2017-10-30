@@ -20,17 +20,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 
 (defn desc [text]
-  (let [text (-> text
-                 (string/replace #"<br/>" " ")
-                 (string/replace #"<[^>]*>" ""))
-        words (string/split (subs text 0 (min (count text) 160)) #" ")
-        result (reduce (fn [res part]
-                         (if (empty? res)
-                           part
-                           (if (< (count (str res " " part)) 155)
-                             (str res " " part)
-                             res))) "" words)]
-    (string/trim result)))
+  (when (seq text)
+    (let [text (-> text
+                   (string/replace #"<br/>" " ")
+                   (string/replace #"<[^>]*>" ""))
+          words (string/split (subs text 0 (min (count text) 160)) #" ")
+          result (reduce (fn [res part]
+                           (if (empty? res)
+                             part
+                             (if (< (count (str res " " part)) 155)
+                               (str res " " part)
+                               res))) "" words)]
+      (string/trim result))))
 
 
 (def main-style (slurp (io/resource "public/css/main.css")))

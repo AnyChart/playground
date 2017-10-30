@@ -1,30 +1,3 @@
--- name: sql-add-repo<!
-INSERT INTO repos (`name`, title, templates, `owner_id`) VALUES (:name, :title, :templates, :owner_id);
-
--- name: sql-repos
-SELECT * FROM repos;
-
--- name: sql-repo-by-name
-SELECT * FROM repos WHERE `name` = :name;
-
-
--- name: sql-add-version<!
-INSERT INTO versions (`name`, repo_id, commit, hidden, config, samples_count) VALUES(:name, :repo_id, :commit, :hidden, :config, :samples_count);
-
--- name: sql-versions
-SELECT * FROM versions WHERE repo_id = :repo_id;
-
--- name: sql-version-by-name
-SELECT * FROM versions WHERE repo_id = :repo_id AND `name` = :name;
-
--- name: sql-delete-version!
-DELETE FROM versions WHERE id = :id;
-
--- name: sql-show-version!
-UPDATE versions SET hidden = false WHERE repo_id = :repo_id AND id = :id;
-
-
-
 -- name: sql-samples
 SELECT * FROM samples;
 
@@ -153,84 +126,6 @@ DELETE FROM templates;
 
 
 
------- users ------
--- name: sql-add-user<!
-INSERT INTO users (`username`, `fullname`, `email`, `password`, `salt`, permissions)
-  VALUES (:username, :fullname, :email, :password, :salt, :permissions);
-
--- name: sql-get-user-by-username-or-email
-SELECT * FROM users WHERE username = :username or email = :username;
-
--- name: sql-get-user-by-username
-SELECT * FROM users WHERE username = :username;
-
--- name: sql-get-user-by-email
-SELECT * FROM users WHERE email = :email;
-
--- name: sql-delete-user!
-DELETE FROM users WHERE id = :id;
-
-
------- sessions ------
---name: sql-add-session<!
-INSERT INTO sessions (session, user_id) VALUES (:session, :user_id);
-
---name: sql-get-session
-SELECT users.*,
-       sessions.id as session_id, sessions.create_date, sessions.session
-       FROM sessions JOIN users ON sessions.user_id = users.id WHERE session = :session;
-
---name: sql-delete-session!
-DELETE FROM sessions WHERE session = :session;
-
-
-
------- tags ------------
---name: sql-tags
-SELECT substring(tag, 2, LENGTH(tag)-2) name, count(*) count FROM (
-SELECT JSON_EXTRACT(tags, CONCAT('$[', idx, ']')) AS tag FROM samples
-JOIN (
-SELECT  0  AS idx UNION
-SELECT  1  UNION
-SELECT  2  UNION
-SELECT  3  UNION
-SELECT  4  UNION
-SELECT  5  UNION
-SELECT  6  UNION
-SELECT  7  UNION
-SELECT  8  UNION
-SELECT  9  UNION
-SELECT  10) AS indexes
-WHERE samples.latest AND
-      samples.id NOT IN (SELECT sample_id FROM templates) AND
-      JSON_EXTRACT(tags, CONCAT('$[', idx, ']')) IS NOT NULL) as t1
-GROUP BY tag
-HAVING name NOT IN (SELECT tag FROM banned_tags)
-ORDER BY count DESC;
-
---name: sql-top-tags
-SELECT substring(tag, 2, LENGTH(tag)-2) name, count(*) count FROM (
-SELECT JSON_EXTRACT(tags, CONCAT('$[', idx, ']')) AS tag FROM samples
-JOIN (
-SELECT  0  AS idx UNION
-SELECT  1  UNION
-SELECT  2  UNION
-SELECT  3  UNION
-SELECT  4  UNION
-SELECT  5  UNION
-SELECT  6  UNION
-SELECT  7  UNION
-SELECT  8  UNION
-SELECT  9  UNION
-SELECT  10) AS indexes
-WHERE samples.latest AND
-      samples.id NOT IN (SELECT sample_id FROM templates) AND
-      JSON_EXTRACT(tags, CONCAT('$[', idx, ']')) IS NOT NULL) as t1
-GROUP BY tag
-HAVING name NOT IN (SELECT tag FROM banned_tags)
-ORDER BY count DESC LIMIT :limit;
-
-
 -- name: sql-samples-by-tag
 SELECT samples.id, samples.name, samples.views, samples.likes, samples.create_date, samples.url, samples.version, samples.version_id,
   samples.tags, samples.description, samples.short_description, samples.preview, samples.latest,
@@ -246,101 +141,25 @@ SELECT samples.id, samples.name, samples.views, samples.likes, samples.create_da
   ON optimize_samples.id = samples.id ORDER BY likes DESC, views DESC, samples.name ASC;
 
 
--- data sets ---
---name: sql-add-data-source<!
-INSERT INTO data_sources (name, title, type, sets, url) VALUES (:name, :title, :type, :sets, :url);
-
---name: sql-add-data-set<!
-INSERT INTO data_sets (logo, name, title, description, tags, source, sample, data_source_id, url, data)
-              VALUES (:logo, :name, :title, :description, :tags, :source, :sample, :data_source_id, :url, :data);
-
---name: sql-delete-data-sources!
-DELETE FROM data_sources;
-
---name: sql-delete-data-sets!
-DELETE FROM data_sets;
-
---name: sql-data-sets
-SELECT  data_sets.*,
- data_sources.name as data_source_name, data_sources.title as data_source_title, data_sources.type as data_source_type,
- data_sources.id as data_source_id, data_sources.type
- FROM data_sets JOIN data_sources ON data_sets.data_source_id = data_sources.id;
-
---name: sql-data-sources
-SELECT data_sources.* FROM data_sources;
-
---name: sql-top-data-sets
-SELECT data_sets.*,
- data_sources.name as data_source_name, data_sources.title as data_source_title, data_sources.type as data_source_type,
- data_sources.id as data_source_id, data_sources.type
- FROM data_sets JOIN data_sources ON data_sets.data_source_id = data_sources.id LIMIT :limit;
-
---name: sql-data-set-by-name
-SELECT data_sets.*,
- data_sources.name as data_source_name, data_sources.title as data_source_title, data_sources.type as data_source_type,
- data_sources.id as data_source_id, data_sources.type
- FROM data_sets JOIN data_sources ON data_sets.data_source_id = data_sources.id WHERE
-  data_sources.name = :data_source_name AND data_sets.name = :name;
-
 
 -- delete all repo ---
---name: sql-delete-samples-by-repo-name!
+-- name: sql-delete-samples-by-repo-name!
 DELETE FROM samples WHERE version_id in (select id FROM versions WHERE repo_id in (SELECT id FROM repos WHERE `name` = :name));
 
---name: sql-delete-versions-by-repo-name!
+-- name: sql-delete-versions-by-repo-name!
 DELETE FROM versions WHERE repo_id in (SELECT id FROM repos WHERE `name` = :name);
 
---name: sql-delete-repo-by-name!
+-- name: sql-delete-repo-by-name!
 DELETE FROM repos WHERE `name` = :name;
 
---name: sql-top-tags-samples
-SELECT DISTINCT tg.tag_count,
-                samples.id,
-                samples.name,
-                samples.views,
-                samples.likes,
-                samples.create_date,
-                samples.url,
-                samples.version,
-                samples.version_id,
-                samples.tags,
-                samples.description,
-                samples.short_description,
-                samples.preview,
-                samples.latest,
-                versions.`name` AS version_name,
-                repos.name AS repo_name,
-                users.username,
-                users.fullname
-FROM
-  (SELECT tag,
-          count(*) AS tag_count
-   FROM
-     (SELECT JSON_EXTRACT(tags, CONCAT('$[', idx, ']')) AS tag
-      FROM samples
-      JOIN
-        (SELECT 0 AS idx
-         UNION SELECT 1
-         UNION SELECT 2
-         UNION SELECT 3
-         UNION SELECT 4
-         UNION SELECT 5
-         UNION SELECT 6
-         UNION SELECT 7
-         UNION SELECT 8
-         UNION SELECT 9
-         UNION SELECT 10) AS indexes
-      WHERE samples.latest
-        AND JSON_EXTRACT(tags, CONCAT('$[', idx, ']')) IS NOT NULL) AS t1
-   GROUP BY tag
-   ORDER BY count(*) DESC) tg
-JOIN samples ON samples.id =
-  (SELECT id
-   FROM samples
-   WHERE tags LIKE CONCAT('%', tg.tag, '%')
-   ORDER BY views DESC, likes DESC, name ASC
-   LIMIT 1)
-LEFT JOIN versions ON samples.version_id = versions.id
-LEFT JOIN repos ON versions.repo_id = repos.id
-LEFT JOIN users ON samples.owner_id = users.id
-ORDER BY tag_count DESC;
+-- name: sql-sitemap-sample-urls
+SELECT concat(repos.name, '/', samples.url) AS url,
+       samples.create_date
+FROM samples
+  JOIN versions ON samples.version_id = versions.id
+  JOIN repos ON versions.repo_id = repos.id
+WHERE version_id AND latest AND samples.id NOT IN (SELECT sample_id FROM templates)
+UNION
+SELECT url, create_date
+FROM samples
+WHERE version_id IS NULL AND latest;

@@ -1,7 +1,7 @@
 (ns playground.web.routes
   (:require [compojure.core :refer :all]
             [compojure.route :as route]
-            [ring.util.response :refer [redirect file-response]]
+            [ring.util.response :refer [redirect file-response content-type]]
             [taoensso.timbre :as timbre]
             [selmer.parser :refer [render-file]]
             [crypto.password.bcrypt :as bcrypt]
@@ -49,6 +49,7 @@
             [playground.views.marketing.roadmap-page :as roadmap-view]
             [playground.views.marketing.support-page :as support-view]
             [playground.views.marketing.version-history-page :as version-history-view]
+            [playground.web.sitemap :as sitemap]
 
     ;[playground.views.editor.standalone-sample-page :as standalone-sample-view]
             [playground.views.editor.editor-page :as editor-view]
@@ -78,7 +79,7 @@
         data {:canonical-url (if editor-view
                                (utils/full-canonical-url-standalone sample)
                                (utils/full-canonical-url sample))
-              :sample sample
+              :sample        sample
               :data          (web-utils/pack {:sample    sample
                                               :templates templates
                                               :datasets  (map #(dissoc % :data) data-sets)
@@ -425,6 +426,12 @@
 (defn page-404 [request]
   (view-404/page (get-app-data request)))
 
+(defn sitemap-page [request]
+  (-> (sitemap/page (merge (get-app-data request)
+                           {:samples (db-req/sitemap-sample-urls (get-db request))}))
+      response
+      (content-type "text/xml")))
+
 ;; =====================================================================================================================
 ;; Routes
 ;; =====================================================================================================================
@@ -434,6 +441,11 @@
            (GET "/" [] (-> landing-page
                            mw/all-tags-middleware
                            mw/base-page-middleware))
+
+           (GET "/sitemap.xml" [] (-> sitemap-page
+                                      mw/repos-middleware
+                                      mw/all-tags-middleware
+                                      mw/all-data-sets-middleware))
 
            (GET "/generate-preview/:id" [] (fn [request]
                                              (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue)
