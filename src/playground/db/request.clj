@@ -8,18 +8,24 @@
             [playground.utils.utils :as utils]
             [version-clj.core :as version-clj]))
 
-(defn underscore->dash [data]
-  (kebab-extra/transform-keys kebab/->kebab-case data))
-
-(defn dash->underscore [data]
-  (kebab-extra/transform-keys kebab/->snake_case data))
-
+;; =====================================================================================================================
+;; Include sql files
+;; =====================================================================================================================
 (defqueries "sql/queries/samples.sql")
 (defqueries "sql/queries/repos.sql")
 (defqueries "sql/queries/versions.sql")
 (defqueries "sql/queries/session.sql")
 (defqueries "sql/queries/datasets.sql")
 (defqueries "sql/queries/tags.sql")
+
+;; =====================================================================================================================
+;; Macroses and util functions
+;; =====================================================================================================================
+(defn underscore->dash [data]
+  (kebab-extra/transform-keys kebab/->kebab-case data))
+
+(defn dash->underscore [data]
+  (kebab-extra/transform-keys kebab/->snake_case data))
 
 (defn sql-sym [sym]
   (symbol (str 'sql- (name sym))))
@@ -49,6 +55,10 @@
           (~fn-name (dash->underscore params#) (merge {:connection (:conn db#)} ~opts))))
      `(fn [db# & [params#]]
         (~fn-name (dash->underscore params#) (merge {:connection (:conn db#)} ~opts))))))
+
+;; =====================================================================================================================
+;; Requests functions
+;; =====================================================================================================================
 
 ;; repos
 (defsql add-repo<!)
