@@ -50,32 +50,41 @@
   (let [fn-name (:name opts)
         opts (dissoc opts :name)]
     (if (ends-with? fn-name "<!")
-     `(fn [db# & [params#]]
-        (:generated_key
-          (~fn-name (dash->underscore params#) (merge {:connection (:conn db#)} ~opts))))
-     `(fn [db# & [params#]]
-        (~fn-name (dash->underscore params#) (merge {:connection (:conn db#)} ~opts))))))
+      `(fn [db# & [params#]]
+         (:generated_key
+           (~fn-name (dash->underscore params#) (merge {:connection (:conn db#)} ~opts))))
+      `(fn [db# & [params#]]
+         (~fn-name (dash->underscore params#) (merge {:connection (:conn db#)} ~opts))))))
 
 ;; =====================================================================================================================
-;; Requests functions
+;; Repos
 ;; =====================================================================================================================
+(def add-repo<! (sql {:name sql-add-repo<!}))
 
-;; repos
-(defsql add-repo<!)
-(defsql repos {:row-fn underscore->dash})
-(defsql repo-by-name {:result-set-fn first
-                      :row-fn        underscore->dash})
+(def repos (sql {:name   sql-repos
+                 :row-fn underscore->dash}))
 
-;; versions
+(def repo-by-name (sql {:name          sql-repo-by-name
+                        :result-set-fn first
+                        :row-fn        underscore->dash}))
+
+;; =====================================================================================================================
+;; Versions
+;; =====================================================================================================================
 (defn parse-version [version]
   (update version :config parse-string true))
 
-(defsql versions {:row-fn underscore->dash})
-(defsql version-by-name {:result-set-fn first
-                         :row-fn        parse-version})
-(defsql add-version<!)
-(defsql delete-version!)
-(defsql show-version!)
+(def versions (sql {:name   sql-versions
+                    :row-fn underscore->dash}))
+(def version-by-name (sql {:name          sql-version-by-name
+                           :result-set-fn first
+                           :row-fn        parse-version}))
+
+(def add-version<! (sql {:name sql-add-version<!}))
+
+(def delete-version! (sql {:name sql-delete-version!}))
+
+(def show-version! (sql {:name sql-show-version!}))
 
 (defn last-version [db data]
   (let [versions (versions db data)
@@ -83,7 +92,9 @@
                                   versions))]
     last-version))
 
-;; samples
+;; =====================================================================================================================
+;; Samples
+;; =====================================================================================================================
 (defn add-full-url [sample]
   (assoc sample :full-url (utils/sample-url sample)))
 
@@ -96,26 +107,44 @@
       underscore->dash
       add-full-url))
 
-(defsql add-sample<!)
-(defsql samples {:row-fn underscore->dash})
-(defsql samples-by-ids {:row-fn parse-sample})
-(defsql sample-version {:result-set-fn (comp :version first)
-                        :row-fn        underscore->dash})
-(defsql top-samples {:row-fn parse-sample})
-(defsql samples-by-version {:row-fn parse-sample})
-(defsql sample-by-url {:result-set-fn first
-                       :row-fn        parse-sample})
-(defsql sample-by-hash {:result-set-fn first
-                        :row-fn        parse-sample})
-(defsql last-sample-by-hash {:result-set-fn first
-                             :row-fn        parse-sample})
-(defsql sample-template-by-url {:result-set-fn first
-                                :row-fn        parse-sample})
+(def add-sample<! (sql {:name sql-add-sample<!}))
+
+(def samples (sql {:name   sql-samples
+                   :row-fn underscore->dash}))
+
+(def samples-by-ids (sql {:name   sql-samples-by-ids
+                          :row-fn parse-sample}))
+
+(def sample-version (sql {:name          sql-sample-version
+                          :result-set-fn (comp :version first)
+                          :row-fn        underscore->dash}))
+
+(def top-samples (sql {:name   sql-top-samples
+                       :row-fn parse-sample}))
+
+(def samples-by-version (sql {:name   sql-samples-by-version
+                              :row-fn parse-sample}))
+
+(def sample-by-url (sql {:name          sql-sample-by-url
+                         :result-set-fn first
+                         :row-fn        parse-sample}))
+
+(def sample-by-hash (sql {:name          sql-sample-by-hash
+                          :result-set-fn first
+                          :row-fn        parse-sample}))
+
+(def last-sample-by-hash (sql {:name          sql-last-sample-by-hash
+                               :result-set-fn first
+                               :row-fn        parse-sample}))
+
+(def sample-template-by-url (sql {:name          sql-sample-template-by-url
+                                  :result-set-fn first
+                                  :row-fn        parse-sample}))
 
 ; TODO: wait until yesql has multiple insert
 ;(defsql add-samples!)
 
-(defsql delete-samples!)
+(def delete-samples! (sql {:name sql-delete-samples!}))
 
 (defn- insert-sample [sample & [version-id]]
   {:version_id        version-id
@@ -158,80 +187,134 @@
   (doall (map :generated_key
               (insert-multiple! db :samples (map #(insert-sample % version-id) samples)))))
 
-(defsql delete-samples-by-ids!)
-(defsql update-sample-views!)
-(defsql update-samples-preview!)
-(defsql user-samples-without-preview)
-(defsql repo-samples-without-preview)
+(def delete-samples-by-ids! (sql {:name sql-delete-samples-by-ids!}))
 
-;; set sample latest
-(defsql update-all-samples-latest!)
-(defsql update-version-samples-latest!)
-(defsql update-all-user-samples-latest!)
-(defsql update-version-user-samples-latest!)
+(def update-sample-views! (sql {:name sql-update-sample-views!}))
 
+(def update-samples-preview! (sql {:name sql-update-samples-preview!}))
 
-;; templates
-(defsql template-by-url {:result-set-fn first
-                         :row-fn        parse-sample})
-(defsql templates {:row-fn parse-sample})
-(defsql templates-sample-ids {:row-fn :sample_id})
-(defsql delete-templates!)
+(def user-samples-without-preview (sql {:name sql-user-samples-without-preview}))
+
+(def repo-samples-without-preview (sql {:name sql-repo-samples-without-preview}))
+
+;;======================================================================================================================
+;; Set sample latest
+;;======================================================================================================================
+(def update-all-samples-latest! (sql {:name sql-update-all-samples-latest!}))
+
+(def update-version-samples-latest! (sql {:name sql-update-version-samples-latest!}))
+
+(def update-all-user-samples-latest! (sql {:name sql-update-all-user-samples-latest!}))
+
+(def update-version-user-samples-latest! (sql {:name sql-update-version-user-samples-latest!}))
+
+;;======================================================================================================================
+;; Templates
+;;======================================================================================================================
+(def template-by-url (sql {:name          sql-template-by-url
+                           :result-set-fn first
+                           :row-fn        parse-sample}))
+
+(def templates (sql {:name   sql-templates
+                     :row-fn parse-sample}))
+
+(def templates-sample-ids (sql {:name   sql-templates-sample-ids
+                                :row-fn :sample_id}))
+
+(def delete-templates! (sql {:name sql-delete-templates!}))
 
 (defn add-templates! [db ids]
   (insert-multiple! db :templates (map (fn [id] {:sample_id id}) ids)))
 
-;; users
-(defsql add-user<!)
-(defsql get-user-by-username-or-email {:result-set-fn first})
-(defsql get-user-by-username {:result-set-fn first})
-(defsql get-user-by-email {:result-set-fn first})
-(defsql delete-user!)
+;;======================================================================================================================
+;; Users
+;;======================================================================================================================
+(def add-user<! (sql {:name sql-add-user<!}))
 
-;; sessions
-(defsql get-session {:result-set-fn first})
-(defsql add-session<!)
-(defsql delete-session!)
+(def get-user-by-username-or-email (sql {:name          sql-get-user-by-username-or-email
+                                         :result-set-fn first}))
 
-;; tags
-(defsql tags)
-(defsql top-tags)
-(defsql samples-by-tag {:row-fn parse-sample})
+(def get-user-by-username (sql {:name          sql-get-user-by-username
+                                :result-set-fn first}))
 
-;;data sources
+(def get-user-by-email (sql {:name          sql-get-user-by-email
+                             :result-set-fn first}))
+
+(def delete-user! (sql {:name sql-delete-user!}))
+
+;;======================================================================================================================
+;; Sessions
+;;======================================================================================================================
+(def get-session (sql {:name          sql-get-session
+                       :result-set-fn first}))
+
+(def add-session<! (sql {:name sql-add-session<!}))
+
+(def delete-session! (sql {:name sql-delete-session!}))
+
+;;======================================================================================================================
+;; Tags
+;;======================================================================================================================
+(def tags (sql {:name sql-tags}))
+
+(def top-tags (sql {:name sql-top-tags}))
+
+(def samples-by-tag (sql {:name   sql-samples-by-tag
+                          :row-fn parse-sample}))
+
+;;======================================================================================================================
+;; Datasets, datasources
+;;======================================================================================================================
 (defn parse-data-set [data-set]
   (-> data-set
       (assoc :tags (parse-string (:tags data-set)))
       ;(assoc :data (parse-string (:data data-set)))
       underscore->dash))
 
-(defsql add-data-source<!)
-(defsql add-data-set<!)
-(defsql delete-data-sources!)
-(defsql delete-data-sets!)
-(defsql data-sets {:row-fn parse-data-set})
-(defsql top-data-sets {:row-fn parse-data-set})
-(defsql data-set-by-name {:result-set-fn first
-                          :row-fn        parse-data-set})
-(defsql data-sources)
+(def add-data-source<! (sql {:name sql-add-data-source<!}))
 
+(def add-data-set<! (sql {:name sql-add-data-set<!}))
 
-;; delete all repo
-(defsql delete-samples-by-repo-name!)
-(defsql delete-versions-by-repo-name!)
-(defsql delete-repo-by-name!)
+(def delete-data-sources! (sql {:name sql-delete-data-sources!}))
 
-;; landing
+(def delete-data-sets! (sql {:name sql-delete-data-sets!}))
+
+(def data-sets (sql {:name   sql-data-sets
+                     :row-fn parse-data-set}))
+
+(def top-data-sets (sql {:name   sql-top-data-sets
+                         :row-fn parse-data-set}))
+
+(def data-set-by-name (sql {:name          sql-data-set-by-name
+                            :result-set-fn first
+                            :row-fn        parse-data-set}))
+
+(def data-sources (sql {:name sql-data-sources}))
+
+;;======================================================================================================================
+;; Delete all repo
+;;======================================================================================================================
+(def delete-samples-by-repo-name! (sql {:name sql-delete-samples-by-repo-name!}))
+
+(def delete-versions-by-repo-name! (sql {:name sql-delete-versions-by-repo-name!}))
+
+(def delete-repo-by-name! (sql {:name sql-delete-repo-by-name!}))
+
+;;======================================================================================================================
+;; Landing
+;;======================================================================================================================
 (defn top-tags-samples-transformer [res]
   (doall (distinct (map #(dissoc % :tag-count) res))))
-
-(defsql top-tags-samples {:result-set-fn top-tags-samples-transformer
-                          :row-fn        parse-sample})
-
+(def top-tags-samples (sql {:name          sql-top-tags-samples
+                            :result-set-fn top-tags-samples-transformer
+                            :row-fn        parse-sample}))
 (defn get-top-tags-samples [db {:keys [offset count]}]
   (let [samples (top-tags-samples db)]
     (take count (drop offset samples))))
 
-;(defsql sitemap-sample-urls {:row-fn underscore->dash})
-(def sitemap-sample-urls (sql {:name sql-sitemap-sample-urls
+
+;;======================================================================================================================
+;; Sitemap
+;;======================================================================================================================
+(def sitemap-sample-urls (sql {:name   sql-sitemap-sample-urls
                                :row-fn underscore->dash}))

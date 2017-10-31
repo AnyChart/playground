@@ -549,8 +549,8 @@
 
            (GET "/landing-samples.json" [] top-landing-samples)
            (POST "/landing-samples.json" [] top-landing-samples)
-           (GET "/landing-tag-samples.json" [] top-landing-tag-samples)
-           (POST "/landing-tag-samples.json" [] top-landing-tag-samples)
+           ;(GET "/landing-tag-samples.json" [] top-landing-tag-samples)
+           ;(POST "/landing-tag-samples.json" [] top-landing-tag-samples)
            (GET "/version-samples.json" [] top-version-samples)
            (POST "/version-samples.json" [] top-version-samples)
            (GET "/tag-samples.json" [] top-tag-samples)
