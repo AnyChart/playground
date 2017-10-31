@@ -81,6 +81,13 @@
              {:tag :changefreq :content ["monthly"]}
              {:tag :lastmod :content [default-date]}]})
 
+(defn version [version]
+  {:tag     :url
+   :content [{:tag :loc :content [(full-url "/projects/" (:repo-name version) "/" (:name version))]}
+             {:tag :priority :content ["0.5"]}
+             {:tag :changefreq :content ["monthly"]}
+             {:tag :lastmod :content [default-date]}]})
+
 
 (defn sample [sample]
   {:tag     :url
@@ -96,12 +103,12 @@
                :attrs   {:xmlns "http://www.sitemaps.org/schemas/sitemap/0.9"}
                :content (concat
                           (map static-tag static-urls)
-                          ;(map repo (:repos data))
+                          (map repo (filter #(not (:templates %)) (:repos data)))
+                          (map version (:versions data))
+
                           (map tag-tag (:all-tags data))
                           (map chart-type chartopedia/chart-types)
                           (map chart-type-category chartopedia/categories)
 
                           ;(map data-set (:all-data-sets data))
-                          (map sample (:samples data))
-
-                          )})))
+                          (map sample (:samples data)))})))

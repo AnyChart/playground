@@ -76,6 +76,10 @@
 
 (def versions (sql {:name   sql-versions
                     :row-fn underscore->dash}))
+
+(def versions-repos (sql {:name   sql-versions-repos
+                          :row-fn underscore->dash}))
+
 (def version-by-name (sql {:name          sql-version-by-name
                            :result-set-fn first
                            :row-fn        parse-version}))
