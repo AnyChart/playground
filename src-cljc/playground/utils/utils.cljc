@@ -1,5 +1,5 @@
 (ns playground.utils.utils
-  (:require [clojure.string :as s]))
+  (:require [clojure.string :as string]))
 
 (defn released-version? [version-key]
   (re-matches #"^\d+\.\d+\.\d+$" version-key))
@@ -87,18 +87,26 @@
 (defn name->url [name]
   (-> name
       ; TODO: refactor with one replace
-      (clojure.string/replace #"^/" "")
-      (clojure.string/replace #"/" "-")
-      (clojure.string/replace #", " "-")
-      (clojure.string/replace #",_" "-")
-      (clojure.string/replace #"," "-")
-      (clojure.string/replace #" " "-")
-      (clojure.string/replace #"_" "-")
-      (clojure.string/replace #"\(" "")
-      (clojure.string/replace #"\)" "")
-      s/lower-case))
+      (string/replace #"^/" "")
+      (string/replace #"/" "-")
+      (string/replace #", " "-")
+      (string/replace #",_" "-")
+      (string/replace #"," "-")
+      (string/replace #" " "-")
+      (string/replace #"_" "-")
+      (string/replace #"\(" "")
+      (string/replace #"\)" "")
+      string/lower-case))
 
 (defn embed-name [sample]
   (if (-> sample :version-id)
     (name->url (-> sample :url))
     (-> sample :url)))
+
+
+(defn strip [s]
+  (when (string? s)
+    (-> s
+        (string/replace #"<[^>]*>" "")
+        (string/replace #"[ ]{2,}" " ")
+        (string/trim))))

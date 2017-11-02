@@ -2,9 +2,9 @@
   (:require [reagent.core :as reagent :refer [atom]]
             [re-frame.core :as rf]
             [clojure.string :as string]
-            [playground.utils :as utils]
             [playground.utils.utils :as common-utils]
-            [playground.web.auth-base :as auth-base]))
+            [playground.web.auth-base :as auth-base]
+            [playground.utils.utils :as utils]))
 
 (defn- makrup-type->str [type]
   (case type
@@ -54,6 +54,10 @@
 (rf/reg-sub :sample/description (fn [db _] (-> db :sample :description)))
 (rf/reg-sub :sample/short-description (fn [db _] (-> db :sample :short-description)))
 (rf/reg-sub :sample/tags (fn [db _] (-> db :sample :tags)))
+
+(rf/reg-sub :sample/stripped-description (fn [db _] (common-utils/strip (-> db :sample :description))))
+(rf/reg-sub :sample/stripped-short-description (fn [db _] (common-utils/strip (-> db :sample :short-description))))
+
 
 (rf/reg-sub :sample/scripts (fn [db _] (-> db :sample :scripts)))
 (rf/reg-sub :sample/styles (fn [db _] (-> db :sample :styles)))

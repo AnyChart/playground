@@ -39,13 +39,13 @@
    [:div.form-group
     [:label {:for "settings-short-desc"} "Short Description"]
     [:textarea.form-control {:id            "settings-short-desc"
-                             :default-value @(rf/subscribe [:sample/short-description])
+                             :default-value @(rf/subscribe [:sample/stripped-short-description])
                              :on-change     #(rf/dispatch [:settings/change-short-desc (-> % .-target .-value)])}]]
    [:div.form-group
     [:label {:for "settings-desc"} "Description"]
     [:textarea.form-control {:id            "settings-desc"
                              :style         {:max-height @(rf/subscribe [:settings.general-tab/description-height])}
-                             :default-value @(rf/subscribe [:sample/description])
+                             :default-value @(rf/subscribe [:sample/stripped-description])
                              :on-change     #(rf/dispatch [:settings/change-desc (-> % .-target .-value)])}]]
    [:div.form-group
     [:label "Tags"]

@@ -39,8 +39,9 @@
            [:div.popular-tags-box
             (for [link (:styles sample)]
               ^{:key link}
-              [:div.popular-tags-button-box
-               [:a.popular-tag-button {::href link} link]])]])
+              [:div.popular-tag-button-box
+               [:a.popular-tag-button {:title link
+                                       :href  link} link]])]])
 
         (when (seq (:scripts sample))
           [:div
@@ -49,7 +50,8 @@
             (for [link (:scripts sample)]
               ^{:key link}
               [:div.popular-tag-button-box
-               [:a.popular-tag-button {::href link} link]])]])]]
+               [:a.popular-tag-button {:title link
+                                       :href  link} link]])]])]]
 
       [:div.col-sm-7
        [:div.iframe-standalone-box
