@@ -8,7 +8,7 @@
   (let [pages (int (Math/ceil (/ all-charts chart-count)))]
     (>= page (dec pages))))
 
-(defn page [data chart-types end page]
+(defn page [data chart-types & [end page]]
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title       "Chart Types | AnyChart Playground"

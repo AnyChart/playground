@@ -74,8 +74,8 @@
 (defn parse-version [version]
   (update version :config parse-string true))
 
-(def versions (sql {:name   sql-versions
-                    :row-fn underscore->dash
+(def versions (sql {:name          sql-versions
+                    :row-fn        underscore->dash
                     :result-set-fn (fn [versions]
                                      (sort (comp - #(version-clj/version-compare (:name %1) (:name %2))) versions))}))
 

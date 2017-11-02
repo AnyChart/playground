@@ -62,7 +62,7 @@
   (set! (.-innerHTML (.getElementById js/document "popular-samples"))
         (apply str (map #(-> % sample-view/sample-landing h/html) (:samples data))))
   (reset! *popular-samples-is-end (:end data))
-  (.pushState (.-history js/window) nil nil (str "?samples=" (inc @*popular-samples-page)
+  (.pushState (.-history js/window) nil nil (str "?page=" (inc @*popular-samples-page)
                                                  ;"&tags=" (inc @*landing-tag-samples-page)
                                                  ))
   (set-buttons-visibility "popular-samples-prev"

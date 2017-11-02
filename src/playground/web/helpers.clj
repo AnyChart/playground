@@ -29,6 +29,8 @@
 
 (defn get-all-data-sets [request] (-> request :app :all-data-sets))
 
+;; pagination
+(defn get-pagination [request] (-> request :app :page))
 
 ;; session
 (defn get-user [request] (-> request :session :user))

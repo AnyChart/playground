@@ -113,24 +113,14 @@
 ;; Pages
 ;; =====================================================================================================================
 (defn landing-page [request]
-  ;(prn "landing: " (get-user request))
-  (let [samples-page (dec (try (-> request :params :samples Integer/parseInt) (catch Exception _ 1)))
-        ;tags-page (dec (try (-> request :params :tags Integer/parseInt) (catch Exception _ 1)))
+  (let [samples-page (get-pagination request)
         samples (db-req/top-samples (get-db request) {:count  (inc samples-per-landing)
-                                                      :offset (* samples-per-landing samples-page)})
-
-        ;tags-samples (db-req/get-top-tags-samples (get-db request) {:count  (inc samples-per-landing)
-        ;                                                            :offset (* samples-per-landing tags-page)})
-        ]
-    (response (landing-view/page (merge (get-app-data request)
-                                        {:samples (take samples-per-landing samples)
-                                         :end     (< (count samples) (inc samples-per-landing))
-                                         :page    samples-page
-
-                                         ;:tags-samples (take samples-per-landing tags-samples)
-                                         ;:tags-end     (< (count tags-samples) (inc samples-per-block))
-                                         ;:tags-page    tags-page
-                                         })))))
+                                                      :offset (* samples-per-landing samples-page)})]
+    (when (seq samples)
+      (response (landing-view/page (merge (get-app-data request)
+                                          {:samples (take samples-per-landing samples)
+                                           :end     (< (count samples) (inc samples-per-landing))
+                                           :page    samples-page}))))))
 
 (defn repo-page [request]
   (let [repo (get-repo request)
@@ -143,16 +133,17 @@
 (defn version-page [request]
   (let [repo (get-repo request)
         version (get-version request)
-        page (dec (try (-> request :params :page Integer/parseInt) (catch Exception _ 1)))
+        page (get-pagination request)
         samples (db-req/samples-by-version (get-db request) {:version_id (:id version)
                                                              :offset     (* samples-per-page page)
                                                              :count      (inc samples-per-page)})]
-    (version-view/page (merge (get-app-data request)
-                              {:samples (take samples-per-page samples)
-                               :end     (< (count samples) (inc samples-per-page))
-                               :page    page
-                               :version version
-                               :repo    repo}))))
+    (when (seq samples)
+      (version-view/page (merge (get-app-data request)
+                                {:samples (take samples-per-page samples)
+                                 :end     (< (count samples) (inc samples-per-page))
+                                 :page    page
+                                 :version version
+                                 :repo    repo})))))
 
 (defn signup-page [request]
   (register-view/page (get-app-data request)))
@@ -168,48 +159,47 @@
 
 (defn tag-page [request]
   (let [tag (-> request :route-params :*)
-        page (dec (try (-> request :params :page Integer/parseInt) (catch Exception _ 1)))
+        page (get-pagination request)
         samples (db-req/samples-by-tag (get-db request) {:count  (inc samples-per-page)
                                                          :offset (* samples-per-page page)
                                                          :tag    tag})]
-    ;(prn "tag-page: " (count samples))
-    (tag-view/page (merge {:samples  (take samples-per-page samples)
-                           :end      (< (count samples) (inc samples-per-page))
-                           :page     page
-                           :tag      tag
-                           :tag-data (tags-data/get-tag-data tag)}
-                          (get-app-data request)))))
+    (when (seq samples)
+      (tag-view/page (merge {:samples  (take samples-per-page samples)
+                             :end      (< (count samples) (inc samples-per-page))
+                             :page     page
+                             :tag      tag
+                             :tag-data (tags-data/get-tag-data tag)}
+                            (get-app-data request))))))
 
 (defn tag-stat-page [request]
   (tags-stat-view/page (get-app-data request)))
 
-
 (defn repos-page [request]
   (repos-view/page (get-app-data request)))
+
 ;; =====================================================================================================================
 ;; Marketing pages
 ;; =====================================================================================================================
 (defn chart-types-page [request]
-  (let [page (dec (try (-> request :params :page Integer/parseInt) (catch Exception _ 1)))
-        chart-types chartopedia/chart-types
-        is-end (chart-types-view/is-end (count chart-types) page)]
-    (chart-types-view/page (get-app-data request) chart-types is-end page)))
+  (let [chart-types chartopedia/chart-types]
+    (chart-types-view/page (get-app-data request) chart-types)))
 
 (defn chart-type-page [request]
   (let [chart-name (-> request :params :chart-type)]
     (when-let [chart-type (chartopedia/get-chart chart-name)]
       (let [tag (:name chart-type)
-            page (dec (try (-> request :params :page Integer/parseInt) (catch Exception _ 1)))
+            page (get-pagination request)
             samples (db-req/samples-by-tag (get-db request) {:count  (inc samples-per-block)
                                                              :offset (* samples-per-block page)
                                                              :tag    tag})]
-        (chart-type-view/page (merge {:samples (take samples-per-block samples)
-                                      :end     (< (count samples) (inc samples-per-block))
-                                      :page    page
-                                      :tag     tag}
-                                     (get-app-data request))
-                              chart-type
-                              (chartopedia/get-relations chart-type))))))
+        (when (seq samples)
+          (chart-type-view/page (merge {:samples (take samples-per-block samples)
+                                        :end     (< (count samples) (inc samples-per-block))
+                                        :page    page
+                                        :tag     tag}
+                                       (get-app-data request))
+                                chart-type
+                                (chartopedia/get-relations chart-type)))))))
 
 (defn chart-types-categories-page [request]
   (chart-type-categories-view/page (get-app-data request) chartopedia/categories))
@@ -220,10 +210,12 @@
       (chart-type-category-view/page (get-app-data request) category))))
 
 (defn data-sets-page [request]
-  (let [page (dec (try (-> request :params :page Integer/parseInt) (catch Exception _ 1)))
+  (let [page (get-pagination request)
         all-datasets (:all-data-sets (get-app-data request))
+        page-datasets (data-sets-view/page-datasets page (get-app-data request))
         is-end (data-sets-view/is-end (count all-datasets) page)]
-    (data-sets-view/page (get-app-data request) is-end page)))
+    (when (seq page-datasets)
+      (data-sets-view/page (get-app-data request) is-end page page-datasets))))
 
 (defn data-set-page [request]
   (let [data-source-name (or (-> request :params :data-source)
@@ -440,6 +432,7 @@
            (route/resources "/")
 
            (GET "/" [] (-> landing-page
+                           mw/pagination-page-middleware
                            mw/all-tags-middleware
                            mw/base-page-middleware))
 
@@ -457,6 +450,7 @@
                                       mw/base-page-middleware))
 
            (GET "/chart-types/:chart-type" [] (-> chart-type-page
+                                                  mw/pagination-page-middleware
                                                   mw/base-page-middleware))
 
            (GET "/chart-types/categories" [] (-> chart-types-categories-page
@@ -467,6 +461,7 @@
 
            (GET "/datasets/" [] redirect-slash)
            (GET "/datasets" [] (-> data-sets-page
+                                   mw/pagination-page-middleware
                                    mw/all-data-sets-middleware
                                    mw/base-page-middleware))
 
@@ -505,6 +500,7 @@
                                      mw/base-page-middleware))
 
            (GET "/tags/*" [] (-> tag-page
+                                 mw/pagination-page-middleware
                                  mw/base-page-middleware))
 
            (GET "/profile" [] (-> profile-page
@@ -572,11 +568,13 @@
                                           (redirect-slash request))))
 
            (GET "/projects/:repo/:version" [] (-> version-page
+                                                  mw/pagination-page-middleware
                                                   mw/check-version-middleware
                                                   mw/check-repo-middleware
                                                   mw/base-page-middleware))
            (GET "/projects/:repo/:version/" [] (fn [request]
                                                  (when ((-> version-page
+                                                            mw/pagination-page-middleware
                                                             mw/check-version-middleware
                                                             mw/check-repo-middleware
                                                             mw/base-page-middleware) request)

@@ -12,12 +12,12 @@
 (defn samples [path config samples-filter]
   (let [files (file-seq (file path))
         files* (filter #(and
-                         (not (.isDirectory %))
-                         (not (.isHidden %))
-                         (or (.endsWith (.getName %) ".sample")
-                             (.endsWith (.getName %) ".html"))
-                         (if samples-filter
-                           (re-find (re-pattern samples-filter) (inner-path path (.getAbsolutePath %)))
-                           true))
+                          (not (.isDirectory %))
+                          (not (.isHidden %))
+                          (or (.endsWith (.getName %) ".sample")
+                              (.endsWith (.getName %) ".html"))
+                          (if samples-filter
+                            (re-find (re-pattern samples-filter) (inner-path path (.getAbsolutePath %)))
+                            true))
                        files)]
     (map (fn [file] (sample-parser/parse path (inner-path path (.getAbsolutePath file)) config (.getName file))) files*)))

@@ -104,6 +104,15 @@
     (handler (assoc-in request [:app :all-data-sets]
                        (db-req/data-sets (get-db request))))))
 
+(defn pagination-page-middleware [handler]
+  (fn [request]
+    (let [page-param (-> request :params :page)
+          page (if page-param
+                 (try (-> request :params :page Integer/parseInt dec)
+                      (catch Exception _ -1))
+                 0)]
+      (when (>= page 0)
+        (handler (assoc-in request [:app :page] page))))))
 
 ;; =====================================================================================================================
 ;; Aggregation functions

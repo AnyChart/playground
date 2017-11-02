@@ -8,7 +8,12 @@
   (let [pages (int (Math/ceil (/ all-datasets datasets-count)))]
     (>= page (dec pages))))
 
-(defn page [data end page]
+(defn page-datasets [page data]
+  (let [blocks (partition datasets-count datasets-count [] (:all-data-sets data))]
+    (when (< page (count blocks))
+      (nth blocks page))))
+
+(defn page [data end page page-datasets]
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title       "Data Sets | AnyChart Playground"
@@ -45,34 +50,34 @@
           [:span.glyphicon.glyphicon-search]]]
 
         [:div.row.datasets-container
-         (let [current-datasets (nth (partition datasets-count datasets-count [] (:all-data-sets data)) page)]
-           (for [data-set (:all-data-sets data)]
-             [:div.col-md-4
-              {:style (str "display: " (if (some (partial = data-set) current-datasets)
-                                         "block;" "none;"))}
-              [:div.item
-               [:a {:title (:title data-set)
-                    :href  (str "/datasets/" (:name data-set))}
-                [:img {:alt (str (:title data-set) " - " (:description data-set))
-                       :src (:logo data-set)}]]
-               [:a.title {:title (:title data-set)
-                          :href  (str "/datasets/" (:name data-set))}
-                (:title data-set)]
-               [:p.description (:description data-set)]
 
-               [:div.popular-tags-box
-                (for [tag (:tags data-set)]
-                  [:a.popular-tag-button {:href  (str "/tags/" tag)
-                                          :title (str tag)} tag])]
+         (for [data-set (:all-data-sets data)]
+           [:div.col-md-4
+            {:style (str "display: " (if (some (partial = data-set) page-datasets)
+                                       "block;" "none;"))}
+            [:div.item
+             [:a {:title (:title data-set)
+                  :href  (str "/datasets/" (:name data-set))}
+              [:img {:alt (str (:title data-set) " - " (:description data-set))
+                     :src (:logo data-set)}]]
+             [:a.title {:title (:title data-set)
+                        :href  (str "/datasets/" (:name data-set))}
+              (:title data-set)]
+             [:p.description (:description data-set)]
 
-               [:a.quick-add-btn {:title  (str (:title data-set) " usage sample")
-                                  :href   (:sample data-set)
-                                  :target "_blank"} "Usage Sample"]
-               [:a.learn-more {:title (str "Learn more about " (:title data-set))
-                               :href  (str "/datasets/" (:name data-set))}
-                [:span "Learn more"]]
-               ]]
-             ))]
+             [:div.popular-tags-box
+              (for [tag (:tags data-set)]
+                [:a.popular-tag-button {:href  (str "/tags/" tag)
+                                        :title (str tag)} tag])]
+
+             [:a.quick-add-btn {:title  (str (:title data-set) " usage sample")
+                                :href   (:sample data-set)
+                                :target "_blank"} "Usage Sample"]
+             [:a.learn-more {:title (str "Learn more about " (:title data-set))
+                             :href  (str "/datasets/" (:name data-set))}
+              [:span "Learn more"]]
+             ]]
+           )]
 
         [:div.prev-next-buttons
          [:a#tag-samples-prev.prev-button.btn.btn-default {:style (str "display: " (if (zero? page) "none;" "inline-block;"))
