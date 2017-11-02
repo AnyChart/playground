@@ -34,12 +34,6 @@
           pattern (re-pattern (str "(?m)^[ ]{" space-count "}"))]
       (clojure.string/replace trailing-s pattern ""))))
 
-(defn strip-tags [s]
-  (when (string? s)
-    (-> s
-        (string/replace #"<[^>]*>" "")
-        (string/replace #"[ ]{2,}" " ")
-        (string/trim))))
 
 (defn parse-html-sample [path s]
   (let [page (html/html-snippet s)
@@ -81,11 +75,11 @@
 
         description (some->> (html/select page [:meta])
                              (filter #(= "ac:desc" (:name (:attrs %))))
-                             first :attrs :content strip-tags)
+                             first :attrs :content)
 
         short-description (some->> (html/select page [:meta])
                                    (filter #(= "ac:short-desc" (:name (:attrs %))))
-                                   first :attrs :content strip-tags)
+                                   first :attrs :content)
 
         tags-content (->> (html/select page [:meta])
                           (filter #(= "ac:tags" (:name (:attrs %))))
