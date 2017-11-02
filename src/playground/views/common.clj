@@ -321,8 +321,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
      ;; TODO: wait datasets text (for centering footer)
      [:div.col-sm-2.col-xs-4]
      [:div.col-sm-2.col-xs-4
-      [:div [:a.caption {:href "https://www.anychart.com" :title "AnyChart"} [:b "Vendor"]]]
-      [:div [:a {:href "https://www.anychart.com" :title "AnyChart"} "AnyChart"]]
+      [:div [:a.caption {:href "https://www.anychart.com" :title "AnyChart"} [:b "AnyChart"]]]
       [:div [:a {:href "https://www.anychart.com/features" :title "AnyChart Features"} "Features"]]
       [:div [:a {:href "https://www.anychart.com/solutions/" :title "AnyChart Business Solutions"} "Business Solutions"]]
       [:div [:a {:href "https://www.anychart.com/technical-integrations/" :title "AnyChart Technical Integrations"} "Technical Integrations"]]
