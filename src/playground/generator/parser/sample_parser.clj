@@ -4,7 +4,8 @@
             [clojure.string :as s :refer (trim-newline)]
             [clojure.java.io :refer [file]]
             [toml.core :as toml]
-            [playground.data.tags :as tags-data]))
+            [playground.data.tags :as tags-data]
+            [clojure.string :as string]))
 
 (defn- ^String trim-newline-left [^CharSequence s]
   (loop [index 0]
@@ -32,6 +33,13 @@
           space-count (space-count trailing-s)
           pattern (re-pattern (str "(?m)^[ ]{" space-count "}"))]
       (clojure.string/replace trailing-s pattern ""))))
+
+(defn strip-tags [s]
+  (when (string? s)
+    (-> s
+        (string/replace #"<[^>]*>" "")
+        (string/replace #"[ ]{2,}" " ")
+        (string/trim))))
 
 (defn parse-html-sample [path s]
   (let [page (html/html-snippet s)
@@ -73,11 +81,11 @@
 
         description (some->> (html/select page [:meta])
                              (filter #(= "ac:desc" (:name (:attrs %))))
-                             first :attrs :content)
+                             first :attrs :content strip-tags)
 
         short-description (some->> (html/select page [:meta])
                                    (filter #(= "ac:short-desc" (:name (:attrs %))))
-                                   first :attrs :content)
+                                   first :attrs :content strip-tags)
 
         tags-content (->> (html/select page [:meta])
                           (filter #(= "ac:tags" (:name (:attrs %))))
