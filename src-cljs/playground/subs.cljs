@@ -55,8 +55,12 @@
 (rf/reg-sub :sample/short-description (fn [db _] (-> db :sample :short-description)))
 (rf/reg-sub :sample/tags (fn [db _] (-> db :sample :tags)))
 
-(rf/reg-sub :sample/stripped-description (fn [db _] (common-utils/strip (-> db :sample :description))))
-(rf/reg-sub :sample/stripped-short-description (fn [db _] (common-utils/strip (-> db :sample :short-description))))
+(rf/reg-sub :sample/stripped-description
+            (fn [db _]
+              (common-utils/strip-tags (-> db :sample :description))))
+(rf/reg-sub :sample/stripped-short-description
+            (fn [db _]
+              (common-utils/strip-tags (-> db :sample :short-description))))
 
 
 (rf/reg-sub :sample/scripts (fn [db _] (-> db :sample :scripts)))

@@ -103,10 +103,28 @@
     (name->url (-> sample :url))
     (-> sample :url)))
 
+(defn delete-spaces [s]
+  (when (string? s)
+    (string/replace s #"[ ]{2,}" " ")))
 
-(defn strip [s]
+(defn strip-tags [s]
+  (when (string? s)
+    (-> s (string/replace #"<[^>]*>" ""))))
+
+(defn trim [s]
+  (when (string? s)
+    (string/trim s)))
+
+(defn full-strip [s]
   (when (string? s)
     (-> s
-        (string/replace #"<[^>]*>" "")
-        (string/replace #"[ ]{2,}" " ")
-        (string/trim))))
+        strip-tags
+        delete-spaces
+        trim)))
+
+
+(defn prepare-sample [sample]
+  (-> sample
+      (update :description (comp trim strip-tags))
+      (update :short-description (comp trim strip-tags))))
+

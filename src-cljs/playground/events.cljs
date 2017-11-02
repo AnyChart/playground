@@ -97,7 +97,7 @@
     (when (= :standalone (-> db :editors :view))
       (rf/dispatch [:view/editor]))
     (POST "/save"
-          {:params        {:sample (:sample db)}
+          {:params        {:sample (common-utils/prepare-sample (:sample db))}
            :handler       #(rf/dispatch [:save-response %1])
            :error-handler #(rf/dispatch [:save-error %1])})
     db))
@@ -132,7 +132,7 @@
     (when (= :standalone (-> db :editors :view))
       (rf/dispatch [:view/editor]))
     (POST "/fork"
-          {:params        {:sample (:sample db)}
+          {:params        {:sample (common-utils/prepare-sample (:sample db))}
            :handler       #(rf/dispatch [:fork-response %1])
            :error-handler #(rf/dispatch [:fork-error %1])})
     db))
