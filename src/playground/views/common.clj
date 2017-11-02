@@ -322,13 +322,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
      [:div.col-sm-2.col-xs-4]
      [:div.col-sm-2.col-xs-4
       [:div [:a.caption {:href "https://www.anychart.com" :title "AnyChart"} [:b "AnyChart"]]]
-      [:div [:a {:href "https://www.anychart.com/features" :title "AnyChart Features"} "Features"]]
+      [:div [:a {:href "https://www.anychart.com/features/" :title "AnyChart Features"} "Features"]]
       [:div [:a {:href "https://www.anychart.com/solutions/" :title "AnyChart Business Solutions"} "Business Solutions"]]
       [:div [:a {:href "https://www.anychart.com/technical-integrations/" :title "AnyChart Technical Integrations"} "Technical Integrations"]]
       [:div [:a {:href "https://www.anychart.com/chartopedia/" :title "AnyChart Chartopedia"} "Chartopedia"]]
-      [:div [:a {:href "https://www.anychart.com/download" :title "AnyChart Download"} "Download"]]
-      [:div [:a {:href "https://www.anychart.com/buy" :title "AnyChart Buy"} "Buy"]]
-      [:div [:a {:href "https://www.anychart.com/blog" :title "AnyChart Blog"} "Blog"]]]
+      [:div [:a {:href "https://www.anychart.com/download/" :title "AnyChart Download"} "Download"]]
+      [:div [:a {:href "https://www.anychart.com/buy/" :title "AnyChart Buy"} "Buy"]]
+      [:div [:a {:href "https://www.anychart.com/blog/" :title "AnyChart Blog"} "Blog"]]]
 
      [:div.col-sm-2.col-xs-4
       [:div [:a.caption {:href "/" :title "Playground Home"} [:b "Playground"]]]
