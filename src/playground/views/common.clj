@@ -351,17 +351,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
      [:div.col-sm-2.col-xs-4
       [:div [:a.caption {:href "/tags" :title "Playground Tags"} [:b "Tags"]]]
-      (for [tag tags]
+      (for [tag (sort-by :name tags)]
         [:div [:a {:href  (str "/tags/" (:name tag))
                    :title (str "Tags - " (:name tag))}
                (:name tag)]])]
 
      ;[:div.col-sm-4.col-xs-8
      ; [:div [:a.caption {:href "/datasets" :title "Playground Data Sets"} [:b "Data Sets"]]]
-     ; (for [data-set data-sets]
+     ; (for [data-set (sort-by :title data-sets)]
      ;   [:div.dataset [:a {:href  (str "/datasets/" (:data-source-name data-set) "/" (:name data-set))
      ;                      :title (str "Data Sets - " (:title data-set))}
      ;                  (:title data-set)]])]
-
      ]
     (bottom-footer)]])

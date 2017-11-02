@@ -26,7 +26,7 @@
 
 (defn author? [owner-fullname]
   (and owner-fullname
-       (not (.startsWith owner-fullnagme "anonymous"))))
+       (not (.startsWith owner-fullname "anonymous"))))
 
 (defn page [{:keys [data sample canonical-url]}]
   (hiccup-page/html5
