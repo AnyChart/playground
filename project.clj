@@ -24,9 +24,9 @@
                  [clj-http "3.7.0"]
                  [version-clj "0.1.2"]
                  [com.cognitect/transit-clj "0.8.300"]
-                 [org.apache.commons/commons-lang3 "3.6"]
+                 [org.apache.commons/commons-lang3 "3.7"]
                  [enlive "1.1.6"]
-                 [selmer "1.11.1"]
+                 [selmer "1.11.2"]
                  [clj-time "0.14.0"]
                  [me.raynes/fs "1.4.6"]
                  [camel-snake-kebab "0.4.0"]
@@ -60,12 +60,12 @@
                  [re-com "2.1.0"]
                  [alandipert/storage-atom "2.0.1"]
                  ; [cljs-http "0.1.42"]
-                 [cljs-ajax "0.7.2"]
+                 [cljs-ajax "0.7.3"]
                  [com.andrewmcveigh/cljs-time "0.5.1"]
                  [hiccups "0.3.0"]
                  ;[secretary "1.2.3"]
                  [com.cognitect/transit-cljs "0.8.243"]
-                 [venantius/accountant "0.2.0"]]
+                 [venantius/accountant "0.2.3"]]
   :plugins [[lein-ancient "0.6.10"]
             [lein-cljsbuild "1.1.5"]
             [lein-kibit "0.1.3"]
@@ -75,7 +75,7 @@
          :target-path  "resources/public/css"
          :output-style :compressed}
   :profiles {:dev {:jvm-opts     ["-Dlocal=true"]
-                   :dependencies [[re-frisk "0.5.0"]]}}
+                   :dependencies [[re-frisk "0.5.2"]]}}
   :cljsbuild {:builds [
                        ;; editor
                        {:id           "dev"

@@ -54,7 +54,8 @@
   (if (pos? @*page)
     (when-not (.getElementById js/document id)
       (let [container (.getElementById js/document "prev-next-buttons")]
-        (.prepend container (str-to-elem (h/html (prev-next-buttons-common/prev-button id @*page url))))
+        ;(.prepend container (str-to-elem (h/html (prev-next-buttons-common/prev-button id @*page url))))
+        (.insertAdjacentHTML container "afterbegin" (h/html (prev-next-buttons-common/prev-button id @*page url)))
         (add-prev-event id *page load-fn)))
     (if-let [btn (.getElementById js/document id)]
       (.remove btn))))
@@ -64,7 +65,8 @@
   (if-not end
     (when-not (.getElementById js/document id)
       (let [container (.getElementById js/document "prev-next-buttons")]
-        (.append container (str-to-elem (h/html (prev-next-buttons-common/next-button id @*page url))))
+        ;(.append container (str-to-elem (h/html (prev-next-buttons-common/next-button id @*page url))))
+        (.insertAdjacentHTML container "beforeend" (h/html (prev-next-buttons-common/next-button id @*page url)))
         (add-next-event id *page load-fn)))
     (if-let [btn (.getElementById js/document id)]
       (.remove btn))))
