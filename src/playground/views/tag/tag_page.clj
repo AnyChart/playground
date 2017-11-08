@@ -1,12 +1,14 @@
 (ns playground.views.tag.tag-page
   (:require [playground.views.common :as page]
             [playground.views.sample :as sample-view]
-            [hiccup.page :as hiccup-page]))
+            [hiccup.page :as hiccup-page]
+            [playground.site.pages.tag-page-utils :as tag-page-utils]))
+
 
 (defn page [{:keys [page tag tag-data] :as data}]
   (hiccup-page/html5
     {:lang "en"}
-    (page/head {:title       (str tag " | Tags | AnyChart Playground")
+    (page/head {:title       (tag-page-utils/title tag page)
                 :description (page/desc (:description tag-data))})
     [:body page/body-tag-manager
      [:div.wrapper.tag-page
@@ -43,4 +45,4 @@
      [:script {:src "/jquery/jquery.min.js"}]
      [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]
      [:script {:src "/js/site.js" :type "text/javascript"}]
-     [:script "playground.site.landing.startTagPage(" (:end data) ", " page ", '" tag "', true);"]]))
+     [:script "playground.site.pages.tag_page.startTagPage(" (:end data) ", " page ", '" tag "', true);"]]))

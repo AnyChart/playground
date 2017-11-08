@@ -1,12 +1,15 @@
 (ns playground.views.repo.version-page
   (:require [playground.views.common :as page]
             [playground.views.sample :as sample-view]
-            [hiccup.page :as hiccup-page]))
+            [hiccup.page :as hiccup-page]
+            [playground.site.pages.version-page-utils :as version-page-utils]))
+
+
 
 (defn page [{:keys [repo version page] :as data}]
   (hiccup-page/html5
     {:lang "en"}
-    (page/head {:title (str (:name version) " | " (:title (:repo data)) " | AnyChart Playground")})
+    (page/head {:title (version-page-utils/title (:name version) page (-> data :repo :title))})
     [:body page/body-tag-manager
      [:div.wrapper
 
@@ -35,4 +38,10 @@
      [:script {:src "/jquery/jquery.min.js"}]
      [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]
      [:script {:src "/js/site.js" :type "text/javascript"}]
-     [:script "playground.site.landing.startVersionPage(" (:end data) ", " page "," (-> data :version :id) ");"]]))
+     [:script "playground.site.pages.version_page.startVersionPage("
+      (:end data) ", "
+      page ","
+      (-> data :version :id) ",'"
+      (:name version) "','"
+      (-> data :repo :title)
+      "');"]]))

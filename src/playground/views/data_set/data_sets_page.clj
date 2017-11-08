@@ -1,6 +1,7 @@
 (ns playground.views.data-set.data-sets-page
   (:require [hiccup.page :as hiccup-page]
-            [playground.views.common :as page]))
+            [playground.views.common :as page]
+            [playground.site.pages.datasets-page-utils :as datasets-page-utils]))
 
 (def ^:const datasets-count 6)
 
@@ -13,10 +14,11 @@
     (when (< page (count blocks))
       (nth blocks page))))
 
+
 (defn page [data end page page-datasets]
   (hiccup-page/html5
     {:lang "en"}
-    (page/head {:title       "Data Sets | AnyChart Playground"
+    (page/head {:title       (datasets-page-utils/title page)
                 :description "The place where all your data visualization dreams come true"})
     [:body page/body-tag-manager
      [:div.wrapper.datasets-page
@@ -97,4 +99,4 @@
      [:script {:src "/jquery/jquery.min.js"}]
      [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]
      [:script {:src "/js/site.js" :type "text/javascript"}]
-     [:script "playground.site.landing.startDatasetsPage(" end ", " page ");"]]))
+     [:script "playground.site.pages.datasets_page.startDatasetsPage(" end ", " page ");"]]))

@@ -1,12 +1,14 @@
 (ns playground.views.landing-page
   (:require [playground.views.sample :as sample-view]
             [playground.views.common :as page]
-            [hiccup.page :as hiccup-page]))
+            [hiccup.page :as hiccup-page]
+            [playground.site.pages.landing-page-utils :as landing]))
+
 
 (defn page [{:keys [page tags-page all-tags] :as data}]
   (hiccup-page/html5
     {:lang "en"}
-    (page/head {:title       "AnyChart Playground"
+    (page/head {:title       (landing/title page)
                 :description "The place where all your data visualization dreams come true"})
     [:body
      page/body-tag-manager
@@ -68,7 +70,7 @@
      [:script {:src "/jquery/jquery.min.js"}]
      [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]
      [:script {:src "/js/site.js" :type "text/javascript"}]
-     [:script "playground.site.landing.startLanding(" (:end data) ", " page ");"
+     [:script "playground.site.pages.landing_page.startLanding(" (:end data) ", " page ");"
       ;"playground.site.landing.startLandingTag(" (:tags-end data) ", " tags-page ");"
       ]
      ]))
