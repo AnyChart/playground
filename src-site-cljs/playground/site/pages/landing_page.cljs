@@ -2,7 +2,7 @@
   (:require-macros [hiccups.core :as h])
   (:require [playground.site.landing :refer [samples-per-page samples-per-block samples-per-landing
                                              change-title
-                                             init-buttons set-buttons-visibility]]
+                                             init-buttons update-buttons]]
             [playground.views.sample :as sample-view]
             [playground.site.utils :as utils]
             [ajax.core :refer [GET POST]]
@@ -15,6 +15,7 @@
 (def *page (atom 0))
 (def *is-end (atom false))
 
+(declare load-popular-samples)
 
 (defn on-popular-samples-load [data]
   (dom/removeChildren (dom/getElement "popular-samples"))
@@ -23,11 +24,12 @@
   (reset! *is-end (:end data))
   (.pushState (.-history js/window) nil nil (str "?page=" (inc @*page)))
   (change-title (landing-page-utils/title @*page))
-  (set-buttons-visibility "popular-samples-prev"
-                          "popular-samples-next"
-                          @*page
-                          @*is-end
-                          "samples"))
+  (update-buttons "popular-samples-prev"
+                  "popular-samples-next"
+                  *page
+                  @*is-end
+                  "/?page="
+                  load-popular-samples))
 
 
 (defn load-popular-samples []
@@ -43,12 +45,7 @@
   (init-buttons "popular-samples-prev"
                 "popular-samples-next"
                 *page
-                load-popular-samples)
-  (set-buttons-visibility "popular-samples-prev"
-                          "popular-samples-next"
-                          @*page
-                          @*is-end
-                          "samples"))
+                load-popular-samples))
 
 ;;======================================================================================================================
 ;; Landing page: tag block

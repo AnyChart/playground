@@ -2,7 +2,7 @@
   (:require-macros [hiccups.core :as h])
   (:require [playground.site.landing :refer [samples-per-page samples-per-block samples-per-landing
                                              change-title
-                                             init-buttons set-buttons-visibility]]
+                                             init-buttons update-buttons]]
             [playground.views.sample :as sample-view]
             [playground.site.utils :as utils]
             [ajax.core :refer [GET POST]]
@@ -32,11 +32,12 @@
     (reset! *is-end (is-end (count els) 6 @*page)))
   (.pushState (.-history js/window) nil nil (str "?page=" (inc @*page)))
   (change-title (datasets-page-utils/title @*page))
-  (set-buttons-visibility "tag-samples-prev"
-                          "tag-samples-next"
-                          @*page
-                          @*is-end
-                          "page"))
+  (update-buttons "tag-samples-prev"
+                  "tag-samples-next"
+                  *page
+                  @*is-end
+                  "/datasets?page="
+                  datasets-buttons-click))
 
 (defn ^:export startDatasetsPage [_end _page]
   (reset! *page _page)
@@ -44,9 +45,4 @@
   (init-buttons "tag-samples-prev"
                 "tag-samples-next"
                 *page
-                datasets-buttons-click)
-  (set-buttons-visibility "tag-samples-prev"
-                          "tag-samples-next"
-                          @*page
-                          @*is-end
-                          "page"))
+                datasets-buttons-click))

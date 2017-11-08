@@ -1,4 +1,4 @@
-(ns playground.site.pages.tag-page
+(ns playground.site.pages.chart-type-page
   (:require-macros [hiccups.core :as h])
   (:require [playground.site.landing :refer [samples-per-page samples-per-block samples-per-landing
                                              change-title
@@ -7,14 +7,16 @@
             [playground.site.utils :as utils]
             [ajax.core :refer [GET POST]]
             [goog.dom :as dom]
-            [playground.site.pages.tag-page-utils :as tag-page-utils]))
+            [playground.site.pages.chart-type-page-utils :as chart-type-page-utils]))
 
 ;;======================================================================================================================
-;; Tags page
+;; Chart type tags page
 ;;======================================================================================================================
 (def *page (atom 0))
 (def *is-end (atom false))
 (def *tag (atom nil))
+(def *chart-type-name (atom nil))
+(def *chart-type-id (atom nil))
 
 (declare load-tag-samples)
 
@@ -24,29 +26,31 @@
         (apply str (map #(-> % sample-view/sample-landing h/html) (:samples data))))
   (reset! *is-end (:end data))
   (.pushState (.-history js/window) nil nil (str "?page=" (inc @*page)))
-  (change-title (tag-page-utils/title @*tag @*page))
+  (change-title (chart-type-page-utils/title @*chart-type-name @*page))
   (update-buttons "tag-samples-prev"
                   "tag-samples-next"
                   *page
                   @*is-end
-                  (str "/tags/" @*tag "?page=")
+                  (str "/chart-types/" @*chart-type-id "?page=")
                   load-tag-samples))
 
 
 (defn load-tag-samples []
   (POST "/tag-samples.json"
-        {:params        {:offset        (* samples-per-page @*page)
+        {:params        {:offset        (* samples-per-block @*page)
                          :tag           @*tag
-                         :samples-count samples-per-page}
+                         :samples-count samples-per-block}
          :handler       on-tag-samples-load
          :error-handler #(utils/log "Error!" %)}))
 
 
-(defn ^:export startTagPage [_end _page _tag]
-  ;(utils/log "Start tag page: " _end _page _tag)
+(defn ^:export startChartTypePage [_end _page _tag _chart-type-id _chart-type-name]
+  ;(utils/log "Start tag page: " _end _page _tag _chart-type-id)
   (reset! *is-end _end)
   (reset! *page _page)
   (reset! *tag _tag)
+  (reset! *chart-type-id _chart-type-id)
+  (reset! *chart-type-name _chart-type-name)
   (init-buttons "tag-samples-prev"
                 "tag-samples-next"
                 *page

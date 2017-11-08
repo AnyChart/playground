@@ -3,7 +3,9 @@
             [playground.views.common :as page]
             [cheshire.core :as json]
             [clojure.string :as string]
-            [playground.views.sample :as sample-view]))
+            [playground.views.sample :as sample-view]
+            [playground.views.prev-next-buttons :as prev-next-buttons]
+            [playground.site.pages.chart-type-page-utils :as chart-type-page-utils]))
 
 (defn get-id [text]
   (string/replace (string/lower-case text) #" " "-"))
@@ -11,7 +13,7 @@
 (defn page [{:keys [page tag] :as data} chart-type relations]
   (hiccup-page/html5
     {:lang "en"}
-    (page/head {:title       (str (:name chart-type) " | Chart Types | AnyChart Playground")
+    (page/head {:title       (chart-type-page-utils/title (:name chart-type) page)
                 :description (page/desc (:description chart-type))})
     [:body page/body-tag-manager
      [:div.wrapper.chart-type-page
@@ -62,17 +64,12 @@
         [:div#tag-samples.row.samples-container
          (for [sample (:samples data)]
            (sample-view/sample-landing sample))]
-        [:div.prev-next-buttons
-         [:a#tag-samples-prev.prev-button.btn.btn-default {:style (str "display: " (if (zero? page) "none;" "inline-block;"))
-                                                           :href  (str "/tags/" tag "?page=" page)
-                                                           :title (str "Prev page, " page)}
-          [:span.glyphicon.glyphicon-arrow-left {:aria-hidden true}]
-          " Prev"]
-         [:a#tag-samples-next.next-button.btn.btn-default {:style (str "display: " (if (:end data) "none;" "inline-block;"))
-                                                           :href  (str "/tags/" tag "?page=" (-> page inc inc))
-                                                           :title (str "Next page, " (-> page inc inc))}
-          "Next "
-          [:span.glyphicon.glyphicon-arrow-right {:aria-hidden true}]]]
+
+        (prev-next-buttons/buttons "tag-samples-prev"
+                                   "tag-samples-next"
+                                   page
+                                   (:end data)
+                                   (str "/chart-types/" (:id chart-type) "?page="))
 
         ]]
 
@@ -80,4 +77,10 @@
      [:script {:src "/jquery/jquery.min.js"}]
      [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]
      [:script {:src "/js/site.js" :type "text/javascript"}]
-     [:script "playground.site.pages.tag_page.startTagPage(" (:end data) ", " page ", '" tag "', false);"]]))
+     [:script "playground.site.pages.chart_type_page.startChartTypePage("
+      (:end data) ", "
+      page ", '"
+      tag "', '"
+      (:id chart-type) "', '"
+      (:name chart-type)
+      "');"]]))

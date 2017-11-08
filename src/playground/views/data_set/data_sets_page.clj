@@ -1,7 +1,8 @@
 (ns playground.views.data-set.data-sets-page
   (:require [hiccup.page :as hiccup-page]
             [playground.views.common :as page]
-            [playground.site.pages.datasets-page-utils :as datasets-page-utils]))
+            [playground.site.pages.datasets-page-utils :as datasets-page-utils]
+            [playground.views.prev-next-buttons :as prev-next-buttons]))
 
 (def ^:const datasets-count 6)
 
@@ -81,18 +82,11 @@
              ]]
            )]
 
-        [:div.prev-next-buttons
-         [:a#tag-samples-prev.prev-button.btn.btn-default {:style (str "display: " (if (zero? page) "none;" "inline-block;"))
-                                                           :href  (str "/datasets?page=" page)
-                                                           :title (str "Prev page, " page)}
-          [:span.glyphicon.glyphicon-arrow-left {:aria-hidden true}]
-          " Prev"]
-         [:a#tag-samples-next.next-button.btn.btn-default {:style (str "display: " (if end "none;" "inline-block;"))
-                                                           :href  (str "/datasets?page=" (-> page inc inc))
-                                                           :title (str "Next page, " (-> page inc inc))}
-          "Next "
-          [:span.glyphicon.glyphicon-arrow-right {:aria-hidden true}]]]
-
+        (prev-next-buttons/buttons "tag-samples-prev"
+                                   "tag-samples-next"
+                                   page
+                                   end
+                                   "/datasets?page=")
         ]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]

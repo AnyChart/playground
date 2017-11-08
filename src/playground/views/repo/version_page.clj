@@ -2,8 +2,8 @@
   (:require [playground.views.common :as page]
             [playground.views.sample :as sample-view]
             [hiccup.page :as hiccup-page]
-            [playground.site.pages.version-page-utils :as version-page-utils]))
-
+            [playground.site.pages.version-page-utils :as version-page-utils]
+            [playground.views.prev-next-buttons :as prev-next-buttons]))
 
 
 (defn page [{:keys [repo version page] :as data}]
@@ -21,17 +21,14 @@
         [:div#version-samples.row.samples-container
          (for [sample (:samples data)]
            (sample-view/sample-landing sample))]
-        [:div.prev-next-buttons
-         [:a#version-samples-prev.prev-button.btn.btn-default {:style (str "display: " (if (zero? page) "none;" "inline-block;"))
-                                                               :href  (str "/" (:name repo) "/" (:name version) "?page=" page)
-                                                               :title (str "Prev page, " page)}
-          [:span.glyphicon.glyphicon-arrow-left {:aria-hidden true}]
-          " Prev"]
-         [:a#version-samples-next.next-button.btn.btn-default {:style (str "display: " (if (:end data) "none;" "inline-block;"))
-                                                               :href  (str "/" (:name repo) "/" (:name version) "?page=" (-> page inc inc))
-                                                               :title (str "Next page, " (-> page inc inc))}
-          "Next "
-          [:span.glyphicon.glyphicon-arrow-right {:aria-hidden true}]]]]]
+
+        (prev-next-buttons/buttons "version-samples-prev"
+                                   "version-samples-next"
+                                   page
+                                   (:end data)
+                                   (str "/projects/" (:name repo) "/" (:name version) "?page="))
+
+        ]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
 

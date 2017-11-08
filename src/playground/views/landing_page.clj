@@ -2,7 +2,8 @@
   (:require [playground.views.sample :as sample-view]
             [playground.views.common :as page]
             [hiccup.page :as hiccup-page]
-            [playground.site.pages.landing-page-utils :as landing]))
+            [playground.site.pages.landing-page-utils :as landing]
+            [playground.views.prev-next-buttons :as prev-next-buttons]))
 
 
 (defn page [{:keys [page tags-page all-tags] :as data}]
@@ -40,19 +41,11 @@
          (for [sample (:samples data)]
            (sample-view/sample-landing sample))]
 
-        [:div.prev-next-buttons
-         [:a#popular-samples-prev.prev-button.btn.btn-default {:style (str "display: " (if (zero? page) "none;" "inline-block;"))
-                                                               :href  (str "/?samples=" page)
-                                                               :title (str "Prev page, " page)}
-          [:span.glyphicon.glyphicon-arrow-left {:aria-hidden true}]
-          " Prev"]
-         [:a#popular-samples-next.next-button.btn.btn-default {:style (str "display: " (if (:end data) "none;" "inline-block;"))
-                                                               :href  (str "/?samples=" (-> page inc inc))
-                                                               :title (str "Next page, " (-> page inc inc))}
-          "Next "
-          [:span.glyphicon.glyphicon-arrow-right {:aria-hidden true}]]]
-
-
+        (prev-next-buttons/buttons "popular-samples-prev"
+                                   "popular-samples-next"
+                                   page
+                                   (:end data)
+                                   "/?page=")
 
         [:p.popular-label.popular-tags-label "Popular " [:b "tags"]]
 

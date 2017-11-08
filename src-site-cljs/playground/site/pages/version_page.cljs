@@ -2,7 +2,7 @@
   (:require-macros [hiccups.core :as h])
   (:require [playground.site.landing :refer [samples-per-page samples-per-block samples-per-landing
                                              change-title
-                                             init-buttons set-buttons-visibility]]
+                                             init-buttons update-buttons]]
             [playground.views.sample :as sample-view]
             [playground.site.utils :as utils]
             [ajax.core :refer [GET POST]]
@@ -18,6 +18,7 @@
 (def *version-name (atom nil))
 (def *repo-title (atom nil))
 
+(declare load-version-samples)
 
 (defn on-version-samples-load [data]
   (dom/removeChildren (dom/getElement "version-samples"))
@@ -26,11 +27,12 @@
   (reset! *is-end (:end data))
   (.pushState (.-history js/window) nil nil (str "?page=" (inc @*page)))
   (change-title (version-page-utils/title @*version-name @*page @*repo-title))
-  (set-buttons-visibility "version-samples-prev"
-                          "version-samples-next"
-                          @*page
-                          @*is-end
-                          "page"))
+  (update-buttons "version-samples-prev"
+                  "version-samples-next"
+                  *page
+                  @*is-end
+                  (str "/projects/" @*repo-title "/" @*version-name "?page=")
+                  load-version-samples))
 
 
 (defn load-version-samples []
@@ -51,9 +53,4 @@
   (init-buttons "version-samples-prev"
                 "version-samples-next"
                 *page
-                load-version-samples)
-  (set-buttons-visibility "version-samples-prev"
-                          "version-samples-next"
-                          @*page
-                          @*is-end
-                          "page"))
+                load-version-samples))

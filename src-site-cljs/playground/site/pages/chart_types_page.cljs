@@ -2,7 +2,7 @@
   (:require-macros [hiccups.core :as h])
   (:require [playground.site.landing :refer [samples-per-page samples-per-block samples-per-landing
                                              change-title
-                                             init-buttons set-buttons-visibility]]
+                                             init-buttons update-buttons]]
             [playground.views.sample :as sample-view]
             [playground.site.utils :as utils]
             [ajax.core :refer [GET POST]]
