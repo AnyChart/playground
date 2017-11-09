@@ -42,4 +42,4 @@
      [:script {:src "/jquery/jquery.min.js"}]
      [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]
      [:script {:src "/js/site.js" :type "text/javascript"}]
-     [:script "playground.site.pages.tag_page.startTagPage(" (:end data) ", " page ", '" tag "');"]]))
+     [:script (page/run-js-fn "playground.site.pages.tag_page.startTagPage" (:end data) page tag)]]))

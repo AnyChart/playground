@@ -93,4 +93,4 @@
      [:script {:src "/jquery/jquery.min.js"}]
      [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]
      [:script {:src "/js/site.js" :type "text/javascript"}]
-     [:script "playground.site.pages.datasets_page.startDatasetsPage(" end ", " page ");"]]))
+     [:script (page/run-js-fn "playground.site.pages.datasets_page.startDatasetsPage" end page)]]))

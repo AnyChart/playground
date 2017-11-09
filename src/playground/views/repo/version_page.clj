@@ -35,10 +35,9 @@
      [:script {:src "/jquery/jquery.min.js"}]
      [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]
      [:script {:src "/js/site.js" :type "text/javascript"}]
-     [:script "playground.site.pages.version_page.startVersionPage("
-      (:end data) ", "
-      page ","
-      (-> data :version :id) ",'"
-      (:name version) "','"
-      (-> data :repo :title)
-      "');"]]))
+     [:script (page/run-js-fn "playground.site.pages.version_page.startVersionPage"
+                              (:end data)
+                              page
+                              (-> data :version :id)
+                              (:name version)
+                              (-> data :repo :title))]]))

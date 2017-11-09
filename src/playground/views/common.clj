@@ -42,6 +42,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     "/bootstrap-3.3.7-dist/fonts"))
 
 
+(defn run-js-fn [fn-name & params]
+  (str fn-name "("
+       (->> params
+            (map #(if (string? %)
+                    (str "'" % "'")
+                    %))
+            (string/join ","))
+       ");"))
+
+
 (defn head [data]
   [:head
    [:meta {:charset "UTF-8"}]
@@ -364,3 +374,4 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
      ;                  (:title data-set)]])]
      ]
     (bottom-footer)]])
+
