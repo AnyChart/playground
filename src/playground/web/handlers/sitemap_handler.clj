@@ -1,10 +1,19 @@
-(ns playground.web.sitemap
-  (:require [clojure.xml :as xml]
-            [clojure.string :as string]
-            [playground.web.chartopedia :as chartopedia]
-            [clj-time.format :as f]
-            [clj-time.coerce :as c])
+(ns playground.web.handlers.sitemap-handler
+  (:require
+    ;; db
+    [playground.db.request :as db-req]
+    ;; web
+    [playground.web.utils :as web-utils :refer [response]]
+    [playground.web.helpers :refer :all]
+    [ring.util.response :refer [redirect file-response content-type]]
+    ;; sitemap
+    [clojure.xml :as xml]
+    [clojure.string :as string]
+    [playground.web.chartopedia :as chartopedia]
+    [clj-time.format :as f]
+    [clj-time.coerce :as c])
   (:import (java.time LocalDateTime)))
+
 
 (defn now []
   (.toString (LocalDateTime/now)))
@@ -97,7 +106,7 @@
              {:tag :lastmod :content [(date->str (:create-date sample))]}]})
 
 
-(defn page [data]
+(defn xml-page [data]
   (with-out-str
     (xml/emit {:tag     :urlset
                :attrs   {:xmlns "http://www.sitemaps.org/schemas/sitemap/0.9"}
@@ -112,3 +121,11 @@
 
                           ;(map data-set (:all-data-sets data))
                           (map sample (:samples data)))})))
+
+
+(defn sitemap-page [request]
+  (-> (xml-page (merge (get-app-data request)
+                       {:samples  (db-req/sitemap-sample-urls (get-db request))
+                        :versions (db-req/versions-repos (get-db request))}))
+      response
+      (content-type "text/xml")))
