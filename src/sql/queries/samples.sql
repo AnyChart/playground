@@ -163,3 +163,10 @@ UNION
 SELECT url, create_date
 FROM samples
 WHERE version_id IS NULL AND latest;
+
+
+-- name: sql-get-visit
+SELECT * FROM visits WHERE user_id = :user_id AND sample_id = :sample_id;
+
+-- name: sql-visit!
+INSERT INTO visits (user_id, sample_id ) VALUES (:user_id, :sample_id);

@@ -38,9 +38,9 @@
   (if (ends-with? fn-name "<!")
     `(defn ~fn-name [db# & [params#]]
        (:generated_key
-         (~(sql-sym fn-name) (dash->underscore params#) (merge {:connection (:conn db#)} ~opts))))
+         (~(sql-sym fn-name) (dash->underscore params#) (merge {:connection (or (:conn db#) db#)} ~opts))))
     `(defn ~fn-name [db# & [params#]]
-       (~(sql-sym fn-name) (dash->underscore params#) (merge {:connection (:conn db#)} ~opts)))))
+       (~(sql-sym fn-name) (dash->underscore params#) (merge {:connection (or (:conn db#) db#)} ~opts)))))
 
 (defmacro sql
   "generate for each request something like:
@@ -52,9 +52,22 @@
     (if (ends-with? fn-name "<!")
       `(fn [db# & [params#]]
          (:generated_key
-           (~fn-name (dash->underscore params#) (merge {:connection (:conn db#)} ~opts))))
+           (~fn-name (dash->underscore params#) (merge {:connection (or (:conn db#) db#)} ~opts))))
       `(fn [db# & [params#]]
-         (~fn-name (dash->underscore params#) (merge {:connection (:conn db#)} ~opts))))))
+         (~fn-name (dash->underscore params#) (merge {:connection (or (:conn db#) db#)} ~opts))))))
+
+; TODO: maybe do something linke this:
+;(db-req/transaction (get-db request)
+;                    (db-req/update-sample-views! {:id (:id sample)})
+;                    (db-req/update-sample-views! {:id (:id sample)})
+;                    (throw (Exception. "my ex"))
+;                    (db-req/update-sample-views! {:id (:id sample)}))
+
+;(defmacro transaction [db & body]
+;  (jdbc/with-db-transaction [conn (:db-spec (get-db request))]
+;                            (prn "CREATED conn: " conn)
+;                            )
+;  )
 
 ;; =====================================================================================================================
 ;; Repos
@@ -202,6 +215,17 @@
 (def user-samples-without-preview (sql {:name sql-user-samples-without-preview}))
 
 (def repo-samples-without-preview (sql {:name sql-repo-samples-without-preview}))
+
+
+;;======================================================================================================================
+;; Visits and likes
+;;======================================================================================================================
+(def get-visit (sql {:name          sql-get-visit
+                     :result-set-fn first
+                     :row-fn        underscore->dash}))
+
+(def visit! (sql {:name sql-visit!}))
+
 
 ;;======================================================================================================================
 ;; Set sample latest

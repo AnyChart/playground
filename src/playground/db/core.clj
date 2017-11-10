@@ -42,7 +42,7 @@
    :password    (:password conf)
    :stringtype  "unspecified"})
 
-(defrecord JDBC [config conn]
+(defrecord JDBC [config db-spec conn]
   component/Lifecycle
 
   (start [this]
@@ -50,8 +50,9 @@
     ;(prn this)
     (if conn
       (assoc this :conn conn)
-      (let [conn (connection-pool (create-db-spec config))]
-        (assoc this :conn conn))))
+      (let [db-spec (create-db-spec config)
+            conn (connection-pool db-spec)]
+        (assoc this :db-spec db-spec :conn conn))))
 
   (stop [this]
     (timbre/info "DB stop")

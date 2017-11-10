@@ -12,13 +12,15 @@
             [playground.views.editor.editor-page :as editor-view]
             [playground.views.iframe :as iframe-view]
     ;; misc
-            [hiccup.core :as hiccup]))
+            [hiccup.core :as hiccup]
+            [clojure.java.jdbc :as jdbc]))
 
 ;; =====================================================================================================================
 ;; Samples pages handlers
 ;; =====================================================================================================================
 (defn show-sample-editor [request & [editor-view]]
   (let [sample (get-sample request)
+        user (get-user request)
         ;; Not need to get them in aggregations function via middleware, cause iframe-view e.g. doesn't need them
         templates (db-req/templates (get-db request))
         data-sets (db-req/data-sets (get-db request))
@@ -31,7 +33,14 @@
                                               :datasets  (map #(dissoc % :data) data-sets)
                                               :user      (get-safe-user request)
                                               :view      editor-view})}]
-    (db-req/update-sample-views! (get-db request) {:id (:id sample)})
+
+    (jdbc/with-db-transaction [conn (:db-spec (get-db request))]
+                              (when-not (db-req/get-visit conn {:sample-id (:id sample)
+                                                                :user-id   (:id user)})
+                                (db-req/update-sample-views! conn {:id (:id sample)})
+                                (db-req/visit! conn {:sample-id (:id sample)
+                                                     :user-id   (:id user)})))
+
     (response (editor-view/page data))))
 
 (defn show-sample-standalone [request]
