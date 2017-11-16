@@ -226,6 +226,9 @@
 
 (def visit! (sql {:name sql-visit!}))
 
+(def delete-version-visits! (sql {:name sql-delete-version-visits!}))
+
+(def delete-repo-visits! (sql {:name sql-delete-repo-visits!}))
 
 ;;======================================================================================================================
 ;; Set sample latest

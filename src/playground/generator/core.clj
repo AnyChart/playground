@@ -118,6 +118,8 @@
       {:name (:name @repo) :e e})))
 
 (defn delete-repo [db repo]
+  (timbre/info "DELETE REPO: " repo)
+  (db-req/delete-repo-visits! db {:repo-id (:id repo)})
   (db-req/delete-samples-by-repo-name! db {:name (:name repo)})
   (db-req/delete-versions-by-repo-name! db {:name (:name repo)})
   (db-req/delete-repo-by-name! db {:name (:name repo)}))
@@ -139,7 +141,8 @@
 
 
 ;;============ remove branches
-(defn- remove-branch [db branch]
+(defn remove-branch [db branch]
+  (db-req/delete-version-visits! db {:version-id (:id branch)})
   (db-req/delete-samples! db {:version-id (:id branch)})
   (db-req/delete-version! db {:id (:id branch)}))
 

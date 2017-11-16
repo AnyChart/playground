@@ -170,3 +170,22 @@ SELECT * FROM visits WHERE user_id = :user_id AND sample_id = :sample_id;
 
 -- name: sql-visit!
 INSERT INTO visits (user_id, sample_id ) VALUES (:user_id, :sample_id);
+
+-- name: sql-delete-version-visits!
+DELETE
+FROM visits
+WHERE sample_id IN
+      (SELECT id
+       FROM samples
+       WHERE version_id = :version_id);
+
+-- name: sql-delete-repo-visits!
+DELETE
+FROM visits
+WHERE sample_id IN
+      (SELECT id
+       FROM samples
+       WHERE version_id IN
+             (SELECT id
+              FROM versions
+              WHERE repo_id = :repo_id));
