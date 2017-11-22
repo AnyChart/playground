@@ -39,7 +39,7 @@
      (when @(rf/subscribe [:embed/embed-tab?])
        [:div
         [:div.content
-         [:p.intro "To place the chart in a web page, copy one of the code snippets below. We recommend using the first option as far as it doesn't bother your page with using external services to load the chart."]
+         [:p.intro "To embed into a web page, copy and paste one of the code snippets below."]
 
          [:form.form-inline
 
@@ -93,7 +93,7 @@
         (when @(rf/subscribe [:embed/html-sub-tab?])
           [:div.content
            [:p.sub-intro
-            "Please, make sure that IDs of HTML elements and CSS styles defined in the sample does not corrupt your page content."]
+            "Make sure that IDs of HTML elements and names of CSS styles defined in the sample do not interfere with the page you are embedding this code into."]
            [plain-html-editor]
            [:input.ac-btn.add-btn {:id    "copy-embed-plain-html"
                                    :type  "button"
@@ -102,7 +102,7 @@
         (when @(rf/subscribe [:embed/iframe-sub-tab?])
           [:div.content
            [:p.sub-intro
-            "This option doesn't use external resources and protect your page content from the ID's and CSS used in the sample, but usage of HTML iframe is not convenient to use from the page loading speed perspective."]
+            "This option protects your page content from the IDs and CSS used in the sample but may increase the page initial loading time."]
            [iframe-internal-editor]
            [:input.ac-btn.add-btn {:id    "copy-embed-internal-iframe"
                                    :type  "button"
