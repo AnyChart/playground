@@ -111,7 +111,7 @@
         (when @(rf/subscribe [:embed/iframe2-sub-tab?])
           [:div.content
            [:p.sub-intro
-            "The advantage of this option is auto-update of the sample embedded on your page then you're updating the sample on playground."]
+            "This option protects your page content from the IDs and CSS used in the sample but may increase the page initial loading time."]
            [embed-editor]
            [:input.ac-btn.add-btn {:id    "copy-embed-iframe"
                                    :type  "button"
