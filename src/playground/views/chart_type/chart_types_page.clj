@@ -12,7 +12,7 @@
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title       "Chart Types | AnyChart Playground"
-                :description "The place where all your data visualization dreams come true"})
+                :description "Browse all available AnyChart Chart types by name or by the way chart is used. Click links below to proceed to study materials, samples selection, guides to similar chart types and other useful information."})
     [:body page/body-tag-manager
      [:div.wrapper.chart-types-page
 

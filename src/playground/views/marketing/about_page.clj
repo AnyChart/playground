@@ -6,7 +6,7 @@
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title       "About | AnyChart Playground"
-                :description "The place where all your data visualization dreams come true"})
+                :description "AnyChart Playground is an online tool for testing and showcasing user-created HTML, CSS and JavaScript code snippets."})
     [:body page/body-tag-manager
      [:div.wrapper
 
@@ -15,33 +15,24 @@
       [:div.content
        [:div.container-fluid.content-container
         [:h1.page-caption "About"]
-        [:h2 "Our Mission"]
+        [:p "AnyChart Playground is an online tool for testing and showcasing user-created HTML, CSS and JavaScript code snippets."]
 
-        [:p "Миссия нового плйграунда состоит в том, чтобы предоставить быстрый и удобный способ создавать визуализации данных.
-        На практике, это значит что " [:b "есть"] " все необходимые инструменты:"
-         [:ul
-          [:li "Нормальный дизайн с продуманным UI/UX"]
-          [:li "Источники данных"]
-          [:li "Различные типы графиков"]
-          [:li "Обучающие материалы и подсказки"]
-          [:li "Community"]
-          ]]
+        [:p "This playground is used by "
+         [:a {:title "AnyChart" :href "https://www.anychart.com/"} "AnyChart Team"]
+         " to store and showcase samples from "
+         [:a {:title "AnyChart Documentation" :href "https://docs.anychart.com/"} "AnyChart Documentation"]
+         ", "
+         [:a {:title "AnyChart API Reference" :href "https://api.anychart.com/"} "AnyChart API Reference"]
+        ", and "
+         [:a {:title "AnyChart Chartopedia" :href "https://www.anychart.com/chartopedia/"} "AnyChart Chartopedia"]
+         "."]
 
-        [:p "Это значит что " [:b "нет"] " ничего лишнего, того что мешало бы процессу создания визуализаций:"
-         [:ul
-          [:li "Рекламы"]
-          [:li "Любой другой херни которая мешает"]]]
-
-        [:h2 "Слоган"]
-        [:p "AnyChart Playground - the ultimate charts playground. Create, modify, browse, learn and share."]
-
-        [:h2 "Профит для Компании"]
-        [:ul
-         [:li "SEO, мы буквально заполоним интернет картинками с графиками AnyChart, которые будут искаться по самым разным тегам"]
-         [:li "Удобный инструмент для создания примеров в галерею который снимает ограничения в которые мы упираемся уже хуй знает сколько"]
-         [:li "Удобный инструмент для того чтобы делать демки для кастомеров, автоматическое сопровожднеие таких демок обучающими материалами: доки, апи, чартопедия"]
-         [:li "Платный контент, на сервисе будут платные услуги, но они имеют меньший приоритет перед профитами перечисленными ранее"]]
-        ]]
+        [:p
+         "Feel free to use AnyChart Playground if you are a customer of AnyChart, evaluating "
+         [:a {:title "GraphicsJS" :href "https://www.anychart.com/"} "AnyChart HTML5 Charts"]
+         ", using "
+         [:a {:title "GraphicsJS" :href "http://www.graphicsjs.org/"} "GraphicsJS"]
+         " library or you just want to create and share any other HTML, CSS and JavaScript code snippet."]]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
      [:script {:src "/jquery/jquery.min.js"}]

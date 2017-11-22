@@ -35,7 +35,8 @@
 (defn page [data]
   (hiccup-page/html5
     {:lang "en"}
-    (page/head {:title "Tags | AnyChart Playground"})
+    (page/head {:title "Tags | AnyChart Playground"
+                :description "Each sample in the Playground has a set of tags attached. Click links below to proceed to the selection of samples with a given tag."})
     [:body page/body-tag-manager
      [:div.wrapper.tags-page
 
@@ -49,10 +50,7 @@
            [:div.text
             [:h1
              [:b "Tags"]]
-            [:p.description "It is an information resource that allows you to discover as many details<br>
-            about any type of chart supported in our JavaScript (HTML5) charting libraries <br>
-            as you need to make good use of it at ease and with full understanding. <br>
-            Now, to get started, click on a chart category that you would like to explore."]]]]]]]
+            [:p.description "Each sample in the Playground has a set of tags attached. Click links below to proceed to the selection of samples with a given tag."]]]]]]]
 
       [:div.content
        [:div.container-fluid.content-container

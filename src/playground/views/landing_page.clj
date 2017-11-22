@@ -10,7 +10,7 @@
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title       (landing/title page)
-                :description "The place where all your data visualization dreams come true"})
+                :description "The ultimate charts playground. Create, modify, browse, learn and share."})
     [:body
      page/body-tag-manager
      [:div.wrapper.landing-page

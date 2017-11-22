@@ -6,7 +6,7 @@
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title       "Roadmap | AnyChart Playground"
-                :description "The place where all your data visualization dreams come true"})
+                :description "AnyChart Playground is one of the favourite projects of AnyChart team. This is a tool we use daily and we have big plans to make Playground even better. The list below is an approximate Playground roadmap and it is subject to change."})
     [:body page/body-tag-manager
      [:div.wrapper.roadmap-page
 
@@ -16,37 +16,39 @@
        [:div.container-fluid.content-container
 
         [:h1.page-caption "Roadmap"]
-        [:p "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto aut culpa deserunt id numquam sed temporibus voluptatem! Animi delectus dolore eos excepturi optio, quasi quibusdam reiciendis suscipit tenetur ullam velit."]
+        [:p "AnyChart Playground is one of the favourite projects of AnyChart team. This is a tool we use daily and we have big plans to make Playground even better. The list below is an approximate Playground roadmap and it is subject to change."]
 
         [:div.line-container
-         [:div
-          [:h2 "Version 1.1.0" [:span.muted "Like, Download and Share"]]
-          [:div
-           [:ul
-            [:li "Ability to download samples as HTML file, PDF file or Vector/Raster image"]
-            [:li "Ability to share samples with Facebook, LinkedIn, Pinterest, Twitter and Instagram"]
-            [:li "Ability to like samples"]]]]
 
          [:div
-          [:h2 "Version 1.2.0" [:span.muted "Search for Samples"]]
+          [:h2 "Version 1.1.0" [:span.muted "Search"]]
           [:div
            [:ul
-            [:li "Ability to search samples by names, description, tags and used data sets"]]]]
+            [:li "Ability to search samples by names, descriptions, and tags."]]]]
 
          [:div
-          [:h2 "Version 1.3.0" [:span.muted "Documentation and API Reference"]]
+          [:h2 "Version 1.2.0" [:span.muted "Documentation and API Reference"]]
           [:div
            [:ul
-            [:li "Плейграунд будет по коду примера саджестить статьи, ссылки на API Reference и чартопедию на странице примера и в редакторе."]]]]
+            [:li "Deep API and Documentation integration."]]]]
+
+
+         [:div
+          [:h2 "Version 1.3.0" [:span.muted "Like, Download and Share"]]
+          [:div
+           [:ul
+            [:li "Ability to download samples as an HTML file, PDF file or Image"]
+            [:li "Ability to share samples with Facebook, LinkedIn, Pinterest, Twitter and Instagram."]
+            [:li "Ability to like samples."]]]]
 
          [:div
           [:h2 "Version 2.0.0" [:span.muted "Personalization"]]
           [:div
            [:ul
-            [:li "Личный кабинет"]
-            [:li "Privacy Settings"]
-            [:li "Коллекции примеров"]
-            [:li "Assets Hosting"]
+            [:li "User accounts."]
+            [:li "Privacy Settings."]
+            [:li "Samples collections."]
+            [:li "Assets Hosting."]
             ]]]
          ]]]
 

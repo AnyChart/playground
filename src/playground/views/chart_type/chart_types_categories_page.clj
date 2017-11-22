@@ -8,7 +8,7 @@
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title       "Chart Type Categories | AnyChart Playground"
-                :description "The place where all your data visualization dreams come true"})
+                :description "Browse all available AnyChart Chart types by the way chart is used or by name. Click links below to proceed to study materials, samples selection, guides to similar chart types and other useful information."})
     [:body page/body-tag-manager
      [:div.wrapper.chart-types-categories-page
 
@@ -22,10 +22,11 @@
            [:div.text
             [:h1
              "Chart " [:b "Types"]]
-            [:p.description "It is an information resource that allows you to discover as many details<br>
-            about any type of chart supported in our JavaScript (HTML5) charting libraries <br>
-            as you need to make good use of it at ease and with full understanding. <br>
-            Now, to get started, click on a chart category that you would like to explore."]]]]]]]
+            [:p.description
+             "Browse all available AnyChart Chart types by the way chart is used or by "
+             [:a {:title "Chart Types" :href "/chart-types"} "name"]
+             ". Click links below to proceed to study materials, samples selection, guides to similar chart types and other useful information."
+             ]]]]]]]
 
 
       [:div.content

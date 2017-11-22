@@ -6,7 +6,7 @@
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title       "Support | AnyChart Playground"
-                :description "The place where all your data visualization dreams come true"})
+                :description "Welcome to AnyChart support center. Our priority is a customer satisfaction. We constantly improve the quality of our products and add new features. Our team is very open to any suggestions regarding our products. We listen what you want."})
     [:body page/body-tag-manager
      [:div.wrapper.support-page
 
@@ -20,10 +20,7 @@
            [:div.text
             [:h1
              [:b "AnyChart Support"]]
-            [:p.description "Welcome to AnyChart support center. Our priority is a customer satisfaction.<br>
-            We constantly improve the quality of our products and add new features.<br>
-            Our team is very open to any suggestions regarding our products.<br>
-            We listen what you want. Please take a look at our product roadmap"]]]]]]]
+            [:p.description "Welcome to AnyChart support center. Our priority is a customer satisfaction. We constantly improve the quality of our products and add new features. Our team is very open to any suggestions regarding our products. We listen what you want."]]]]]]]
 
       [:div.content
        [:div.container-fluid.content-container
@@ -44,9 +41,7 @@
            [:span.yellow-label "Please always include the following information:"]
            [:ul
             [:li "The description of problem."]
-            [:li "XML/HTML file with all settings that cause the problem."]
-            [:li "Version of product that you're using. " [:a {:href "https://docs.anychart.com"} "How to detect version."]]
-            [:li "Ask on Stack Overflow."]]]]]
+            [:li "Link to a sample in playground."]]]]]
 
         [:h1 "Ask on Stack Overflow"]
         [:div.text
