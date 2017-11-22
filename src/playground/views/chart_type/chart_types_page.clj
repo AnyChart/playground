@@ -26,10 +26,9 @@
            [:div.text
             [:h1
              "Chart " [:b "Types"]]
-            [:p.description [
-                "Browse all available AnyChart Chart types by name or by "
-                [:a {:title "Chart Types by Category" :href  "/chart-types/categories"} "the way chart is used"]
-                ". Click links below to proceed to study materials, samples selection, guides to similar chart types and other useful information."]]]]]]]
+            [:p.description ["Browse all available AnyChart Chart types by name or by "
+                             [:a {:title "Chart Types by Category" :href "/chart-types/categories"} "the way chart is used"]
+                             ". Click links below to proceed to study materials, samples selection, guides to similar chart types and other useful information."]]]]]]]]
 
 
       [:div.content
