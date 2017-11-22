@@ -34,12 +34,11 @@
 
 
          [:div
-          [:h2 "Version 1.3.0" [:span.muted "Like, Download and Share"]]
+          [:h2 "Version 1.3.0" [:span.muted "Download and Share"]]
           [:div
            [:ul
             [:li "Ability to download samples as an HTML file, PDF file or Image"]
-            [:li "Ability to share samples with Facebook, LinkedIn, Pinterest, Twitter and Instagram."]
-            [:li "Ability to like samples."]]]]
+            [:li "Ability to share samples with Facebook, LinkedIn, Pinterest, Twitter and Instagram."]]]]
 
          [:div
           [:h2 "Version 2.0.0" [:span.muted "Personalization"]]
@@ -49,6 +48,7 @@
             [:li "Privacy Settings."]
             [:li "Samples collections."]
             [:li "Assets Hosting."]
+            [:li "Ability to like samples."]
             ]]]
          ]]]
 
