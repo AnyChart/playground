@@ -25,7 +25,7 @@
            [:div.text
             [:h1 "AnyChart "
              [:b "Playground"]]
-            [:p.description "is a place where all your data visualization dreams come true"]]]]]]]
+            [:p.description "The ultimate charts playground. Create, modify, browse, learn and share."]]]]]]]
 
       [:div.create-box
        [:div.container-fluid.content-container

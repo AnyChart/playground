@@ -33,7 +33,7 @@
           [:li "Любой другой херни которая мешает"]]]
 
         [:h2 "Слоган"]
-        [:p "AnyChart Playground is a place where all your data visualization dreams come true"]
+        [:p "AnyChart Playground - the ultimate charts playground. Create, modify, browse, learn and share."]
 
         [:h2 "Профит для Компании"]
         [:ul
