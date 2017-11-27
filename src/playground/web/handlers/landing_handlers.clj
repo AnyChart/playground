@@ -38,11 +38,11 @@
                 :end     (< (count samples) (inc samples-per-landing))}]
     (response result)))
 
-(defn top-landing-tag-samples [request]
-  (let [offset* (-> request :params :offset)
-        offset (if (int? offset*) offset* (Integer/parseInt offset*))
-        samples (db-req/get-top-tags-samples (get-db request) {:count  (inc samples-per-block)
-                                                               :offset offset})
-        result {:samples (take samples-per-block samples)
-                :end     (< (count samples) (inc samples-per-block))}]
-    (response result)))
+;(defn top-landing-tag-samples [request]
+;  (let [offset* (-> request :params :offset)
+;        offset (if (int? offset*) offset* (Integer/parseInt offset*))
+;        samples (db-req/get-top-tags-samples (get-db request) {:count  (inc samples-per-block)
+;                                                               :offset offset})
+;        result {:samples (take samples-per-block samples)
+;                :end     (< (count samples) (inc samples-per-block))}]
+;    (response result)))

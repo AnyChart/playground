@@ -27,6 +27,7 @@
   (fn [{:keys [message attemp]}]
     (timbre/info "Redis message: " message)
     (update-repository-by-repo-name generator (:db generator) message)
+    (db-req/update-tags-mw (:db generator))
     {:status :success}))
 
 (defrecord Generator [conf repos db redis notifier]
@@ -37,6 +38,7 @@
     (data-sets/parse-data-source (:db this) (:data_sources conf))
     (add-predefined-users (:db this) (:users conf))
     (check-repositories this (:db this) (:notifier this))
+    (db-req/update-tags-mw (:db this))
     (assoc this
       :redis-worker (redis/create-worker redis (-> redis :config :queue) (message-handler this))))
 
