@@ -18,7 +18,7 @@
 (defn compose-themes []
   (let [themes (:themes data)
         themes (map (fn [[url-name data]]
-                      {:url         (str "http://cdn.anychart.com/releases/latest-v8/themes/" (name url-name) ".js")
+                      {:url         (str "http://cdn.anychart.com/releases/v8/themes/" (name url-name) ".js")
                        :name        (:name data)
                        :icon        (:icon data)
                        :description (:desc data)
@@ -40,7 +40,7 @@
         modules (map (fn [[url-name data]]
                        {:name          (or (:name data) (str "Unnamed module with ID: " (name url-name)))
                         :description   (:desc data)
-                        :url           (str "http://cdn.anychart.com/releases/latest-v8/js/" (name url-name) ".min.js")
+                        :url           (str "http://cdn.anychart.com/releases/v8/js/" (name url-name) ".min.js")
                         :example       "TODO: modules examples"
                         :internal-type (:type data)})
                      modules)
@@ -118,7 +118,7 @@
                          item
                          {:name (str (:eng-name item) " - " (:native-name item))
                           :js   (name js-name)
-                          :url  (str "https://cdn.anychart.com/releases/latest-v8/locales/" (name js-name) ".js")}))
+                          :url  (str "https://cdn.anychart.com/releases/v8/locales/" (name js-name) ".js")}))
                      locales)]
     (sort-by :name locales)))
 
@@ -144,7 +144,7 @@
                         (map (fn [[js item]]
                                {:js   (name js)
                                 :name (:name item)
-                                :url  (str "https://cdn.anychart.com/releases/latest-v8/geodata/"
+                                :url  (str "https://cdn.anychart.com/releases/v8/geodata/"
                                            (name type-name) "/" (name js) "/" (name js) ".js")}))
                         (sort-by :name))}))
        (sort-by :name)))
@@ -157,8 +157,8 @@
 ;; CSS
 ;;======================================================================================================================
 (def ^:const css
-  [{:url "https://cdn.anychart.com/releases/latest-v8/css/anychart-ui.min.css", :name "AnyChart UI"}
-   {:url "https://cdn.anychart.com/releases/latest-v8/fonts/css/anychart-font.min.css", :name "AnyChart Font"}])
+  [{:url "https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css", :name "AnyChart UI"}
+   {:url "https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css", :name "AnyChart Font"}])
 
 
 ;;======================================================================================================================
