@@ -149,7 +149,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
        [:li [:a {:href "/chart-types"} "Chart Types"]]
        [:li [:a {:href "/tags"} "Tags"]]
-       [:li [:a {:href "/datasets"} "Data Sets"]]
+       ;[:li [:a {:href "/datasets"} "Data Sets"]]
 
        [:li.dropdown
         [:a.dropdown-toggle {:href          "#"
@@ -343,7 +343,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
      [:div.col-sm-2.col-xs-4
       [:div [:a.caption {:href "/" :title "Playground Home"} [:b "Playground"]]]
       [:div [:a {:href "/chart-types" :title "Playground Chart Types"} "Chart Types"]]
-      [:div [:a {:href "/datasets" :title "Playground Data Sets"} "Data Sets"]]
+      ;[:div [:a {:href "/datasets" :title "Playground Data Sets"} "Data Sets"]]
       [:div [:a {:href "/support" :title "Playground Support"} "Support"]]
       [:div [:a {:href "/roadmap" :title "Playground Roadmap"} "Roadmap"]]
       [:div [:a {:href "/version-history" :title "Playground Version History"} "Version History"]]
