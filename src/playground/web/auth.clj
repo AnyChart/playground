@@ -17,16 +17,16 @@
                    :action          (name action)
                    :message         (str "Not permission for action: " (name action))})))))
 
-(defn default-user []
+(defn default-user [db]
   {:fullname    "anonymous"
-   :username    (str "anonymous" (web-utils/new-hash 12))
+   :username    (web-utils/anonymous-username db)
    :permissions anonymous-perms
    :salt        nil
    :password    nil
    :email       nil})
 
 (defn create-anonymous-user [db]
-  (let [temp-user (default-user)
+  (let [temp-user (default-user db)
         user-id (db-req/add-user<! db temp-user)
         user (assoc temp-user :id user-id)]
     user))

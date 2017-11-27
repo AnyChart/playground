@@ -49,6 +49,12 @@
 (defn new-hash [count]
   (RandomStringUtils/randomAlphanumeric count))
 
+(defn anonymous-username [db]
+  (let [username (str "anonymous" (new-hash 12))]
+    (if (db-req/get-user-by-username db {:username username})
+      (anonymous-username db)
+      username)))
+
 (defn sample-hash [db]
   (let [hash (new-hash 8)]
     (if (db-req/url-exist db {:url hash})
