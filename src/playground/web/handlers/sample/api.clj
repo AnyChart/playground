@@ -34,7 +34,7 @@
 (defn fork [request]
   ;(prn "Fork: " (-> request :session :user) (-> request :params :sample))
   (let [sample (-> request :params :sample)
-        hash (web-utils/new-hash)
+        hash (web-utils/sample-hash (get-db request))
         sample* (assoc sample
                   :url hash
                   :version 0

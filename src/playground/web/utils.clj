@@ -1,6 +1,7 @@
 (ns playground.web.utils
   (:require [cognitect.transit :as transit]
-            [buddy.core.codecs.base64 :as b64])
+            [buddy.core.codecs.base64 :as b64]
+            [playground.db.request :as db-req])
   (:import (java.io ByteArrayOutputStream ByteArrayInputStream)
            (org.apache.commons.lang3 RandomStringUtils)
            (java.security SecureRandom)
@@ -45,9 +46,14 @@
         reader (transit/reader in :json)]
     (transit/read reader)))
 
-(defn new-hash
-  ([] (new-hash 8))
-  ([count] (RandomStringUtils/randomAlphanumeric count)))
+(defn new-hash [count]
+  (RandomStringUtils/randomAlphanumeric count))
+
+(defn sample-hash [db]
+  (let [hash (new-hash 8)]
+    (if (db-req/url-exist db {:url hash})
+      (sample-hash db)
+      hash)))
 
 (defn to-base64 [byte-array]
   (String. (b64/encode byte-array) "UTF-8"))

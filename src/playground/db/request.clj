@@ -127,6 +127,9 @@
       underscore->dash
       add-full-url))
 
+(def url-exist (sql {:name sql-url-exist
+                     :result-set-fn first}))
+
 (def add-sample<! (sql {:name sql-add-sample<!}))
 
 (def samples (sql {:name   sql-samples

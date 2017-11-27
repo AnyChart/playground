@@ -1,6 +1,10 @@
 -- name: sql-samples
 SELECT * FROM samples;
 
+-- name: sql-url-exist
+SELECT id FROM samples WHERE url = :url;
+
+
 -- name: sql-samples-by-ids
 SELECT samples.*, versions.`name` as version_name, repos.name as repo_name FROM samples
    LEFT JOIN versions ON samples.version_id = versions.id
@@ -189,3 +193,4 @@ WHERE sample_id IN
              (SELECT id
               FROM versions
               WHERE repo_id = :repo_id));
+
