@@ -11,8 +11,10 @@
             [ring.middleware.format-params :refer [wrap-transit-json-params]]
             [ring.middleware.format-response :refer [wrap-transit-json-response]]
             [ring.middleware.session :refer [wrap-session]]
+            [ring.util.response :refer [redirect]]
             [playground.web.routes :refer [app-routes]]
-            [playground.web.sessions :as session]))
+            [playground.web.sessions :as session]
+            [clojure.string :as string]))
 
 (defn- component-middleware [web-component handler]
   (fn [request]
@@ -21,6 +23,22 @@
 (defn create-web-handler [web-component]
   (component-middleware web-component #'app-routes))
 
+
+(defn create-redirect-wrapper [handler conf]
+  (let [redirects (:redirect-replacements conf)]
+    (fn [request]
+      (let [uri (:uri request)
+            rd (first (filter (fn [redirect]
+                                (string/includes? uri (:from redirect)))
+                              redirects))]
+        (if rd
+          (redirect (string/replace uri
+                                    (re-pattern (:from rd))
+                                    (:to rd))
+                    301)
+          (handler request))))))
+
+
 (defrecord Web [server conf db]
   component/Lifecycle
 
@@ -28,6 +46,7 @@
     (timbre/info "Web start" conf)
     (assoc component :server (web/run
                                (-> (create-web-handler component)
+                                   (create-redirect-wrapper conf)
                                    wrap-transit-json-params
                                    wrap-transit-json-response
                                    wrap-keyword-params
