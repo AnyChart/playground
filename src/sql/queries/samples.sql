@@ -145,6 +145,12 @@ SELECT samples.id, samples.name, samples.views, samples.likes, samples.create_da
   ON optimize_samples.id = samples.id ORDER BY likes DESC, views DESC, samples.name ASC;
 
 
+-- name: sql-group-samples
+SELECT samples.url
+FROM samples
+WHERE version_id = :version_id
+      AND url LIKE CONCAT(:url , '%') ORDER BY url ASC;
+
 
 -- delete all repo ---
 -- name: sql-delete-samples-by-repo-name!

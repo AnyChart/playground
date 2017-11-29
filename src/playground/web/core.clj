@@ -38,6 +38,15 @@
                     301)
           (handler request))))))
 
+;; TODO: delete after 6-9 months
+(defn wrap-api-redirects [handler]
+  (fn [request]
+    (if (and (string/starts-with? (:uri request) "/api/")
+             (not (string/includes? (:uri request) "/_samples/")))
+      (let [parts (string/split (:uri request) #"/")]
+        (redirect (string/join "/" (concat (butlast parts) ["_samples"] [(last parts)])) 301))
+      (handler request))))
+
 
 (defrecord Web [server conf db]
   component/Lifecycle
@@ -47,6 +56,7 @@
     (assoc component :server (web/run
                                (-> (create-web-handler component)
                                    (create-redirect-wrapper conf)
+                                   wrap-api-redirects
                                    wrap-transit-json-params
                                    wrap-transit-json-response
                                    wrap-keyword-params

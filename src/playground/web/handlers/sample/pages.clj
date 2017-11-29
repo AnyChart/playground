@@ -13,7 +13,8 @@
             [playground.views.iframe :as iframe-view]
     ;; misc
             [hiccup.core :as hiccup]
-            [clojure.java.jdbc :as jdbc]))
+            [clojure.java.jdbc :as jdbc]
+            [clojure.string :as string]))
 
 ;; =====================================================================================================================
 ;; Samples pages handlers
@@ -62,3 +63,15 @@
 (defn show-sample-download [request]
   (assoc (show-sample-iframe request)
     :headers {"Content-Disposition" (str "attachment; filename=\"" (:name (get-sample request)) ".html\"")}))
+
+;; TODO: redirects for group, delete in 6-9 months
+(defn group-redirect [request]
+  (let [group (-> request :params :group)
+        version-id (:id (get-version request))
+        samples-urls (db-req/group-samples (get-db request) {:version_id version-id
+                                                             :url        group})]
+    (when (seq samples-urls)
+      (redirect (str "/"
+                     (:name (get-repo request)) "/"
+                     (:name (get-version request)) "/"
+                     (:url (first samples-urls))) 301))))

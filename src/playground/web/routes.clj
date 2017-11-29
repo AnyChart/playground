@@ -249,5 +249,15 @@
            (GET "/:hash/:version/preview" [] (-> sample-handlers/show-sample-preview mw/user-sample))
            (GET "/:hash/:version/download" [] (-> sample-handlers/show-sample-download mw/user-sample))
 
+           ;; TODO: redirects for group, delete in 6-9 months
+           (GET "/:repo/:version/:group/" [] (-> sample-handlers/group-redirect
+                                                mw/check-version-middleware
+                                                mw/check-repo-middleware
+                                                auth/check-anonymous-middleware))
+           (GET "/:repo/:version/:group" [] (-> sample-handlers/group-redirect
+                                                mw/check-version-middleware
+                                                mw/check-repo-middleware
+                                                auth/check-anonymous-middleware))
+
            (route/not-found (-> page-404
                                 mw/base-page-middleware)))

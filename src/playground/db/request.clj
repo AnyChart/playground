@@ -220,6 +220,7 @@
 
 (def repo-samples-without-preview (sql {:name sql-repo-samples-without-preview}))
 
+(def group-samples (sql {:name sql-group-samples}))
 
 ;;======================================================================================================================
 ;; Visits and likes
