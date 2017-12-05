@@ -42,6 +42,13 @@
    :password    (:password conf)
    :stringtype  "unspecified"})
 
+(defn create-db-spec-postgre [conf]
+  {:subprotocol "postgresql"
+   :subname     (str "//" (:host conf) ":" (:port conf) "/" (:name conf))
+   :classname   "org.postgresql.Driver"
+   :user        (:user conf)
+   :password    (:password conf)})
+
 (defrecord JDBC [config db-spec conn]
   component/Lifecycle
 
@@ -50,7 +57,7 @@
     ;(prn this)
     (if conn
       (assoc this :conn conn)
-      (let [db-spec (create-db-spec config)
+      (let [db-spec (create-db-spec-postgre config)
             conn (connection-pool db-spec)]
         (assoc this :db-spec db-spec :conn conn))))
 
@@ -81,4 +88,6 @@
 ;
 (defn insert-multiple! [db table data]
   (if (seq data)
-    (clj-jdbc/insert-multi! (:conn db) table data {:entities (quoted \`)})))
+    (clj-jdbc/insert-multi! (:conn db) table data
+                            ;{:entities (quoted \`)}
+                            )))

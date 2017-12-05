@@ -64,9 +64,8 @@
           db-data {:name  (:id data)
                    :title (:name data)
                    :type  (:type data)
-                   :sets  (:sets data)
                    :url   url}
-          data-source-id (db-req/add-data-source<! db (update db-data :sets json/generate-string))
+          data-source-id (db-req/add-data-source<! db db-data)
           full-db-data (assoc db-data :id data-source-id)]
       (doseq [data-set (:sets data)]
         (parse-data-set db full-db-data data-set)))))

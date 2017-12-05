@@ -1,5 +1,5 @@
 -- name: sql-add-user<!
-INSERT INTO users (`username`, `fullname`, `email`, `password`, `salt`, permissions)
+INSERT INTO users (username, fullname, email, password, salt, permissions)
 VALUES (:username, :fullname, :email, :password, :salt, :permissions);
 
 -- name: sql-get-user-by-username-or-email

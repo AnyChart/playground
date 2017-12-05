@@ -1,5 +1,5 @@
 -- name: sql-add-data-source<!
-INSERT INTO data_sources (name, title, type, sets, url) VALUES (:name, :title, :type, :sets, :url);
+INSERT INTO data_sources (name, title, type, url) VALUES (:name, :title, :type, :url);
 
 -- name: sql-add-data-set<!
 INSERT INTO data_sets (logo, name, title, description, tags, source, sample, data_source_id, url, data)

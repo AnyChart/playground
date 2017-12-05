@@ -172,8 +172,8 @@
         version-id (db-req/add-version<! db {:name          (:name branch)
                                              :commit        (:commit branch)
                                              :repo-id       (:id @repo)
-                                             :hidden        true
-                                             :config        (json/generate-string version-config)
+                                             :hidden        false
+                                             :config        version-config
                                              :samples-count (count samples)})]
     (timbre/info "Insert samples: " (count samples) version-config)
     (when (seq samples)

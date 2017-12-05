@@ -7,7 +7,11 @@
             [camel-snake-kebab.extras :as kebab-extra]
             [playground.utils.utils :as utils]
             [version-clj.core :as version-clj]
-            [clojure.java.jdbc :as jdbc]))
+            [clojure.java.jdbc :as jdbc]
+            [mpg.core :as mpg]))
+
+
+(mpg/patch {:datetime false})
 
 ;; =====================================================================================================================
 ;; Include sql files
@@ -28,20 +32,34 @@
 (defn dash->underscore [data]
   (kebab-extra/transform-keys kebab/->snake_case data))
 
-(defn sql-sym [sym]
-  (symbol (str 'sql- (name sym))))
+(defn vec->arr [array-vector db]
+  (.createArrayOf (jdbc/get-connection (:conn db))
+                  "varchar"
+                  (into-array String array-vector)))
 
-(defmacro defsql
-  "generate for each request something like:
-  (defn versions [db & [params]
-   (sql-versions params {:connection (:conn db)}))"
-  [fn-name & [opts]]
-  (if (ends-with? fn-name "<!")
-    `(defn ~fn-name [db# & [params#]]
-       (:generated_key
-         (~(sql-sym fn-name) (dash->underscore params#) (merge {:connection (or (:conn db#) db#)} ~opts))))
-    `(defn ~fn-name [db# & [params#]]
-       (~(sql-sym fn-name) (dash->underscore params#) (merge {:connection (or (:conn db#) db#)} ~opts)))))
+(defn pg-params [data db]
+  (reduce-kv (fn [res key val]
+               (assoc res key
+                          (if (sequential? val)
+                            (vec->arr val db)
+                            val)))
+             {}
+             data))
+
+;(defn sql-sym [sym]
+;  (symbol (str 'sql- (name sym))))
+
+;(defmacro defsql
+;  "generate for each request something like:
+;  (defn versions [db & [params]
+;   (sql-versions params {:connection (:conn db)}))"
+;  [fn-name & [opts]]
+;  (if (ends-with? fn-name "<!")
+;    `(defn ~fn-name [db# & [params#]]
+;       (:generated_key
+;         (~(sql-sym fn-name) (pg-params (dash->underscore params#) db#) (merge {:connection (or (:conn db#) db#)} ~opts))))
+;    `(defn ~fn-name [db# & [params#]]
+;       (~(sql-sym fn-name) (pg-params (dash->underscore params#) db#) (merge {:connection (or (:conn db#) db#)} ~opts)))))
 
 (defmacro sql
   "generate for each request something like:
@@ -52,10 +70,9 @@
         opts (dissoc opts :name)]
     (if (ends-with? fn-name "<!")
       `(fn [db# & [params#]]
-         (:generated_key
-           (~fn-name (dash->underscore params#) (merge {:connection (or (:conn db#) db#)} ~opts))))
+         (:id (~fn-name (pg-params (dash->underscore params#) db#) (merge {:connection (or (:conn db#) db#)} ~opts))))
       `(fn [db# & [params#]]
-         (~fn-name (dash->underscore params#) (merge {:connection (or (:conn db#) db#)} ~opts))))))
+         (~fn-name (pg-params (dash->underscore params#) db#) (merge {:connection (or (:conn db#) db#)} ~opts))))))
 
 ; TODO: maybe do something linke this:
 ;(db-req/transaction (get-db request)
@@ -85,8 +102,8 @@
 ;; =====================================================================================================================
 ;; Versions
 ;; =====================================================================================================================
-(defn parse-version [version]
-  (update version :config parse-string true))
+;(defn parse-version [version]
+;  (update version :config parse-string true))
 
 (def versions (sql {:name          sql-versions
                     :row-fn        underscore->dash
@@ -98,7 +115,8 @@
 
 (def version-by-name (sql {:name          sql-version-by-name
                            :result-set-fn first
-                           :row-fn        parse-version}))
+                           ;:row-fn        parse-version
+                           }))
 
 (def add-version<! (sql {:name sql-add-version<!}))
 
@@ -120,10 +138,10 @@
 
 (defn parse-sample [sample]
   (-> sample
-      (assoc :tags (parse-string (:tags sample)))
-      (assoc :deleted-tags (parse-string (:deleted_tags sample)))
-      (assoc :scripts (parse-string (:scripts sample)))
-      (assoc :styles (parse-string (:styles sample)))
+      ;(assoc :tags (parse-string (:tags sample)))
+      ;(assoc :deleted-tags (parse-string (:deleted_tags sample)))
+      ;(assoc :scripts (parse-string (:scripts sample)))
+      ;(assoc :styles (parse-string (:styles sample)))
       underscore->dash
       add-full-url))
 
@@ -177,20 +195,13 @@
    :short_description (:short-description sample)
 
    :url               (:url sample)
-   :tags              (generate-string (:tags sample))
-   :deleted_tags      (generate-string (:deleted-tags sample))
-   :exports           (:exports sample)
+   :tags              (vec (:tags sample))
+   :deleted_tags      (vec (:deleted-tags sample))
 
    :owner_id          (:owner-id sample)
 
-   :styles            (when (seq (:styles sample))
-                        (generate-string (:styles sample)))
-
-   :scripts           (when (seq (:scripts sample))
-                        (generate-string (:scripts sample)))
-
-   :local_scripts     (when (seq (:local-scripts sample))
-                        (generate-string (:local-scripts sample)))
+   :styles            (vec (:styles sample))
+   :scripts           (vec (:scripts sample))
 
    :code              (:code sample)
    :code_type         (:code-type sample)
@@ -204,10 +215,11 @@
    :version           (or (:version sample) 0)})
 
 (defn add-sample! [db sample]
-  (add-sample<! db (insert-sample sample)))
+  (let [s (insert-sample sample)]
+    (add-sample<! db s)))
 
 (defn add-samples! [db version-id samples]
-  (doall (map :generated_key
+  (doall (map :id                                           ; :generated-key for MySQL
               (insert-multiple! db :samples (map #(insert-sample % version-id) samples)))))
 
 (def delete-samples-by-ids! (sql {:name sql-delete-samples-by-ids!}))
@@ -300,14 +312,15 @@
 (def samples-by-tag (sql {:name   sql-samples-by-tag
                           :row-fn parse-sample}))
 
-(def clear-tags-mw! (sql {:name sql-clear-tags-mw!}))
-
-(def update-tags-mw! (sql {:name sql-update-tags-mw!}))
+;(def clear-tags-mw! (sql {:name sql-clear-tags-mw!}))
+;
+;(def update-tags-mw! (sql {:name sql-update-tags-mw!}))
 
 (defn update-tags-mw [db]
-  (jdbc/with-db-transaction [conn (:db-spec db)]
-                            (clear-tags-mw! conn {})
-                            (update-tags-mw! conn {})))
+  ;(jdbc/with-db-transaction [conn (:db-spec db)]
+  ;                          (clear-tags-mw! conn {})
+  ;                          (update-tags-mw! conn {}))
+  )
 
 ;;======================================================================================================================
 ;; Datasets, datasources
