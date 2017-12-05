@@ -13,8 +13,7 @@
   (fn [{:keys [message attemp]}]
     (timbre/info "Preview generator redis message: " message)
     (when (seq message)
-      ;(generate-previews generator message)
-      )
+      (generate-previews generator message))
     {:status :success}))
 
 
