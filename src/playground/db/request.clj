@@ -40,7 +40,8 @@
 (defn pg-params [data db]
   (reduce-kv (fn [res key val]
                (assoc res key
-                          (if (sequential? val)
+                          (if (and (sequential? val)
+                                   (not (:arr-ignore (meta val))))
                             (vec->arr val db)
                             val)))
              {}
@@ -70,9 +71,9 @@
         opts (dissoc opts :name)]
     (if (ends-with? fn-name "<!")
       `(fn [db# & [params#]]
-         (:id (~fn-name (pg-params (dash->underscore params#) db#) (merge {:connection (or (:conn db#) db#)} ~opts))))
+         (:id (~fn-name (dash->underscore (pg-params params# db#)) (merge {:connection (or (:conn db#) db#)} ~opts))))
       `(fn [db# & [params#]]
-         (~fn-name (pg-params (dash->underscore params#) db#) (merge {:connection (or (:conn db#) db#)} ~opts))))))
+         (~fn-name (dash->underscore (pg-params params# db#)) (merge {:connection (or (:conn db#) db#)} ~opts))))))
 
 ; TODO: maybe do something linke this:
 ;(db-req/transaction (get-db request)
@@ -137,6 +138,7 @@
   (assoc sample :full-url (utils/sample-url sample)))
 
 (defn parse-sample [sample]
+  ;(prn sample)
   (-> sample
       ;(assoc :tags (parse-string (:tags sample)))
       ;(assoc :deleted-tags (parse-string (:deleted_tags sample)))
@@ -145,7 +147,7 @@
       underscore->dash
       add-full-url))
 
-(def url-exist (sql {:name sql-url-exist
+(def url-exist (sql {:name          sql-url-exist
                      :result-set-fn first}))
 
 (def add-sample<! (sql {:name sql-add-sample<!}))
@@ -221,8 +223,6 @@
 (defn add-samples! [db version-id samples]
   (doall (map :id                                           ; :generated-key for MySQL
               (insert-multiple! db :samples (map #(insert-sample % version-id) samples)))))
-
-(def delete-samples-by-ids! (sql {:name sql-delete-samples-by-ids!}))
 
 (def update-sample-views! (sql {:name sql-update-sample-views!}))
 
