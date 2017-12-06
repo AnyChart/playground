@@ -27,25 +27,25 @@
          [:div
           ;region ---- version 1.0.0
           [:h2 "Version 1.0.0" [:span.muted "Dec 2017"]]
-          [:p "Rebirth of AnyChart Playground as an online community for testing and showcasing user-created HTML, CSS and JavaScript code snippets."]]]
+          [:p "Rebirth of AnyChart Playground as an online community for testing and showcasing user-created HTML, CSS and JavaScript code snippets."]]
 
-        [:div.row
-         [:div.col-md-4
-          [:p [:span.glyphicon.glyphicon-ok] "Fork Samples"]
-          [:ul
-           [:li "Any sample can now be forked and saved."]]]
-         [:div.col-md-4
-          [:p [:span.glyphicon.glyphicon-ok] "\"View Only\" mode"]
-          [:ul
-           [:li "\"View only\" mode to show the description, files used, and tags."]]]
-         [:div.col-md-4
-          [:p [:span.glyphicon.glyphicon-ok] "Brand New Editor"]
-          [:ul
-           [:li "Ability to modify JavaScript, HTML and CSS code."]]]
-         [:div.col-md-4
-          [:p [:span.glyphicon.glyphicon-ok] "Embedding"]
-          [:ul
-           [:li "Ability to embed charts from Playground and use on your website."]]]]
+         [:div.row
+          [:div.col-md-4
+           [:p [:span.glyphicon.glyphicon-ok] "Fork Samples"]
+           [:ul
+            [:li "Any sample can now be forked and saved."]]]
+          [:div.col-md-4
+           [:p [:span.glyphicon.glyphicon-ok] "\"View Only\" mode"]
+           [:ul
+            [:li "\"View only\" mode to show the description, files used, and tags."]]]
+          [:div.col-md-4
+           [:p [:span.glyphicon.glyphicon-ok] "Brand New Editor"]
+           [:ul
+            [:li "Ability to modify JavaScript, HTML and CSS code."]]]
+          [:div.col-md-4
+           [:p [:span.glyphicon.glyphicon-ok] "Embedding"]
+           [:ul
+            [:li "Ability to embed charts from Playground and use on your website."]]]]]
         ]]
       (page/footer (:repos data) (:tags data) (:data-sets data))]
      [:script {:src "/jquery/jquery.min.js"}]

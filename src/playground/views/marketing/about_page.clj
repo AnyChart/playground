@@ -8,7 +8,7 @@
     (page/head {:title       "About | AnyChart Playground"
                 :description "AnyChart Playground is an online tool for testing and showcasing user-created HTML, CSS and JavaScript code snippets."})
     [:body page/body-tag-manager
-     [:div.wrapper
+     [:div.wrapper.about-page
 
       (page/nav (:templates data) (:user data))
 
