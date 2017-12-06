@@ -37,8 +37,8 @@
 (defn vec->arr [array-vector db]
   (let [conn (jdbc/get-connection (:conn db))
         arr (.createArrayOf conn
-                        "varchar"
-                        (into-array String array-vector))]
+                            "varchar"
+                            (into-array String array-vector))]
     (.close conn)
     arr))
 

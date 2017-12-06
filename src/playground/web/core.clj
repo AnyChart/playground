@@ -28,14 +28,17 @@
   (let [redirects (:redirect-replacements conf)]
     (fn [request]
       (let [uri (:uri request)
-            rd (first (filter (fn [redirect]
-                                (string/includes? uri (:from redirect)))
-                              redirects))]
-        (if rd
-          (redirect (string/replace uri
-                                    (re-pattern (:from rd))
-                                    (:to rd))
-                    301)
+            new-uri (reduce
+                      (fn [new-uri redirect]
+                        (if (string/includes? new-uri (:from redirect))
+                          (string/replace new-uri
+                                          (re-pattern (:from redirect))
+                                          (:to redirect))
+                          new-uri))
+                      uri
+                      redirects)]
+        (if (not= uri new-uri)
+          (redirect new-uri 301)
           (handler request))))))
 
 ;; TODO: delete after 6-9 months
