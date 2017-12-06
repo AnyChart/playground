@@ -251,9 +251,9 @@
 
            ;; TODO: redirects for group, delete in 6-9 months
            (GET "/:repo/:version/:group/" [] (-> sample-handlers/group-redirect
-                                                mw/check-version-middleware
-                                                mw/check-repo-middleware
-                                                auth/check-anonymous-middleware))
+                                                 mw/check-version-middleware
+                                                 mw/check-repo-middleware
+                                                 auth/check-anonymous-middleware))
            (GET "/:repo/:version/:group" [] (-> sample-handlers/group-redirect
                                                 mw/check-version-middleware
                                                 mw/check-repo-middleware

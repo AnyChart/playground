@@ -36,8 +36,7 @@
 
 
 (defn generate-previews [generator ids]
-  (let [samples (db-req/samples-by-ids (:db generator)
-                                       {:ids (with-meta ids {:arr-ignore true})})]
+  (let [samples (db-req/samples-by-ids (:db generator) {:ids (db-req/raw-coll ids)})]
     (timbre/info "Generate previews: " (if (= 1 (count samples)) (-> samples first :name) (count ids)))
     (fs/mkdirs (-> generator :conf :images-dir))
     (let [result (doall (pmap #(phantom/generate-img (-> generator :conf :phantom-engine)
@@ -47,6 +46,6 @@
           good-results (filter (complement :error) result)
           ids (map :id good-results)]
       (when (seq ids)
-        (db-req/update-samples-preview! (:db generator) {:ids     (with-meta ids {:arr-ignore true})
+        (db-req/update-samples-preview! (:db generator) {:ids     (db-req/raw-coll ids)
                                                          :preview true})))
     (timbre/info "End generate previews: " (if (= 1 (count samples)) (-> samples first :name) (count ids)))))

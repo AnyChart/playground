@@ -29,13 +29,16 @@
 (defn underscore->dash [data]
   (kebab-extra/transform-keys kebab/->kebab-case data))
 
+
 (defn dash->underscore [data]
   (kebab-extra/transform-keys kebab/->snake_case data))
+
 
 (defn vec->arr [array-vector db]
   (.createArrayOf (jdbc/get-connection (:conn db))
                   "varchar"
                   (into-array String array-vector)))
+
 
 (defn pg-params [data db]
   (reduce-kv (fn [res key val]
@@ -47,8 +50,20 @@
              {}
              data))
 
+
+(defn raw-coll
+  "yesql transforms vector or list in 'IN' clause ( ... WHERE id IN (:ids)...
+  to appropriate string  (... WHERE id IN (1,2,3) ... ), but sometimes we need to insert vec or list
+  to field with type like ( varchar(10)[] ) - for this we use (pg-params) function that by default
+  transform vecs and lists without :arr-ignore meta to appropriate database array.
+  So we need to add :arr-ingore meta tag if we want to use vec or list in IN clause"
+  [data]
+  (with-meta data {:arr-ignore true}))
+
+
 ;(defn sql-sym [sym]
 ;  (symbol (str 'sql- (name sym))))
+
 
 ;(defmacro defsql
 ;  "generate for each request something like:
@@ -61,6 +76,7 @@
 ;         (~(sql-sym fn-name) (pg-params (dash->underscore params#) db#) (merge {:connection (or (:conn db#) db#)} ~opts))))
 ;    `(defn ~fn-name [db# & [params#]]
 ;       (~(sql-sym fn-name) (pg-params (dash->underscore params#) db#) (merge {:connection (or (:conn db#) db#)} ~opts)))))
+
 
 (defmacro sql
   "generate for each request something like:
@@ -75,6 +91,7 @@
       `(fn [db# & [params#]]
          (~fn-name (dash->underscore (pg-params params# db#)) (merge {:connection (or (:conn db#) db#)} ~opts))))))
 
+
 ; TODO: maybe do something linke this:
 ;(db-req/transaction (get-db request)
 ;                    (db-req/update-sample-views! {:id (:id sample)})
@@ -87,6 +104,7 @@
 ;                            (prn "CREATED conn: " conn)
 ;                            )
 ;  )
+
 
 ;; =====================================================================================================================
 ;; Repos
@@ -138,7 +156,6 @@
   (assoc sample :full-url (utils/sample-url sample)))
 
 (defn parse-sample [sample]
-  ;(prn sample)
   (-> sample
       ;(assoc :tags (parse-string (:tags sample)))
       ;(assoc :deleted-tags (parse-string (:deleted_tags sample)))

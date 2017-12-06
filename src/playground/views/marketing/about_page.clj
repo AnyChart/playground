@@ -23,7 +23,7 @@
          [:a {:title "AnyChart Documentation" :href "https://docs.anychart.com/"} "AnyChart Documentation"]
          ", "
          [:a {:title "AnyChart API Reference" :href "https://api.anychart.com/"} "AnyChart API Reference"]
-        ", and "
+         ", and "
          [:a {:title "AnyChart Chartopedia" :href "https://www.anychart.com/chartopedia/"} "AnyChart Chartopedia"]
          "."]
 

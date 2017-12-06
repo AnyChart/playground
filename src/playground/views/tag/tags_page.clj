@@ -35,7 +35,7 @@
 (defn page [data]
   (hiccup-page/html5
     {:lang "en"}
-    (page/head {:title "Tags | AnyChart Playground"
+    (page/head {:title       "Tags | AnyChart Playground"
                 :description "Each sample in the Playground has a set of tags attached. Click links below to proceed to the selection of samples with a given tag."})
     [:body page/body-tag-manager
      [:div.wrapper.tags-page
