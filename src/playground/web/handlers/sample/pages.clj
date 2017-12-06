@@ -34,13 +34,14 @@
                                               :datasets  (map #(dissoc % :data) data-sets)
                                               :user      (get-safe-user request)
                                               :view      editor-view})}]
-
-    (jdbc/with-db-transaction [conn (:db-spec (get-db request))]
-                              (when-not (db-req/get-visit conn {:sample-id (:id sample)
-                                                                :user-id   (:id user)})
-                                (db-req/update-sample-views! conn {:id (:id sample)})
-                                (db-req/visit! conn {:sample-id (:id sample)
-                                                     :user-id   (:id user)})))
+    ;; when not "new" sample
+    (when (:id sample)
+      (jdbc/with-db-transaction [conn (:db-spec (get-db request))]
+                                (when-not (db-req/get-visit conn {:sample-id (:id sample)
+                                                                  :user-id   (:id user)})
+                                  (db-req/update-sample-views! conn {:id (:id sample)})
+                                  (db-req/visit! conn {:sample-id (:id sample)
+                                                       :user-id   (:id user)}))))
 
     (response (editor-view/page data))))
 
