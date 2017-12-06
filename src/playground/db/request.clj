@@ -35,9 +35,12 @@
 
 
 (defn vec->arr [array-vector db]
-  (.createArrayOf (jdbc/get-connection (:conn db))
-                  "varchar"
-                  (into-array String array-vector)))
+  (let [conn (jdbc/get-connection (:conn db))
+        arr (.createArrayOf conn
+                        "varchar"
+                        (into-array String array-vector))]
+    (.close conn)
+    arr))
 
 
 (defn pg-params [data db]
