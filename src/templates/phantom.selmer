@@ -25,7 +25,9 @@
 <body>
 {{markup|safe}}
 <script type="text/javascript">
-    anychart.licenseKey('anychart-adb3c9ca-df1c254d');
+    if (typeof anychart !== 'undefined'){
+        anychart.licenseKey('anychart-adb3c9ca-df1c254d');
+    }
     {{code|safe}}
     window.onload = function() {
         var checkRenderCount = 0;
