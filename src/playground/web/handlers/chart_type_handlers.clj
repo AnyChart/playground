@@ -26,14 +26,13 @@
             samples (db-req/samples-by-tag (get-db request) {:count  (inc samples-per-block)
                                                              :offset (* samples-per-block page)
                                                              :tag    tag})]
-        (when (seq samples)
-          (chart-type-view/page (merge {:samples (take samples-per-block samples)
-                                        :end     (< (count samples) (inc samples-per-block))
-                                        :page    page
-                                        :tag     tag}
-                                       (get-app-data request))
-                                chart-type
-                                (chartopedia/get-relations chart-type)))))))
+        (chart-type-view/page (merge {:samples (take samples-per-block samples)
+                                      :end     (< (count samples) (inc samples-per-block))
+                                      :page    page
+                                      :tag     tag}
+                                     (get-app-data request))
+                              chart-type
+                              (chartopedia/get-relations chart-type))))))
 
 (defn chart-types-categories-page [request]
   (chart-type-categories-view/page (get-app-data request) chartopedia/categories))
