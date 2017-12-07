@@ -67,8 +67,8 @@
      ; Latest compiled and minified JavaScript
      [:script {:src "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"}]
 
-     [:link {:type "text/css" :rel "stylesheet" :href "http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic"}]
-     [:link {:type "text/css" :rel "stylesheet" :href "http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300"}]
+     [:link {:type "text/css" :rel "stylesheet" :href "https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic"}]
+     [:link {:type "text/css" :rel "stylesheet" :href "https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300"}]
 
      ; codemirror
      [:script {:src "/codemirror/lib/codemirror.js"}]

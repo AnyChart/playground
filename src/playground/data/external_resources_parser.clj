@@ -5,7 +5,7 @@
 
 (defn get-data []
   (try
-    (json/parse-string (:body (http/get "http://cdn.anychart.com/releases/latest-v8/js/modules.json")) true)
+    (json/parse-string (:body (http/get "https://cdn.anychart.com/releases/latest-v8/js/modules.json")) true)
     (catch Exception _ nil)))
 
 
