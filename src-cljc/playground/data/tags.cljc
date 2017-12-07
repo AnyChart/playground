@@ -1,7 +1,8 @@
 (ns playground.data.tags
   (:require [clojure.string :as string])
   #?(:clj
-           (:require [playground.data.tags-macros :as tags-macros])
+           (:require [playground.data.tags-macros :as tags-macros]
+                     [clojure.set :as set])
      :cljs (:require-macros [playground.data.tags-macros :as tags-macros])))
 
 (defn original-name->id-name [name]
@@ -20,15 +21,17 @@
 
 (defn get-all-tags []
   (let [
-        ;tags-from-rules (mapcat :tags *rules*)
+        tags-from-rules (distinct (mapcat :tags rules))
         ;tags (map name (keys (:tags tags-data)))
-        ; all-tags (sort (distinct (concat tags-from-rules tags)))
-        all-tags (map (fn [[tag-key tag-data]]
-                        (assoc tag-data
-                          :name (name tag-key)
-                          :id (original-name->id-name (name tag-key))))
-                      (:tags tags-data))]
-    all-tags))
+        ;all-tags (sort (distinct (concat tags-from-rules tags)))
+        all-tags (map (fn [tag-name]
+                        (assoc {}
+                          :name tag-name
+                          :id (original-name->id-name tag-name)
+                          :description (or (:description ((keyword tag-name) (:tags tags-data))) "")
+                          ))
+                      tags-from-rules)]
+    (sort-by :name all-tags)))
 
 (def all-tags (get-all-tags))
 
@@ -57,3 +60,12 @@
   (:name (first (filter (fn [tag-data]
                           (= tag (:id tag-data)))
                         all-tags))))
+
+
+(defn check-data []
+  (let [tags-from-rules (mapcat :tags (:rules tags-data))
+        tags (map name (keys (:tags tags-data)))
+        bad-tags (set/difference (set tags-from-rules) (set tags))]
+    (prn (set tags-from-rules))
+    (prn (set tags))
+    bad-tags))
