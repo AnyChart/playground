@@ -97,7 +97,6 @@
 (rf/reg-event-db
   :settings/refresh-tags
   (fn [db _]
-    (utils/log "Refresh tags")
     (let [tags-by-code (tags-data/get-tags-by-code (-> db :sample :code))
           deleted-tags (-> db :sample :deleted-tags)
           new-tags (distinct (concat (-> db :sample :tags)

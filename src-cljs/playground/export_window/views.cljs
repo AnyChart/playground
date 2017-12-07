@@ -4,20 +4,17 @@
             [reagent.core :as reagent]))
 
 (defn embed-editor []
-  (reagent/create-class {:component-did-mount #(do (utils/log "Embed iframe editor did mount!")
-                                                   (rf/dispatch [:embed/create-iframe-editor]))
+  (reagent/create-class {:component-did-mount #(do (rf/dispatch [:embed/create-iframe-editor]))
                          :reagent-render      (fn []
                                                 [:div#embed-iframe-editor {:class "editor-box editor-box-embed"}])}))
 
 (defn iframe-internal-editor []
-  (reagent/create-class {:component-did-mount #(do (utils/log "Embed internal-iframe editor did mount!")
-                                                   (rf/dispatch [:embed/create-internal-iframe-editor]))
+  (reagent/create-class {:component-did-mount #(do (rf/dispatch [:embed/create-internal-iframe-editor]))
                          :reagent-render      (fn []
                                                 [:div#embed-internal-iframe-editor {:class "editor-box editor-box-embed"}])}))
 
 (defn plain-html-editor []
-  (reagent/create-class {:component-did-mount #(do (utils/log "Embed plain-html editor did mount!")
-                                                   (rf/dispatch [:embed/create-plain-html-editor]))
+  (reagent/create-class {:component-did-mount #(do (rf/dispatch [:embed/create-plain-html-editor]))
                          :reagent-render      (fn []
                                                 [:div#embed-plain-html-editor {:class "editor-box editor-box-embed"}])}))
 

@@ -95,7 +95,7 @@
 
 
 (defn editors-left-old []
-  (reagent/create-class {:component-did-mount #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
+  (reagent/create-class {:component-did-mount #(do (rf/dispatch [:create-editors]))
                          :reagent-render      (fn []
                                                 (let [[markup-percent style-percent] @(rf/subscribe [:editors/splitter-percents])]
                                                   [h-split
@@ -115,7 +115,7 @@
                                                    :panel-2 [iframe-result]]))}))
 
 (defn editors-right-old []
-  (reagent/create-class {:component-did-mount #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
+  (reagent/create-class {:component-did-mount #(do (rf/dispatch [:create-editors]))
                          :reagent-render      (fn []
                                                 (let [[markup-percent style-percent] @(rf/subscribe [:editors/splitter-percents])]
                                                   [h-split
@@ -135,7 +135,7 @@
                                                    :panel-1 [iframe-result]]))}))
 
 (defn editors-top-old []
-  (reagent/create-class {:component-did-mount #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
+  (reagent/create-class {:component-did-mount #(do (rf/dispatch [:create-editors]))
                          :reagent-render      (fn []
                                                 [v-split
                                                  :class "splitter"
@@ -153,7 +153,7 @@
                                                  :panel-2 [iframe-result]])}))
 
 (defn editors-bottom-old []
-  (reagent/create-class {:component-did-mount #(do (utils/log "Did mount!") (rf/dispatch [:create-editors]))
+  (reagent/create-class {:component-did-mount #(do (rf/dispatch [:create-editors]))
                          :reagent-render      (fn []
                                                 [v-split
                                                  :class "splitter"
@@ -172,7 +172,6 @@
 
 (defn editors-left []
   (reagent/create-class {:component-did-mount #(do
-                                                 (utils/log "Did mount!")
                                                  (rf/dispatch [:create-editors])
                                                  (.init js/splitMe))
                          :reagent-render      (fn []
@@ -188,7 +187,6 @@
 
 (defn editors-right []
   (reagent/create-class {:component-did-mount #(do
-                                                 (utils/log "Did mount!")
                                                  (rf/dispatch [:create-editors])
                                                  (.init js/splitMe))
                          :reagent-render      (fn []
@@ -204,7 +202,6 @@
 
 (defn editors-top []
   (reagent/create-class {:component-did-mount #(do
-                                                 (utils/log "Did mount!")
                                                  (rf/dispatch [:create-editors])
                                                  (.init js/splitMe))
                          :reagent-render      (fn []
@@ -220,7 +217,6 @@
 
 (defn editors-bottom []
   (reagent/create-class {:component-did-mount #(do
-                                                 (utils/log "Did mount!")
                                                  (rf/dispatch [:create-editors])
                                                  (.init js/splitMe))
                          :reagent-render      (fn []
