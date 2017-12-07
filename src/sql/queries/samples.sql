@@ -167,7 +167,7 @@ SELECT concat(repos.name, '/', samples.url) AS url,
 FROM samples
   JOIN versions ON samples.version_id = versions.id
   JOIN repos ON versions.repo_id = repos.id
-WHERE version_id AND latest AND samples.id NOT IN (SELECT sample_id FROM templates)
+WHERE version_id IS NOT NULL AND latest AND samples.id NOT IN (SELECT sample_id FROM templates)
 UNION
 SELECT url, create_date
 FROM samples
