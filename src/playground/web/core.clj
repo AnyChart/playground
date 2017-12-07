@@ -30,11 +30,9 @@
       (let [uri (:uri request)
             new-uri (reduce
                       (fn [new-uri redirect]
-                        (if (string/includes? new-uri (:from redirect))
-                          (string/replace new-uri
-                                          (re-pattern (:from redirect))
-                                          (:to redirect))
-                          new-uri))
+                        (string/replace new-uri
+                                        (re-pattern (:from redirect))
+                                        (:to redirect)))
                       uri
                       redirects)]
         (if (not= uri new-uri)
