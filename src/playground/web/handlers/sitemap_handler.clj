@@ -19,7 +19,7 @@
   (.toString (LocalDateTime/now)))
 
 (defn full-url [& parts]
-  (str "https://pg.anychart.com"
+  (str "https://playground.anychart.com"
        (string/join ""
                     (map #(string/replace % #" " "%20") parts))))
 
