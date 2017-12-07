@@ -138,7 +138,7 @@ SELECT samples.id, samples.name, samples.views, samples.likes, samples.create_da
   JOIN (SELECT samples.id FROM samples
         LEFT JOIN templates ON samples.id = templates.sample_id
         WHERE templates.sample_id IS NULL
-          AND tags @> ARRAY[:tag]
+          AND tags @> ARRAY[:tag]::VARCHAR(128)[]
           AND samples.latest
         ORDER BY likes DESC, views DESC, samples.name ASC LIMIT :count OFFSET :offset) as optimize_samples
   ON optimize_samples.id = samples.id ORDER BY likes DESC, views DESC, samples.name ASC;

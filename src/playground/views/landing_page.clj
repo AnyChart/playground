@@ -3,7 +3,8 @@
             [playground.views.common :as page]
             [hiccup.page :as hiccup-page]
             [playground.site.pages.landing-page-utils :as landing]
-            [playground.views.prev-next-buttons :as prev-next-buttons]))
+            [playground.views.prev-next-buttons :as prev-next-buttons]
+            [playground.data.tags :as tags-data]))
 
 
 (defn page [{:keys [page tags-page all-tags] :as data}]
@@ -53,7 +54,7 @@
          (for [tag (take 60 all-tags)]
            [:a.popular-tag-button
             {:title (str "Tag - " (:name tag))
-             :href  (str "/tags/" (:name tag))}
+             :href  (str "/tags/" (tags-data/original-name->id-name (:name tag)))}
             (:name tag)])]
 
         ]]

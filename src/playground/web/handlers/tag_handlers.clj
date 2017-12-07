@@ -18,7 +18,7 @@
 
 
 (defn tag-page [request]
-  (let [tag (-> request :route-params :*)
+  (let [tag (-> request :route-params :* tags-data/original-name-by-id)
         page (get-pagination request)
         samples (db-req/samples-by-tag (get-db request) {:count  (inc samples-per-page)
                                                          :offset (* samples-per-page page)

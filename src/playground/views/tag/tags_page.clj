@@ -1,6 +1,7 @@
 (ns playground.views.tag.tags-page
   (:require [playground.views.common :as page]
-            [hiccup.page :as hiccup-page]))
+            [hiccup.page :as hiccup-page]
+            [playground.data.tags :as tags-data]))
 
 
 ;(defn divide-tags-by-blocks [tags]
@@ -29,7 +30,7 @@
         (= letter-tag \0) [:p.letter "1 — 9"]
         (char? letter-tag) [:p.letter letter-tag]
         (string? letter-tag) [:a {:title (str "Tag - " letter-tag)
-                                  :href  (str "/tags/" letter-tag)}
+                                  :href  (str "/tags/" (tags-data/original-name->id-name letter-tag))}
                               (str letter-tag)]))))
 
 (defn page [data]
@@ -71,7 +72,7 @@
          (for [tag (take 13 (:all-tags data))]
            [:a.popular-tag-button
             {:title (str "Tag - " (:name tag))
-             :href  (str "/tags/" (:name tag))}
+             :href  (str "/tags/" (tags-data/original-name->id-name (:name tag)))}
             (:name tag)]
            )
          ]

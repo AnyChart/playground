@@ -3,7 +3,8 @@
             [playground.web.auth-base :as auth-base]
             [playground.utils.utils :as utils]
             [clojure.java.io :as io]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [playground.data.tags :as tags-data]))
 
 (def head-tag-manager "<!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -362,7 +363,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
      [:div.col-sm-2.col-xs-4
       [:div [:a.caption {:href "/tags" :title "Playground Tags"} [:b "Tags"]]]
       (for [tag (sort-by :name tags)]
-        [:div [:a {:href  (str "/tags/" (:name tag))
+        [:div [:a {:href  (str "/tags/" (tags-data/original-name->id-name (:name tag)))
                    :title (str "Tags - " (:name tag))}
                (:name tag)]])]
 
