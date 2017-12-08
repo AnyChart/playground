@@ -26,6 +26,7 @@
                  [com.cognitect/transit-clj "0.8.300"]
                  [org.apache.commons/commons-lang3 "3.7"]
                  [enlive "1.1.6"]
+                 [org.jsoup/jsoup "1.11.2"]
                  [selmer "1.11.2"]
                  [clj-time "0.14.0"]
                  [me.raynes/fs "1.4.6"]

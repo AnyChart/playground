@@ -5,7 +5,8 @@
             [clojure.java.io :refer [file]]
             [toml.core :as toml]
             [playground.data.tags :as tags-data]
-            [clojure.string :as string]))
+            [clojure.string :as string])
+  (:import (org.jsoup Jsoup)))
 
 (defn- ^String trim-newline-left [^CharSequence s]
   (loop [index 0]
@@ -28,78 +29,62 @@
 (defn trim-code
   "Delete so many spaces from string start as it have at first line"
   [s]
-  (when s
+  (when (and s (seq s))
     (let [trailing-s (-> s trim-trailing trim-newline-left)
-          space-count (space-count trailing-s)
+          space-count (space-count (last (string/split-lines trailing-s)))
           pattern (re-pattern (str "(?m)^[ ]{" space-count "}"))]
       (clojure.string/replace trailing-s pattern ""))))
 
 
-(defn parse-html-sample [path s]
-  (let [page (html/html-snippet s)
-        scripts (->> (html/select page [:script])
-                     (filter #(some? (:src (:attrs %))))
-                     (map #(:src (:attrs %))))
-        local-scripts (->> (html/select page [:script])
-                           (filter #(nil? (:data-export (:attrs %))))
-                           (map #(:src (:attrs %))))
+(defn parse-html-sample [s]
+  (let [page (Jsoup/parse s)
 
-        code (some->> (html/select page [:script])
-                      (filter #(not (:src (:attrs %))))
-                      first
-                      :content
-                      (apply str))
+        scripts (some->> (.select page "script[src]")
+                         (map (fn [script] (.attr script "src"))))
 
-        markup (some->> (html/select page [:div])
-                        first
-                        html/emit*
-                        (apply str))
+        code (.select page "script:not([src])")
+        code (if code (.html code) "")
 
-        style (some->> (html/select page [:style])
-                       first
-                       :content
-                       (apply str))
+        markup (.select page "body > :not(script)")
+        markup (string/join "\n" markup)
 
-        css-libs (->> (html/select page [:link])
-                      (filter #(and (= (-> % :attrs :rel) "stylesheet")
-                                    (-> % :attrs :href some?)))
-                      (map #(-> % :attrs :href)))
+        style (.select page "style")
+        style (string/join "\n" (map #(.html %) style))
 
-        name (some->> (html/select page [:meta])
-                      (filter #(= "ac:name" (:name (:attrs %))))
-                      first :attrs :content)
+        styles (.select page "link[rel=stylesheet][href]")
+        styles (map (fn [style] (.attr style "href")) styles)
 
-        exports (some->> (html/select page [:meta])
-                         (filter #(= "ac:export" (:name (:attrs %))))
-                         first :attrs :content)
+        name (.select page "meta[name=ac:name]")
+        name (.attr name "content")
 
-        description (some->> (html/select page [:meta])
-                             (filter #(= "ac:desc" (:name (:attrs %))))
-                             first :attrs :content)
+        exports (.select page "meta[name=ac:export]")
+        exports (.attr exports "content")
 
-        short-description (some->> (html/select page [:meta])
-                                   (filter #(= "ac:short-desc" (:name (:attrs %))))
-                                   first :attrs :content)
+        description (.select page "meta[name=ac:desc]")
+        description (.attr description "content")
 
-        tags-content (->> (html/select page [:meta])
-                          (filter #(= "ac:tags" (:name (:attrs %))))
-                          first :attrs :content)
+        short-description (.select page "meta[name=ac:short-desc]")
+        short-description (.attr short-description "content")
+
+        tags-content (.select page "meta[name=ac:tags]")
+        tags-content (.attr tags-content "content")
+
         tags (if (and tags-content
                       (seq tags-content))
-               (clojure.string/split tags-content #"\s*,\s*")
+               (string/split tags-content #"\s*,\s*")
                [])
         all-tags (sort (distinct (concat tags (tags-data/get-tags-by-code code))))]
     {:name              name
-     :description       description
-     :short-description short-description
+     :description       (string/trim description)
+     :short-description (string/trim short-description)
 
      :tags              all-tags
      :deleted-tags      []
      :exports           exports
 
      :scripts           scripts
-     :local-scripts     local-scripts
-     :styles            css-libs
+
+     :styles            styles
 
      :code-type         "js"
      :code              (or (trim-code code) "")
@@ -109,7 +94,6 @@
 
      :style-type        "css"
      :style             (or (trim-code style) "")}))
-
 
 
 (defn parse-toml-sample [path s]
@@ -138,10 +122,12 @@
       (info "parse TOML error: " path e)
       nil)))
 
+
 (defn- sample-path [base-path group sample]
   (if (.exists (file (str base-path group sample)))
     (str base-path group sample)
     (str base-path group "_samples/" sample)))
+
 
 (defn replace-vars [s vars]
   (reduce (fn [s [key value]]
@@ -150,17 +136,19 @@
                                     value))
           s vars))
 
+
 (defn html? [s]
   (.startsWith (.toLowerCase s) "<!doctype html"))
+
 
 (defn parse [base-path group config sample]
   ;(prn "parse sample: " base-path group config sample)
   (let [path (sample-path base-path group sample)
         name (clojure.string/replace sample #"\.(html|sample)$" "")
         sample-str (-> path slurp (replace-vars (:vars config)))
-        base-info (cond (.endsWith path ".html") (parse-html-sample path sample-str)
+        base-info (cond (.endsWith path ".html") (parse-html-sample sample-str)
                         (.endsWith path ".sample") (if (html? sample-str)
-                                                     (parse-html-sample path sample-str)
+                                                     (parse-html-sample sample-str)
                                                      (parse-toml-sample path sample-str)))]
     (when base-info
       (assoc base-info
