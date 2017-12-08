@@ -43,6 +43,7 @@
 (defn wrap-api-redirects [handler]
   (fn [request]
     (if (and (string/starts-with? (:uri request) "/api/")
+             (string/includes? (:uri request) "anychart.")
              (not (string/includes? (:uri request) "/_samples/")))
       (let [parts (string/split (:uri request) #"/")]
         (redirect (string/join "/" (concat (butlast parts) ["_samples"] [(last parts)])) 301))
