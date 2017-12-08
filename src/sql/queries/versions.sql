@@ -6,7 +6,10 @@ VALUES(:name, :repo_id, :commit, :hidden, :config, :samples_count);
 SELECT * FROM versions WHERE repo_id = :repo_id;
 
 -- name: sql-versions-repos
-SELECT versions.name, repos.name AS repo_name FROM versions
+SELECT versions.name,
+       versions.samples_count,
+       repos.name AS repo_name
+  FROM versions
   JOIN repos ON versions.repo_id = repos.id WHERE NOT repos.templates;
 
 -- name: sql-version-by-name

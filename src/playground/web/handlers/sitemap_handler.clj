@@ -126,6 +126,8 @@
 (defn sitemap-page [request]
   (-> (xml-page (merge (get-app-data request)
                        {:samples  (db-req/sitemap-sample-urls (get-db request))
-                        :versions (db-req/versions-repos (get-db request))}))
+                        :versions (filter (fn [version]
+                                            (pos? (:samples-count version)))
+                                          (db-req/versions-repos (get-db request)))}))
       response
       (content-type "text/xml")))
