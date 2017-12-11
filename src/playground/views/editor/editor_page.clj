@@ -7,12 +7,24 @@
 
 (defn title [sample]
   (if (:version-id sample)
-    (str (string/replace (string/join " | " (reverse (string/split (:url sample) #"/"))) "_" " ")
-         " | " (:repo-title sample) " |  AnyChart Playground")
+    ;; repo sample
+    (let [url-parts (->> (string/split (:url sample) #"/")
+                         butlast
+                         reverse
+                         (concat [(:name sample)])
+                         (string/join " | "))
+          name-title (string/replace url-parts "_" " ")]
+      (str name-title
+           (when (and (:repo-title sample)
+                      (seq (:repo-title sample)))
+             (str " | " (:repo-title sample)))
+           " |  AnyChart Playground"))
+    ;; user sample
     (str (:name sample)
          (when-not (:latest sample)
            (str ", v" (:version sample)))
-         " | #" (:url sample)
+         (when (and (:url sample) (seq (:url sample)))
+           (str " | #" (:url sample)))
          " | AnyChart Playground")))
 
 

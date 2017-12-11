@@ -8,11 +8,12 @@
            (java.util Base64)))
 
 (def empty-sample
-  {:name              ""
+  {:name              "New chart"
    :tags              []
    :short-description ""
    :description       ""
    :url               ""
+   :latest            true
 
    :styles            []
    :scripts           []
