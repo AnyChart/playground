@@ -2,7 +2,8 @@
   (:require [playground.views.common :as page]
             [hiccup.page :as hiccup-page]
             [clojure.string :as string]
-            [playground.utils.utils :as utils]))
+            [playground.utils.utils :as utils])
+  (:import (org.apache.commons.lang3 StringEscapeUtils)))
 
 
 (defn title [sample]
@@ -109,14 +110,11 @@
      [:script {:type "text/javascript"} "window.HIDE_SHARING_BUTTONS = true;"]
      page/body-tag-manager
 
-     [:div {:style "display: none;"}
-      [:textarea#transit-data data]]
-
      [:div#main-container]
 
      (page/bottom-footer)
 
      [:script {:src "/js/playground.js" :type "text/javascript"}]
-     [:script {:type "text/javascript"} "playground.core.run(document.getElementById('transit-data').innerText);"]
+     [:script {:type "text/javascript"} (str "playground.core.run(\"" (StringEscapeUtils/escapeJson data) "\");")]
 
      ]))
