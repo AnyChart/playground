@@ -33,6 +33,11 @@
                                   :href  (str "/tags/" (tags-data/original-name->id-name letter-tag))}
                               (str letter-tag)]))))
 
+(defn tags-height [tags]
+  (let [c (count tags)]
+    (int (* 1.02 (/ (+ (* 37 27) (* 18 c)) 4)))))
+
+
 (defn page [data]
   (hiccup-page/html5
     {:lang "en"}
@@ -79,8 +84,8 @@
 
         [:div.tags-box
          [:div.row
-          [:div.col-sm-12.flex-content
-           (divide-tags-by-blocks (map :name (:all-tags data)))]]]]]
+          [:div.col-sm-12.flex-content {:style (str "height: " (tags-height (concat (:all-tags data))) "px")}
+           (divide-tags-by-blocks (map :name (concat (:all-tags data))))]]]]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
      [:script {:src "/jquery/jquery.min.js"}]
