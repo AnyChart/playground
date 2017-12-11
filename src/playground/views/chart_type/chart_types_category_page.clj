@@ -1,6 +1,7 @@
 (ns playground.views.chart-type.chart-types-category-page
   (:require [hiccup.page :as hiccup-page]
-            [playground.views.common :as page]))
+            [playground.views.common :as page]
+            [clojure.string :as string]))
 
 (defn page [data category]
   (hiccup-page/html5
@@ -21,7 +22,7 @@
                  :src (:img category)}]]
          [:div.info
           [:h1.name.popular-label (:name category)]
-          [:p.description (:description category)]]]
+          [:p.description (string/join "\n" (:description category))]]]
 
         [:div.row.chart-type-container
          (for [chart (:charts category)]
