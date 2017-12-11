@@ -18,11 +18,12 @@
 
 
 (defn tag-page [request]
-  (let [tag (-> request :route-params :* tags-data/original-name-by-id)
+  (let [tag-dashed-id (-> request :route-params :*)
+        tag (db-req/tag-name-by-id (get-db request) {:tag tag-dashed-id})
         page (get-pagination request)
         samples (db-req/samples-by-tag (get-db request) {:count  (inc samples-per-page)
                                                          :offset (* samples-per-page page)
-                                                         :tag    tag})]
+                                                         :tag    tag-dashed-id})]
     (when (seq samples)
       (tag-view/page (merge {:samples  (take samples-per-page samples)
                              :end      (< (count samples) (inc samples-per-page))

@@ -126,24 +126,6 @@ SELECT sample_id FROM templates;
 DELETE FROM templates;
 
 
-
--- name: sql-samples-by-tag
-SELECT samples.id, samples.name, samples.views, samples.likes, samples.create_date, samples.url, samples.version, samples.version_id,
-  samples.tags, samples.description, samples.short_description, samples.preview, samples.latest,
-  versions.name as version_name, repos.name as repo_name,
-  users.username, users.fullname FROM samples
-  LEFT JOIN versions ON samples.version_id = versions.id
-  LEFT JOIN repos ON versions.repo_id = repos.id
-  JOIN users ON samples.owner_id = users.id
-  JOIN (SELECT samples.id FROM samples
-        LEFT JOIN templates ON samples.id = templates.sample_id
-        WHERE templates.sample_id IS NULL
-          AND tags @> ARRAY[:tag]::VARCHAR(128)[]
-          AND samples.latest
-        ORDER BY likes DESC, views DESC, samples.name ASC LIMIT :count OFFSET :offset) as optimize_samples
-  ON optimize_samples.id = samples.id ORDER BY likes DESC, views DESC, samples.name ASC;
-
-
 -- name: sql-group-samples
 SELECT samples.url
 FROM samples

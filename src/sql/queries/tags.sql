@@ -1,53 +1,28 @@
 -- name: sql-tags
-SELECT tags.nm as name, count FROM
-  (SELECT unnest(tags) as nm, count(*) as count
-   FROM samples WHERE samples.latest
-                      AND samples.id NOT IN (SELECT sample_id FROM templates)
-   GROUP BY nm
-   ORDER BY count DESC) tags
-WHERE nm NOT IN (SELECT tag FROM banned_tags);
+SELECT name, count FROM tags;
 
 -- name: sql-top-tags
-SELECT tags.nm as name, count FROM
-  (SELECT unnest(tags) as nm, count(*) as count
-   FROM samples WHERE samples.latest
-                      AND samples.id NOT IN (SELECT sample_id FROM templates)
-   GROUP BY nm
-   ORDER BY count DESC) tags
-WHERE nm NOT IN (SELECT tag FROM banned_tags)
-LIMIT :limit;
+SELECT name, count FROM tags LIMIT :limit;
 
--- name: sql-clear-tags-mw!
-DELETE FROM tags_mw;
+-- name: sql-tag-name-by-id
+SELECT name FROM tags WHERE id = :tag;
 
--- name: sql-update-tags-mw!
-INSERT INTO tags_mw
-  SELECT substring(tag, 2, LENGTH(tag)-2) name,
-         count(*) COUNT
-  FROM
-    ( SELECT JSON_EXTRACT(tags, CONCAT('$[', idx, ']')) AS tag
-      FROM samples
-        JOIN
-        ( SELECT 0 AS idx
-          UNION SELECT 1
-          UNION SELECT 2
-          UNION SELECT 3
-          UNION SELECT 4
-          UNION SELECT 5
-          UNION SELECT 6
-          UNION SELECT 7
-          UNION SELECT 8
-          UNION SELECT 9
-          UNION SELECT 10) AS INDEXES
-      WHERE samples.latest
-            AND samples.id NOT IN
-                (SELECT sample_id
-                 FROM templates)
-            AND JSON_EXTRACT(tags, CONCAT('$[', idx, ']')) IS NOT NULL) AS t1
-  GROUP BY tag
-  HAVING name NOT IN
-         (SELECT tag
-          FROM banned_tags)
-  ORDER BY COUNT DESC;
+-- name: sql-update-tags!
+REFRESH MATERIALIZED VIEW tags;
 
-
+-- name: sql-samples-by-tag
+SELECT samples.id, samples.name, samples.views, samples.likes, samples.create_date, samples.url, samples.version, samples.version_id,
+  samples.tags, samples.description, samples.short_description, samples.preview, samples.latest,
+  versions.name as version_name, repos.name as repo_name,
+  users.username, users.fullname FROM samples
+  LEFT JOIN versions ON samples.version_id = versions.id
+  LEFT JOIN repos ON versions.repo_id = repos.id
+  JOIN users ON samples.owner_id = users.id
+  JOIN (SELECT samples.id FROM samples
+    LEFT JOIN templates ON samples.id = templates.sample_id
+  WHERE templates.sample_id IS NULL
+        AND tags && ARRAY(SELECT name FROM tags
+                          WHERE id = regexp_replace(regexp_replace(regexp_replace(lower(:tag), '[^a-z0-9]', '-', 'g'), '-[-]+', '-', 'g'), '(-$|^-)', '', 'g'))::VARCHAR(128)[]
+        AND samples.latest
+        ORDER BY likes DESC, views DESC, samples.name ASC LIMIT :count OFFSET :offset) as optimize_samples
+    ON optimize_samples.id = samples.id ORDER BY likes DESC, views DESC, samples.name ASC;

@@ -44,6 +44,7 @@
                                                                     :url     hash
                                                                     :version 0})
       (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [id]))
+    (future (db-req/update-tags-mw! (get-db request)))
     (response {:status   :ok
                :hash     hash
                :version  0
@@ -63,15 +64,16 @@
       (let [version (:version db-sample)
             new-version (inc version)
             sample* (assoc sample :version new-version
-                                  :owner-id (-> request :session :user :id))]
-        (let [id (db-req/add-sample! (get-db request) sample*)]
-          (db-req/update-all-user-samples-latest! (get-db request) {:latest  false
-                                                                    :url     hash
-                                                                    :version new-version})
-          (db-req/update-version-user-samples-latest! (get-db request) {:latest  true
-                                                                        :url     hash
-                                                                        :version new-version})
-          (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [id]))
+                                  :owner-id (-> request :session :user :id))
+            id (db-req/add-sample! (get-db request) sample*)]
+        (db-req/update-all-user-samples-latest! (get-db request) {:latest  false
+                                                                  :url     hash
+                                                                  :version new-version})
+        (db-req/update-version-user-samples-latest! (get-db request) {:latest  true
+                                                                      :url     hash
+                                                                      :version new-version})
+        (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [id])
+        (future (db-req/update-tags-mw! (get-db request)))
         (response {:status   :ok
                    :hash     hash
                    :version  new-version

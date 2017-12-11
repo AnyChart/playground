@@ -332,15 +332,11 @@
 (def samples-by-tag (sql {:name   sql-samples-by-tag
                           :row-fn parse-sample}))
 
-;(def clear-tags-mw! (sql {:name sql-clear-tags-mw!}))
-;
-;(def update-tags-mw! (sql {:name sql-update-tags-mw!}))
+(def tag-name-by-id (sql {:name          sql-tag-name-by-id
+                          :row-fn        :name
+                          :result-set-fn first}))
 
-(defn update-tags-mw [db]
-  ;(jdbc/with-db-transaction [conn (:db-spec db)]
-  ;                          (clear-tags-mw! conn {})
-  ;                          (update-tags-mw! conn {}))
-  )
+(def update-tags-mw! (sql {:name sql-update-tags!}))
 
 ;;======================================================================================================================
 ;; Datasets, datasources
