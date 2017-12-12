@@ -11,7 +11,8 @@
     [clojure.string :as string]
     [playground.web.chartopedia :as chartopedia]
     [clj-time.format :as f]
-    [clj-time.coerce :as c])
+    [clj-time.coerce :as c]
+    [playground.data.tags :as tags-data])
   (:import (java.time LocalDateTime)))
 
 
@@ -53,10 +54,16 @@
 
 (defn tag-tag [tag]
   {:tag     :url
-   :content [{:tag :loc :content [(full-url "/tags/" (:name tag))]}
+   :content [{:tag :loc :content [(full-url "/tags/" tag)]}
              {:tag :priority :content ["0.5"]}
              {:tag :changefreq :content ["monthly"]}
              {:tag :lastmod :content [default-date]}]})
+
+(defn tags [data]
+  (let [dashed-tags (->> (:all-tags data)
+                         (map #(-> % :name tags-data/original-name->id-name))
+                         distinct)]
+    (map tag-tag dashed-tags)))
 
 
 (defn chart-type [chart-type]
@@ -115,7 +122,7 @@
                           (map repo (filter #(not (:templates %)) (:repos data)))
                           (map version (:versions data))
 
-                          (map tag-tag (:all-tags data))
+                          (tags data)
                           (map chart-type chartopedia/chart-types)
                           (map chart-type-category chartopedia/categories)
 
