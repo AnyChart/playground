@@ -24,7 +24,7 @@
         samples (db-req/samples-by-tag (get-db request) {:count  (inc samples-per-page)
                                                          :offset (* samples-per-page page)
                                                          :tag    tag-dashed-id})]
-    (when (seq samples)
+    (when (and tag (seq samples))
       (tag-view/page (merge {:samples  (take samples-per-page samples)
                              :end      (< (count samples) (inc samples-per-page))
                              :page     page
