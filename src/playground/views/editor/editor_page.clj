@@ -17,10 +17,11 @@
                          (string/join " | "))
           name-title (string/replace url-parts "_" " ")]
       (str name-title
-           (when (and (:repo-title sample)
-                      (seq (:repo-title sample)))
+           (when (seq (:repo-title sample))
              (str " | " (:repo-title sample)))
-           " |  AnyChart Playground"))
+           " |  AnyChart Playground"
+           (when-not (:latest sample)
+             (str " | ver. " (:version-name sample)))))
     ;; user sample
     (let [res (:name sample)
           res (str res (when-not (:latest sample)
