@@ -13,20 +13,25 @@
                          butlast
                          reverse
                          (concat [(:name sample)])
+                         (filter #(not (string/blank? %)))
                          (string/join " | "))
           name-title (string/replace url-parts "_" " ")]
       (str name-title
-           (when (and (:repo-title sample)
-                      (seq (:repo-title sample)))
+           (when (seq (:repo-title sample))
              (str " | " (:repo-title sample)))
-           " |  AnyChart Playground"))
+           " |  AnyChart Playground"
+           (when-not (:latest sample)
+             (str " | ver. " (:version-name sample)))))
     ;; user sample
-    (str (:name sample)
-         (when-not (:latest sample)
-           (str ", v" (:version sample)))
-         (when (and (:url sample) (seq (:url sample)))
-           (str " | #" (:url sample)))
-         " | AnyChart Playground")))
+    (let [res (:name sample)
+          res (str res (when-not (:latest sample)
+                         (str (when (seq res) ", ")
+                              "v" (:version sample))))
+          res (str res (when (seq (:url sample))
+                         (str (when (seq res) " | ")
+                              "#" (:url sample))))
+          res (str res " | AnyChart Playground")]
+      res)))
 
 
 (defn description [sample]
