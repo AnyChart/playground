@@ -11,7 +11,7 @@
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title       (landing/title page)
-                :description "The ultimate charts playground. Create, modify, browse, learn and share."})
+                :description "The ultimate charts playground. Create, modify, browse, learn and share. AnyChart Playground is an online tool for testing and showcasing user-created HTML, CSS and JavaScript code snippets. This playground is used by AnyChart Team to store and showcase samples from AnyChart Documentation, AnyChart API Reference, and AnyChart Chartopedia."})
     [:body
      page/body-tag-manager
      [:div.wrapper.landing-page
