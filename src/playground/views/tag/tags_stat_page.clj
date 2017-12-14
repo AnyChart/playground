@@ -1,6 +1,7 @@
 (ns playground.views.tag.tags-stat-page
   (:require [playground.views.common :as page]
-            [hiccup.page :as hiccup-page]))
+            [hiccup.page :as hiccup-page]
+            [playground.data.tags :as tags-data]))
 
 
 (defn page [data]
@@ -24,7 +25,7 @@
             [:div.tag-container
              [:a.popular-tag-button
               {:title (str "Tag - " (:name tag))
-               :href  (str "/tags/" (:name tag))}
+               :href  (str "/tags/" (tags-data/original-name->id-name (:name tag)))}
               (:name tag)
               ]]
             [:span.count (:count tag)]])]
