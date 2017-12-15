@@ -36,8 +36,8 @@
 (defn add-prev-event [prev-btn-id *page load-fn *loading]
   (when-let [btn (dom/getElement prev-btn-id)]
     (event/listen btn "click" (fn [e]
+                                (.preventDefault e)
                                 (when-not @*loading
-                                  (.preventDefault e)
                                   (reset! *loading true)
                                   (swap! *page dec)
                                   (load-fn))))))
@@ -46,8 +46,8 @@
 (defn add-next-event [next-btn-id *page load-fn *loading]
   (when-let [btn (dom/getElement next-btn-id)]
     (event/listen btn "click" (fn [e]
+                                (.preventDefault e)
                                 (when-not @*loading
-                                  (.preventDefault e)
                                   (reset! *loading true)
                                   (swap! *page inc)
                                   (load-fn))))))

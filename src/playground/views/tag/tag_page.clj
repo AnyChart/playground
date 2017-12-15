@@ -3,7 +3,8 @@
             [playground.views.sample :as sample-view]
             [hiccup.page :as hiccup-page]
             [playground.site.pages.tag-page-utils :as tag-page-utils]
-            [playground.views.prev-next-buttons :as prev-next-buttons]))
+            [playground.views.prev-next-buttons :as prev-next-buttons]
+            [playground.data.tags :as tags-data]))
 
 
 (defn page [{:keys [page tag tag-data] :as data}]
@@ -34,7 +35,7 @@
                                    "tag-samples-next"
                                    page
                                    (:end data)
-                                   (str "/tags/" tag "?page="))
+                                   (str "/tags/" (tags-data/original-name->id-name tag) "?page="))
         ]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]

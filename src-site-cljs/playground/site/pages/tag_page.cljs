@@ -7,7 +7,8 @@
             [playground.site.utils :as utils]
             [ajax.core :refer [GET POST]]
             [goog.dom :as dom]
-            [playground.site.pages.tag-page-utils :as tag-page-utils]))
+            [playground.site.pages.tag-page-utils :as tag-page-utils]
+            [playground.data.tags :as tags-data]))
 
 ;;======================================================================================================================
 ;; Tags page
@@ -30,7 +31,7 @@
                   "tag-samples-next"
                   *page
                   @*is-end
-                  (str "/tags/" @*tag "?page=")
+                  (str "/tags/" (tags-data/original-name->id-name @*tag) "?page=")
                   load-tag-samples
                   *loading))
 
