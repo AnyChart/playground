@@ -1,6 +1,7 @@
 (ns playground.standalone.views
   (:require [re-frame.core :as rf]
-            [reagent.core :as reagent]))
+            [reagent.core :as reagent]
+            [playground.data.tags :as tags-data]))
 
 
 (defn iframe-standalone []
@@ -32,7 +33,7 @@
         [:div.popular-tags-box
          (for [tag (:tags sample)]
            ^{:key tag}
-           [:a.popular-tag-button {:href  (str "/tags/" tag)
+           [:a.popular-tag-button {:href  (str "/tags/" (tags-data/original-name->id-name tag))
                                    :title (str "Tag " tag)} tag])]
 
         (when (seq (:styles sample))
