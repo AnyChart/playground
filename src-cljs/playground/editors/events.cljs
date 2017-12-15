@@ -13,22 +13,21 @@
     (let [markup-editor (editors-js/create-editor :markup (-> db :sample :markup) "text/html")
           style-editor (editors-js/create-editor :style (-> db :sample :style) "css")
           code-editor (editors-js/create-editor :code (-> db :sample :code) "javascript")]
-      {:db       (-> db
-                     ;; editors
-                     (assoc-in [:editors :markup-editor] markup-editor)
-                     (assoc-in [:editors :style-editor] style-editor)
-                     (assoc-in [:editors :code-editor] code-editor)
-                     ;; copy to clipboard buttons
-                     (assoc-in [:editors :markup-editor-clipboard]
-                               (js/Clipboard. "#markup-editor-copy"
-                                              (clj->js {:text (fn [] (.getValue markup-editor))})))
-                     (assoc-in [:editors :style-editor-clipboard]
-                               (js/Clipboard. "#style-editor-copy"
-                                              (clj->js {:text (fn [] (.getValue style-editor))})))
-                     (assoc-in [:editors :code-editor-clipboard]
-                               (js/Clipboard. "#code-editor-copy"
-                                              (clj->js {:text (fn [] (.getValue code-editor))}))))
-       :dispatch [:run]})))
+      {:db (-> db
+               ;; editors
+               (assoc-in [:editors :markup-editor] markup-editor)
+               (assoc-in [:editors :style-editor] style-editor)
+               (assoc-in [:editors :code-editor] code-editor)
+               ;; copy to clipboard buttons
+               (assoc-in [:editors :markup-editor-clipboard]
+                         (js/Clipboard. "#markup-editor-copy"
+                                        (clj->js {:text (fn [] (.getValue markup-editor))})))
+               (assoc-in [:editors :style-editor-clipboard]
+                         (js/Clipboard. "#style-editor-copy"
+                                        (clj->js {:text (fn [] (.getValue style-editor))})))
+               (assoc-in [:editors :code-editor-clipboard]
+                         (js/Clipboard. "#code-editor-copy"
+                                        (clj->js {:text (fn [] (.getValue code-editor))}))))})))
 
 (rf/reg-event-db
   :resize-window

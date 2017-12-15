@@ -7,16 +7,21 @@
             [playground.data.external-resources :as external-resources]
             [playground.standalone.views :as standalone-view]))
 
+(defn iframe []
+  (reagent/create-class {:component-did-mount #(do (rf/dispatch [:run]))
+                         :reagent-render      (fn []
+                                                [:iframe {:id                "result-iframe"
+                                                          :name              "result-iframe"
+                                                          :class             "iframe-result"
+                                                          :sandbox           "allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"
+                                                          :allowTransparency "true"
+                                                          :allowFullScreen   "true"}])}))
+
 (defn iframe-result []
   [:div.result
    [:div.iframe-hider {:style {:display (if @(rf/subscribe [:editors/iframe-hider-show]) "block" "none")}}]
-   [:iframe {:id                "result-iframe"
-             :name              "result-iframe"
-             :class             "iframe-result"
-             :sandbox           "allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"
-             :allowTransparency "true"
-             :allowFullScreen   "true"}]])
-
+   (let [k @(rf/subscribe [:editors/iframe-update])]
+     ^{:key (inc k)} [iframe])])
 
 (defn markup-editor []
   [:div.editor-container

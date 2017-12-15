@@ -31,7 +31,8 @@
       (let [view (or (:view data) (:view @ls) :right)]
         {:db {:editors       {:editors-height (editors-js/editors-height)
                               :view           view
-                              :code-settings  {:show false}}
+                              :code-settings  {:show false}
+                              :iframe-update  0}
 
               :sample        (:sample data)
               :saved-sample  (:sample data)
@@ -60,9 +61,7 @@
               :view-menu     {:show false}
               :create-menu   {:show false}
               :local-storage ls
-              :data          (external-resources/compose-all-data (:datasets data))}
-         ;:dispatch-n (list (when (= view :standalone) [:run]))
-         }))))
+              :data          (external-resources/compose-all-data (:datasets data))}}))))
 
 
 (rf/reg-event-db
@@ -80,16 +79,16 @@
       (.close doc))))
 
 (rf/reg-event-fx
+  :run
+  (fn [{db :db} _]
+    {:update-iframe (-> db :sample)}))
+
+(rf/reg-event-fx
   :click-run
   (fn [{db :db} _]
     (if (= :standalone (-> db :editors :view))
       {:dispatch [:view/editor]}
-      {:dispatch [:run]})))
-
-(rf/reg-event-fx
-  :run
-  (fn [{db :db} _]
-    {:update-iframe (-> db :sample)}))
+      {:db (update-in db [:editors :iframe-update] inc)})))
 
 (rf/reg-event-db
   :save

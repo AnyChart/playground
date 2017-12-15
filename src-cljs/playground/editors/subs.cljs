@@ -55,3 +55,7 @@
                   (-> db :left-menu :show)
                   (-> db :view-menu :show)
                   (-> db :create-menu :show))))
+
+(rf/reg-sub :editors/iframe-update
+            (fn [db _]
+              (-> db :editors :iframe-update)))
