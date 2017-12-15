@@ -14,6 +14,7 @@
 ;;======================================================================================================================
 (def *page (atom 0))
 (def *is-end (atom false))
+(def *loading (atom false))
 
 (declare load-popular-samples)
 
@@ -29,7 +30,8 @@
                   *page
                   @*is-end
                   "/?page="
-                  load-popular-samples))
+                  load-popular-samples
+                  *loading))
 
 
 (defn load-popular-samples []
@@ -45,7 +47,8 @@
   (init-buttons "popular-samples-prev"
                 "popular-samples-next"
                 *page
-                load-popular-samples))
+                load-popular-samples
+                *loading))
 
 ;;======================================================================================================================
 ;; Landing page: tag block

@@ -17,6 +17,7 @@
 (def *version-id (atom nil))
 (def *version-name (atom nil))
 (def *repo-title (atom nil))
+(def *loading (atom false))
 
 (declare load-version-samples)
 
@@ -32,7 +33,8 @@
                   *page
                   @*is-end
                   (str "/projects/" @*repo-title "/" @*version-name "?page=")
-                  load-version-samples))
+                  load-version-samples
+                  *loading))
 
 
 (defn load-version-samples []
@@ -53,4 +55,5 @@
   (init-buttons "version-samples-prev"
                 "version-samples-next"
                 *page
-                load-version-samples))
+                load-version-samples
+                *loading))

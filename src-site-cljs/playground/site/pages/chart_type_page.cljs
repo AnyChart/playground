@@ -17,6 +17,7 @@
 (def *tag (atom nil))
 (def *chart-type-name (atom nil))
 (def *chart-type-id (atom nil))
+(def *loading (atom false))
 
 (declare load-tag-samples)
 
@@ -32,7 +33,8 @@
                   *page
                   @*is-end
                   (str "/chart-types/" @*chart-type-id "?page=")
-                  load-tag-samples))
+                  load-tag-samples
+                  *loading))
 
 
 (defn load-tag-samples []
@@ -54,4 +56,5 @@
   (init-buttons "tag-samples-prev"
                 "tag-samples-next"
                 *page
-                load-tag-samples))
+                load-tag-samples
+                *loading))

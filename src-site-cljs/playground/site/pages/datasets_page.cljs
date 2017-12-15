@@ -16,6 +16,8 @@
 (def *is-end (atom false))
 (def ^:const datasets-count 6)
 
+(def *loading (atom false))
+
 (defn is-end [all-items-count on-page-count page]
   (let [pages (int (.ceil js/Math (/ all-items-count on-page-count)))]
     (>= page (dec pages))))
@@ -37,7 +39,8 @@
                   *page
                   @*is-end
                   "/datasets?page="
-                  datasets-buttons-click))
+                  datasets-buttons-click
+                  *loading))
 
 (defn ^:export startDatasetsPage [_end _page]
   (reset! *page _page)
@@ -45,4 +48,5 @@
   (init-buttons "tag-samples-prev"
                 "tag-samples-next"
                 *page
-                datasets-buttons-click))
+                datasets-buttons-click
+                *loading))

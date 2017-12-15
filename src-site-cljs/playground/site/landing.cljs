@@ -29,45 +29,56 @@
     (set! (.-innerHTML d) s)
     (.-firstChild d)))
 
+;;======================================================================================================================
+;; Init buttons
+;;======================================================================================================================
 
-(defn add-prev-event [prev-btn-id *page load-fn]
+(defn add-prev-event [prev-btn-id *page load-fn *loading]
   (when-let [btn (dom/getElement prev-btn-id)]
     (event/listen btn "click" (fn [e]
-                                (.preventDefault e)
-                                (swap! *page dec)
-                                (load-fn)))))
+                                (when-not @*loading
+                                  (.preventDefault e)
+                                  (reset! *loading true)
+                                  (swap! *page dec)
+                                  (load-fn))))))
 
 
-(defn add-next-event [next-btn-id *page load-fn]
+(defn add-next-event [next-btn-id *page load-fn *loading]
   (when-let [btn (dom/getElement next-btn-id)]
     (event/listen btn "click" (fn [e]
-                                (.preventDefault e)
-                                (swap! *page inc)
-                                (load-fn)))))
+                                (when-not @*loading
+                                  (.preventDefault e)
+                                  (reset! *loading true)
+                                  (swap! *page inc)
+                                  (load-fn))))))
 
-(defn init-buttons [prev-btn-id next-btn-id *page load-fn]
-  (add-prev-event prev-btn-id *page load-fn)
-  (add-next-event next-btn-id *page load-fn))
+(defn init-buttons [prev-btn-id next-btn-id *page load-fn *loading]
+  (add-prev-event prev-btn-id *page load-fn *loading)
+  (add-next-event next-btn-id *page load-fn *loading))
 
 
-(defn add-or-remove-prev-button-if-need [id *page url load-fn]
+;;======================================================================================================================
+;; Update buttons
+;;======================================================================================================================
+
+(defn add-or-remove-prev-button-if-need [id *page url load-fn *loading]
   (if (pos? @*page)
     (when-not (.getElementById js/document id)
       (let [container (.getElementById js/document "prev-next-buttons")]
         ;(.prepend container (str-to-elem (h/html (prev-next-buttons-common/prev-button id @*page url))))
         (.insertAdjacentHTML container "afterbegin" (h/html (prev-next-buttons-common/prev-button id @*page url)))
-        (add-prev-event id *page load-fn)))
+        (add-prev-event id *page load-fn *loading)))
     (if-let [btn (.getElementById js/document id)]
       (.remove btn))))
 
 
-(defn add-or-remove-next-button-if-need [id *page end url load-fn]
+(defn add-or-remove-next-button-if-need [id *page end url load-fn *loading]
   (if-not end
     (when-not (.getElementById js/document id)
       (let [container (.getElementById js/document "prev-next-buttons")]
         ;(.append container (str-to-elem (h/html (prev-next-buttons-common/next-button id @*page url))))
         (.insertAdjacentHTML container "beforeend" (h/html (prev-next-buttons-common/next-button id @*page url)))
-        (add-next-event id *page load-fn)))
+        (add-next-event id *page load-fn *loading)))
     (if-let [btn (.getElementById js/document id)]
       (.remove btn))))
 
@@ -77,9 +88,10 @@
                       *page
                       end
                       url
-                      load-fn]
-  (add-or-remove-prev-button-if-need prev-btn-id *page url load-fn)
-  (add-or-remove-next-button-if-need next-btn-id *page end url load-fn)
+                      load-fn
+                      *loading]
+  (add-or-remove-prev-button-if-need prev-btn-id *page url load-fn *loading)
+  (add-or-remove-next-button-if-need next-btn-id *page end url load-fn *loading)
   (let [prev-button (dom/getElement prev-btn-id)
         next-button (dom/getElement next-btn-id)]
     (when prev-button
@@ -87,4 +99,5 @@
       (.setAttribute prev-button "title" (str "Prev page, " @*page)))
     (when next-button
       (.setAttribute next-button "href" (str url (inc (inc @*page))))
-      (.setAttribute next-button "title" (str "Next page, " (inc (inc @*page)))))))
+      (.setAttribute next-button "title" (str "Next page, " (inc (inc @*page))))))
+  (reset! *loading false))

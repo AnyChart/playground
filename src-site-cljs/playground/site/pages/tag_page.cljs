@@ -15,6 +15,7 @@
 (def *page (atom 0))
 (def *is-end (atom false))
 (def *tag (atom nil))
+(def *loading (atom false))
 
 (declare load-tag-samples)
 
@@ -30,7 +31,8 @@
                   *page
                   @*is-end
                   (str "/tags/" @*tag "?page=")
-                  load-tag-samples))
+                  load-tag-samples
+                  *loading))
 
 
 (defn load-tag-samples []
@@ -50,4 +52,5 @@
   (init-buttons "tag-samples-prev"
                 "tag-samples-next"
                 *page
-                load-tag-samples))
+                load-tag-samples
+                *loading))
