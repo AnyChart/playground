@@ -49,6 +49,8 @@
 (defroutes app-routes
            (route/resources "/")
 
+           (GET "/*/" []  redirect-slash)
+
            (GET "/" [] (-> landing-handlers/landing-page
                            mw/pagination-page-middleware
                            mw/all-tags-middleware
@@ -81,7 +83,7 @@
            ;; ==========================================================================================================
            ;; Dataset routes
            ;; ==========================================================================================================
-           (GET "/datasets/" [] redirect-slash)
+           ; (GET "/datasets/" [] redirect-slash)
            (GET "/datasets" [] (-> dataset-handlers/data-sets-page
                                    mw/pagination-page-middleware
                                    mw/all-data-sets-middleware
@@ -117,7 +119,7 @@
            ;; ==========================================================================================================
            ;; Tags routes
            ;; ==========================================================================================================
-           (GET "/tags/" [] redirect-slash)
+           ;(GET "/tags/" [] redirect-slash)
            (GET "/tags" [] (-> tag-handlers/tags-page
                                mw/all-tags-middleware
                                mw/base-page-middleware))
@@ -191,31 +193,31 @@
            (POST "/tag-samples.json" [] tag-handlers/top-tag-samples)
 
 
-           (GET "/projects/" [] redirect-slash)
+           ;(GET "/projects/" [] redirect-slash)
            (GET "/projects" [] (-> repo-handlers/repos-page
                                    mw/base-page-middleware))
 
            (GET "/projects/:repo" [] (-> repo-handlers/repo-page
                                          mw/check-repo-middleware
                                          mw/base-page-middleware))
-           (GET "/projects/:repo/" [] (fn [request]
-                                        (when ((-> repo-handlers/repo-page
-                                                   mw/check-repo-middleware
-                                                   mw/base-page-middleware) request)
-                                          (redirect-slash request))))
+           ;(GET "/projects/:repo/" [] (fn [request]
+           ;                             (when ((-> repo-handlers/repo-page
+           ;                                        mw/check-repo-middleware
+           ;                                        mw/base-page-middleware) request)
+           ;                               (redirect-slash request))))
 
            (GET "/projects/:repo/:version" [] (-> repo-handlers/version-page
                                                   mw/pagination-page-middleware
                                                   mw/check-version-middleware
                                                   mw/check-repo-middleware
                                                   mw/base-page-middleware))
-           (GET "/projects/:repo/:version/" [] (fn [request]
-                                                 (when ((-> repo-handlers/version-page
-                                                            mw/pagination-page-middleware
-                                                            mw/check-version-middleware
-                                                            mw/check-repo-middleware
-                                                            mw/base-page-middleware) request)
-                                                   (redirect-slash request))))
+           ;(GET "/projects/:repo/:version/" [] (fn [request]
+           ;                                      (when ((-> repo-handlers/version-page
+           ;                                                 mw/pagination-page-middleware
+           ;                                                 mw/check-version-middleware
+           ;                                                 mw/check-repo-middleware
+           ;                                                 mw/base-page-middleware) request)
+           ;                                        (redirect-slash request))))
 
            ;; projects samples
            (GET "/:repo/:version/*" [] (-> sample-handlers/show-sample-editor mw/repo-sample))
