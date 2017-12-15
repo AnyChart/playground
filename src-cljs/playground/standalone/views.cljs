@@ -25,7 +25,9 @@
        [:div.info
         [:h1 (:name sample)]
 
-        [:div {:dangerouslySetInnerHTML {:__html (:description sample)}}]
+        [:div {:dangerouslySetInnerHTML {:__html (cond (seq (:description sample)) (:description sample)
+                                                       (seq (:short-description sample)) (:short-description sample)
+                                                       :else "")}}]
 
         [:div.popular-tags-box
          (for [tag (:tags sample)]
