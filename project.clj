@@ -27,8 +27,8 @@
                  [org.apache.commons/commons-lang3 "3.7"]
                  [enlive "1.1.6"]
                  [org.jsoup/jsoup "1.11.2"]
-                 [selmer "1.11.2"]
-                 [clj-time "0.14.0"]
+                 [selmer "1.11.3"]
+                 [clj-time "0.14.2"]
                  [me.raynes/fs "1.4.6"]
                  [camel-snake-kebab "0.4.0"]
                  [hiccup "1.0.5"]
@@ -39,7 +39,7 @@
                  [clojure.jdbc/clojure.jdbc-c3p0 "0.3.3"]
                  [yesql "0.5.3"]
                  ;[org.clojure/java.jdbc "0.6.1"]
-                 [org.clojure/java.jdbc "0.7.3"]
+                 [org.clojure/java.jdbc "0.7.4"]
                  [mysql/mysql-connector-java "6.0.6"]
                  [com.taoensso/carmine "2.16.0"]
 
@@ -64,7 +64,7 @@
                  [alandipert/storage-atom "2.0.1"]
                  ; [cljs-http "0.1.42"]
                  [cljs-ajax "0.7.3"]
-                 [com.andrewmcveigh/cljs-time "0.5.1"]
+                 [com.andrewmcveigh/cljs-time "0.5.2"]
                  [hiccups "0.3.0"]
                  ;[secretary "1.2.3"]
                  [com.cognitect/transit-cljs "0.8.243"]
@@ -78,7 +78,7 @@
          :target-path  "resources/public/css"
          :output-style :compressed}
   :profiles {:dev {:jvm-opts     ["-Dlocal=true"]
-                   :dependencies [[re-frisk "0.5.2"]]}}
+                   :dependencies [[re-frisk "0.5.3"]]}}
   :cljsbuild {:builds [
                        ;; editor
                        {:id           "dev"
