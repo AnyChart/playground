@@ -66,7 +66,7 @@
                  [cljs-ajax "0.7.3"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
                  [hiccups "0.3.0"]
-                 ;[secretary "1.2.3"]
+                 [secretary "1.2.3"]
                  [com.cognitect/transit-cljs "0.8.243"]
                  [venantius/accountant "0.2.3"]]
   :plugins [[lein-ancient "0.6.10"]

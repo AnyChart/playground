@@ -127,32 +127,32 @@
 (defn footer [])
 
 
-(defn send-form []
-  [:form#run-form
-   {:style  {:display "none"}
-    :action "/run"
-    :target "result-iframe"
-    :method "POST"}
-   [:input {:name  "code"
-            :value @(rf/subscribe [:sample/code])
-            :type  "hidden"}]
-   [:input {:name  "markup"
-            :value @(rf/subscribe [:sample/markup])
-            :type  "hidden"}]
-   [:input {:name  "style"
-            :value @(rf/subscribe [:sample/style])
-            :type  "hidden"}]
-   [:input {:name  "styles"
-            :value @(rf/subscribe [:sample/styles])
-            :type  "hidden"}]
-   [:input {:name  "scripts"
-            :value @(rf/subscribe [:sample/scripts])
-            :type  "hidden"}]])
+;(defn send-form []
+;  [:form#run-form
+;   {:style  {:display "none"}
+;    :action "/run"
+;    :target "result-iframe"
+;    :method "POST"}
+;   [:input {:name  "code"
+;            :value @(rf/subscribe [:sample/code])
+;            :type  "hidden"}]
+;   [:input {:name  "markup"
+;            :value @(rf/subscribe [:sample/markup])
+;            :type  "hidden"}]
+;   [:input {:name  "style"
+;            :value @(rf/subscribe [:sample/style])
+;            :type  "hidden"}]
+;   [:input {:name  "styles"
+;            :value @(rf/subscribe [:sample/styles])
+;            :type  "hidden"}]
+;   [:input {:name  "scripts"
+;            :value @(rf/subscribe [:sample/scripts])
+;            :type  "hidden"}]])
 
 
 (defn app []
   [:div
-   [send-form]
+   ;[send-form]
    [navbar]
    [editors/editors]
    [tips/tips]

@@ -49,7 +49,7 @@
 (defroutes app-routes
            (route/resources "/")
 
-           (GET "/*/" []  redirect-slash)
+           (GET "/*/" [] redirect-slash)
 
            (GET "/" [] (-> landing-handlers/landing-page
                            mw/pagination-page-middleware
@@ -226,6 +226,8 @@
            (GET "/:repo/:version/*/iframe" [] (-> sample-handlers/show-sample-iframe mw/repo-sample))
            (GET "/:repo/:version/*/preview" [] (-> sample-handlers/show-sample-preview mw/repo-sample))
            (GET "/:repo/:version/*/download" [] (-> sample-handlers/show-sample-download mw/repo-sample))
+           (GET "/:repo/:version/*/data" [] (-> sample-handlers/sample-data mw/repo-sample))
+           (POST "/:repo/:version/*/data" [] (-> sample-handlers/sample-data mw/repo-sample))
 
            ;; canonical projects samples
            (GET "/:repo/*" [] (-> sample-handlers/show-sample-editor mw/repo-sample))
@@ -234,6 +236,8 @@
            (GET "/:repo/*/iframe" [] (-> sample-handlers/show-sample-iframe mw/repo-sample))
            (GET "/:repo/*/preview" [] (-> sample-handlers/show-sample-preview mw/repo-sample))
            (GET "/:repo/*/download" [] (-> sample-handlers/show-sample-download mw/repo-sample))
+           (GET "/:repo/*/data" [] (-> sample-handlers/sample-data mw/repo-sample))
+           (POST "/:repo/*/data" [] (-> sample-handlers/sample-data mw/repo-sample))
 
            ;; canonical (last) user samples
            (GET "/:hash" [] (-> sample-handlers/show-sample-editor mw/last-user-sample))
@@ -242,6 +246,8 @@
            (GET "/:hash/iframe" [] (-> sample-handlers/show-sample-iframe mw/last-user-sample))
            (GET "/:hash/preview" [] (-> sample-handlers/show-sample-preview mw/last-user-sample))
            (GET "/:hash/download" [] (-> sample-handlers/show-sample-download mw/last-user-sample))
+           (GET "/:hash/data" [] (-> sample-handlers/sample-data mw/last-user-sample))
+           (POST "/:hash/data" [] (-> sample-handlers/sample-data mw/last-user-sample))
 
            ;; user samples with version
            (GET "/:hash/:version" [] (-> sample-handlers/show-sample-editor mw/user-sample))
@@ -250,6 +256,8 @@
            (GET "/:hash/:version/iframe" [] (-> sample-handlers/show-sample-iframe mw/user-sample))
            (GET "/:hash/:version/preview" [] (-> sample-handlers/show-sample-preview mw/user-sample))
            (GET "/:hash/:version/download" [] (-> sample-handlers/show-sample-download mw/user-sample))
+           (GET "/:hash/:version/data" [] (-> sample-handlers/sample-data mw/user-sample))
+           (POST "/:hash/:version/data" [] (-> sample-handlers/sample-data mw/user-sample))
 
            ;; TODO: redirects for group, delete in 6-9 months
            (GET "/:repo/:version/:group/" [] (-> sample-handlers/group-redirect

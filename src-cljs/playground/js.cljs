@@ -1,7 +1,8 @@
 (ns playground.js
   (:require [playground.utils :as utils]
             [re-frame.core :as rf]
-            [goog.events :as events])
+            [goog.events :as events]
+            [secretary.core :as secretary :refer-macros [defroute]])
   (:import [goog History]
            [goog.history EventType]))
 
@@ -27,13 +28,29 @@
 (defn init-history []
   (set! (.-onpopstate js/window)
         (fn [event]
-          (utils/log "popstate")
-          (utils/log (.-location js/document))
-          (let [current-url (.-href (.-location js/document))]
-            (cond
-              (.endsWith current-url "/editor") (rf/dispatch [:view/editor])
-              (.endsWith current-url "/view") (rf/dispatch [:view/standalone])
-              :else (rf/dispatch [:view/editor]))))))
+          ;(utils/log "popstate")
+          ;(utils/log event)
+          ;(utils/log (.-location js/document))
+          ;(let [current-url (.-href (.-location js/document))]
+          ;  (cond
+          ;    (.endsWith current-url "/editor") (rf/dispatch [:view/editor])
+          ;    (.endsWith current-url "/view") (rf/dispatch [:view/standalone])
+          ;    :else (rf/dispatch [:view/editor])))
+          ;(let [browser-history-index (.-state event)]
+          ;  (rf/dispatch [:change-history browser-history-index]))
+          (secretary.core/dispatch! (.-pathname (.-location js/document))))))
+
+(defroute "/:url/view" [url]
+          (rf/dispatch [:location-change url nil true]))
+
+(defroute "/:url/:id/view" [url id]
+          (rf/dispatch [:location-change url (int id) true]))
+
+(defroute "/:url" [url]
+          (rf/dispatch [:location-change url nil nil]))
+
+(defroute "/:url/:id" [url id]
+          (rf/dispatch [:location-change url (int id) nil]))
 
 (init)
 (init-close)

@@ -2,7 +2,8 @@
   (:require [re-frame.core :as rf]
             [playground.editors.js :as editors-js]
             [playground.utils :as js-utils]
-            [playground.utils.utils :as utils]))
+            [playground.utils.utils :as utils]
+            [ajax.core :refer [GET POST]]))
 
 ;;======================================================================================================================
 ;; Editors
@@ -37,27 +38,40 @@
 ;;======================================================================================================================
 ;; Editors views
 ;;======================================================================================================================
-(defn push-state [url]
+;(defn push-state [url history-index]
+;  (js-utils/log "push state " history-index)
+;  (.replaceState (.-history js/window) history-index nil url))
+;
+;
+;(defn different-paths [url]
+;  (not= (.-pathname (.-location js/document)) url))
+
+
+(defn push-state-if-need [url]
   (when (not= (.-pathname (.-location js/document)) url)
     ;(js-utils/log "Push state" url " : " (.-pathname (.-location js/document)))
-    (.pushState (.-history js/window) nil nil url)))
+    (.pushState (.-history js/window) 1 nil url)))
+
 
 (defn update-view [db view]
-  (push-state (utils/sample-url (:sample db)))
+  (push-state-if-need (utils/sample-url (:sample db)))
   (swap! (:local-storage db) assoc :view view))
+
 
 (rf/reg-event-db
   :view/editor
   (fn [db _]
     ;; TODO : to effects
-    (push-state (utils/sample-url (:sample db)))
+    (push-state-if-need (utils/sample-url (:sample db)))
     (assoc-in db [:editors :view] (-> db :local-storage deref :view))))
+
 
 (rf/reg-event-db
   :view/left
   (fn [db _]
-    (update-view db :left)
-    (assoc-in db [:editors :view] :left)))
+    (update-view db :right)
+    (assoc-in db [:editors :view] :right)))
+
 
 (rf/reg-event-db
   :view/right
@@ -81,9 +95,45 @@
   :view/standalone
   (fn [{db :db} _]
     (let [sample-standalone-url (utils/sample-standalone-url (:sample db))]
-      (push-state sample-standalone-url)
+      (push-state-if-need sample-standalone-url)
       {:db (-> db
                (assoc-in [:editors :view] :standalone))})))
+
+
+(rf/reg-event-fx
+  :location-change
+  (fn [{db :db} [_ url id standalone?]]
+    ;(js-utils/log "URL:" url " ID:" id " Standalone:" standalone?
+    ;              "Current sample url:" (-> db :sample :url) " Current version:" (-> db :sample :version)
+    ;              (= id (-> db :sample :version)))
+    (if (and (= url (-> db :sample :url))
+             (or (nil? id)
+                 (= id (-> db :sample :version))))
+      {:db (if standalone?
+             (assoc-in db [:editors :view] :standalone)
+             (assoc-in db [:editors :view] (-> db :local-storage deref :view)))}
+
+      (do
+        (POST (str "/" url (when id (str "/" id)) "/data")
+              {:params        {}
+               :handler       #(rf/dispatch [:data-response %1])
+               :error-handler #(rf/dispatch [:data-error %1])})
+        {:db db}))))
+
+
+(rf/reg-event-fx
+  :data-response
+  (fn [{db :db} [_ data]]
+    {:dispatch [:re-init data]}))
+
+
+(rf/reg-event-db
+  :data-error
+  (fn [db [_ error]]
+    (js-utils/log "Data error!" error)
+    (js/alert "Data error!")
+    db))
+
 
 ;;======================================================================================================================
 ;; Code context menu
@@ -100,3 +150,44 @@
     ;TODO: eliminate dispatch in event handler
     (rf/dispatch [:tips/add-from-queue])
     (assoc-in db [:editors :code-settings :show] false)))
+
+
+;;======================================================================================================================
+;; Change editors code/style/markup
+;;======================================================================================================================
+(rf/reg-event-fx
+  :update-code
+  (fn [{db :db} [_ s]]
+    {:update-code [db s]}))
+
+(rf/reg-event-fx
+  :update-markup
+  (fn [{db :db} [_ s]]
+    {:update-markup [db s]}))
+
+(rf/reg-event-fx
+  :update-style
+  (fn [{db :db} [_ s]]
+    {:update-style [db s]}))
+
+
+(rf/reg-fx
+  :update-code
+  (fn [[db s]]
+    (let [cm (-> db :editors :code-editor)]
+      (when (not= (.getValue cm) s)
+        (.setValue (.getDoc cm) s)))))
+
+(rf/reg-fx
+  :update-markup
+  (fn [[db s]]
+    (let [cm (-> db :editors :markup-editor)]
+      (when (not= (.getValue cm) s)
+        (.setValue (.getDoc cm) s)))))
+
+(rf/reg-fx
+  :update-style
+  (fn [[db s]]
+    (let [cm (-> db :editors :style-editor)]
+      (when (not= (.getValue cm) s)
+        (.setValue (.getDoc cm) s)))))

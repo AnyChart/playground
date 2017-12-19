@@ -65,6 +65,11 @@
   (assoc (show-sample-iframe request)
     :headers {"Content-Disposition" (str "attachment; filename=\"" (:name (get-sample request)) ".html\"")}))
 
+
+(defn sample-data [request]
+  (response (get-sample request)))
+
+
 ;; TODO: redirects for group, delete in 6-9 months
 (defn group-redirect [request]
   (let [group (-> request :params :group)

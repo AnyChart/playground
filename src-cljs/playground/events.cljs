@@ -64,6 +64,18 @@
               :data          (external-resources/compose-all-data (:datasets data))}}))))
 
 
+(rf/reg-event-fx
+  :re-init
+  (fn [{db :db} [_ sample]]
+    {:db         (-> db
+                     (assoc-in [:sample] sample))
+     :dispatch-n [[:sync-saved-sample]
+                  [:run]
+                  [:update-code (:code sample)]
+                  [:update-markup (:markup sample)]
+                  [:update-style (:style sample)]]}))
+
+
 (rf/reg-event-db
   :change-code
   (fn [db [_ type code]]
@@ -111,7 +123,8 @@
                        (assoc-in [:sample :url] (:hash data))
                        (assoc-in [:sample :version] (:version data))
                        (assoc-in [:sample :owner-id] (:owner-id data)))
-       :dispatch   [:sync-saved-sample]
+       :dispatch-n [[:run]
+                    [:sync-saved-sample]]
        :update-url data}
       {:db       db
        :dispatch [:save-error "bad status"]})))
@@ -146,7 +159,8 @@
                        (assoc-in [:sample :url] (:hash data))
                        (assoc-in [:sample :version] (:version data))
                        (assoc-in [:sample :owner-id] (:owner-id data)))
-       :dispatch   [:sync-saved-sample]
+       :dispatch-n [[:run]
+                    [:sync-saved-sample]]
        :update-url data}
       {:db       db
        :dispatch [:fork-error "bad status"]})))
@@ -174,8 +188,6 @@
 ;;======================================================================================================================
 ;; Effects
 ;;======================================================================================================================
-
-
 (rf/reg-fx
   :update-url
   (fn [data]
