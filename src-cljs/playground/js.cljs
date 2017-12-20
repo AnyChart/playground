@@ -52,6 +52,13 @@
 (defroute "/:url/:id" [url id]
           (rf/dispatch [:location-change url (int id) nil]))
 
+(defroute "/*/view"  {:as params}
+          (rf/dispatch [:location-change (:* params) nil true]))
+
+(defroute "/*"  {:as params}
+          (rf/dispatch [:location-change (:* params) nil nil]))
+
+
 (init)
 (init-close)
 (init-history)

@@ -106,19 +106,17 @@
     ;(js-utils/log "URL:" url " ID:" id " Standalone:" standalone?
     ;              "Current sample url:" (-> db :sample :url) " Current version:" (-> db :sample :version)
     ;              (= id (-> db :sample :version)))
-    (if (and (= url (-> db :sample :url))
-             (or (nil? id)
-                 (= id (-> db :sample :version))))
-      {:db (if standalone?
-             (assoc-in db [:editors :view] :standalone)
-             (assoc-in db [:editors :view] (-> db :local-storage deref :view)))}
-
-      (do
+    (let [new-db (if standalone?
+                   (assoc-in db [:editors :view] :standalone)
+                   (assoc-in db [:editors :view] (-> db :local-storage deref :view)))]
+      (when-not (and (= url (-> db :sample :url))
+                     (or (nil? id)
+                         (= id (-> db :sample :version))))
         (POST (str "/" url (when id (str "/" id)) "/data")
               {:params        {}
                :handler       #(rf/dispatch [:data-response %1])
-               :error-handler #(rf/dispatch [:data-error %1])})
-        {:db db}))))
+               :error-handler #(rf/dispatch [:data-error %1])}))
+      {:db new-db})))
 
 
 (rf/reg-event-fx
