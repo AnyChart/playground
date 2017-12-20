@@ -86,6 +86,9 @@ DELETE FROM samples WHERE version_id = :version_id;
 -- name: sql-update-sample-views!
 UPDATE samples SET views = views + 1 WHERE id = :id;
 
+-- name: sql-set-sample-views!
+UPDATE samples SET views = :views WHERE id = :id;
+
 -- name: sql-update-samples-preview!
 UPDATE samples SET preview = :preview WHERE id IN (:ids);
 
@@ -181,3 +184,7 @@ WHERE sample_id IN
               FROM versions
               WHERE repo_id = :repo_id));
 
+-- name: sql-copy-visits!
+INSERT INTO visits (user_id, sample_id, create_date)
+    SELECT user_id, :new_sample_id, create_date FROM
+      visits WHERE sample_id = :old_sample_id;

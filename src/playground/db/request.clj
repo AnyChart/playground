@@ -35,11 +35,12 @@
 
 
 (defn vec->arr [array-vector db]
-  (let [conn (jdbc/get-connection (:conn db))
+  (let [conn (jdbc/get-connection (or (:conn db) db))
         arr (.createArrayOf conn
                             "varchar"
                             (into-array String array-vector))]
-    (.close conn)
+    (when (:conn db)
+      (.close conn))
     arr))
 
 
@@ -246,6 +247,8 @@
 
 (def update-sample-views! (sql {:name sql-update-sample-views!}))
 
+(def set-sample-views! (sql {:name sql-set-sample-views!}))
+
 (def update-samples-preview! (sql {:name sql-update-samples-preview!}))
 
 (def user-samples-without-preview (sql {:name sql-user-samples-without-preview}))
@@ -266,6 +269,8 @@
 (def delete-version-visits! (sql {:name sql-delete-version-visits!}))
 
 (def delete-repo-visits! (sql {:name sql-delete-repo-visits!}))
+
+(def copy-visits! (sql {:name sql-copy-visits!}))
 
 ;;======================================================================================================================
 ;; Set sample latest

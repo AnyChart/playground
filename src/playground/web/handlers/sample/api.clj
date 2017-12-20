@@ -9,7 +9,8 @@
     [playground.web.helpers :refer :all]
     [playground.web.utils :as web-utils :refer [response]]
     ;; misc
-    [clojure.string :as string]))
+    [clojure.string :as string]
+    [clojure.java.jdbc :as jdbc]))
 
 (defn run [request]
   (let [code (-> request :params :code)
@@ -65,13 +66,20 @@
             new-version (inc version)
             sample* (assoc sample :version new-version
                                   :owner-id (-> request :session :user :id))
-            id (db-req/add-sample! (get-db request) sample*)]
-        (db-req/update-all-user-samples-latest! (get-db request) {:latest  false
-                                                                  :url     hash
-                                                                  :version new-version})
-        (db-req/update-version-user-samples-latest! (get-db request) {:latest  true
-                                                                      :url     hash
-                                                                      :version new-version})
+            ;id (db-req/add-sample! (get-db request) sample*)
+            id (jdbc/with-db-transaction [conn (:db-spec (get-db request))]
+                                         (let [id (db-req/add-sample! conn sample*)]
+                                           (db-req/copy-visits! conn {:new-sample-id id
+                                                                      :old-sample-id (:id db-sample)})
+                                           (db-req/set-sample-views! conn {:id    id
+                                                                           :views (:views db-sample)})
+                                           (db-req/update-all-user-samples-latest! conn {:latest  false
+                                                                                         :url     hash
+                                                                                         :version new-version})
+                                           (db-req/update-version-user-samples-latest! conn {:latest  true
+                                                                                             :url     hash
+                                                                                             :version new-version})
+                                           id))]
         (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [id])
         (future (db-req/update-tags-mw! (get-db request)))
         (response {:status   :ok
