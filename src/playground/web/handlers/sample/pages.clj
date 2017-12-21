@@ -39,9 +39,16 @@
       (jdbc/with-db-transaction [conn (:db-spec (get-db request))]
                                 (when-not (db-req/get-visit conn {:sample-id (:id sample)
                                                                   :user-id   (:id user)})
-                                  (db-req/update-sample-views! conn {:id (:id sample)})
                                   (db-req/visit! conn {:sample-id (:id sample)
-                                                       :user-id   (:id user)}))))
+                                                       :user-id   (:id user)}))
+                                (when-not (db-req/get-canonical-visit conn {:user-id (:id user)
+                                                                            :url     (:url sample)
+                                                                            :repo-id (:repo-id sample)})
+                                  (db-req/canonical-visit! conn {:user-id (:id user)
+                                                                 :url     (:url sample)
+                                                                 :repo-id (:repo-id sample)}))
+                                (db-req/update-sample-views-from-canonical-visits! conn {:url     (:url sample)
+                                                                                         :repo-id (:repo-id sample)})))
 
     (response (editor-view/page data))))
 

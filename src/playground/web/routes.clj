@@ -177,6 +177,7 @@
            ;; ==========================================================================================================
            (GET "/_user_previews_" [] generator-handlers/user-previews)
            (GET "/_repo_previews_" [] generator-handlers/repo-previews)
+           (GET "/_refresh_views_" [] generator-handlers/refresh-views)
 
            (GET "/:repo/_update_" [] (-> generator-handlers/update-repo
                                          mw/check-repo-middleware))

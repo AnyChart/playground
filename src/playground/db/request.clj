@@ -22,6 +22,7 @@
 (defqueries "sql/queries/session.sql")
 (defqueries "sql/queries/datasets.sql")
 (defqueries "sql/queries/tags.sql")
+(defqueries "sql/queries/visits.sql")
 
 ;; =====================================================================================================================
 ;; Macroses and util functions
@@ -176,6 +177,9 @@
 (def samples (sql {:name   sql-samples
                    :row-fn underscore->dash}))
 
+(def samples-latest (sql {:name   sql-samples-latest
+                          :row-fn underscore->dash}))
+
 (def samples-by-ids (sql {:name   sql-samples-by-ids
                           :row-fn parse-sample}))
 
@@ -245,7 +249,7 @@
   (doall (map :id                                           ; :generated-key for MySQL
               (insert-multiple! db :samples (map #(insert-sample % version-id) samples)))))
 
-(def update-sample-views! (sql {:name sql-update-sample-views!}))
+;(def update-sample-views! (sql {:name sql-update-sample-views!}))
 
 (def set-sample-views! (sql {:name sql-set-sample-views!}))
 
@@ -270,7 +274,16 @@
 
 (def delete-repo-visits! (sql {:name sql-delete-repo-visits!}))
 
-(def copy-visits! (sql {:name sql-copy-visits!}))
+;l(def copy-visits! (sql {:name sql-copy-visits!}))
+
+;; canonical visits
+(def get-canonical-visit (sql {:name          sql-get-canonical-visit
+                               :result-set-fn first
+                               :row-fn        underscore->dash}))
+
+(def canonical-visit! (sql {:name sql-canonical-visit!}))
+
+(def update-sample-views-from-canonical-visits! (sql {:name sql-update-sample-views-from-canonical-visits!}))
 
 ;;======================================================================================================================
 ;; Set sample latest

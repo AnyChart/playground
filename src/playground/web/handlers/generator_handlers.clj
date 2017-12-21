@@ -3,6 +3,7 @@
     ;; comp
     [playground.redis.core :as redis]
     [playground.db.request :as db-req]
+    [playground.db.migration :as migration]
     ;; web
     [playground.web.helpers :refer :all]
     [playground.web.utils :as web-utils :refer [response]]))
@@ -27,3 +28,6 @@
 
 (defn repo-previews [request]
   (generate-previews (db-req/repo-samples-without-preview (get-db request)) request))
+
+(defn refresh-views [request]
+  (str "Update samples views: " (migration/refresh-views-from-canonical-visits (get-db request))))

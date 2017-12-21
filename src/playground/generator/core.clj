@@ -178,10 +178,15 @@
     (timbre/info "Insert samples: " (count samples) version-config)
     (when (seq samples)
       (let [ids (db-req/add-samples! db version-id samples)]
-        ;  ;; if repo is templates-repo, then update templates
+        ;;  set views
+        (doseq [sample samples]
+          (db-req/update-sample-views-from-canonical-visits! db {:url     (:url sample)
+                                                                 :repo-id (:id @repo)}))
         (redis/enqueue redis
                        (-> redis :config :preview-queue)
                        ids)
+
+        ;; if repo is templates-repo, then update templates
         (when (:templates @repo)
           (db-req/delete-templates! db)
           (db-req/add-templates! db ids))))

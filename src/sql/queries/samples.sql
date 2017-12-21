@@ -1,5 +1,12 @@
 -- name: sql-samples
-SELECT * FROM samples;
+SELECT samples.*, versions.name as version_name, repos.name as repo_name, repos.id as repo_id FROM samples
+  LEFT JOIN versions ON samples.version_id = versions.id
+  LEFT JOIN repos ON versions.repo_id = repos.id;
+
+-- name: sql-samples-latest
+SELECT samples.*, versions.name as version_name, repos.name as repo_name, repos.id as repo_id FROM samples
+  LEFT JOIN versions ON samples.version_id = versions.id
+  LEFT JOIN repos ON versions.repo_id = repos.id WHERE latest;
 
 -- name: sql-url-exist
 SELECT id FROM samples WHERE url = :url;
@@ -83,11 +90,7 @@ ORDER BY version DESC;
 -- name: sql-delete-samples!
 DELETE FROM samples WHERE version_id = :version_id;
 
--- name: sql-update-sample-views!
-UPDATE samples SET views = views + 1 WHERE id = :id;
 
--- name: sql-set-sample-views!
-UPDATE samples SET views = :views WHERE id = :id;
 
 -- name: sql-update-samples-preview!
 UPDATE samples SET preview = :preview WHERE id IN (:ids);
@@ -157,34 +160,3 @@ UNION
 SELECT url, create_date
 FROM samples
 WHERE version_id IS NULL AND latest;
-
-
--- name: sql-get-visit
-SELECT * FROM visits WHERE user_id = :user_id AND sample_id = :sample_id;
-
--- name: sql-visit!
-INSERT INTO visits (user_id, sample_id ) VALUES (:user_id, :sample_id);
-
--- name: sql-delete-version-visits!
-DELETE
-FROM visits
-WHERE sample_id IN
-      (SELECT id
-       FROM samples
-       WHERE version_id = :version_id);
-
--- name: sql-delete-repo-visits!
-DELETE
-FROM visits
-WHERE sample_id IN
-      (SELECT id
-       FROM samples
-       WHERE version_id IN
-             (SELECT id
-              FROM versions
-              WHERE repo_id = :repo_id));
-
--- name: sql-copy-visits!
-INSERT INTO visits (user_id, sample_id, create_date)
-    SELECT user_id, :new_sample_id, create_date FROM
-      visits WHERE sample_id = :old_sample_id;
