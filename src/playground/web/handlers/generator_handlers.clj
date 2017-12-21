@@ -30,4 +30,5 @@
   (generate-previews (db-req/repo-samples-without-preview (get-db request)) request))
 
 (defn refresh-views [request]
-  (str "Update samples views: " (migration/refresh-views-from-canonical-visits (get-db request))))
+  (future (migration/refresh-views-from-canonical-visits (get-db request)))
+  (str "Update samples views!"))
