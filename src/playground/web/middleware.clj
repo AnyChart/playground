@@ -37,6 +37,7 @@
           sample (db-req/sample-by-url (get-db request) {:version-id (:id version)
                                                          :url        sample-url})
           full-sample (-> sample
+                          (assoc :repo-id (:id repo))
                           (assoc :repo-name (:name repo))
                           (assoc :repo-title (:title repo))
                           (assoc :version-name (:name version))
