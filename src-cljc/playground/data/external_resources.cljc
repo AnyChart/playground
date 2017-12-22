@@ -18,7 +18,7 @@
 (defn compose-themes []
   (let [themes (:themes data)
         themes (map (fn [[url-name data]]
-                      {:url         (str "http://cdn.anychart.com/releases/v8/themes/" (name url-name) ".js")
+                      {:url         (str "https://cdn.anychart.com/releases/v8/themes/" (name url-name) ".js")
                        :name        (:name data)
                        :icon        (:icon data)
                        :description (:desc data)
@@ -40,7 +40,7 @@
         modules (map (fn [[url-name data]]
                        {:name          (or (:name data) (str "Unnamed module with ID: " (name url-name)))
                         :description   (:desc data)
-                        :url           (str "http://cdn.anychart.com/releases/v8/js/" (name url-name) ".min.js")
+                        :url           (str "https://cdn.anychart.com/releases/v8/js/" (name url-name) ".min.js")
                         :example       "TODO: modules examples"
                         :internal-type (:type data)})
                      modules)
@@ -228,7 +228,7 @@
   (map (fn [item]
          (assoc item
            :type :dataset
-           :example "TODO: Add example to http://static.anychart.com/cdn/anydata/common/index.json?")) datasets))
+           :example "TODO: Add example to https://static.anychart.com/cdn/anydata/common/index.json?")) datasets))
 
 (defn get-csss []
   (map (fn [{:keys [url name] :as item}]
