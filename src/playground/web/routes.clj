@@ -160,12 +160,12 @@
            ;; Samples routes
            ;; ==========================================================================================================
 
-           (GET "/new" [] (-> sample-handlers/show-sample-editor mw/check-template-middleware))
-           (GET "/new/editor" [] (-> sample-handlers/show-sample-editor mw/check-template-middleware))
-           (GET "/new/view" [] (-> sample-handlers/show-sample-standalone mw/check-template-middleware))
-           (GET "/new/iframe" [] (-> sample-handlers/show-sample-iframe mw/check-template-middleware))
-           (GET "/new/preview" [] (-> sample-handlers/show-sample-preview mw/check-template-middleware))
-           (GET "/new/download" [] (-> sample-handlers/show-sample-download mw/check-template-middleware))
+           (GET "/new" [] (-> sample-handlers/show-sample-editor mw/check-template-middleware auth/check-anonymous-middleware))
+           (GET "/new/editor" [] (-> sample-handlers/show-sample-editor mw/check-template-middleware auth/check-anonymous-middleware))
+           (GET "/new/view" [] (-> sample-handlers/show-sample-standalone mw/check-template-middleware auth/check-anonymous-middleware))
+           (GET "/new/iframe" [] (-> sample-handlers/show-sample-iframe mw/check-template-middleware auth/check-anonymous-middleware))
+           (GET "/new/preview" [] (-> sample-handlers/show-sample-preview mw/check-template-middleware auth/check-anonymous-middleware))
+           (GET "/new/download" [] (-> sample-handlers/show-sample-download mw/check-template-middleware auth/check-anonymous-middleware))
 
 
            (POST "/run" [] sample-api/run)
