@@ -60,7 +60,7 @@
           result-ids (map :id good-results)
           bad-results (filter :error result)]
       ;(timbre/info "Total: " ids " Result ids: " (pr-str result-ids))
-      (when (seq ids)
+      (when (seq result-ids)
         (db-req/update-samples-preview! (:db generator) {:ids     (db-req/raw-coll result-ids)
                                                          :preview true}))
       (timbre/info "End generate previews: " (if (= 1 (count samples))
