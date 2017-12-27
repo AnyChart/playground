@@ -54,7 +54,10 @@
                  ;[ilevd/clj-jgit "0.8.8"]
 
                  ;; phantom
+                 [com.github.detro.ghostdriver/phantomjsdriver "1.1.0"]
+                 [clj-webdriver "0.7.2"]
                  [org.imgscalr/imgscalr-lib "4.2"]
+                 [com.climate/claypoole "1.1.4"]
 
                  ;; front-end
                  [org.clojure/clojurescript "1.9.908"]

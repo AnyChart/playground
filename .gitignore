@@ -20,3 +20,4 @@ src-css/.sass-cache
 .sass-cache
 resources/public/chartopedia/images
 .DS_Store
+phantomjsdriver.log
