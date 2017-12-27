@@ -54,6 +54,7 @@
                  ;[ilevd/clj-jgit "0.8.8"]
 
                  ;; phantom
+                 [com.google.guava/guava "23.6-jre"]
                  [com.github.detro.ghostdriver/phantomjsdriver "1.1.0"]
                  [clj-webdriver "0.7.2"]
                  [org.imgscalr/imgscalr-lib "4.2"]
