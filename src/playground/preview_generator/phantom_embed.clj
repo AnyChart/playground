@@ -168,7 +168,7 @@
         (when error (timbre/info "ERROR:" (:image-url sample) (pr-str (filter some? results))))
 
         (if error
-          {:error error :id (:id sample)}
+          {:error error :id (:id sample) :url (:url sample)}
           {:result scaled-image :id (:id sample)})))))
 
 
@@ -188,4 +188,4 @@
     (catch Exception e
       (do
         (timbre/info "generation failed for" (:url sample) " exception:" e)
-        {:id (:id sample) :url (:url sample) :error e}))))
+        {:error e :id (:id sample) :url (:url sample)}))))

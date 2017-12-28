@@ -59,7 +59,10 @@
           good-results (filter (complement :error) result)
           result-ids (map :id good-results)
           bad-results (filter :error result)]
-      ;(timbre/info "Total: " ids " Result ids: " (pr-str result-ids))
+      (when (seq bad-results)
+        (timbre/info "Bad results: " (count bad-results) "/" (count ids))
+        (doseq [er (take 20 result-ids)]
+          (timbre/info "Bad result: " (:id er) (:url er) (:error er))))
       (when (seq result-ids)
         (db-req/update-samples-preview! (:db generator) {:ids     (db-req/raw-coll result-ids)
                                                          :preview true}))
