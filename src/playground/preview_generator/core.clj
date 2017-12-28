@@ -14,7 +14,9 @@
 
 (defn message-handler [generator]
   (fn [{:keys [message attemp]}]
-    (timbre/info "Preview generator redis message: " message)
+    (timbre/info "Preview generator redis message: " (if (seq message)
+                                                       (str (count message) " - " (take 20 message))
+                                                       message))
     (when (seq message)
       (generate-previews generator message))
     {:status :success}))

@@ -175,7 +175,7 @@
                                              :hidden        false
                                              :config        version-config
                                              :samples-count (count samples)})]
-    (timbre/info "Insert samples: " (count samples) version-config)
+    (timbre/info "Insert samples: " (count samples))
     (when (seq samples)
       (let [ids (db-req/add-samples! db version-id samples)]
         ;;  set views
@@ -253,7 +253,7 @@
               errors (filter some? result)]
           ;; update latest field
           (let [latest-version (db-req/last-version db {:repo-id (:id @repo)})]
-            (timbre/info "last version: " latest-version)
+            (timbre/info "Latest version: " (:name latest-version))
             (db-req/update-all-samples-latest! db {:latest       false
                                                    :repo-name    (:name @repo)
                                                    :version-name (:name latest-version)})
