@@ -193,7 +193,7 @@
     (timbre/info "Done samples inserting: " (count samples))
     (let [old-versions (filter #(and (= (:name %) (:name branch))
                                      (not= (:id %) version-id)) versions)]
-      (info "Delete old versions for" (:name branch) ": " (pr-str old-versions))
+      (info "Delete old versions for" (:name branch) ": " (pr-str (map #(select-keys % [:id :name]) old-versions)))
       (doseq [version old-versions]
         (remove-branch db version)))
     (db-req/show-version! db {:repo-id (:id @repo) :id version-id})))
