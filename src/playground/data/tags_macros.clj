@@ -5,7 +5,7 @@
 
 (defn get-data []
   (try
-    (json/parse-string (:body (http/get "https://static.anychart.com/utility/tags_list.json?v2")) true)
+    (json/parse-string (:body (http/get "https://static.anychart.com/utility/tags_list.json?v3")) true)
     (catch Exception _ nil)))
 
 
