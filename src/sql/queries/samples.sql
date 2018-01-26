@@ -95,14 +95,8 @@ DELETE FROM samples WHERE version_id = :version_id;
 -- name: sql-update-samples-preview!
 UPDATE samples SET preview = :preview WHERE id IN (:ids);
 
--- name: sql-update-all-samples-latest!
-UPDATE samples SET latest = :latest WHERE version_id IN
-  (SELECT id FROM versions WHERE repo_id IN (SELECT id FROM repos WHERE name = :repo_name)
-                          AND name <> :version_name);
 -- name: sql-update-version-samples-latest!
-UPDATE samples SET latest = :latest WHERE version_id IN
-  (SELECT id FROM versions WHERE repo_id IN (SELECT id FROM repos WHERE name = :repo_name)
-                           AND name = :version_name);
+UPDATE samples SET latest = :latest WHERE version_id = :version_id;
 -- name: sql-update-all-user-samples-latest!
 UPDATE samples SET latest = :latest WHERE url = :url AND version <> :version;
 -- name: sql-update-version-user-samples-latest!

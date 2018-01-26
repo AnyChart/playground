@@ -288,8 +288,6 @@
 ;;======================================================================================================================
 ;; Set sample latest
 ;;======================================================================================================================
-(def update-all-samples-latest! (sql {:name sql-update-all-samples-latest!}))
-
 (def update-version-samples-latest! (sql {:name sql-update-version-samples-latest!}))
 
 (def update-all-user-samples-latest! (sql {:name sql-update-all-user-samples-latest!}))

@@ -231,7 +231,8 @@
       (info "update repo: " (:git @repo))
       (git/fetch repo)
       (fs/mkdirs (versions-path @repo))
-      (let [branch-list (git/branch-list (:git @repo))
+      (let [prev-latest-version (db-req/last-version db {:repo-id (:id @repo)})
+            branch-list (git/branch-list (:git @repo))
             actual-branches (if (:branches @repo)
                               (filter #(re-matches (re-pattern (:branches @repo)) (:name %)) branch-list)
                               branch-list)
@@ -253,13 +254,12 @@
               errors (filter some? result)]
           ;; update latest field
           (let [latest-version (db-req/last-version db {:repo-id (:id @repo)})]
-            (timbre/info "Latest version: " (:name latest-version))
-            (db-req/update-all-samples-latest! db {:latest       false
-                                                   :repo-name    (:name @repo)
-                                                   :version-name (:name latest-version)})
-            (db-req/update-version-samples-latest! db {:latest       true
-                                                       :repo-name    (:name @repo)
-                                                       :version-name (:name latest-version)}))
+            (timbre/info "Prev latest version:" (:id prev-latest-version) (:name prev-latest-version))
+            (timbre/info "Latest version:" (:id latest-version) (:name latest-version))
+            (db-req/update-version-samples-latest! db {:latest     false
+                                                       :version-id (:id prev-latest-version)})
+            (db-req/update-version-samples-latest! db {:latest     true
+                                                       :version-id (:id latest-version)}))
 
           (fs/delete-dir (versions-path @repo))
           (if (not-empty errors)
