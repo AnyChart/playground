@@ -170,7 +170,7 @@
         (prn "Generate preview: " (:id sample) " " (:url sample) " " error)
         (if error
           {:error error :id (:id sample) :url (:url sample)}
-          {:result scaled-image :id (:id sample)})))))
+          {:id (:id sample)})))))
 
 
 (defn image-path [images-folder sample]
