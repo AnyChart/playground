@@ -15,7 +15,7 @@ cache:
   - "$HOME/.m2"
 addons:
   ssh_known_hosts:
-  - 104.236.250.75
+  - 138.68.237.182
   - 136.243.19.202
 git:
   submodules: false
@@ -32,7 +32,7 @@ before_install:
 - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 - git submodule update --init --recursive
 after_success:
-- scp target/pg-standalone.jar root@104.236.250.75:/apps/$APP/pg-standalone.jar
-- ssh root@104.236.250.75 "supervisorctl restart $APP"
+- scp target/pg-standalone.jar root@138.68.237.182:/apps/$APP/pg-standalone.jar
+- ssh root@138.68.237.182 "supervisorctl restart $APP"
 notifications:
   slack: anychart-team:sJRPhNn8Ur8yVdhvhgp6EbDM
