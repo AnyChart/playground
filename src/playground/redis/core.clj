@@ -6,6 +6,7 @@
             [clojure.spec.alpha :as s]
             [playground.spec.redis :as redis-spec]))
 
+
 (defrecord Redis [config conn]
   component/Lifecycle
   (start [this]
@@ -15,15 +16,27 @@
     (timbre/info "Redis stop")
     this))
 
+
 (defn enqueue [redis queue message]
   (car/wcar (:conn redis)
             (car-mq/enqueue queue message)))
 
+
+(defn generate-previews [redis ids]
+  (let [group-ids (partition-all 1000 ids)]
+    (doseq [ids group-ids]
+      (enqueue redis
+              (-> redis :config :preview-queue)
+              ids))))
+
+
 (defn create-worker [redis queue handler]
   (car-mq/worker (:conn redis) queue {:handler handler}))
 
+
 (defn delete-worker [worker]
   (car-mq/stop worker))
+
 
 (defn new-redis [config]
   {:pre  [(s/valid? ::redis-spec/config config)]

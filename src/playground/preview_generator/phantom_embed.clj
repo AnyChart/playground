@@ -167,7 +167,7 @@
 
         (when error (timbre/info "ERROR:" (:image-url sample) (pr-str (filter some? results))))
 
-        (prn "Generate preview: " (:id sample) " " (:url sample) " " error)
+        ;(prn "Generate preview: " (:id sample) " " (:url sample) " " error)
         (if error
           {:error error :id (:id sample) :url (:url sample)}
           {:id (:id sample)})))))

@@ -18,7 +18,7 @@
 (defn- generate-previews [samples request]
   (let [ids (map :id samples)]
     (if (seq ids)
-      (do (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) ids)
+      (do (redis/generate-previews (get-redis request) ids)
           (response (str "Start generate previews for " (count samples) " samples: "
                          (clojure.string/join ", " (map :name samples)))))
       "All samples have previews")))

@@ -182,9 +182,8 @@
         (doseq [sample samples]
           (db-req/update-sample-views-from-canonical-visits! db {:url     (:url sample)
                                                                  :repo-id (:id @repo)}))
-        (redis/enqueue redis
-                       (-> redis :config :preview-queue)
-                       ids)
+
+        (redis/generate-previews redis ids)
 
         ;; if repo is templates-repo, then update templates
         (when (:templates @repo)
