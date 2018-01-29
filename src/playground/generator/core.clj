@@ -15,9 +15,12 @@
             [playground.utils.utils :as utils]
             [crypto.password.bcrypt :as bcrypt]
             [playground.web.utils :as web-utils]
-            [playground.web.auth-base :as auth-base]))
+            [playground.web.auth-base :as auth-base]
+            [clojure.java.shell :as shell]))
 
-;;============== component ==============
+;; =====================================================================================================================
+;; Component
+;; =====================================================================================================================
 (declare update-repository-by-repo-name)
 (declare check-repositories)
 (declare parse-templates)
@@ -58,7 +61,9 @@
 (defn new-generator [conf]
   (map->Generator {:conf  {:users        (:users conf)
                            :data_sources (:data_sources conf)
-                           :queue-index  (atom 0)}
+                           :queue-index  (atom 0)
+                           ;; images dir from previews generator
+                           :images-dir   (-> conf :previews :images-dir)}
                    :repos (get-repos conf)}))
 
 (defn get-repo-by-name [generator name]
@@ -66,7 +71,9 @@
     (first (filter #(= name (-> % deref :name)) repos))))
 
 
-;;============= path utils
+;; =====================================================================================================================
+;; Path utils
+;; =====================================================================================================================
 (defn repo-path [repo]
   (str (:dir repo) "/repo"))
 
@@ -79,7 +86,9 @@
 (defn version-path [repo branch]
   (str (:dir repo) "/versions/" branch))
 
-;;============== init repo
+;; =====================================================================================================================
+;; Init repo
+;; =====================================================================================================================
 (defn download-repo [repo]
   (try
     (fs/mkdirs (:dir @repo))
@@ -142,7 +151,9 @@
                            (filter :e result)))))
 
 
-;;============ remove branches
+;; =====================================================================================================================
+;; Remove branches
+;; =====================================================================================================================
 (defn remove-branch [db branch]
   (db-req/delete-version-visits! db {:version-id (:id branch)})
   (db-req/delete-samples! db {:version-id (:id branch)})
@@ -155,8 +166,14 @@
   (let [removed-branches (filter #(need-remove-branch? % actual-branches) db-branches)]
     removed-branches))
 
+(defn remove-previews [repo-name branch-name dir]
+  (let [rm (str "rm " dir "/" (utils/name->url (str repo-name "-" branch-name "-*.png")))]
+    (info "Remove previews:" rm)
+    (shell/sh "/bin/bash" "-c" rm)))
 
-;;============ update branches
+;; =====================================================================================================================
+;; Update branches
+;; =====================================================================================================================
 (defn read-version-config [path]
   (when (.exists (file path))
     (some-> path slurp (toml/read :keywordize))))
@@ -246,7 +263,8 @@
         (slack/start-build (:notifier generator) (:name @repo) (map :name updated-branches) (map :name removed-branches) queue-index)
         ;; delete old branches
         (doseq [branch removed-branches]
-          (remove-branch db branch))
+          (remove-branch db branch)
+          (remove-previews (:name @repo) (:name branch) (-> generator :conf :images-dir)))
 
         ;; update branches
         (let [result (doall (map #(update-branch db (:redis generator) repo % db-branches generator queue-index) updated-branches))
@@ -286,7 +304,9 @@
 ;      (db-req/delete-samples-by-ids! (:db generator) {:ids old-ids}))))
 
 
-;;=== users ===
+;; =====================================================================================================================
+;; Users
+;; =====================================================================================================================
 (defn add-predefined-users [db users]
   (doseq [user users]
     (when-not (or (db-req/get-user-by-username db {:username (:username user)})
