@@ -4,7 +4,9 @@
             [taoensso.timbre :as timbre]
             [playground.utils.utils :as utils]
             [playground.preview-generator.download :as download]
-            [clojure.string :as string])
+            [clojure.string :as string]
+            [clojure.java.shell :as shell]
+            [clojure.java.io :as io])
   (:import (java.util ArrayList)
            (org.openqa.selenium.phantomjs PhantomJSDriverService PhantomJSDriver)
            (org.openqa.selenium.remote DesiredCapabilities)
@@ -163,7 +165,8 @@
         ;(with-open [out (output-stream (clojure.java.io/file image-path))]
         ;  (.write out (screenshot)))
 
-        (ImageIO/write scaled-image "png" (clojure.java.io/file image-path))
+        (ImageIO/write scaled-image "png" (io/file image-path))
+        (shell/sh "pngquant" "--force" "--ext" ".png" image-path)
 
         (when error (timbre/info "ERROR:" (:image-url sample) (pr-str (filter some? results))))
 
