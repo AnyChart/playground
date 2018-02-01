@@ -138,7 +138,8 @@
     [:div.col-sm-6
      [:div.form-group
       [:label {:for "settings-select-bin"} "AnyChart Binaries"
-       [:a.question-small {:href "https://www.anychart.com/download/cdn/"}]]
+       [:a.question-small {:href "https://www.anychart.com/download/cdn/"
+                           :target "_blank"}]]
       [:div.line
        [:select.form-control {:id        "settings-select-bin"
                               :on-change #(rf/dispatch [:settings.external-resources/binaries-select (-> % .-target .-value)])}
@@ -165,7 +166,8 @@
     [:div.col-sm-6
      [:div.form-group
       [:label {:for "settings-select-theme"} "AnyChart Themes"
-       [:a.question-small {:href "https://www.anychart.com/download/cdn/"}]]
+       [:a.question-small {:href "https://www.anychart.com/download/cdn/"
+                           :target "_blank"}]]
       [:div.line
        [:select.form-control {:id        "settings-select-theme"
                               :on-change #(rf/dispatch [:settings.external-resources/themes-select (-> % .-target .-value)])}
@@ -181,7 +183,8 @@
     [:div.col-sm-6
      [:div.form-group
       [:label {:for "settings-select-locale"} "AnyChart Locales"
-       [:a.question-small {:href "https://www.anychart.com/download/cdn/"}]]
+       [:a.question-small {:href "https://www.anychart.com/download/cdn/"
+                           :target "_blank"}]]
       [:div.line
        [:select.form-control {:id        "settings-select-locale"
                               :on-change #(rf/dispatch [:settings.external-resources/locales-select (-> % .-target .-value)])}
@@ -197,7 +200,8 @@
     [:div.col-sm-6
      [:div.form-group
       [:label {:for "settings-select-map"} "AnyChart Geo Data"
-       [:a.question-small {:href "https://www.anychart.com/download/cdn/"}]]
+       [:a.question-small {:href "https://www.anychart.com/download/cdn/"
+                           :target "_blank"}]]
       [:div.line
        [:select.form-control {:id        "settings-select-map"
                               :on-change #(rf/dispatch [:settings.external-resources/maps-select (-> % .-target .-value)])}
@@ -251,7 +255,8 @@
     [:div.col-sm-6
      [:div.form-group
       [:label {:for "settings-select-bin"} "AnyChart CSS"
-       [:a.question-small {:href "https://www.anychart.com/download/cdn/"}]]
+       [:a.question-small {:href "https://www.anychart.com/download/cdn/"
+                           :target "_blank"}]]
       [:div.line
        [:select.form-control {:id        "settings-select-bin"
                               :on-change #(rf/dispatch [:settings.external-resources/css-select (-> % .-target .-value)])}
