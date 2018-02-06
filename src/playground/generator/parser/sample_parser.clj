@@ -36,6 +36,10 @@
       (clojure.string/replace trailing-s pattern ""))))
 
 
+(defn replace-white-spaces [s]
+  (string/replace s #"\s+" " "))
+
+
 (defn parse-html-sample [s]
   (let [page (Jsoup/parse s)
 
@@ -76,7 +80,7 @@
         all-tags (sort (distinct (concat tags (tags-data/get-tags-by-code code))))]
     {:name              name
      :description       (string/trim description)
-     :short-description (string/trim short-description)
+     :short-description (-> short-description replace-white-spaces string/trim)
 
      :tags              all-tags
      :deleted-tags      []
