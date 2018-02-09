@@ -9,11 +9,13 @@
             [playground.generator.core :as generator]
             [playground.notification.slack :as slack]
             [playground.redis.core :as redis]
-            [playground.preview-generator.core :as pw-generator])
+            [playground.preview-generator.core :as pw-generator]
+            [playground.utils.utils :as utils])
   (:gen-class)
   (:import (org.slf4j LoggerFactory Logger)
            (ch.qos.logback.classic Level)
            (java.nio.charset Charset)))
+
 
 ; disable some dirty logging
 (System/setProperties
@@ -21,7 +23,15 @@
     (.put "com.mchange.v2.log.MLog" "com.mchange.v2.log.FallbackMLog")
     (.put "com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL" "OFF")))
 
+
 (.setLevel (LoggerFactory/getLogger Logger/ROOT_LOGGER_NAME) Level/INFO)
+
+
+(defn set-default-charset []
+  (System/setProperty "file.encoding" "UTF-8")
+  (doto (.getDeclaredField Charset "defaultCharset") (.setAccessible true) (.set nil nil))
+  (timbre/info "Charset: " (System/getProperty "file.encoding")))
+
 
 (defn get-full-system [conf]
   (component/system-map
@@ -35,6 +45,7 @@
     :web (component/using (web/new-web (merge (:web conf) (:previews conf)))
                           [:db :redis])))
 
+
 (defn get-worker-system [conf]
   (component/system-map
     :db (db/new-jdbc (:db conf))
@@ -43,11 +54,13 @@
     :generator (component/using (generator/new-generator conf)
                                 [:db :notifier :redis])))
 
+
 (defn get-web-system [conf]
   (component/system-map
     :db (db/new-jdbc (:db conf))
     :redis (redis/new-redis (:redis conf))
     :web (component/using (web/new-web (:web conf)) [:db :redis])))
+
 
 (defn get-preview-worker-system [conf]
   (component/system-map
@@ -57,18 +70,16 @@
     :preview-generator (component/using (pw-generator/new-preview-generator (merge (:web conf) (:previews conf)))
                                         [:db :redis :notifier])))
 
+
 (def system nil)
+
 
 (defn read-config [path]
   (toml/read (slurp path) :keywordize))
 
-(defn set-default-charset []
-  (System/setProperty "file.encoding" "UTF-8")
-  (doto (.getDeclaredField Charset "defaultCharset") (.setAccessible true) (.set nil nil)))
 
 (defn -main [conf-path & args]
   (set-default-charset)
-  (timbre/info "Charset: " (System/getProperty "file.encoding"))
   (let [conf (read-config conf-path)]
     (if (= (s/conform ::core-spec/config conf) ::s/invalid)
       (timbre/info "Bad config file!\n" (s/explain-str ::core-spec/config conf))
@@ -77,8 +88,10 @@
                   "generator" (get-worker-system conf)
                   "preview-generator" (get-preview-worker-system conf)
                   (get-full-system conf))]
+        (utils/init-preview-prefix (-> conf :previews :url-prefix))
         (alter-var-root #'system (constantly (component/start-system sys)))
         system))))
+
 
 (defn stop []
   (when system

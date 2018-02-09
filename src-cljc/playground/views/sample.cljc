@@ -35,10 +35,10 @@
      {:style "margin-bottom: 88px;"}
      (if (:preview sample)
        [:a {:target "_blank" :href (utils/url sample)}
-        [:img.image-preview {:src   (str (:full-url sample) "/preview")
+        [:img.image-preview {:src   (utils/sample-image-url sample)
                              :alt   (image-alt sample)
                              :title (image-alt sample)}]]
-       [:iframe.iframe-preview {:src               (str (:full-url sample) "/iframe")
+       [:iframe.iframe-preview {:src               (utils/sample-iframe-url sample)
                                 :allowfullscreen   "true"
                                 :allowtransparency "true"
                                 :sandbox           "allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"}])]

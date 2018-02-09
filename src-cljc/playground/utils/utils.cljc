@@ -15,6 +15,27 @@
 ;;======================================================================================================================
 (def ^:const domain "https://playground.anychart.com")
 
+;; NEED to be initialized by back-end, front-end editor, all front-end pages
+;; All frontend calls are incapsulated in: playground.views.common/run-js-fn
+(defonce preview-prefix nil)
+
+(defn ^:export init-preview-prefix [url-prefix]
+  #?(:clj
+     (alter-var-root #'preview-prefix (constantly url-prefix))
+     :cljs
+     (set! preview-prefix url-prefix)))
+
+(declare name->url)
+
+;;======================================================================================================================
+;; Relative urls
+;;======================================================================================================================
+(defn image-name [sample]
+  (str (name->url (:full-url sample)) ".png"))
+
+(defn image-path [images-folder sample]
+  (str images-folder "/" (image-name sample)))
+
 ;;======================================================================================================================
 ;; Relative urls
 ;;======================================================================================================================
@@ -39,19 +60,20 @@
   (str (sample-url sample) "/iframe"))
 
 (defn sample-image-url [sample]
-  (str (sample-url sample) "/preview"))
+  ;(str (sample-url sample) "/preview")
+  (str preview-prefix (name->url (:full-url sample)) ".png"))
 
 ;;======================================================================================================================
 ;; Full urls
 ;;======================================================================================================================
-(defn full-sample-editor-url [sample]
-  (str domain (sample-editor-url sample)))
-
-(defn full-sample-standalone-url [sample]
-  (str domain (sample-standalone-url sample)))
-
-(defn full-sample-iframe-url [sample]
-  (str domain (sample-iframe-url sample)))
+;(defn full-sample-editor-url [sample]
+;  (str domain (sample-editor-url sample)))
+;
+;(defn full-sample-standalone-url [sample]
+;  (str domain (sample-standalone-url sample)))
+;
+;(defn full-sample-iframe-url [sample]
+;  (str domain (sample-iframe-url sample)))
 
 (defn full-sample-image-url [sample]
   (str domain (sample-image-url sample)))

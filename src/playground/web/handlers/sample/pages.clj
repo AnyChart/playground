@@ -14,7 +14,8 @@
     ;; misc
             [hiccup.core :as hiccup]
             [clojure.java.jdbc :as jdbc]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [taoensso.timbre :as timbre]))
 
 ;; =====================================================================================================================
 ;; Samples pages handlers
@@ -65,7 +66,10 @@
 (defn show-sample-preview [request]
   (let [sample (get-sample request)]
     (if (:preview sample)
-      (file-response (phantom/image-path (-> request :component :conf :images-dir) sample))
+      (do
+        ;; TODO: delete logging
+        (timbre/warn "Image from Clojure server: " (utils/image-path (-> request :component :conf :images-dir) sample))
+        (file-response (utils/image-path (-> request :component :conf :images-dir) sample)))
       (response "Preview is not available, try later."))))
 
 (defn show-sample-download [request]

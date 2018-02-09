@@ -16,8 +16,6 @@
                                      (clojure.string/re-quote-replacement ".animation(true")
                                      ".animation(false")))
 
-(defn image-path [images-folder sample]
-  (str images-folder "/" (utils/name->url (:full-url sample)) ".png"))
 
 (defn generate-img [phantom-engine phantom-generator images-folder sample]
   ;{:id (:id sample) :error true}
@@ -29,7 +27,7 @@
                            :style   (:style sample)})
         tmp-file (java.io.File/createTempFile "sample" ".html")
         ;image-path (str images-folder "/" (utils/name->url (:full-url sample)) ".png")
-        image-path (image-path images-folder sample)]
+        image-path (utils/image-path images-folder sample)]
     (info "generate-img:" (:id sample) image-path (.getAbsolutePath tmp-file))
     (with-open [f (clojure.java.io/writer tmp-file)]
       (binding [*out* f]

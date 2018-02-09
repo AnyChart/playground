@@ -173,18 +173,14 @@
         ;(prn "Generate preview: " (:id sample) " " (:url sample) " " error)
         (if error
           {:error error :id (:id sample) :url (:url sample)}
-          {:id (:id sample)})))))
-
-
-(defn image-path [images-folder sample]
-  (str images-folder "/" (utils/name->url (:full-url sample)) ".png"))
+          (select-keys sample [:id :url :full-url]))))))
 
 
 (defn generate-image [sample generator]
   (try
     (if-let [driver (get-free-driver (-> generator :drivers-queue))]
       (let [images-dir (-> generator :conf :images-dir)
-            image-path (image-path images-dir sample)
+            image-path (utils/image-path images-dir sample)
             res (exec-script-to-png driver sample image-path)]
         (return-driver driver (-> generator :drivers-queue))
         res)

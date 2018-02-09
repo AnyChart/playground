@@ -6,6 +6,7 @@
   :main ^:aot playground.core
   :uberjar-name "pg-standalone.jar"
   :source-paths ["src" "src-cljc"]
+  :java-source-paths ["src-java"]
   :dependencies [[org.clojure/clojure "1.9.0-alpha16"]
 
                  [org.immutant/web "2.1.9"]
@@ -72,7 +73,15 @@
                  [hiccups "0.3.0"]
                  [secretary "1.2.3"]
                  [com.cognitect/transit-cljs "0.8.243"]
-                 [venantius/accountant "0.2.3"]]
+                 [venantius/accountant "0.2.3"]
+
+                 ;; maxcdn dependencies
+                 ;; https://mvnrepository.com/artifact/commons-codec/commons-codec
+                 [commons-codec/commons-codec "1.7"]
+                 ;; https://mvnrepository.com/artifact/org.scribe/scribe
+                 [org.scribe/scribe "1.3.7"]
+                 ;; https://mvnrepository.com/artifact/org.json/json
+                 [org.json/json "20180130"]]
   :plugins [[lein-ancient "0.6.10"]
             [lein-cljsbuild "1.1.5"]
             [lein-kibit "0.1.3"]

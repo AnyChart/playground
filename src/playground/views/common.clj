@@ -44,10 +44,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 
 (defn run-js-fn [fn-name & params]
-  (str fn-name "("
+  (str "playground.utils.utils.init_preview_prefix('" utils/preview-prefix "');"
+       fn-name "("
        (->> params
             (map #(if (string? %)
-                    (str "'" % "'")
+                    (str "\"" % "\"")
                     %))
             (string/join ","))
        ");"))

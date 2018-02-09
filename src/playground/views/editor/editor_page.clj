@@ -120,6 +120,5 @@
      (page/bottom-footer)
 
      [:script {:src "/js/playground.js" :type "text/javascript"}]
-     [:script {:type "text/javascript"} (str "playground.core.run(\"" (StringEscapeUtils/escapeJson data) "\");")]
-
-     ]))
+     [:script {:type "text/javascript"}
+      (page/run-js-fn "playground.core.run" (StringEscapeUtils/escapeJson data))]]))
