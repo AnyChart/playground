@@ -60,7 +60,7 @@
       ;; TODO: delete test
       (timbre/info "Purge cache:" (count image-names) (pr-str (take 3 image-names)))
       ;; maxcdn query should be less than ~21517 char count
-      (let [groups (partition-all 200 image-names)]
+      (let [groups (partition-all 150 image-names)]
         (doseq [names groups]
           (purge-files names))))))
 
