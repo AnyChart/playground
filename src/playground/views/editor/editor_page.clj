@@ -66,7 +66,8 @@
      (when (author? (:owner-fullname sample))
        [:meta {:name "author" :content (:owner-fullname sample)}])
 
-     [:meta {:property "og:image" :content (utils/full-sample-image-url sample)}]
+     (when-not (:new sample)
+       [:meta {:property "og:image" :content (utils/full-sample-image-url sample)}])
      [:meta {:property "og:url" :content (utils/canonical-url sample)}]
      [:meta {:property "og:site_name" :content "AnyChart Playground"}]
      [:meta {:property "og:type" :content "website"}]
