@@ -15,7 +15,8 @@
     [clojure.spec.alpha :as s]
     [playground.spec.sample :as sample-spec]
     [clojure.set :as set]
-    [ring.util.response :refer [redirect]]))
+    [ring.util.response :refer [redirect]]
+    [playground.data.tags :as tags-data]))
 
 
 (defn run [request]
@@ -102,7 +103,9 @@
   (let [hash (web-utils/sample-hash (get-db request))
 
         check-coll-fn (fn [data key]
-                        (update data key #(if (coll? %) % [%])))
+                        (update data key #(if (coll? %)
+                                            %
+                                            (if % [%] []))))
 
         sample (-> (:params request)
                    (assoc :url hash)
@@ -112,7 +115,9 @@
                    (check-coll-fn :scripts)
                    (check-coll-fn :styles)
                    (check-coll-fn :tags)
-                   db-req/underscore->dash)]
+                   db-req/underscore->dash)
+
+        sample (update sample :tags (fn [tags] (concat tags (tags-data/get-tags-by-code (:code sample)))))]
     ;(prn (-> request :session :user))
     ;(prn sample)
     ;(prn (s/explain ::sample-spec/sample sample))
