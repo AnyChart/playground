@@ -111,7 +111,8 @@
                                      "styles[]"  :styles})
                    (check-coll-fn :scripts)
                    (check-coll-fn :styles)
-                   (check-coll-fn :tags))]
+                   (check-coll-fn :tags)
+                   db-req/underscore->dash)]
     ;(prn (-> request :session :user))
     ;(prn sample)
     ;(prn (s/explain ::sample-spec/sample sample))
