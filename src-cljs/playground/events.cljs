@@ -48,7 +48,7 @@
                                                    :map    (first external-resources/maps)
                                                    :css    (first external-resources/css)}
                               :general-tab        {:tags (map (fn [tag] {:name tag :selected false}) (-> data :sample :tags))}}
-              :embed         {:show    false
+              :embed         {:show    (:embed-show data)
                               :tab     :embed
                               :sub-tab :html
                               :props   {:id     (common-utils/embed-name (-> data :sample))

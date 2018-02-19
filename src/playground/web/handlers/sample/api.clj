@@ -10,7 +10,13 @@
     [playground.web.utils :as web-utils :refer [response]]
     ;; misc
     [clojure.string :as string]
-    [clojure.java.jdbc :as jdbc]))
+    [clojure.java.jdbc :as jdbc]
+    ;;spec
+    [clojure.spec.alpha :as s]
+    [playground.spec.sample :as sample-spec]
+    [clojure.set :as set]
+    [ring.util.response :refer [redirect]]))
+
 
 (defn run [request]
   (let [code (-> request :params :code)
@@ -89,3 +95,30 @@
                    :version  new-version
                    :owner-id (:id (get-user request))}))
       (fork request))))
+
+;; for chart editor to show embed window
+(defn export [request]
+  ;(clojure.pprint/pprint (dissoc request :component))
+  (let [hash (web-utils/sample-hash (get-db request))
+
+        check-coll-fn (fn [data key]
+                        (update data key #(if (coll? %) % [%])))
+
+        sample (-> (:params request)
+                   (assoc :url hash)
+                   (set/rename-keys {"scripts[]" :scripts
+                                     "tags[]"    :tags
+                                     "styles[]"  :styles})
+                   (check-coll-fn :scripts)
+                   (check-coll-fn :styles)
+                   (check-coll-fn :tags))]
+    ;(prn (-> request :session :user))
+    ;(prn sample)
+    ;(prn (s/explain ::sample-spec/sample sample))
+    (if (s/valid? ::sample-spec/sample sample)
+      (if (-> request :session :user)
+        (let [res (fork (assoc-in request [:params :sample] sample))
+              hash (-> res :body :hash)]
+          (redirect (str "/" hash "?export")))
+        (response "Error: no session user"))
+      (response "Error: bad sample arguments!"))))

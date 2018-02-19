@@ -171,6 +171,7 @@
            (POST "/run" [] sample-api/run)
            (POST "/save" [] sample-api/save)
            (POST "/fork" [] sample-api/fork)
+           (POST "/export" [] (-> sample-api/export auth/check-anonymous-middleware))
 
            ;; ==========================================================================================================
            ;; Generator routes

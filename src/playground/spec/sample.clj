@@ -1,6 +1,5 @@
 (ns playground.spec.sample
-  (:require [clojure.spec :as s]
-            [clojure.spec.test :as stest]))
+  (:require [clojure.spec.alpha :as s]))
 
 (s/def ::name string?)
 (s/def ::description string?)
@@ -29,10 +28,7 @@
                                  ::short_description
 
                                  ::tags
-                                 ::exports
-
                                  ::scripts
-                                 ::local_scripts
                                  ::styles
 
                                  ::code_type

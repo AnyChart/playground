@@ -26,15 +26,18 @@
         ;; Not need to get them in aggregations function via middleware, cause iframe-view e.g. doesn't need them
         templates (db-req/templates (get-db request))
         data-sets (db-req/data-sets (get-db request))
+        embed-show (or (contains? (-> request :params) :export)
+                       (= "export" (-> request :query-string)))
         data {:canonical-url (if editor-view
                                (utils/full-canonical-url-standalone sample)
                                (utils/full-canonical-url sample))
               :sample        sample
-              :data          (web-utils/pack {:sample    sample
-                                              :templates templates
-                                              :datasets  (map #(dissoc % :data) data-sets)
-                                              :user      (get-safe-user request)
-                                              :view      editor-view})}]
+              :data          (web-utils/pack {:sample     sample
+                                              :templates  templates
+                                              :datasets   (map #(dissoc % :data) data-sets)
+                                              :user       (get-safe-user request)
+                                              :view       editor-view
+                                              :embed-show embed-show})}]
     ;; when not "new" sample
     (when (:id sample)
       (jdbc/with-db-transaction [conn (:db-spec (get-db request))]
