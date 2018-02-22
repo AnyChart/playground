@@ -9,7 +9,7 @@
   :java-source-paths ["src-java"]
   :dependencies [[org.clojure/clojure "1.9.0-alpha16"]
 
-                 [org.immutant/web "2.1.9"]
+                 [org.immutant/web "2.1.10"]
                  ;[org.immutant/caching "2.1.5"]
                  ;[org.immutant/messaging "2.1.5"]
                  ;[org.immutant/scheduling "2.1.5"]
@@ -28,7 +28,7 @@
                  [org.apache.commons/commons-lang3 "3.7"]
                  [enlive "1.1.6"]
                  [org.jsoup/jsoup "1.11.2"]
-                 [selmer "1.11.3"]
+                 [selmer "1.11.7"]
                  [clj-time "0.14.2"]
                  [me.raynes/fs "1.4.6"]
                  [camel-snake-kebab "0.4.0"]
@@ -40,7 +40,7 @@
                  [clojure.jdbc/clojure.jdbc-c3p0 "0.3.3"]
                  [yesql "0.5.3"]
                  ;[org.clojure/java.jdbc "0.6.1"]
-                 [org.clojure/java.jdbc "0.7.4"]
+                 [org.clojure/java.jdbc "0.7.5"]
                  [mysql/mysql-connector-java "6.0.6"]
                  [com.taoensso/carmine "2.16.0"]
 
@@ -64,7 +64,7 @@
                  ;; front-end
                  [org.clojure/clojurescript "1.9.908"]
                  [reagent "0.7.0"]
-                 [re-frame "0.10.2"]
+                 [re-frame "0.10.5"]
                  [re-com "2.1.0"]
                  [alandipert/storage-atom "2.0.1"]
                  ; [cljs-http "0.1.42"]
