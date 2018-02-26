@@ -97,6 +97,31 @@
                    :owner-id (:id (get-user request))}))
       (fork request))))
 
+
+(defn add-default-data [sample]
+  (assoc {}
+    :name (or (:name sample) "Export chart")
+    :description (or (:description sample) "")
+    :short-description (or (:short-description sample) "")
+
+    :style (or (:style sample) "html, body, #container {\n    width: 100%;\n    height: 100%;\n    margin: 0;\n    padding: 0;\n}")
+    :markup (or (:markup sample) "<div id=\"container\"></div>")
+    :code (or (:code sample) "")
+
+    :code-type (or (:code-type sample) "js")
+    :markup-type (or (:markup-type sample) "html")
+    :style-type (or (:style-type sample) "css")
+
+    :styles (if (seq (:styles sample))
+              (:styles sample)
+              ["https://cdn.anychart.com/releases/8.1.0/css/anychart-ui.min.css"])
+
+    :scripts (if (seq (:scripts sample))
+              (:scripts sample)
+              ["https://cdn.anychart.com/releases/v8/js/anychart-bundle.min.js" "https://cdn.anychart.com/releases/8.1.0/js/anychart-ui.min.js"])
+    :url (:url sample)))
+
+
 ;; for chart editor to show embed window
 (defn export [request]
   ;(clojure.pprint/pprint (dissoc request :component))
@@ -115,12 +140,13 @@
                    (check-coll-fn :scripts)
                    (check-coll-fn :styles)
                    (check-coll-fn :tags)
-                   db-req/underscore->dash)
+                   db-req/underscore->dash
+                   add-default-data)
 
         sample (update sample :tags (fn [tags] (concat tags (tags-data/get-tags-by-code (:code sample)))))]
     ;(prn (-> request :session :user))
-    ;(prn sample)
-    ;(prn (s/explain ::sample-spec/sample sample))
+    ;(prn "sample" sample)
+    ;(prn "explain" (s/explain ::sample-spec/sample sample))
     (if (s/valid? ::sample-spec/sample sample)
       (if (-> request :session :user)
         (let [res (fork (assoc-in request [:params :sample] sample))
