@@ -108,82 +108,82 @@
    [:div#style-editor.editor-box]])
 
 
-(defn editors-left-old []
-  (reagent/create-class {:component-did-mount #(do (rf/dispatch [:create-editors]))
-                         :reagent-render      (fn []
-                                                (let [[markup-percent style-percent] @(rf/subscribe [:editors/splitter-percents])]
-                                                  [h-split
-                                                   :class "splitter"
-                                                   :splitter-size "8px"
-                                                   :panel-1 [v-split
-                                                             :margin "0px"
-                                                             :splitter-size "8px"
-                                                             :initial-split markup-percent
-                                                             :panel-1 [markup-editor]
-                                                             :panel-2 [v-split
-                                                                       :margin "0px"
-                                                                       :splitter-size "8px"
-                                                                       :initial-split style-percent
-                                                                       :panel-1 [style-editor]
-                                                                       :panel-2 [code-editor]]]
-                                                   :panel-2 [iframe-result]]))}))
-
-
-(defn editors-right-old []
-  (reagent/create-class {:component-did-mount #(do (rf/dispatch [:create-editors]))
-                         :reagent-render      (fn []
-                                                (let [[markup-percent style-percent] @(rf/subscribe [:editors/splitter-percents])]
-                                                  [h-split
-                                                   :class "splitter"
-                                                   :splitter-size "8px"
-                                                   :panel-2 [v-split
-                                                             :margin "0px"
-                                                             :splitter-size "8px"
-                                                             :initial-split markup-percent
-                                                             :panel-1 [markup-editor]
-                                                             :panel-2 [v-split
-                                                                       :margin "0px"
-                                                                       :splitter-size "8px"
-                                                                       :initial-split style-percent
-                                                                       :panel-1 [style-editor]
-                                                                       :panel-2 [code-editor]]]
-                                                   :panel-1 [iframe-result]]))}))
-
-(defn editors-top-old []
-  (reagent/create-class {:component-did-mount #(do (rf/dispatch [:create-editors]))
-                         :reagent-render      (fn []
-                                                [v-split
-                                                 :class "splitter"
-                                                 :splitter-size "8px"
-                                                 :panel-1 [h-split
-                                                           :margin "0px"
-                                                           :splitter-size "8px"
-                                                           :initial-split 33
-                                                           :panel-1 [markup-editor]
-                                                           :panel-2 [h-split
-                                                                     :margin "0px"
-                                                                     :splitter-size "8px"
-                                                                     :panel-1 [style-editor]
-                                                                     :panel-2 [code-editor]]]
-                                                 :panel-2 [iframe-result]])}))
-
-(defn editors-bottom-old []
-  (reagent/create-class {:component-did-mount #(do (rf/dispatch [:create-editors]))
-                         :reagent-render      (fn []
-                                                [v-split
-                                                 :class "splitter"
-                                                 :splitter-size "8px"
-                                                 :panel-2 [h-split
-                                                           :margin "0px"
-                                                           :splitter-size "8px"
-                                                           :initial-split 33
-                                                           :panel-1 [markup-editor]
-                                                           :panel-2 [h-split
-                                                                     :margin "0px"
-                                                                     :splitter-size "8px"
-                                                                     :panel-1 [style-editor]
-                                                                     :panel-2 [code-editor]]]
-                                                 :panel-1 [iframe-result]])}))
+;(defn editors-left-old []
+;  (reagent/create-class {:component-did-mount #(do (rf/dispatch [:create-editors]))
+;                         :reagent-render      (fn []
+;                                                (let [[markup-percent style-percent] @(rf/subscribe [:editors/splitter-percents])]
+;                                                  [h-split
+;                                                   :class "splitter"
+;                                                   :splitter-size "8px"
+;                                                   :panel-1 [v-split
+;                                                             :margin "0px"
+;                                                             :splitter-size "8px"
+;                                                             :initial-split markup-percent
+;                                                             :panel-1 [markup-editor]
+;                                                             :panel-2 [v-split
+;                                                                       :margin "0px"
+;                                                                       :splitter-size "8px"
+;                                                                       :initial-split style-percent
+;                                                                       :panel-1 [style-editor]
+;                                                                       :panel-2 [code-editor]]]
+;                                                   :panel-2 [iframe-result]]))}))
+;
+;
+;(defn editors-right-old []
+;  (reagent/create-class {:component-did-mount #(do (rf/dispatch [:create-editors]))
+;                         :reagent-render      (fn []
+;                                                (let [[markup-percent style-percent] @(rf/subscribe [:editors/splitter-percents])]
+;                                                  [h-split
+;                                                   :class "splitter"
+;                                                   :splitter-size "8px"
+;                                                   :panel-2 [v-split
+;                                                             :margin "0px"
+;                                                             :splitter-size "8px"
+;                                                             :initial-split markup-percent
+;                                                             :panel-1 [markup-editor]
+;                                                             :panel-2 [v-split
+;                                                                       :margin "0px"
+;                                                                       :splitter-size "8px"
+;                                                                       :initial-split style-percent
+;                                                                       :panel-1 [style-editor]
+;                                                                       :panel-2 [code-editor]]]
+;                                                   :panel-1 [iframe-result]]))}))
+;
+;(defn editors-top-old []
+;  (reagent/create-class {:component-did-mount #(do (rf/dispatch [:create-editors]))
+;                         :reagent-render      (fn []
+;                                                [v-split
+;                                                 :class "splitter"
+;                                                 :splitter-size "8px"
+;                                                 :panel-1 [h-split
+;                                                           :margin "0px"
+;                                                           :splitter-size "8px"
+;                                                           :initial-split 33
+;                                                           :panel-1 [markup-editor]
+;                                                           :panel-2 [h-split
+;                                                                     :margin "0px"
+;                                                                     :splitter-size "8px"
+;                                                                     :panel-1 [style-editor]
+;                                                                     :panel-2 [code-editor]]]
+;                                                 :panel-2 [iframe-result]])}))
+;
+;(defn editors-bottom-old []
+;  (reagent/create-class {:component-did-mount #(do (rf/dispatch [:create-editors]))
+;                         :reagent-render      (fn []
+;                                                [v-split
+;                                                 :class "splitter"
+;                                                 :splitter-size "8px"
+;                                                 :panel-2 [h-split
+;                                                           :margin "0px"
+;                                                           :splitter-size "8px"
+;                                                           :initial-split 33
+;                                                           :panel-1 [markup-editor]
+;                                                           :panel-2 [h-split
+;                                                                     :margin "0px"
+;                                                                     :splitter-size "8px"
+;                                                                     :panel-1 [style-editor]
+;                                                                     :panel-2 [code-editor]]]
+;                                                 :panel-1 [iframe-result]])}))
 
 (defn editors-left []
   (reagent/create-class {:component-did-mount #(do

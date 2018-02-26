@@ -90,8 +90,28 @@ var splitMe = {
     update: function (element) {
         var es = element.vertical ? element.clientWidth : element.clientHeight;
         var newPos = element.percent / 100 * es;
+
+        // move not less than 70px, if container < 140px, than set 50%
+        if (newPos < 70 ){
+            if (es > 140){
+                newPos = 70;
+                element.percent = 70 / es * 100;
+            }else {
+                newPos = es /2;
+                element.percent = 50;
+            }
+        } else if (newPos > es - 70) {
+            if( es > 140){
+                newPos = es - 70;
+                element.percent = (es - 70) / es * 100;
+            }else {
+                newPos = es /2;
+                element.percent = 50;
+            }
+        }
+
         var sw = element.vertical ? element.splitter.offsetWidth : element.splitter.offsetHeight;
-        var bp = ((newPos + sw) / es * 100) + '%';
+        var bp = ((newPos /*+ sw*/) / es * 100) + '%';
         //console.log(newPos);
         var ap = ((es - newPos) / es * 100) + '%';
         element.splitter.style[element.vertical ? 'left' : 'top'] = element.percent + '%';
