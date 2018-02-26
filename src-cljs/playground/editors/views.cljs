@@ -7,6 +7,7 @@
             [playground.data.external-resources :as external-resources]
             [playground.standalone.views :as standalone-view]))
 
+
 (defn iframe []
   (reagent/create-class {:component-did-mount #(do (rf/dispatch [:run]))
                          :reagent-render      (fn []
@@ -17,21 +18,25 @@
                                                           :allowTransparency "true"
                                                           :allowFullScreen   "true"}])}))
 
+
 (defn iframe-result []
   [:div.result
    [:div.iframe-hider {:style {:display (if @(rf/subscribe [:editors/iframe-hider-show]) "block" "none")}}]
    (let [k @(rf/subscribe [:editors/iframe-update])]
      ^{:key (inc k)} [iframe])])
 
+
 (defn markup-editor []
   [:div.editor-container
    ;[:a.editor-label.editor-label-gear {:on-click #(utils/log "JS settings click!")}
    ; [:span "javascript"]
    ; [:span.glyphicon.glyphicon-cog {:aria-hidden true}]]
-   [:a.editor-label.editor-label-copy {:id "markup-editor-copy"}
-    [:span "copy"]
-    [:div.icon.icon-copy]]
-   [:div#markup-editor {:class "editor-box"}]])
+   [:div.top-line
+    [:span.editor-label-name "HTML"]
+    [:a#markup-editor-copy.editor-label.editor-label-copy
+     [:span "copy"]
+     [:div.icon.icon-copy]]]
+   [:div#markup-editor.editor-box]])
 
 
 (defn code-editor []
@@ -41,11 +46,13 @@
    ;                                    :on-click #(rf/dispatch [:editors.code-settings/show])}
    ; [:span "javascript"]
    ; [:div.icon.icon-settings]]
-   [:a.editor-label.editor-label-copy {:id "code-editor-copy"}
-    [:span "copy"]
-    [:div.icon.icon-copy]]
+   [:div.top-line
+    [:span.editor-label-name "JavaScript"]
+    [:a#code-editor-copy.editor-label.editor-label-copy
+     [:span "copy"]
+     [:div.icon.icon-copy]]]
    (when @(rf/subscribe [:editors.code-settings/show])
-     [:div.code-context-menu {:id "code-context-menu"}
+     [:div#code-context-menu.code-context-menu
       [:h4 "Added resources"]
       [:div
        (for [res @(rf/subscribe [:editors/external-resources])]
@@ -85,7 +92,7 @@
         ]
        ]
       ])
-   [:div#code-editor {:class "editor-box"}]])
+   [:div#code-editor.editor-box]])
 
 
 (defn style-editor []
@@ -93,10 +100,12 @@
    ;[:a.editor-label.editor-label-gear {:on-click #(utils/log "JS settings click!")}
    ; [:span "javascript"]
    ; [:span.glyphicon.glyphicon-cog {:aria-hidden true}]]
-   [:a.editor-label.editor-label-copy {:id "style-editor-copy"}
-    [:span "copy"]
-    [:div.icon.icon-copy]]
-   [:div#style-editor {:class "editor-box"}]])
+   [:div.top-line
+    [:span.editor-label-name "CSS"]
+    [:a#style-editor-copy.editor-label.editor-label-copy
+     [:span "copy"]
+     [:div.icon.icon-copy]]]
+   [:div#style-editor.editor-box]])
 
 
 (defn editors-left-old []
@@ -118,6 +127,7 @@
                                                                        :panel-1 [style-editor]
                                                                        :panel-2 [code-editor]]]
                                                    :panel-2 [iframe-result]]))}))
+
 
 (defn editors-right-old []
   (reagent/create-class {:component-did-mount #(do (rf/dispatch [:create-editors]))
@@ -190,6 +200,7 @@
                                                      [style-editor]
                                                      [code-editor]]]]))}))
 
+
 (defn editors-right []
   (reagent/create-class {:component-did-mount #(do
                                                  (rf/dispatch [:create-editors])
@@ -205,6 +216,7 @@
                                                      [code-editor]]]
                                                    [iframe-result]]))}))
 
+
 (defn editors-top []
   (reagent/create-class {:component-did-mount #(do
                                                  (rf/dispatch [:create-editors])
@@ -219,6 +231,7 @@
                                                    [style-editor]
                                                    [code-editor]]]
                                                  ])}))
+
 
 (defn editors-bottom []
   (reagent/create-class {:component-did-mount #(do

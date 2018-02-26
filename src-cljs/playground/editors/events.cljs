@@ -70,7 +70,7 @@
   :view/left
   (fn [db _]
     (update-view db :right)
-    (assoc-in db [:editors :view] :right)))
+    (assoc-in db [:editors :view] :left)))
 
 
 (rf/reg-event-db

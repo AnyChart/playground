@@ -57,7 +57,7 @@
                                         :height "450px"}}
               :tips          {:current []
                               :queue   []}
-              :left-meu      {:show false}
+              :left-menu     {:show false}
               :view-menu     {:show false}
               :create-menu   {:show false}
               :local-storage ls
