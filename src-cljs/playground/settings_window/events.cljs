@@ -252,12 +252,12 @@
 (rf/reg-event-fx
   :settings/add-dataset
   (fn [{:keys [db]} [_ dataset]]
-    (let [code (.getValue (-> db :editors :code-editor))]
+    (let [code (.getValue (-> db :editors :code :editor))]
       (if-not (dataset-added? dataset code)
         ;; add dataset
         (do
           ;; TODO: make event handler clean
-          (.setValue (.getDoc (-> db :editors :code-editor))
+          (.setValue (.getDoc (-> db :editors :code :editor))
                      (str "anychart.data.loadJsonFile('" (:url dataset) "', function(data) {\n"
                           "  // use data object has following format\n"
                           "  // {\n"

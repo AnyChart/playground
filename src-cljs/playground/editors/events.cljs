@@ -16,17 +16,17 @@
           code-editor (editors-js/create-editor :code (-> db :sample :code) "javascript")]
       {:db (-> db
                ;; editors
-               (assoc-in [:editors :markup-editor] markup-editor)
-               (assoc-in [:editors :style-editor] style-editor)
-               (assoc-in [:editors :code-editor] code-editor)
+               (assoc-in [:editors :markup :editor] markup-editor)
+               (assoc-in [:editors :style :editor] style-editor)
+               (assoc-in [:editors :code :editor] code-editor)
                ;; copy to clipboard buttons
-               (assoc-in [:editors :markup-editor-clipboard]
+               (assoc-in [:editors :markup :editor-clipboard]
                          (js/Clipboard. "#markup-editor-copy"
                                         (clj->js {:text (fn [] (.getValue markup-editor))})))
-               (assoc-in [:editors :style-editor-clipboard]
+               (assoc-in [:editors :style :editor-clipboard]
                          (js/Clipboard. "#style-editor-copy"
                                         (clj->js {:text (fn [] (.getValue style-editor))})))
-               (assoc-in [:editors :code-editor-clipboard]
+               (assoc-in [:editors :code :editor-clipboard]
                          (js/Clipboard. "#code-editor-copy"
                                         (clj->js {:text (fn [] (.getValue code-editor))}))))})))
 
@@ -172,20 +172,20 @@
 (rf/reg-fx
   :update-code
   (fn [[db s]]
-    (let [cm (-> db :editors :code-editor)]
+    (let [cm (-> db :editors :code :editor)]
       (when (not= (.getValue cm) s)
         (.setValue (.getDoc cm) s)))))
 
 (rf/reg-fx
   :update-markup
   (fn [[db s]]
-    (let [cm (-> db :editors :markup-editor)]
+    (let [cm (-> db :editors :markup :editor)]
       (when (not= (.getValue cm) s)
         (.setValue (.getDoc cm) s)))))
 
 (rf/reg-fx
   :update-style
   (fn [[db s]]
-    (let [cm (-> db :editors :style-editor)]
+    (let [cm (-> db :editors :style :editor)]
       (when (not= (.getValue cm) s)
         (.setValue (.getDoc cm) s)))))
