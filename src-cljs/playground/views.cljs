@@ -19,76 +19,77 @@
      [:a.logo-label {:href "/"}
       "AnyChart " [:b "Playground"]]]
 
-    [:ul.nav.navbar-nav.left-navbar
+    [:div.top-menu
+     [:ul.nav.navbar-nav.left-navbar
 
-     [:li [:button.btn.btn-link {:on-click #(do (rf/dispatch [:click-run]))}
-           [:div.icon.icon-run]
-           [:span "Run"]]]
+      [:li [:button.btn.btn-link {:on-click #(do (rf/dispatch [:click-run]))}
+            [:div.icon.icon-run]
+            [:span "Run"]]]
 
-     (when @(rf/subscribe [:show-save-button])
-       [:li [:button.btn.btn-link {:on-click #(do
-                                                (rf/dispatch [:settings/refresh-tags])
-                                                (rf/dispatch [:save]))}
-             [:div.icon.icon-save]
-             [:span "Save"]]])
+      (when @(rf/subscribe [:show-save-button])
+        [:li [:button.btn.btn-link {:on-click #(do
+                                                 (rf/dispatch [:settings/refresh-tags])
+                                                 (rf/dispatch [:save]))}
+              [:div.icon.icon-save]
+              [:span "Save"]]])
 
-     [:li [:button.btn.btn-link {:on-click #(do
-                                              (rf/dispatch [:settings/refresh-tags])
-                                              (rf/dispatch [:fork]))}
-           [:div.icon.icon-fork]
-           [:span "Fork"]]]
+      [:li [:button.btn.btn-link {:on-click #(do
+                                               (rf/dispatch [:settings/refresh-tags])
+                                               (rf/dispatch [:fork]))}
+            [:div.icon.icon-fork]
+            [:span "Fork"]]]
 
-     [:li.dropdown
-      [:button.btn.btn-link {:on-click #(do
-                                          (rf/dispatch [:settings/refresh-tags])
-                                          (rf/dispatch [:settings/update-datasets])
-                                          (rf/dispatch [:settings/show]))
-                             :class    (when @(rf/subscribe [:settings/show]) "active")}
-       [:div.icon.icon-settings]
-       [:span "Settings"]
-       [:span.caret]]]
+      [:li.dropdown
+       [:button.btn.btn-link {:on-click #(do
+                                           (rf/dispatch [:settings/refresh-tags])
+                                           (rf/dispatch [:settings/update-datasets])
+                                           (rf/dispatch [:settings/show]))
+                              :class    (when @(rf/subscribe [:settings/show]) "active")}
+        [:div.icon.icon-settings]
+        [:span "Settings"]
+        [:span.caret]]]
 
-     [:li.dropdown
-      [:button.btn.btn-link {:on-click #(rf/dispatch [:embed/show])
-                             :class    (when @(rf/subscribe [:embed/show]) "active")}
-       [:div.icon.icon-embed]
-       [:span "Export"]
-       [:span.caret]]]
+      [:li.dropdown
+       [:button.btn.btn-link {:on-click #(rf/dispatch [:embed/show])
+                              :class    (when @(rf/subscribe [:embed/show]) "active")}
+        [:div.icon.icon-embed]
+        [:span "Export"]
+        [:span.caret]]]
 
-     [:li.dropdown
-      [:button.btn.btn-link.dropdown-toggle {:href          "#"
-                                             ;:data-toggle   "dropdown"
-                                             :role          "button"
-                                             :aria-haspopup "true"
-                                             :aria-expanded "false"
-                                             :on-click      #(rf/dispatch [:view-menu/show])}
-       [:div.icon.icon-view]
-       [:span "View"]
-       [:span.caret]]
-      [:ul.dropdown-menu
-       {:style {:display (if @(rf/subscribe [:view-menu/show]) "block" "none")}}
-       [:li [:button.btn.btn-link {:on-click #(rf/dispatch [:view/editor])}
-             [:img.icon {:src "/icons/editor/editor.svg"}]
-             [:span "Editor"]]]
-       [:li [:button.btn.btn-link {:on-click #(rf/dispatch [:view/standalone])}
-             [:img.icon {:src "/icons/editor/standalone.svg"}]
-             "View only"]]
-       [:li [:a {:href @(rf/subscribe [:sample-iframe-url])}
-             [:img.icon {:src "/icons/editor/iframe.svg"}]
-             "Iframe"]]
-       [:li.divider {:role "separator"}]
-       [:li [:button.btn.btn-link {:on-click #(rf/dispatch [:view/left])}
-             [:img.icon {:src "/icons/editor/left.svg"}]
-             "Left"]]
-       [:li [:button.btn.btn-link {:on-click #(rf/dispatch [:view/bottom])}
-             [:img.icon {:src "/icons/editor/bottom.svg"}]
-             "Bottom"]]
-       [:li [:button.btn.btn-link {:on-click #(rf/dispatch [:view/right])}
-             [:img.icon {:src "/icons/editor/right.svg"}]
-             "Right"]]
-       [:li [:button.btn.btn-link {:on-click #(rf/dispatch [:view/top])}
-             [:img.icon {:src "/icons/editor/top.svg"}]
-             "Top"]]]]]
+      [:li.dropdown
+       [:button.btn.btn-link.dropdown-toggle {:href          "#"
+                                              ;:data-toggle   "dropdown"
+                                              :role          "button"
+                                              :aria-haspopup "true"
+                                              :aria-expanded "false"
+                                              :on-click      #(rf/dispatch [:view-menu/show])}
+        [:div.icon.icon-view]
+        [:span "View"]
+        [:span.caret]]
+       [:ul.dropdown-menu
+        {:style {:display (if @(rf/subscribe [:view-menu/show]) "block" "none")}}
+        [:li [:button.btn.btn-link {:on-click #(rf/dispatch [:view/editor])}
+              [:img.icon {:src "/icons/editor/editor.svg"}]
+              [:span "Editor"]]]
+        [:li [:button.btn.btn-link {:on-click #(rf/dispatch [:view/standalone])}
+              [:img.icon {:src "/icons/editor/standalone.svg"}]
+              "View only"]]
+        [:li [:a {:href @(rf/subscribe [:sample-iframe-url])}
+              [:img.icon {:src "/icons/editor/iframe.svg"}]
+              "Iframe"]]
+        [:li.divider {:role "separator"}]
+        [:li [:button.btn.btn-link {:on-click #(rf/dispatch [:view/left])}
+              [:img.icon {:src "/icons/editor/left.svg"}]
+              "Left"]]
+        [:li [:button.btn.btn-link {:on-click #(rf/dispatch [:view/bottom])}
+              [:img.icon {:src "/icons/editor/bottom.svg"}]
+              "Bottom"]]
+        [:li [:button.btn.btn-link {:on-click #(rf/dispatch [:view/right])}
+              [:img.icon {:src "/icons/editor/right.svg"}]
+              "Right"]]
+        [:li [:button.btn.btn-link {:on-click #(rf/dispatch [:view/top])}
+              [:img.icon {:src "/icons/editor/top.svg"}]
+              "Top"]]]]]]
     [:ul.nav.navbar-nav.navbar-right
 
      [:li.dropdown

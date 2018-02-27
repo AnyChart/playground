@@ -32,6 +32,7 @@ html {
 
       .logo {
         display: inline-block;
+        z-index: 1;
         .logo-img {
           height: 58px;
           width: 56px;
@@ -48,8 +49,14 @@ html {
           color: #19a1ce;
           font-size: 18px;
           margin-left: 13px;
+          @media (max-width: 615px){
+            display: none;
+          }
           b {
             font-weight: 600;
+            @media (max-width: 1000px){
+              display: none;
+            }
           }
           &:hover, &:focus {
             text-decoration: none;
@@ -139,8 +146,20 @@ html {
         background-color: white;
         margin: 0 !important;
 
-        .left-navbar {
-          padding-right: 150px;
+        div.top-menu{
+          position: absolute;
+          width: 100%;
+          text-align: center;
+          .left-navbar {
+            & > li {
+              float: left;             // always horizontal, prevent vertical
+              @media (max-width: 768px){
+                & > button > span:not(.caret) {
+                  display: none;
+                }
+              }
+            }
+          }
         }
 
         ul.nav.navbar-nav {
@@ -202,6 +221,9 @@ html {
         }
 
         ul.nav.navbar-nav.navbar-right {
+          @media (max-width: 510px){
+            display: none;
+          }
           .caret {
             margin-left: 10px;
           }
