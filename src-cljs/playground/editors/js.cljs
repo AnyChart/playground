@@ -31,6 +31,16 @@
 
 
 (defn init []
+  ;; hide or show editors copy buttons
+  (js/setInterval (fn [_]
+                    (let [code-editor (.getElementById js/document "code-editor")
+                          style-editor (.getElementById js/document "style-editor")
+                          markup-editor (.getElementById js/document "markup-editor")]
+                      (rf/dispatch [:editors/code-width-change (.-offsetWidth code-editor)])
+                      (rf/dispatch [:editors/style-width-change (.-offsetWidth style-editor)])
+                      (rf/dispatch [:editors/markup-width-change (.-offsetWidth markup-editor)]))
+                    ) 50)
+
   (.addEventListener js/window "resize" (fn [_] (rf/dispatch [:resize-window])))
   ;; for closing code editor context menu
   (.addEventListener js/window "mouseup"

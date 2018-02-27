@@ -33,9 +33,10 @@
    ; [:span.glyphicon.glyphicon-cog {:aria-hidden true}]]
    [:div.top-line
     [:span.editor-label-name "HTML"]
-    [:a#markup-editor-copy.editor-label.editor-label-copy
-     [:span "copy"]
-     [:div.icon.icon-copy]]]
+    (when @(rf/subscribe [:editors/show-markup-copy-button])
+      [:a#markup-editor-copy.editor-label.editor-label-copy
+       [:span "copy"]
+       [:div.icon.icon-copy]])]
    [:div#markup-editor.editor-box]])
 
 
@@ -48,9 +49,10 @@
    ; [:div.icon.icon-settings]]
    [:div.top-line
     [:span.editor-label-name "JavaScript"]
-    [:a#code-editor-copy.editor-label.editor-label-copy
-     [:span "copy"]
-     [:div.icon.icon-copy]]]
+    (when @(rf/subscribe [:editors/show-code-copy-button])
+      [:a#code-editor-copy.editor-label.editor-label-copy
+       [:span "copy"]
+       [:div.icon.icon-copy]])]
    (when @(rf/subscribe [:editors.code-settings/show])
      [:div#code-context-menu.code-context-menu
       [:h4 "Added resources"]
@@ -102,9 +104,10 @@
    ; [:span.glyphicon.glyphicon-cog {:aria-hidden true}]]
    [:div.top-line
     [:span.editor-label-name "CSS"]
-    [:a#style-editor-copy.editor-label.editor-label-copy
-     [:span "copy"]
-     [:div.icon.icon-copy]]]
+    (when @(rf/subscribe [:editors/show-style-copy-button])
+      [:a#style-editor-copy.editor-label.editor-label-copy
+       [:span "copy"]
+       [:div.icon.icon-copy]])]
    [:div#style-editor.editor-box]])
 
 

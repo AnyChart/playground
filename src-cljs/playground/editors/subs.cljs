@@ -59,3 +59,19 @@
 (rf/reg-sub :editors/iframe-update
             (fn [db _]
               (-> db :editors :iframe-update)))
+
+
+; ======================================================================================================================
+;; Hide or show editor COPY BUTTONS
+;;======================================================================================================================
+(rf/reg-sub :editors/show-code-copy-button
+            (fn [db _]
+              (-> db :editors :code :show-copy-button)))
+
+(rf/reg-sub :editors/show-style-copy-button
+            (fn [db _]
+              (-> db :editors :style :show-copy-button)))
+
+(rf/reg-sub :editors/show-markup-copy-button
+            (fn [db _]
+              (-> db :editors :markup :show-copy-button)))

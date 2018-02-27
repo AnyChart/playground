@@ -189,3 +189,22 @@
     (let [cm (-> db :editors :style :editor)]
       (when (not= (.getValue cm) s)
         (.setValue (.getDoc cm) s)))))
+
+
+; ======================================================================================================================
+;; Hide or show editor COPY BUTTONS
+;;======================================================================================================================
+(rf/reg-event-db
+  :editors/code-width-change
+  (fn [db [_ width]]
+    (assoc-in db [:editors :code :show-copy-button] (> width 140))))
+
+(rf/reg-event-db
+  :editors/style-width-change
+  (fn [db [_ width]]
+    (assoc-in db [:editors :style :show-copy-button] (> width 140))))
+
+(rf/reg-event-db
+  :editors/markup-width-change
+  (fn [db [_ width]]
+    (assoc-in db [:editors :markup :show-copy-button] (> width 140))))
