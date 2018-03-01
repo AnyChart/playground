@@ -841,9 +841,24 @@ html {
 //======================================================================================================================
 .export-window {
   width: 516px;
-  //margin-left: -258px;
-  margin-left: -145px;
+  margin-left: -180px;
   font-size: 12px;
+
+  // prevent .from-group become vertical on small devices
+  @media (max-width: 767px) {
+    .form-inline {
+      .form-control {
+        display: inline-block;
+        width: auto;
+        vertical-align: middle;
+      }
+      .form-group {
+        display: inline-block;
+        margin-bottom: 0;
+        vertical-align: middle;
+      }
+    }
+  }
 
   p.intro {
     margin: 4px 0 16px;
