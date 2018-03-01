@@ -99,68 +99,45 @@ html {
               width: 20px;
               display: inline-block;
               background-color: #19a1ce;
-              -webkit-mask-size: contain;
-              mask-size: contain;
               margin-right: 4px;
-              &.icon-embed {
-                mask-image: url(/icons/editor/embed.svg);
-                mask-size: 20px 20px;
-                -webkit-mask-image: url(/icons/editor/embed.svg);
-                -webkit-mask-size: 20px 20px;
-              }
-              &.icon-settings {
-                mask-image: url(/icons/editor/setting.svg);
-                mask-size: 16px 16px;
-                -webkit-mask-image: url(/icons/editor/settings.svg);
-                -webkit-mask-size: 16px 16px;
-                width: 16px;
-                height: 16px;
-                margin-top: 2px;
-              }
+              mask-size: contain;
+              -webkit-mask-size: contain;
+              mask-repeat: no-repeat;
+              -webkit-mask-repeat: no-repeat;
+              mask-position: center;
+              -webkit-mask-position: center;
               &.icon-run {
-                height: 12px;
-                width: 12px;
                 mask-image: url(/icons/editor/run.svg);
-                mask-size: 12px 12px;
                 -webkit-mask-image: url(/icons/editor/run.svg);
-                -webkit-mask-size: 12px 12px;
-                margin-top: 3px;
+                width: 11px;
               }
               &.icon-fork {
                 mask-image: url(/icons/editor/fork.svg);
-                mask-size: 16px 16px;
                 -webkit-mask-image: url(/icons/editor/fork.svg);
-                -webkit-mask-size: 16px 16px;
                 width: 16px;
-                height: 16px;
-                margin-top: 2px;
               }
               &.icon-save {
                 mask-image: url(/icons/editor/save.svg);
-                mask-size: 16px 16px;
                 -webkit-mask-image: url(/icons/editor/save.svg);
-                -webkit-mask-size: 16px 16px;
                 width: 16px;
-                height: 16px;
-                margin-top: 2px;
+              }
+              &.icon-embed {
+                mask-image: url(/icons/editor/embed.svg);
+                -webkit-mask-image: url(/icons/editor/embed.svg);
+              }
+              &.icon-settings {
+                mask-image: url(/icons/editor/setting.svg);
+                -webkit-mask-image: url(/icons/editor/settings.svg);
+                width: 16px;
               }
               &.icon-view {
                 mask-image: url(/icons/editor/view.svg);
-                mask-size: 16px 16px;
                 -webkit-mask-image: url(/icons/editor/view.svg);
-                -webkit-mask-size: 16px 16px;
                 width: 16px;
-                height: 16px;
-                margin-top: 2px;
               }
               &.icon-editor {
                 mask-image: url(/icons/editor/editor.svg);
-                mask-size: 20px 20px;
                 -webkit-mask-image: url(/icons/editor/editor.svg);
-                -webkit-mask-size: 20px 20px;
-                width: 20px;
-                height: 20px;
-                margin-top: 2px;
               }
             }
 
