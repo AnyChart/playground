@@ -228,6 +228,7 @@
            (GET "/:repo/:version/*/iframe" [] (-> sample-handlers/show-sample-iframe mw/repo-sample))
            (GET "/:repo/:version/*/preview" [] (-> sample-handlers/show-sample-preview mw/repo-sample))
            (GET "/:repo/:version/*/download" [] (-> sample-handlers/show-sample-download mw/repo-sample))
+           (GET "/:repo/:version/*/download-zip" [] (-> sample-handlers/show-sample-download-zip mw/repo-sample))
            (GET "/:repo/:version/*/data" [] (-> sample-handlers/sample-data mw/repo-sample))
            (POST "/:repo/:version/*/data" [] (-> sample-handlers/sample-data mw/repo-sample))
 
@@ -238,6 +239,7 @@
            (GET "/:repo/*/iframe" [] (-> sample-handlers/show-sample-iframe mw/repo-sample))
            (GET "/:repo/*/preview" [] (-> sample-handlers/show-sample-preview mw/repo-sample))
            (GET "/:repo/*/download" [] (-> sample-handlers/show-sample-download mw/repo-sample))
+           (GET "/:repo/*/download-zip" [] (-> sample-handlers/show-sample-download-zip mw/repo-sample))
            (GET "/:repo/*/data" [] (-> sample-handlers/sample-data mw/repo-sample))
            (POST "/:repo/*/data" [] (-> sample-handlers/sample-data mw/repo-sample))
 
@@ -248,6 +250,7 @@
            (GET "/:hash/iframe" [] (-> sample-handlers/show-sample-iframe mw/last-user-sample))
            (GET "/:hash/preview" [] (-> sample-handlers/show-sample-preview mw/last-user-sample))
            (GET "/:hash/download" [] (-> sample-handlers/show-sample-download mw/last-user-sample))
+           (GET "/:hash/download-zip" [] (-> sample-handlers/show-sample-download-zip mw/last-user-sample))
            (GET "/:hash/data" [] (-> sample-handlers/sample-data mw/last-user-sample))
            (POST "/:hash/data" [] (-> sample-handlers/sample-data mw/last-user-sample))
 
@@ -258,6 +261,7 @@
            (GET "/:hash/:version/iframe" [] (-> sample-handlers/show-sample-iframe mw/user-sample))
            (GET "/:hash/:version/preview" [] (-> sample-handlers/show-sample-preview mw/user-sample))
            (GET "/:hash/:version/download" [] (-> sample-handlers/show-sample-download mw/user-sample))
+           (GET "/:hash/:version/download-zip" [] (-> sample-handlers/show-sample-download-zip mw/user-sample))
            (GET "/:hash/:version/data" [] (-> sample-handlers/sample-data mw/user-sample))
            (POST "/:hash/:version/data" [] (-> sample-handlers/sample-data mw/user-sample))
 
