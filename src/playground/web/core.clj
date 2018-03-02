@@ -14,7 +14,8 @@
             [ring.util.response :refer [redirect]]
             [playground.web.routes :refer [app-routes]]
             [playground.web.sessions :as session]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [me.raynes.fs :as fs]))
 
 (defn- component-middleware [web-component handler]
   (fn [request]
@@ -55,6 +56,7 @@
 
   (start [component]
     (timbre/info "Web start" conf)
+    (fs/delete-dir (:zip-folder conf))
     (assoc component :server (web/run
                                (-> (create-web-handler component)
                                    (create-redirect-wrapper conf)

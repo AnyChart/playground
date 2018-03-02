@@ -5,6 +5,8 @@
 
 (defn get-redis [request] (-> request :component :redis))
 
+(defn get-zip-folder [request] (-> request :component :conf :zip-folder))
+
 
 ;; config
 (defn get-redis-queue [request] (-> (get-redis request) :config :queue))

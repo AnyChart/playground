@@ -52,12 +52,15 @@
 
 
 (defn download [request]
-  (let [main-zip-folder "/media/ssd/sibental/playground-data/zip/"
+  (let [main-zip-folder (get-zip-folder request)
 
         sample (get-sample request)
-        zip-folder (str main-zip-folder (utils/name->url
-                                     (str (:name sample) (utils/sample-url sample)))
-                        "/")
+
+        folder-name (utils/name->url (str (:name sample) (utils/sample-url sample)))
+
+        zip-folder (str main-zip-folder folder-name "/")
+        zip-archive-name (str folder-name ".zip")
+        zip-archive-path (str main-zip-folder folder-name ".zip")
 
         scripts (:scripts sample)
         styles (:styles sample)
@@ -87,6 +90,8 @@
 
     (create-styles styles zip-folder)
 
-    (generate-zip zip-folder (str main-zip-folder "/asdf.zip"))
+    (generate-zip zip-folder zip-archive-path)
 
-    sample))
+    (fs/delete-dir zip-folder)
+
+    [zip-archive-path zip-archive-name]))

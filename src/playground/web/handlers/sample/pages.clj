@@ -87,9 +87,9 @@
 
 
 (defn show-sample-download-zip [request]
-  ;(response (zip/download request))
-  (response "Under development")
-  )
+  (let [[zip-archive-path zip-archive-name] (zip/download request)]
+    (assoc (file-response zip-archive-path)
+      :headers {"Content-Disposition" (str "attachment; filename=\"" zip-archive-name "\"")})))
 
 
 (defn sample-data [request]

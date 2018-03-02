@@ -112,6 +112,8 @@
     :markup-type (or (:markup-type sample) "html")
     :style-type (or (:style-type sample) "css")
 
+    :tags (:tags sample)
+
     :styles (if (seq (:styles sample))
               (:styles sample)
               ["https://cdn.anychart.com/releases/8.1.0/css/anychart-ui.min.css"])
