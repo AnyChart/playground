@@ -37,7 +37,9 @@
 
 (defn parse-data []
   (let [base (json/parse-string (slurp "resources/chartopedia/data/main.json") true)
-        chart-types (map #(parse-chart-type %) (:chartTypes base))
+        chart-types (->> (:chartTypes base)
+                         (map parse-chart-type)
+                         (sort-by :name))
         relations (:relations base)
         categories (map #(parse-category %) (:categories base))
         categories (map (fn [category]
