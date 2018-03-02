@@ -8,7 +8,7 @@
 (defn parse-chart-type [chart-type]
   (let [chart-data (json/parse-string
                      (slurp
-                       (str "resources/chartopedia/data/chart-types/" (:id chart-type) ".json"))
+                       (str "resources/chartopedia/data/chart-type/" (:id chart-type) ".json"))
                      true)]
     (update
       (merge chart-type
