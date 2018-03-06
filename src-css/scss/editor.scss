@@ -40,7 +40,7 @@ html {
         .logo {
           display: inline-block;
           z-index: 1;
-          @media (max-width: 360px){
+          @media (max-width: 450px){
             display: none;
           }
           .logo-img {
@@ -59,12 +59,12 @@ html {
             color: #19a1ce;
             font-size: 18px;
             margin-left: 13px;
-            @media (max-width: 615px){
+            @media (max-width: 920px){
               display: none;
             }
             b {
               font-weight: 600;
-              @media (max-width: 1000px){
+              @media (max-width: 1125px){
                 display: none;
               }
             }
@@ -82,7 +82,7 @@ html {
           .left-navbar {
             & > li {
               float: left;             // always horizontal, prevent vertical
-              @media (max-width: 768px){
+              @media (max-width: 820px){
                 & > button > span:not(.caret) {
                   display: none;
                 }
@@ -139,8 +139,12 @@ html {
                 mask-image: url(/icons/editor/editor.svg);
                 -webkit-mask-image: url(/icons/editor/editor.svg);
               }
+              &.icon-download {
+                mask-image: url(/icons/editor/download.svg);
+                -webkit-mask-image: url(/icons/editor/download.svg);
+                width: 16px;
+              }
             }
-
           }
         }
 
@@ -203,7 +207,7 @@ html {
         }
 
         ul.nav.navbar-nav.navbar-right {
-          @media (max-width: 510px){
+          @media (max-width: 550px){
             display: none;
           }
           .caret {

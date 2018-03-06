@@ -60,6 +60,7 @@
               :left-menu     {:show false}
               :view-menu     {:show false}
               :create-menu   {:show false}
+              :download-menu {:show false}
               :local-storage ls
               :data          (external-resources/compose-all-data (:datasets data))}}))))
 
@@ -184,6 +185,9 @@
 (rf/reg-event-db :create-menu/toggle (fn [db _] (update-in db [:create-menu :show] not)))
 (rf/reg-event-db :create-menu/close (fn [db _] (assoc-in db [:create-menu :show] false)))
 (rf/reg-event-db :create-menu/show (fn [db _] (assoc-in db [:create-menu :show] true)))
+
+(rf/reg-event-db :download-menu/show (fn [db _] (assoc-in db [:download-menu :show] true)))
+(rf/reg-event-db :download-menu/close (fn [db _] (assoc-in db [:download-menu :show] false)))
 
 ;;======================================================================================================================
 ;; Effects

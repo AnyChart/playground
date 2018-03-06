@@ -54,7 +54,8 @@
                   (-> db :embed :show)
                   (-> db :left-menu :show)
                   (-> db :view-menu :show)
-                  (-> db :create-menu :show))))
+                  (-> db :create-menu :show)
+                  (-> db :download-menu :show))))
 
 (rf/reg-sub :editors/iframe-update
             (fn [db _]

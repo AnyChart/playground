@@ -73,6 +73,14 @@
 (rf/reg-sub :sample/style-type (fn [db _] (-> db :sample :style-type style-type->str)))
 (rf/reg-sub :sample/style (fn [db _] (-> db :sample :style)))
 
+(rf/reg-sub :sample/download-html-url
+            (fn [query_v _] (rf/subscribe [:sample-url]))
+            (fn [sample-url _] (str sample-url "/download")))
+
+(rf/reg-sub :sample/download-zip-url
+            (fn [query_v _] (rf/subscribe [:sample-url]))
+            (fn [sample-url _] (str sample-url "/download-zip")))
+
 (rf/reg-sub :sample/show-close-warning? (fn [db _]
                                           (not= (-> db :saved-sample)
                                                 (-> db :sample))))
@@ -96,3 +104,4 @@
 
 (rf/reg-sub :view-menu/show (fn [db _] (-> db :view-menu :show)))
 (rf/reg-sub :create-menu/show (fn [db _] (-> db :create-menu :show)))
+(rf/reg-sub :download-menu/show (fn [db _] (-> db :download-menu :show)))

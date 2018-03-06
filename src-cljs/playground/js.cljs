@@ -14,7 +14,8 @@
     (rf/dispatch [:embed/hide])
     (rf/dispatch [:left-menu/close])
     (rf/dispatch [:view-menu/close])
-    (rf/dispatch [:create-menu/close])))
+    (rf/dispatch [:create-menu/close])
+    (rf/dispatch [:download-menu/close])))
 
 (defn init []
   (.addEventListener js/document "click" click-handler))
@@ -52,10 +53,10 @@
 (defroute "/:url/:id" [url id]
           (rf/dispatch [:location-change url (int id) nil]))
 
-(defroute "/*/view"  {:as params}
+(defroute "/*/view" {:as params}
           (rf/dispatch [:location-change (:* params) nil true]))
 
-(defroute "/*"  {:as params}
+(defroute "/*" {:as params}
           (rf/dispatch [:location-change (:* params) nil nil]))
 
 

@@ -70,7 +70,7 @@
         {:style {:display (if @(rf/subscribe [:view-menu/show]) "block" "none")}}
         [:li [:button.btn.btn-link {:on-click #(rf/dispatch [:view/editor])}
               [:img.icon {:src "/icons/editor/editor.svg"}]
-              [:span "Editor"]]]
+              "Editor"]]
         [:li [:button.btn.btn-link {:on-click #(rf/dispatch [:view/standalone])}
               [:img.icon {:src "/icons/editor/standalone.svg"}]
               "View only"]]
@@ -89,9 +89,28 @@
               "Right"]]
         [:li [:button.btn.btn-link {:on-click #(rf/dispatch [:view/top])}
               [:img.icon {:src "/icons/editor/top.svg"}]
-              "Top"]]]]]]
-    [:ul.nav.navbar-nav.navbar-right
+              "Top"]]]]
 
+      [:li.dropdown
+       [:button.btn.btn-link.dropdown-toggle {:href          "#"
+                                              :role          "button"
+                                              :aria-haspopup "true"
+                                              :aria-expanded "false"
+                                              :on-click      #(rf/dispatch [:download-menu/show])}
+        [:div.icon.icon-download]
+        [:span "Download"]
+        [:span.caret]]
+       [:ul.dropdown-menu
+        {:style {:display (if @(rf/subscribe [:download-menu/show]) "block" "none")}}
+        [:li [:a {:href @(rf/subscribe [:sample/download-html-url])}
+              [:img.icon {:src "/icons/editor/download-html.svg"}]
+              "HTML with links"]]
+        [:li [:a {:href @(rf/subscribe [:sample/download-zip-url])}
+              [:img.icon {:src "/icons/editor/download-zip.svg"}]
+              "ZIP with files"]]]]
+      ]]
+
+    [:ul.nav.navbar-nav.navbar-right
      [:li.dropdown
       [:button.btn.btn-link.dropdown-toggle {;:data-toggle   "dropdown"
                                              :role          "button"
@@ -123,6 +142,7 @@
      ;  [:li [:a {:href "/signout"} "Log Out"]])
      ;(when @(rf/subscribe [:can-signup])
      ;  [:li [:a {:href "/signup"} "Sign Up"]])
+
      ]]])
 
 (defn footer [])
