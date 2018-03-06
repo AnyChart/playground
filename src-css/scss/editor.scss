@@ -117,8 +117,9 @@ html {
                 width: 16px;
               }
               &.icon-save {
-                mask-image: url(/icons/editor/save.svg);
-                -webkit-mask-image: url(/icons/editor/save.svg);
+                mask-image: url(/icons/editor/download.svg);
+                -webkit-mask-image: url(/icons/editor/download.svg);
+                transform: rotate(180deg);
                 width: 16px;
               }
               &.icon-embed {
