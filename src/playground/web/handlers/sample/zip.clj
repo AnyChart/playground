@@ -6,6 +6,7 @@
             [me.raynes.fs :as fs]
             [playground.utils.utils :as utils]
             [playground.views.iframe :as iframe-view]
+            [playground.utils.xml-pretty :as xml-pretty]
             [hiccup.core :as hiccup])
   (:import (java.util.zip ZipOutputStream ZipEntry)))
 
@@ -66,7 +67,7 @@
         styles (:styles sample)
 
         html (str "<!DOCTYPE html>\n"
-                  (hiccup/html (iframe-view/iframe sample)))
+               (hiccup/html (iframe-view/iframe sample)))
 
         html (reduce (fn [html script]
                        (string/replace html
@@ -79,6 +80,8 @@
                                        (re-pattern style)
                                        (str "css/" (name-from-url style))))
                      html styles)
+
+        html (xml-pretty/pretty html)
 
         html-file (str zip-folder "index.html")]
 

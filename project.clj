@@ -33,6 +33,7 @@
                  [me.raynes/fs "1.4.6"]
                  [camel-snake-kebab "0.4.0"]
                  [hiccup "1.0.5"]
+                 [net.sf.jtidy/jtidy "r938"]
 
                  ;; db
                  [mpg "1.3.0"]

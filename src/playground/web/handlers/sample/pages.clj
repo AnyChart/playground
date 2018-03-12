@@ -16,7 +16,8 @@
             [hiccup.core :as hiccup]
             [clojure.java.jdbc :as jdbc]
             [clojure.string :as string]
-            [taoensso.timbre :as timbre]))
+            [taoensso.timbre :as timbre]
+            [playground.utils.xml-pretty :as xml-pretty]))
 
 ;; =====================================================================================================================
 ;; Samples pages handlers
@@ -82,8 +83,11 @@
 
 
 (defn show-sample-download [request]
-  (assoc (show-sample-iframe request)
-    :headers {"Content-Disposition" (str "attachment; filename=\"" (:name (get-sample request)) ".html\"")}))
+  (let [html (xml-pretty/pretty
+               (str "<!DOCTYPE html>\n"
+                    (hiccup/html (iframe-view/iframe (get-sample request)))))]
+    (assoc (response html)
+     :headers {"Content-Disposition" (str "attachment; filename=\"" (:name (get-sample request)) ".html\"")})))
 
 
 (defn show-sample-download-zip [request]
