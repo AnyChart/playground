@@ -2,7 +2,7 @@
   (:require-macros [hiccups.core :as h])
   (:require [reagent.core :as reagent :refer [atom]]
             [re-frame.core :as rf]
-            [playground.utils :as utils]
+            [playground.utils :as js-utils]
             [ajax.core :refer [GET POST]]
     ;[accountant.core :as accountant]
             [clojure.string :as string]
@@ -11,7 +11,8 @@
             [playground.utils.utils :as common-utils]
             [alandipert.storage-atom :refer [local-storage]]
             [playground.views.iframe :as iframe-view]
-            [hiccups.runtime :as hiccupsrt]))
+            [hiccups.runtime :as hiccupsrt]
+            [playground.utils.utils :as utils]))
 
 
 (rf/reg-event-fx
@@ -28,6 +29,8 @@
       ; (swap! ls assoc :hidden-tips [])
       ; (swap! ls assoc :hidden-types [])
       ; (utils/log (clj->js @ls))
+      (when-not (-> data :sample :version-id)
+        (.replaceState (.-history js/window) nil nil (utils/sample-url-with-version (:sample data))))
       (let [view (or (:view data) (:view @ls) :right)]
         {:db {:editors       {:editors-height (editors-js/editors-height)
                               :view           view
@@ -133,7 +136,7 @@
 (rf/reg-event-db
   :save-error
   (fn [db [_ error]]
-    (utils/log "Save error!" error)
+    (js-utils/log "Save error!" error)
     (js/alert "Save error!")
     db))
 
@@ -141,7 +144,7 @@
 (rf/reg-event-db
   :fork
   (fn [db _]
-    (utils/log "Fork")
+    (js-utils/log "Fork")
     (when (= :standalone (-> db :editors :view))
       (rf/dispatch [:view/editor]))
     (POST "/fork"
@@ -169,7 +172,7 @@
 (rf/reg-event-db
   :fork-error
   (fn [db [_ error]]
-    (utils/log "Fork error!" error)
+    (js-utils/log "Fork error!" error)
     (js/alert "Fork error!")
     db))
 

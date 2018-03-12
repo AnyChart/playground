@@ -50,14 +50,28 @@
              (str "/" (:version sample))))
       "")))
 
+
+(defn sample-url-with-version [sample]
+  (if (:version-id sample)
+    (str "/" (:repo-name sample)
+         "/" (:version-name sample)
+         "/" (:url sample))
+    (if (and (:url sample) (seq (:url sample)))
+      (str "/" (:url sample)
+           "/" (:version sample)))))
+
+
 (defn sample-editor-url [sample]
   (str (sample-url sample) "/editor"))
+
 
 (defn sample-standalone-url [sample]
   (str (sample-url sample) "/view"))
 
+
 (defn sample-iframe-url [sample]
   (str (sample-url sample) "/iframe"))
+
 
 (defn sample-image-url [sample]
   ;(str (sample-url sample) "/preview")
@@ -89,11 +103,14 @@
       (str "/" (:url sample))
       "")))
 
+
 (defn full-canonical-url [sample]
   (str domain (canonical-url sample)))
 
+
 (defn full-canonical-url-iframe [sample]
   (str (full-canonical-url sample) "/iframe"))
+
 
 (defn full-canonical-url-standalone [sample]
   (str (full-canonical-url sample) "/view"))
@@ -105,6 +122,7 @@
   (if (:latest sample)
     (canonical-url sample)
     (sample-url sample)))
+
 
 (defn name->url [name]
   (-> name
@@ -120,22 +138,27 @@
       (string/replace #"\)" "")
       string/lower-case))
 
+
 (defn embed-name [sample]
   (if (-> sample :version-id)
     (name->url (-> sample :url))
     (-> sample :url)))
 
+
 (defn delete-spaces [s]
   (when (string? s)
     (string/replace s #"[ ]{2,}" " ")))
+
 
 (defn strip-tags [s]
   (when (string? s)
     (-> s (string/replace #"<[^>]*>" ""))))
 
+
 (defn trim [s]
   (when (string? s)
     (string/trim s)))
+
 
 (defn full-strip [s]
   (when (string? s)
