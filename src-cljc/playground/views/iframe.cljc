@@ -1,5 +1,12 @@
 (ns playground.views.iframe
-  (:require [playground.utils.utils :as utils]))
+  (:require [playground.utils.utils :as utils]
+            [clojure.string :as string]))
+
+
+(defn code-format [code]
+  (let [code (if (string/starts-with? code "\n") code (str "\n" code))
+        code (if (string/ends-with? code "\n") code (str code "\n"))]
+    code))
 
 
 (defn iframe [sample]
