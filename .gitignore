@@ -21,3 +21,5 @@ src-css/.sass-cache
 resources/public/chartopedia/images
 .DS_Store
 phantomjsdriver.log
+id_rsa
+.travis/id_rsa
