@@ -1,6 +1,6 @@
-(defproject playground "0.1.0-SNAPSHOT"
-  :description "AnyChart Playground"
-  :url "http://example."
+(defproject playground "1.0.0-SNAPSHOT"
+  :description "AnyChart Playground is an online tool for testing and showcasing user-created HTML, CSS and JavaScript code snippets."
+  :url "https://playground.anychart.com/"
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
   :main ^:aot playground.core
