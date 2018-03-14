@@ -1,5 +1,6 @@
-## API
+## Editor API
 For communication between editor and server the application uses [Transit](https://github.com/cognitect/transit-format) format.
+These are some examples of requests. For purpose of easy reading, they are in JSON format.
 ```
 POST /run 
 Request params:
