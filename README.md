@@ -9,7 +9,7 @@
 
 ## Dependencies
 ```
-sudo apt-get install mysql-server
+sudo apt-get install postgresql postgresql-contrib
 sudo apt-get install redis-server
 sudo apt-get install phantomjs
 sudo apt-get install pngquant
@@ -27,19 +27,33 @@ For now playground uses some of AnyChart resources, later we'll need to rework i
 
 
 ## Usage
-Config file format:
+Sample config file format:
 
 ```
 [web]
 # Web settings
 port = 8080
+# used for generation zip - for downloading in editor
+zip-folder = "/apps/pg/data/zip/"
+
 
 [db]
-# MySQL settings
-port = 3306
+# Dababase settings
+port = 5432
 name = "playground_db"
 user = "playground_user"
 password = "playground_password"
+
+
+[redis]
+# redis settings are used for communication between web, generator 
+# and preview-generator parts
+port = 6379
+host = "127.0.0.1"
+db = 0
+queue = "generator-queue-name"
+preview-queue = "generator-preview-queue-name"
+
 
 [notifications.slack]
 # Slack notification settings
@@ -50,8 +64,25 @@ username = "playground_bot"
 domain = "http://playground.example.com/"
 tag  = "playground"
 
-# Next you should describe you repositories
 
+[previews]
+# settings for preview-generator
+cdn-purge = true
+cdn-prefix = "/pg/"
+url-prefix = "http://playground.anychart.local/previews/pg/"
+images-dir = "/apps/pg/data/previews"
+phantom-engine = "/usr/bin/phantomjs"
+generator = "/apps/pg/data/phantom.js"
+
+[previews.maxcdn]
+# maxcdn settings, used for purging images when new ones are generated
+alias = "anychart"
+key = "key"
+secret = "secret"
+zone-id = 12345
+
+
+# Repositories settings
 [[repositories]]
 # Main info
 name = "first_repository"
@@ -261,7 +292,7 @@ Response:
 ```
 
 
-[MySQL Scheme](https://github.com/AnyChart/playground/blob/staging/src/sql/scheme.sql)
+[Database Scheme](https://github.com/AnyChart/playground/blob/staging/src/sql/scheme_postgre.sql)
 
 
 AnyChart © 2017
