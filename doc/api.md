@@ -1,5 +1,5 @@
 ## API
-The application uses [Transit](https://github.com/cognitect/transit-format) format.
+For communication between editor and server the application uses [Transit](https://github.com/cognitect/transit-format) format.
 ```
 POST /run 
 Request params:
