@@ -168,7 +168,6 @@ CREATE TABLE canonical_visits (
 CREATE INDEX url_canonical_visits_index ON canonical_visits (url);
 
 
-
 CREATE MATERIALIZED VIEW tags AS
   SELECT tags.nm AS name,
          regexp_replace(regexp_replace(regexp_replace(lower(tags.nm), '[^a-z0-9]', '-', 'g'), '-[-]+', '-', 'g'), '(-$|^-)', '', 'g') AS id,

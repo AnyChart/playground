@@ -48,7 +48,7 @@ For now playground uses some of AnyChart resources, later we'll need to rework i
 
 [Editor API](doc/api.md)
 
-[DatabaseScheme](src/sql/scheme_postgre.sql)
+[Database Scheme](src/sql/scheme_postgre.sql)
 
 ## License
 If you have any questions regarding licensing - please contact us. <sales@anychart.com>
