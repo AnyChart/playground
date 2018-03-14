@@ -1,10 +1,16 @@
 [<img src="https://cdn.anychart.com/images/logo-transparent-segoe.png?2" width="234px" alt="AnyChart - Robust JavaScript/HTML5 Chart library for any project">](https://anychart.com)
 
-# Playground
+# AnyChart Playground
+
+AnyChart Playground is an online tool for testing and showcasing user-created HTML, 
+CSS and JavaScript code snippets - https://playground.anychart.com/
 
 [![Build Status](https://travis-ci.com/AnyChart/playground.svg?token=ERMLfyrvWdA8g6gi11Vp&branch=master)](https://travis-ci.com/AnyChart/playground) production
 
 [![Build Status](https://travis-ci.com/AnyChart/playground.svg?token=ERMLfyrvWdA8g6gi11Vp&branch=staging)](https://travis-ci.com/AnyChart/playground) staging
+
+
+
 
 ## Architecture
 The application consists of three parts:
