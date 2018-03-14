@@ -6,6 +6,14 @@
 
 [![Build Status](https://travis-ci.com/AnyChart/playground.svg?token=ERMLfyrvWdA8g6gi11Vp&branch=staging)](https://travis-ci.com/AnyChart/playground) staging
 
+## Architecture
+The application consists of three parts:
+* Web part - for serving http requets, the main site and the editor
+* Generator - for parsing git repositories and put data to database
+* Preview generator - generate images for samples
+
+All parts communicate via Redis queues.
+
 
 ## Dependencies
 ```
