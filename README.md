@@ -42,13 +42,13 @@ For now playground uses some of AnyChart resources, later we'll need to rework i
 
 ## Usage
 
-[Application config](docs/config.md)
+[Application config](doc/config.md)
 
-[Repositories samples format](docs/format.md)
+[Repositories samples format](doc/format.md)
 
-[Editor API](docs/api.md)
+[Editor API](doc/api.md)
 
-[DatabaseScheme](https://github.com/AnyChart/playground/blob/staging/src/sql/scheme_postgre.sql)
+[DatabaseScheme](src/sql/scheme_postgre.sql)
 
 ## License
 If you have any questions regarding licensing - please contact us. <sales@anychart.com>
