@@ -1,12 +1,20 @@
 (ns playground.spec.app-config
   (:require [clojure.spec.alpha :as s]))
 
-;;=================== App .toml config file spec ==================
+;; =====================================================================================================================
+;; App .toml config file spec
+;; =====================================================================================================================
 (s/def ::mode #{"full" "web" "generator" "preview-generator"})
 
+;; =====================================================================================================================
+;; Web
+;; =====================================================================================================================
 (s/def :web/port (s/and int? pos?))
 (s/def ::web (s/keys :req-un [:web/port]))
 
+;; =====================================================================================================================
+;; Database
+;; =====================================================================================================================
 (s/def :db/port (s/and int? pos?))
 (s/def :db/host string?)
 (s/def :db/name string?)
@@ -18,6 +26,9 @@
                              :db/user
                              :db/password]))
 
+;; =====================================================================================================================
+;; Redis
+;; =====================================================================================================================
 (s/def :redis/port (s/and int? pos?))
 (s/def :redis/host string?)
 (s/def :redis/db (s/and int? #(>= % 0)))
@@ -29,6 +40,9 @@
                                 :redis/queue
                                 :redis/preview-queue]))
 
+;; =====================================================================================================================
+;; Notifications.slack
+;; =====================================================================================================================
 (s/def :slack/token string?)
 (s/def :slack/channel string?)
 (s/def :slack/username string?)
@@ -41,7 +55,38 @@
                                 :slack/tag]))
 (s/def ::notifications (s/keys :req-un [::slack]))
 
-;; user
+
+
+;; =====================================================================================================================
+;; Previews and previews.maxcdn
+;; =====================================================================================================================
+(s/def :previews/cdn-purge boolean?)
+(s/def :previews/cdn-prefix string?)
+(s/def :previews/url-prefix string?)
+(s/def :previews/images-dir string?)
+(s/def :previews/generator string?)
+
+(s/def :maxcdn/alias string?)
+(s/def :maxcdn/key string?)
+(s/def :maxcdn/secret string?)
+(s/def :maxcdn/zone-id integer?)
+(s/def ::maxcdn (s/keys :req-un [:maxcdn/alias
+                                 :maxcdn/key
+                                 :maxcdn/secret
+                                 :maxcdn/zone-id]))
+
+(s/def ::previews (s/keys :req-un [:previews/cdn-purge
+                                   :previews/cdn-prefix
+                                   :previews/url-prefix
+                                   :previews/images-dir
+                                   :previews/phantom-engine
+                                   :previews/generator
+                                   ::maxcdn]))
+
+
+;; =====================================================================================================================
+;; Users
+;; =====================================================================================================================
 (s/def :user/username string?)
 (s/def :user/fullname string?)
 (s/def :user/email string?)
@@ -53,7 +98,9 @@
 
 (s/def ::users (s/coll-of ::user))
 
-;; repositories
+;; =====================================================================================================================
+;; Repositories
+;; =====================================================================================================================
 (s/def :ssh/ssh string?)
 (s/def :ssh/secret-key string?)
 (s/def :ssh/public-key string?)
@@ -87,12 +134,15 @@
 
 (s/def ::repositories (s/coll-of ::repository))
 
-;; main config
+;; =====================================================================================================================
+;; Main config
+;; =====================================================================================================================
 (s/def ::config (s/keys :req-un [::mode
                                  ::web
                                  ::db
                                  ::redis
                                  ::notifications
+                                 ::previews
                                  ::users
                                  ::repositories]))
 

@@ -17,17 +17,14 @@
 ;; =====================================================================================================================
 ;; Purge MaxCDN images cache
 ;; =====================================================================================================================
-(defn purge-files [files]
-  (let [
-        ;files ["/pg/1.png"]
-        zone-id 720175
-        api (MaxCDN. "anychart"
-                     "0a111b3017347f512aceb458df5bd34405a77e3af"
-                     "43ecb3c2850d3cc2e95d315a85ec38c1")
+(defn purge-files [files generator]
+  (let [maxcdn-conf (-> generator :conf :maxcdn)
+        zone-id (:zone-id maxcdn-conf)
+        api (MaxCDN. (:alias maxcdn-conf) (:key maxcdn-conf) (:secret maxcdn-conf))
         files-query (string/join "&" (map #(str "file=" %) files))
         ;; maxcdn query should be less than ~ 21517 char count
         query (str "/zones/pull.json/" zone-id "/cache?" files-query)]
-    (prn "Query length: " (count query))
+    (timbre/info "Query length: " (count query))
     (try
       (let [data (.delete api query)
             code (.code data)
@@ -62,7 +59,7 @@
       ;; maxcdn query should be less than ~21517 char count
       (let [groups (partition-all 150 image-names)]
         (doseq [names groups]
-          (purge-files names))))))
+          (purge-files names generator))))))
 
 
 ;; =====================================================================================================================
