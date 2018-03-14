@@ -35,4 +35,4 @@ after_success:
 - scp target/pg-standalone.jar root@138.68.237.182:/apps/$APP/pg-standalone.jar
 - ssh root@138.68.237.182 "supervisorctl restart $APP"
 notifications:
-  slack: anychart-team:sJRPhNn8Ur8yVdhvhgp6EbDM
+  slack: $SLACK_ACCOUNT:$SLACK_TOKEN
