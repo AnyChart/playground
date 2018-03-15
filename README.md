@@ -1,24 +1,34 @@
 [<img src="https://cdn.anychart.com/images/logo-transparent-segoe.png?2" width="234px" alt="AnyChart - Robust JavaScript/HTML5 Chart library for any project">](https://anychart.com)
 
-# AnyChart Playground
+# AnyChart Playground Engine
 
-AnyChart Playground is an online tool for testing and showcasing user-created HTML, 
-CSS and JavaScript code snippets - https://playground.anychart.com/
+[AnyChart Playground](https://playground.anychart.com/) is an online tool for testing and showcasing user-created HTML, 
+CSS and JavaScript code snippets. 
 
-[![Build Status](https://travis-ci.com/AnyChart/playground.svg?token=ERMLfyrvWdA8g6gi11Vp&branch=master)](https://travis-ci.com/AnyChart/playground) production
 
-[![Build Status](https://travis-ci.com/AnyChart/playground.svg?token=ERMLfyrvWdA8g6gi11Vp&branch=staging)](https://travis-ci.com/AnyChart/playground) staging
+[![Build Status](https://travis-ci.com/AnyChart/playground.svg?token=ERMLfyrvWdA8g6gi11Vp&branch=master)](https://travis-ci.com/AnyChart/playground) 
+[production](http://playground.anychart.com)
+
+[![Build Status](https://travis-ci.com/AnyChart/playground.svg?token=ERMLfyrvWdA8g6gi11Vp&branch=staging)](https://travis-ci.com/AnyChart/playground) 
+staging
 
 
 
 
 ## Architecture
-The application consists of three parts:
+The application backend is written on Clojure and consists of three parts:
 * Web part - for serving http requets, the main site and the editor
 * Generator - for parsing git repositories and put data to database
-* Preview generator - generate images for samples
+* Preview generator - for generating images for samples
 
 All parts communicate via Redis queues.
+
+The frontend is written on ClojureScript and consists of:
+* Site
+* Editor
+
+The editor is a single page application built with Reagent and re-frame.
+
 
 
 ## Dependencies
