@@ -16,7 +16,8 @@
             [crypto.password.bcrypt :as bcrypt]
             [playground.web.utils :as web-utils]
             [playground.web.auth-base :as auth-base]
-            [clojure.java.shell :as shell]))
+            [clojure.java.shell :as shell]
+            [clojure.java.jdbc :as jdbc]))
 
 ;; =====================================================================================================================
 ;; Component
@@ -26,12 +27,14 @@
 (declare parse-templates)
 (declare add-predefined-users)
 
+
 (defn message-handler [generator]
   (fn [{:keys [message attemp]}]
     (timbre/info "Redis message: " message)
     (update-repository-by-repo-name generator (:db generator) message)
     (db-req/update-tags-mw! (:db generator))
     {:status :success}))
+
 
 (defrecord Generator [conf repos db redis notifier]
   component/Lifecycle
@@ -50,6 +53,7 @@
     (redis/delete-worker (:redis-worker this))
     (dissoc this :conf)))
 
+
 (defn get-repos [conf]
   (let [get-user-fn (fn [username] (first (filter #(= username (:username %)) (:users conf))))
         repos (map #(atom (-> %
@@ -58,6 +62,7 @@
                    (:repositories conf))]
     repos))
 
+
 (defn new-generator [conf]
   (map->Generator {:conf  {:users        (:users conf)
                            :data_sources (:data_sources conf)
@@ -65,6 +70,7 @@
                            ;; images dir from previews generator
                            :images-dir   (-> conf :previews :images-dir)}
                    :repos (get-repos conf)}))
+
 
 (defn get-repo-by-name [generator name]
   (let [repos (:repos generator)]
@@ -77,11 +83,14 @@
 (defn repo-path [repo]
   (str (:dir repo) "/repo"))
 
+
 (defn git-path [path]
   (str path "/.git"))
 
+
 (defn versions-path [repo]
   (str (:dir repo) "/versions"))
+
 
 (defn version-path [repo branch]
   (str (:dir repo) "/versions/" branch))
@@ -97,6 +106,7 @@
       (info "Download repo " (:name @repo) " error! " e)
       (fs/delete-dir (:dir @repo))
       (throw (Exception. (str "Download repo " (:name @repo) " error"))))))
+
 
 (defn check-repository [generator db repo db-repo]
   (try
@@ -128,12 +138,15 @@
       (info (str "Repository \"" (:name @repo) "\" - ERROR, check repository's settings " e))
       {:name (:name @repo) :e e})))
 
+
 (defn delete-repo [db repo]
   (timbre/info "DELETE REPO: " repo)
-  (db-req/delete-repo-visits! db {:repo-id (:id repo)})
-  (db-req/delete-samples-by-repo-name! db {:name (:name repo)})
-  (db-req/delete-versions-by-repo-name! db {:name (:name repo)})
-  (db-req/delete-repo-by-name! db {:name (:name repo)}))
+  (jdbc/with-db-transaction [conn (:db-spec db)]
+                            (db-req/delete-repo-visits! conn {:repo-id (:id repo)})
+                            (db-req/delete-samples-by-repo-name! conn {:name (:name repo)})
+                            (db-req/delete-versions-by-repo-name! conn {:name (:name repo)})
+                            (db-req/delete-repo-by-name! conn {:name (:name repo)})))
+
 
 (defn check-repositories [generator db notifier]
   (info "Synchronize repositories...")
@@ -155,16 +168,21 @@
 ;; Remove branches
 ;; =====================================================================================================================
 (defn remove-branch [db branch]
-  (db-req/delete-version-visits! db {:version-id (:id branch)})
-  (db-req/delete-samples! db {:version-id (:id branch)})
-  (db-req/delete-version! db {:id (:id branch)}))
+  (info "Remove branch: " (:name branch))
+  (jdbc/with-db-transaction [conn (:db-spec db)]
+                            (db-req/delete-version-visits! conn {:version-id (:id branch)})
+                            (db-req/delete-samples! conn {:version-id (:id branch)})
+                            (db-req/delete-version! conn {:id (:id branch)})))
+
 
 (defn need-remove-branch? [db-branch actual-branches]
   (every? #(not= (:name db-branch) (:name %)) actual-branches))
 
+
 (defn branches-for-remove [actual-branches db-branches]
   (let [removed-branches (filter #(need-remove-branch? % actual-branches) db-branches)]
     removed-branches))
+
 
 (defn remove-previews [repo-name branch-name dir]
   (let [rm (str "rm " dir "/" (utils/name->url (str repo-name "-" branch-name "-*.png")))]
