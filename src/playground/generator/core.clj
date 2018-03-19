@@ -168,7 +168,7 @@
 ;; Remove branches
 ;; =====================================================================================================================
 (defn remove-branch [db branch]
-  (info "Remove branch: " (:name branch))
+  (info "Remove (previous) branch: " (:name branch))
   (jdbc/with-db-transaction [conn (:db-spec db)]
                             (db-req/delete-version-visits! conn {:version-id (:id branch)})
                             (db-req/delete-samples! conn {:version-id (:id branch)})
