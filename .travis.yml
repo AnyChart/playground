@@ -29,8 +29,8 @@ after_success:
 - if [ "$TRAVIS_BRANCH" == "staging" ]; then export APP="pg-stg"; fi
 - echo "Deploying to $SERVER"
 - mv .travis/id_rsa.pub ~/.ssh/id_rsa.pub
-- chmod 600 ~/.ssh/id_rsa
-- chmod 600 ~/.ssh/id_rsa.pub
+- chmod 400 ~/.ssh/id_rsa
+- chmod 400 ~/.ssh/id_rsa.pub
 - ssh-add ~/.ssh/id_rsa
 - scp target/pg-standalone.jar root@138.68.237.182:/apps/$APP/pg-standalone.jar
 - ssh root@138.68.237.182 "supervisorctl restart $APP"
