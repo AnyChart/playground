@@ -148,13 +148,15 @@
   (timbre/info "Elastic load samples")
   (try
     (let [conn (get-connection conf)
-         samples (db-req/search-samples db)
-         samples-list (bulk-samples samples conf)]
-     (timbre/info "Elastic load samples: " (count samples))
-     (s/request conn {:url    "/_bulk"
-                      :method :put
-                      :body   (s/chunks->body samples-list)})
-     nil)
+          samples (db-req/search-samples db)
+          samples-groups (partition-all 20000 samples)]
+      (timbre/info "Elastic load samples total:" (count samples))
+      (doseq [samples samples-groups]
+        (let [samples-list (bulk-samples samples conf)]
+          (timbre/info "Elastic load samples: " (count samples))
+          (s/request conn {:url    "/_bulk"
+                           :method :put
+                           :body   (s/chunks->body samples-list)}))))
     (catch Exception e (timbre/error "Elastic load samples error:" (pr-str e)))))
 
 
