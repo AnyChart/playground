@@ -146,14 +146,16 @@
 
 (defn load-samples [db conf]
   (timbre/info "Elastic load samples")
-  (let [conn (get-connection conf)
-        samples (db-req/search-samples db)
-        samples-list (bulk-samples samples conf)]
-    (timbre/info "Elastic load samples: " (count samples))
-    (s/request conn {:url    "/_bulk"
-                     :method :put
-                     :body   (s/chunks->body samples-list)})
-    nil))
+  (try
+    (let [conn (get-connection conf)
+         samples (db-req/search-samples db)
+         samples-list (bulk-samples samples conf)]
+     (timbre/info "Elastic load samples: " (count samples))
+     (s/request conn {:url    "/_bulk"
+                      :method :put
+                      :body   (s/chunks->body samples-list)})
+     nil)
+    (catch Exception e (timbre/error "Elastic load samples error:" (pr-str e)))))
 
 
 (defn init [db conf]
