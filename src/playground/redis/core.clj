@@ -26,8 +26,8 @@
   (let [group-ids (partition-all 1000 ids)]
     (doseq [ids group-ids]
       (enqueue redis
-              (-> redis :config :preview-queue)
-              ids))))
+               (-> redis :config :preview-queue)
+               ids))))
 
 
 (defn create-worker [redis queue handler]

@@ -67,7 +67,7 @@
         styles (:styles sample)
 
         html (str "<!DOCTYPE html>\n"
-               (hiccup/html (iframe-view/iframe sample)))
+                  (hiccup/html (iframe-view/iframe sample)))
 
         html (reduce (fn [html script]
                        (string/replace html

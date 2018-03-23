@@ -87,7 +87,7 @@
                (str "<!DOCTYPE html>\n"
                     (hiccup/html (iframe-view/iframe (get-sample request)))))]
     (assoc (response html)
-     :headers {"Content-Disposition" (str "attachment; filename=\"" (:name (get-sample request)) ".html\"")})))
+      :headers {"Content-Disposition" (str "attachment; filename=\"" (:name (get-sample request)) ".html\"")})))
 
 
 (defn show-sample-download-zip [request]
