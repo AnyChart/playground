@@ -9,6 +9,7 @@
             [playground.generator.data-sets :as data-sets]
             [playground.generator.utils :refer [copy-dir]]
             [playground.db.request :as db-req]
+            [playground.db.elastic :as elastic]
             [playground.notification.slack :as slack]
             [playground.redis.core :as redis]
             [playground.repo.git :as git]
@@ -189,12 +190,14 @@
     (info "Remove previews:" rm)
     (shell/sh "/bin/bash" "-c" rm)))
 
+
 ;; =====================================================================================================================
 ;; Update branches
 ;; =====================================================================================================================
 (defn read-version-config [path]
   (when (.exists (file path))
     (some-> path slurp (toml/read :keywordize))))
+
 
 (defn build-branch [db redis repo branch path versions]
   (info "Build branch: " path (:name branch))
@@ -212,14 +215,14 @@
                                              :samples-count (count samples)})]
     (timbre/info "Insert samples: " (count samples))
     (when (seq samples)
+      (elastic/remove-branch (:name @repo) (:name branch) (-> db :config :elastic))
       (let [ids (db-req/add-samples! db version-id samples)]
+        (elastic/add-branch samples (:name @repo) (:name branch) (-> db :config :elastic))
         ;;  set views
         (doseq [sample samples]
           (db-req/update-sample-views-from-canonical-visits! db {:url     (:url sample)
                                                                  :repo-id (:id @repo)}))
-
         (redis/generate-previews redis ids)
-
         ;; if repo is templates-repo, then update templates
         (when (:templates @repo)
           (db-req/delete-templates! db)
@@ -231,6 +234,7 @@
       (doseq [version old-versions]
         (remove-branch db version)))
     (db-req/show-version! db {:repo-id (:id @repo) :id version-id})))
+
 
 (defn update-branch [db redis repo branch versions generator queue-index]
   (try
@@ -251,13 +255,16 @@
           ;(slack/build-failed (:notifier generator) (:name project) (:name branch) queue-index e)
           {:branch branch :e e}))))
 
+
 (defn need-update-branch? [branch db-branches]
   (let [db-branch (first (filter #(= (:name branch) (:name %)) db-branches))]
     (or (nil? db-branch) (not= (:commit branch) (:commit db-branch)))))
 
+
 (defn branches-for-update [actual-branches db-branches]
   (let [update-branches (filter #(need-update-branch? % db-branches) actual-branches)]
     update-branches))
+
 
 (defn update-repository [generator db repo]
   (let [queue-index (swap! (:queue-index (:conf generator)) inc)]
@@ -281,6 +288,7 @@
         (slack/start-build (:notifier generator) (:name @repo) (map :name updated-branches) (map :name removed-branches) queue-index)
         ;; delete old branches
         (doseq [branch removed-branches]
+          (elastic/remove-branch (:name @repo) (:name branch) (-> db :config :elastic))
           (remove-branch db branch)
           (remove-previews (:name @repo) (:name branch) (-> generator :conf :images-dir)))
 
@@ -306,8 +314,10 @@
             (error (.getMessage e))
             (slack/complete-building-with-errors (:notifier generator) (:name @repo) [] [] queue-index e))))))
 
+
 (defn update-repository-by-repo-name [generator db repo-name]
   (update-repository generator db (get-repo-by-name generator repo-name)))
+
 
 ;(defn parse-templates [generator templates-config]
 ;  (info "Parse templates: " templates-config)

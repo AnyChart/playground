@@ -4,6 +4,7 @@
             [taoensso.timbre :as timbre :refer [info error]])
   (:import (com.mchange.v2.c3p0 ComboPooledDataSource)))
 
+
 (defn- connection-pool
   "Create a connection pool for the given database spec."
   [{:keys [subprotocol subname classname user password
@@ -34,6 +35,7 @@
                  (.setTestConnectionOnCheckout test-connection-on-checkout)
                  (.setPreferredTestQuery test-connection-query))})
 
+
 (defn create-db-spec [conf]
   {:classname   "com.mysql.cj.jdbc.Driver"
    :subprotocol "mysql"
@@ -42,12 +44,14 @@
    :password    (:password conf)
    :stringtype  "unspecified"})
 
+
 (defn create-db-spec-postgre [conf]
   {:subprotocol "postgresql"
    :subname     (str "//" (:host conf) ":" (:port conf) "/" (:name conf))
    :classname   "org.postgresql.Driver"
    :user        (:user conf)
    :password    (:password conf)})
+
 
 (defrecord JDBC [config db-spec conn]
   component/Lifecycle
@@ -67,8 +71,10 @@
       (-> this :conn :datasource (.close))
       this)))
 
+
 (defn new-jdbc [config]
   (map->JDBC {:config config}))
+
 
 ;(defn sql [q]
 ;  (println (sql/format q :quoting :ansi))
@@ -86,6 +92,7 @@
 ;(defn insert! [jdbc table data]
 ;  (clj-jdbc/insert! (:conn jdbc) table data))
 ;
+
 (defn insert-multiple! [db table data]
   (if (seq data)
     (clj-jdbc/insert-multi! (:conn db) table data

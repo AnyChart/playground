@@ -34,6 +34,7 @@
                  [camel-snake-kebab "0.4.0"]
                  [hiccup "1.0.5"]
                  [net.sf.jtidy/jtidy "r938"]
+                 [instaparse "1.4.8"]
 
                  ;; db
                  [mpg "1.3.0"]
@@ -44,6 +45,7 @@
                  [org.clojure/java.jdbc "0.7.5"]
                  [mysql/mysql-connector-java "6.0.6"]
                  [com.taoensso/carmine "2.16.0"]
+                 [cc.qbits/spandex "0.6.1"]
 
                  ;; crypto
                  [buddy "2.0.0"]

@@ -154,3 +154,28 @@ UNION
 SELECT url, create_date
 FROM samples
 WHERE version_id IS NULL AND latest;
+
+
+--name: sql-search-samples
+SELECT
+  samples.id,
+  samples.name,
+  samples.views,
+  samples.likes,
+  samples.create_date,
+  samples.url,
+  samples.version,
+  samples.version_id,
+  samples.tags,
+  samples.description,
+  samples.short_description,
+  samples.preview,
+  samples.latest,
+  versions.name as version_name,
+  repos.name as repo_name
+FROM samples
+  LEFT JOIN versions ON samples.version_id = versions.id
+  LEFT JOIN repos ON versions.repo_id = repos.id
+  WHERE samples.id NOT IN (SELECT id FROM templates) AND
+        ((samples.latest AND samples.version_id IS NULL) OR
+          samples.version_id IS NOT NULL);

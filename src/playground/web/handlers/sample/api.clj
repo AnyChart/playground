@@ -16,7 +16,8 @@
     [playground.spec.sample :as sample-spec]
     [clojure.set :as set]
     [ring.util.response :refer [redirect]]
-    [playground.data.tags :as tags-data]))
+    [playground.data.tags :as tags-data]
+    [playground.db.elastic :as elastic]))
 
 
 (defn run [request]
@@ -47,7 +48,9 @@
                   :url hash
                   :version 0
                   :owner-id (-> request :session :user :id))]
-    (let [id (db-req/add-sample! (get-db request) sample*)]
+    (let [id (db-req/add-sample! (get-db request) sample*)
+          new-sample (assoc sample* :id id)]
+      (elastic/add-sample new-sample (-> (get-db request) :config :elastic))
       (db-req/update-version-user-samples-latest! (get-db request) {:latest  true
                                                                     :url     hash
                                                                     :version 0})
@@ -88,7 +91,9 @@
                                                                                              :version new-version})
                                            (db-req/update-sample-views-from-canonical-visits! conn {:url     (:url sample)
                                                                                                     :repo-id (:repo-id sample)})
-                                           id))]
+                                           id))
+            new-sample (assoc sample* :id id)]
+        (elastic/replace-sample new-sample (-> (get-db request) :config :elastic))
         (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [id])
         (future (db-req/update-tags-mw! (get-db request)))
         (response {:status   :ok

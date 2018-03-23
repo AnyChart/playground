@@ -14,6 +14,7 @@
             [ring.util.response :refer [redirect]]
             [playground.web.routes :refer [app-routes]]
             [playground.web.sessions :as session]
+            [playground.db.elastic :as elastic]
             [clojure.string :as string]
             [me.raynes.fs :as fs]))
 
@@ -56,6 +57,7 @@
 
   (start [component]
     (timbre/info "Web start" conf)
+    (elastic/init db (-> db :config :elas))
     (fs/delete-dir (:zip-folder conf))
     (assoc component :server (web/run
                                (-> (create-web-handler component)

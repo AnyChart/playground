@@ -59,7 +59,7 @@
   (component/system-map
     :db (db/new-jdbc (:db conf))
     :redis (redis/new-redis (:redis conf))
-    :web (component/using (web/new-web (:web conf)) [:db :redis])))
+    :web (component/using (web/new-web (merge (:web conf) (:previews conf))) [:db :redis])))
 
 
 (defn get-preview-worker-system [conf]
@@ -67,7 +67,7 @@
     :db (db/new-jdbc (:db conf))
     :redis (redis/new-redis (:redis conf))
     :notifier (slack/new-notifier (-> conf :notifications :slack))
-    :preview-generator (component/using (pw-generator/new-preview-generator (merge (:web conf) (:previews conf)))
+    :preview-generator (component/using (pw-generator/new-preview-generator (:previews conf))
                                         [:db :redis :notifier])))
 
 
