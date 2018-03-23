@@ -57,7 +57,7 @@
 
   (start [component]
     (timbre/info "Web start" conf)
-    (elastic/init db (-> db :config :elas))
+    (elastic/init db (-> db :config :elastic))
     (fs/delete-dir (:zip-folder conf))
     (assoc component :server (web/run
                                (-> (create-web-handler component)
