@@ -22,6 +22,9 @@ git:
 before_install:
 - openssl aes-256-cbc -K $encrypted_5edcd9343923_key -iv $encrypted_5edcd9343923_iv -in .travis/id_rsa.enc -out id_rsa -d
 - mv id_rsa ~/.ssh/id_rsa
+- echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+- git submodule update --init --recursive
+after_success:
 - if [ "$TRAVIS_BRANCH" == "master" ]; then export APP="pg-prod"; fi
 - if [ "$TRAVIS_BRANCH" == "staging" ]; then export APP="pg-stg"; fi
 - echo "Deploying to $SERVER"
@@ -29,9 +32,6 @@ before_install:
 - chmod 600 ~/.ssh/id_rsa
 - chmod 600 ~/.ssh/id_rsa.pub
 - ssh-add ~/.ssh/id_rsa
-- echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-- git submodule update --init --recursive
-after_success:
 - scp target/pg-standalone.jar root@138.68.237.182:/apps/$APP/pg-standalone.jar
 - ssh root@138.68.237.182 "supervisorctl restart $APP"
 notifications:
