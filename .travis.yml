@@ -20,8 +20,7 @@ addons:
 git:
   submodules: false
 before_install:
-- openssl aes-256-cbc -K $encrypted_5edcd9343923_key -iv $encrypted_5edcd9343923_iv
-  -in .travis/id_rsa_travis_deploy.enc -out id_rsa_travis_deploy -d
+- openssl aes-256-cbc -K $encrypted_5edcd9343923_key -iv $encrypted_5edcd9343923_iv -in .travis/id_rsa.enc -out id_rsa -d
 - mv id_rsa_travis_deploy ~/.ssh/id_rsa
 - if [ "$TRAVIS_BRANCH" == "master" ]; then export APP="pg-prod"; fi
 - if [ "$TRAVIS_BRANCH" == "staging" ]; then export APP="pg-stg"; fi
