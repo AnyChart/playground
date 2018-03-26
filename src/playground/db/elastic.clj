@@ -337,7 +337,7 @@
           conn (get-connection conf)
           data (s/request conn {:url    [(:index conf) (:type conf) :_search]
                                 :method :post
-                                :body   {:size 20 :query query}})
+                                :body   {:size 30 :query query}})
           hits (:hits (:body data))
           total (:total hits)
           samples (map (fn [hit]

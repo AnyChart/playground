@@ -5,10 +5,9 @@
             [goog.style :as style]
             [playground.site.utils :as utils]
             [playground.views.sample :as sample-view]
+            [playground.views.prev-next-buttons :as prev-next-buttons-common]
             [ajax.core :refer [GET POST]]
-            [hiccups.runtime :as hiccupsrt]
-            [clojure.string :as s]
-            [playground.views.prev-next-buttons :as prev-next-buttons-common]))
+            [hiccups.runtime :as hiccupsrt]))
 
 ;;======================================================================================================================
 ;; Main consts and funcs

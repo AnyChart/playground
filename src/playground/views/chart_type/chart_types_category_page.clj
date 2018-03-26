@@ -38,5 +38,6 @@
         ]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
+     [:script {:src "/js/site.js" :type "text/javascript"}]
 
      ]))

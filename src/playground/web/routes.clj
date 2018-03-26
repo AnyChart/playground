@@ -31,6 +31,7 @@
             [playground.web.handlers.session-handlers :as session-handlers]
             [playground.web.handlers.sitemap-handler :as sitemap-handler]
             [playground.web.handlers.generator-handlers :as generator-handlers]
+            [playground.web.handlers.search-handlers :as search-handlers]
             ))
 
 ;; =====================================================================================================================
@@ -195,31 +196,21 @@
            (POST "/tag-samples.json" [] tag-handlers/top-tag-samples)
 
 
-           ;(GET "/projects/" [] redirect-slash)
            (GET "/projects" [] (-> repo-handlers/repos-page
                                    mw/base-page-middleware))
 
            (GET "/projects/:repo" [] (-> repo-handlers/repo-page
                                          mw/check-repo-middleware
                                          mw/base-page-middleware))
-           ;(GET "/projects/:repo/" [] (fn [request]
-           ;                             (when ((-> repo-handlers/repo-page
-           ;                                        mw/check-repo-middleware
-           ;                                        mw/base-page-middleware) request)
-           ;                               (redirect-slash request))))
+
 
            (GET "/projects/:repo/:version" [] (-> repo-handlers/version-page
                                                   mw/pagination-page-middleware
                                                   mw/check-version-middleware
                                                   mw/check-repo-middleware
                                                   mw/base-page-middleware))
-           ;(GET "/projects/:repo/:version/" [] (fn [request]
-           ;                                      (when ((-> repo-handlers/version-page
-           ;                                                 mw/pagination-page-middleware
-           ;                                                 mw/check-version-middleware
-           ;                                                 mw/check-repo-middleware
-           ;                                                 mw/base-page-middleware) request)
-           ;                                        (redirect-slash request))))
+
+           (POST "/search" [] search-handlers/search)
 
            ;; projects samples
            (GET "/:repo/:version/*" [] (-> sample-handlers/show-sample-editor mw/repo-sample))
