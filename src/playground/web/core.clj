@@ -2,7 +2,6 @@
   (:require [immutant.web :as web]
             [compojure.core :refer :all]
             [compojure.route :as route]
-            [toml.core :as toml]
             [taoensso.timbre :as timbre]
             [com.stuartsierra.component :as component]
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
@@ -18,9 +17,11 @@
             [clojure.string :as string]
             [me.raynes.fs :as fs]))
 
+
 (defn- component-middleware [web-component handler]
   (fn [request]
     (handler (assoc request :component web-component))))
+
 
 (defn create-web-handler [web-component]
   (component-middleware web-component #'app-routes))
@@ -40,6 +41,7 @@
         (if (not= uri new-uri)
           (redirect new-uri 301)
           (handler request))))))
+
 
 ;; TODO: delete after 6-9 months
 (defn wrap-api-redirects [handler]
@@ -74,6 +76,7 @@
     (timbre/info "Web stop")
     (web/stop (:server component))
     (assoc component :server nil)))
+
 
 (defn new-web [conf]
   (map->Web {:conf conf}))

@@ -80,11 +80,13 @@ html {
               //border: 1px solid #1796bf;
               outline: none;
               border: none;
+              color: #8eafe0;
               &::placeholder {
                 color: #8eafe0;
               }
               &:focus {
                 background-color: #476896;
+                color: white;
               }
             }
             .glyphicon {

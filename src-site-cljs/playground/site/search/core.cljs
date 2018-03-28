@@ -43,3 +43,10 @@
 
 
 (init)
+
+
+;(defn ^:export setSearchInput
+;  ([repo]
+;   (set! (.-value (dom/getElement "search-input")) (str "p:" repo " ")))
+;  ([repo version]
+;   (set! (.-value (dom/getElement "search-input")) (str "p:" repo " " "v:" version " "))))

@@ -6,6 +6,10 @@
             [playground.views.prev-next-buttons :as prev-next-buttons]))
 
 
+(defn search-query [repo-name version-name]
+  (str "p:" repo-name " v:" version-name " "))
+
+
 (defn page [{:keys [repo version page] :as data}]
   (hiccup-page/html5
     {:lang "en"}
@@ -13,7 +17,9 @@
     [:body page/body-tag-manager
      [:div.wrapper
 
-      (page/nav (:templates data) (:user data))
+      (page/nav (:templates data)
+                (:user data)
+                (search-query (:name repo) (:name version)))
 
       [:div.content
        [:div.container-fluid.content-container

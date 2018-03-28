@@ -4,7 +4,14 @@
             [hiccup.page :as hiccup-page]
             [playground.site.pages.tag-page-utils :as tag-page-utils]
             [playground.views.prev-next-buttons :as prev-next-buttons]
-            [playground.data.tags :as tags-data]))
+            [playground.data.tags :as tags-data]
+            [clojure.string :as string]))
+
+
+(defn search-query [tag]
+  (if (string/includes? tag " ")
+    (str "t:'" tag "' ")
+    (str "t:" tag)))
 
 
 (defn page [{:keys [page tag tag-data] :as data}]
@@ -15,7 +22,9 @@
     [:body page/body-tag-manager
      [:div.wrapper.tag-page
 
-      (page/nav (:templates data) (:user data))
+      (page/nav (:templates data)
+                (:user data)
+                (search-query tag))
 
       [:div.content
        [:div.container-fluid.content-container

@@ -56,6 +56,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
        ");"))
 
 
+(defn run-js-fns [& fns]
+  (->> fns
+       (map #(apply run-js-fn %))
+       (string/join "\n")))
+
+
+(defn search-query [{:keys [repo version tag]}]
+  (str
+    (when repo (str "p:" repo) " ")
+    (when version (str "v:" version) " ")
+    (when tag (if (string/includes? tag " ")
+                (str "t:'" tag "' ")
+                (str "t:" tag " ")))))
+
+
 (defn head [data]
   [:head
    [:meta {:charset "UTF-8"}]
@@ -200,7 +215,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 
 
-(defn nav [templates user & [sample]]
+(defn nav [templates user & [q]]
   [:header
    [:div.container-fluid.content-container.header
     [:div.row
@@ -248,15 +263,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           [:li [:a {:href "/version-history" :title "Playground Version History"} "Version History"]]]]
         ;[:li [:a {:href "/pricing" :title "Playground Pricing"} "Pricing"]]
         [:li [:a {:href "/about" :title "About Playground"} "About"]]
-
-        (when sample
-          (nav-sample-menu-item sample))]
+        ]
 
        ;; right navbar
        [:ul.nav.navbar-nav.navbar-right
 
         [:li.search-box
-         [:input#search-input.search {:type "text" :placeholder "Search"}]
+         [:input#search-input.search {:type        "text"
+                                      :placeholder "Search"
+                                      :value       (or q "")}]
          [:span.glyphicon.glyphicon-search]
          [:div#search-results-box.results {:style "display:none;"}
           [:div#search-results]]]
