@@ -15,6 +15,8 @@
 ;                                   :path-exists?
 ;                                   (fn [path] (utils/log "Path exist? " path))})
 
+(enable-console-print!)
+
 (defn init [data]
   (rf/dispatch-sync [:init data]))
 

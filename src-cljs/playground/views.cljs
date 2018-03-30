@@ -6,6 +6,7 @@
             [playground.editors.views :as editors]
             [playground.tips.views :as tips]
             [playground.sidemenu.views :as sidemenu]
+            [playground.search.views :as search]
             [playground.utils :as utils]
             [playground.utils.utils :as utils-main]))
 
@@ -108,6 +109,14 @@
         [:li [:a {:href @(rf/subscribe [:sample/download-zip-url])}
               [:img.icon {:src "/icons/editor/download-zip.svg"}]
               "ZIP with files"]]]]
+
+      [:div.search-box
+       [:input#search-input.search {:type        "text"
+                                    :placeholder "Search"
+                                    :on-key-down #(when (= 13 (.-keyCode %))
+                                                    (rf/dispatch [:search/search (-> % .-target .-value)]))}]
+       [:span.glyphicon.glyphicon-search]
+       [search/search-window]]
       ]]
 
     [:ul.nav.navbar-nav.navbar-right

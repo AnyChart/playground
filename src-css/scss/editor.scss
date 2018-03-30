@@ -146,6 +146,61 @@ html {
                 width: 16px;
               }
             }
+
+            .search-box {
+              display: inline-block;
+              position: relative;
+              margin-left: 30px;
+              height: 34px;
+              font-size: 12px;
+              input.search {
+                margin-top: 3px;
+                padding: 4px 30px 4px 10px;
+                background-color: white;
+                outline: none;
+                //border: 1px solid #19a1ce;
+                border: 1px solid #b6d4e0;
+                //border: 1px solid #80a9bd;
+                color: #b6d4e0;
+                &::placeholder {
+                  color: #b6d4e0;
+                }
+                &:focus {
+                  color: #333333;
+                  border: 1px solid #80a9bd;
+                  &+.glyphicon-search{
+                    color: #80a9bd;
+                  }
+                }
+              }
+              .glyphicon {
+                color: #b6d4e0;
+                //font-size: 13px;
+                position: absolute;
+                right: 0;
+                padding: 10px;
+                pointer-events: none;
+              }
+              #search-results-box.results {
+                z-index: 2;
+                text-align: left;
+                min-width: 200px;
+                padding: 10px;
+                background-color: white;
+                border: 1px solid $main-bg-color;
+                color: #0d2e5c;
+                position: absolute;
+                white-space: nowrap;
+                box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+                .search-result {
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  max-width: 280px;
+                }
+              }
+            }
+
           }
         }
 

@@ -15,7 +15,8 @@
     (rf/dispatch [:left-menu/close])
     (rf/dispatch [:view-menu/close])
     (rf/dispatch [:create-menu/close])
-    (rf/dispatch [:download-menu/close])))
+    (rf/dispatch [:download-menu/close])
+    (rf/dispatch [:search/close])))
 
 (defn init []
   (.addEventListener js/document "click" click-handler))
