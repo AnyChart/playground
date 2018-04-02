@@ -168,12 +168,23 @@
 ;; =====================================================================================================================
 ;; Remove branches
 ;; =====================================================================================================================
-(defn remove-branch [db branch]
-  (info "Remove (previous) branch: " (:name branch))
-  (jdbc/with-db-transaction [conn (:db-spec db)]
-                            (db-req/delete-version-visits! conn {:version-id (:id branch)})
-                            (db-req/delete-samples! conn {:version-id (:id branch)})
-                            (db-req/delete-version! conn {:id (:id branch)})))
+;; TODO: test behaviour, if it works well? make func/macros for transaction retry
+(defn remove-branch
+  ([db branch retry]
+   (info "Remove (previous) branch:" retry (:name branch))
+   (if (pos? retry)
+     (try
+       (jdbc/with-db-transaction [conn (:db-spec db)]
+                                 (db-req/delete-version-visits! conn {:version-id (:id branch)})
+                                 (db-req/delete-samples! conn {:version-id (:id branch)})
+                                 (db-req/delete-version! conn {:id (:id branch)}))
+       (catch Exception e
+         (timbre/error "REMOVE BRANCH ERROR:" e)
+         (remove-branch db branch (dec retry))))
+     (do
+       (timbre/info "REMOVE BRANCH retry exceeded")
+       (throw (Exception. (str "REMOVE BRANCH " (:name branch " ERROR")))))))
+  ([db branch] (remove-branch db branch 3)))
 
 
 (defn need-remove-branch? [db-branch actual-branches]
