@@ -5,6 +5,8 @@
 
 (defn get-redis [request] (-> request :component :redis))
 
+(defn get-config [request] (-> request :component :conf))
+
 (defn get-zip-folder [request] (-> request :component :conf :zip-folder))
 
 

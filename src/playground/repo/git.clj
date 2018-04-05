@@ -136,3 +136,7 @@
     :ssh (pull-ssh git (-> repo :ssh :secret-key) (-> repo :ssh :public-key) (-> repo :ssh :passphrase))
     :https (pull-http git (-> repo :https :login) (-> repo :https :password))))
 
+;;=========== revparse
+(defn current-commit [git-path]
+  (let [git-repo (get-git git-path)]
+    (subs (.getName (.getObjectId (.getRef (.getRepository git-repo) "HEAD"))) 0 7)))

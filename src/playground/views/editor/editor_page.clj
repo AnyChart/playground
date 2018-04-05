@@ -2,7 +2,8 @@
   (:require [playground.views.common :as page]
             [hiccup.page :as hiccup-page]
             [clojure.string :as string]
-            [playground.utils.utils :as utils])
+            [playground.utils.utils :as utils]
+            [playground.data.config :as c])
   (:import (org.apache.commons.lang3 StringEscapeUtils)))
 
 
@@ -106,7 +107,7 @@
      ; splitter
      [:script {:src "/splitter/splitter.js" :type "text/javascript"}]
      [:link {:href "/splitter/splitter.css" :type "text/css" :rel "stylesheet"}]
-     [:link {:href "/css/editor.css" :rel "stylesheet"}]
+     [:link {:href (str "/css/editor.css?v=" (c/commit)) :rel "stylesheet"}]
      [:link {:href "https://cdn.anychart.com/fonts/2.7.2/anychart.css" :rel "stylesheet"}]
      [:link {:href "https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&subset=greek" :type "text/css" :rel "stylesheet"}]
      [:script {:type "text/javascript"} "window.HIDE_SHARING_BUTTONS = true;"]
@@ -121,6 +122,6 @@
 
      (page/bottom-footer)
 
-     [:script {:src "/js/playground.js" :type "text/javascript"}]
+     [:script {:src (str "/js/playground.js?v=" (c/commit)) :type "text/javascript"}]
      [:script {:type "text/javascript"}
       (page/run-js-fn "playground.core.run" (StringEscapeUtils/escapeJson data))]]))

@@ -4,7 +4,8 @@
             [playground.utils.utils :as utils]
             [clojure.java.io :as io]
             [clojure.string :as string]
-            [playground.data.tags :as tags-data]))
+            [playground.data.tags :as tags-data]
+            [playground.data.config :as c]))
 
 
 (def head-tag-manager "<!-- Google Tag Manager -->
@@ -118,9 +119,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
      [:link {:rel "stylesheet" :type "text/css" :href "/bootstrap-3.3.7-dist/css/bootstrap.min.css"}]
      [:style {:type "text/css"} bootstrap-style])
    (if (System/getProperty "local")
-     [:link {:rel "stylesheet" :type "text/css" :href "/css/main.css"}]
+     [:link {:rel "stylesheet" :type "text/css" :href (str "/css/main.css?v=" (c/commit))}]
      [:style {:type "text/css"} main-style])
    head-tag-manager])
+
+
+(defn site-script []
+  [:script {:src (str "/js/site.js?v=" (c/commit)) :type "text/javascript"}])
 
 
 (defn nav [templates user & [q]]

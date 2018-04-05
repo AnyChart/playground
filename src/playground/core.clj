@@ -1,20 +1,36 @@
 (ns playground.core
-  (:require [toml.core :as toml]
-            [com.stuartsierra.component :as component]
-            [taoensso.timbre :as timbre]
-            [clojure.spec.alpha :as s]
-            [playground.spec.app-config :as core-spec]
+  (:require [playground.spec.app-config :as core-spec]
+            [playground.repo.git :as git]
             [playground.db.core :as db]
             [playground.web.core :as web]
             [playground.generator.core :as generator]
             [playground.notification.slack :as slack]
             [playground.redis.core :as redis]
             [playground.preview-generator.core :as pw-generator]
-            [playground.utils.utils :as utils])
+            [playground.utils.utils :as utils]
+            [playground.data.config :as c]
+            [toml.core :as toml]
+            [com.stuartsierra.component :as component]
+            [taoensso.timbre :as timbre]
+            [clojure.spec.alpha :as s])
   (:gen-class)
   (:import (org.slf4j LoggerFactory Logger)
            (ch.qos.logback.classic Level)
            (java.nio.charset Charset)))
+
+
+(defn git-commit []
+  (try
+    (git/current-commit (.getAbsolutePath (clojure.java.io/file "")))
+    (catch Exception _ (quot (System/currentTimeMillis) 1000))))
+
+
+(defmacro parse-data-compile-time []
+  `'~(git-commit))
+
+
+(def commit (parse-data-compile-time))
+
 
 
 ; disable some dirty logging
@@ -42,7 +58,7 @@
                                 [:db :notifier :redis])
     :preview-generator (component/using (pw-generator/new-preview-generator (:previews conf))
                                         [:db :redis :notifier])
-    :web (component/using (web/new-web (merge (:web conf) (:previews conf)))
+    :web (component/using (web/new-web (merge (:web conf) (:previews conf) {:commit commit}))
                           [:db :redis])))
 
 
@@ -59,7 +75,7 @@
   (component/system-map
     :db (db/new-jdbc (:db conf))
     :redis (redis/new-redis (:redis conf))
-    :web (component/using (web/new-web (merge (:web conf) (:previews conf))) [:db :redis])))
+    :web (component/using (web/new-web (merge (:web conf) (:previews conf) {:commit commit})) [:db :redis])))
 
 
 (defn get-preview-worker-system [conf]
@@ -80,6 +96,7 @@
 
 (defn -main [conf-path & args]
   (set-default-charset)
+  (c/set-config {:commit commit})
   (let [conf (read-config conf-path)]
     (if (= (s/conform ::core-spec/config conf) ::s/invalid)
       (timbre/info "Bad config file!\n" (s/explain-str ::core-spec/config conf))

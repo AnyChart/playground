@@ -76,7 +76,7 @@
       (page/footer (:repos data) (:tags data) (:data-sets data))]
      [:script {:src "/jquery/jquery.min.js"}]
      [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]
-     [:script {:src "/js/site.js" :type "text/javascript"}]
+     (page/site-script)
      [:script (page/run-js-fn "playground.site.pages.chart_type_page.startChartTypePage"
                               (:end data)
                               page
