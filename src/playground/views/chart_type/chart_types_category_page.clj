@@ -38,6 +38,7 @@
         ]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
+     (page/jquery-script)
+     (page/bootstrap-script)
      (page/site-script)
-
      ]))

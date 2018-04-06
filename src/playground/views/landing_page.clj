@@ -61,7 +61,7 @@
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
 
-     [:script {:src "/jquery/jquery.min.js"}]
-     [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]
+     (page/jquery-script)
+     (page/bootstrap-script)
      (page/site-script)
      [:script (page/run-js-fn "playground.site.pages.landing_page.startLanding" (:end data) page)]]))

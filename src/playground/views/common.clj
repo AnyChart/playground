@@ -124,8 +124,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
    head-tag-manager])
 
 
-(defn site-script []
-  [:script {:src (str "/js/site.js?v=" (c/commit)) :type "text/javascript"}])
+(defn site-script [] [:script {:src (str "/js/site.js?v=" (c/commit))}])
+(defn jquery-script [] [:script {:src "/jquery/jquery.min.js"}])
+(defn bootstrap-script [] [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}])
 
 
 (defn nav [templates user & [q]]

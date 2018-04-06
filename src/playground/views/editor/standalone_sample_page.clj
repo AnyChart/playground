@@ -59,5 +59,6 @@
          ]]]
 
       (page/bottom-footer)]
-     [:script {:src "/jquery/jquery.min.js"}]
-     [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]]))
+     (page/jquery-script)
+     (page/bootstrap-script)
+     ]))
