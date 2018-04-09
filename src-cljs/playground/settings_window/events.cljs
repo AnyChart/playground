@@ -211,6 +211,21 @@
           (update-in [:sample :scripts] (fn [scripts] (remove #(= url %) scripts)))
           (update-in [:tips :queue] (fn [tips-urls] (remove #(= url %) tips-urls)))))))
 
+(rf/reg-event-db
+  :settings/edit-script
+  (fn [db [_ val index]]
+    (-> db
+        (update-in [:sample :scripts] (fn [scripts]
+                                        (let [scripts (vec scripts)]
+                                          (assoc scripts index val)))))))
+
+(rf/reg-event-db
+  :settings/edit-style
+  (fn [db [_ val index]]
+    (-> db
+        (update-in [:sample :styles] (fn [styles]
+                                       (let [styles (vec styles)]
+                                         (assoc styles index val)))))))
 
 ;;======================================================================================================================
 ;; Add/remove css

@@ -109,16 +109,22 @@
    [:p.section-label "Scripts"
     [:span.question-small {:title "Add any script, drag to change the order, click to edit the path."}]]
    [:div.scripts-box
-    (for [script @(rf/subscribe [:sample/scripts])]
-      ^{:key script}
+    (for [[idx script] (map-indexed (fn [idx script] [idx script]) @(rf/subscribe [:sample/scripts]))]
+      ^{:key idx}
       [:div.script
-       [:a {:href script :target "_blank"}
+       [:span.script-box
         [:span.glyphicon.glyphicon-align-justify]
         [:div.in-box
-         [:span.url script]
+         [:div.input-height-box
+          [:span.height-line script]
+          [:input.url {:type        "text"
+                       :value       script
+                       :on-key-down #(when (= 13 (.-keyCode %)) (.blur (-> % .-target)))
+                       :on-change   #(rf/dispatch [:settings/edit-script (-> % .-target .-value) idx])}]]
          [:span.glyphicon.glyphicon-remove {:on-click #(do
                                                          (.preventDefault %)
-                                                         (rf/dispatch [:settings/remove-script script]))}]]]])]
+                                                         (rf/dispatch [:settings/remove-script script]))}]]]
+       ])]
    [:div.line
     [:input.form-control.script-input {:id          "script-input"
                                        :placeholder "Add new script"
@@ -227,16 +233,22 @@
    [:p.section-label "Styles"
     [:span.question-small {:title "Add any CSS, drag to change the order, click to edit the path."}]]
    [:div.scripts-box
-    (for [style @(rf/subscribe [:sample/styles])]
-      ^{:key style}
+    (for [[idx style] (map-indexed (fn [idx style] [idx style]) @(rf/subscribe [:sample/styles]))]
+      ^{:key idx}
       [:div.script
-       [:a {:href style :target "_blank"}
+       [:span.script-box
         [:span.glyphicon.glyphicon-align-justify]
         [:div.in-box
-         [:span.url style]
+         [:div.input-height-box
+          [:span.height-line style]
+          [:input.url {:type        "text"
+                       :value       style
+                       :on-key-down #(when (= 13 (.-keyCode %)) (.blur (-> % .-target)))
+                       :on-change   #(rf/dispatch [:settings/edit-style (-> % .-target .-value) idx])}]]
          [:span.glyphicon.glyphicon-remove {:on-click #(do
                                                          (.preventDefault %)
-                                                         (rf/dispatch [:settings/remove-style style]))}]]]])]
+                                                         (rf/dispatch [:settings/remove-style style]))}]]]
+       ])]
    [:div.line
     [:input.form-control.script-input {:id          "style-input"
                                        :placeholder "Add new style"

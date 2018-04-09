@@ -30,7 +30,6 @@ html {
       border-bottom: 1px solid #b6d4e0;
       box-sizing: content-box;
 
-
       div.header-box {
         display: flex;
         justify-content: space-between;
@@ -40,7 +39,7 @@ html {
         .logo {
           display: inline-block;
           z-index: 1;
-          @media (max-width: 450px){
+          @media (max-width: 450px) {
             display: none;
           }
           .logo-img {
@@ -59,12 +58,12 @@ html {
             color: #19a1ce;
             font-size: 18px;
             margin-left: 13px;
-            @media (max-width: 920px){
+            @media (max-width: 920px) {
               display: none;
             }
             b {
               font-weight: 600;
-              @media (max-width: 1125px){
+              @media (max-width: 1125px) {
                 display: none;
               }
             }
@@ -74,15 +73,14 @@ html {
           }
         }
 
-
-        div.top-menu{
+        div.top-menu {
           position: absolute;
           width: 100%;
           text-align: center;
           .left-navbar {
             & > li {
-              float: left;             // always horizontal, prevent vertical
-              @media (max-width: 820px){
+              float: left; // always horizontal, prevent vertical
+              @media (max-width: 820px) {
                 & > button > span:not(.caret) {
                   display: none;
                 }
@@ -169,7 +167,7 @@ html {
                 &:focus {
                   color: #333333;
                   border: 1px solid #80a9bd;
-                  &+.glyphicon-search{
+                  & + .glyphicon-search {
                     color: #80a9bd;
                   }
                 }
@@ -192,7 +190,7 @@ html {
                 color: #0d2e5c;
                 position: absolute;
                 white-space: nowrap;
-                box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+                box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
                 .search-result {
                   white-space: nowrap;
                   overflow: hidden;
@@ -264,7 +262,7 @@ html {
         }
 
         ul.nav.navbar-nav.navbar-right {
-          @media (max-width: 550px){
+          @media (max-width: 550px) {
             display: none;
           }
           .caret {
@@ -436,7 +434,6 @@ html {
       width: 100%;
       height: calc(100% - 35px);
     }
-
 
     // Code context menu
     .code-context-menu {
@@ -730,7 +727,7 @@ html {
       margin-bottom: 26px;
       div.script {
         margin: 0 0 11px 0;
-        a {
+        .script-box {
           background-color: white;
           color: white;
           font-size: 12px;
@@ -741,15 +738,30 @@ html {
           .in-box {
             border-radius: 5px;
             background-color: #95bfd3;
-            padding: 2px 5px 2px 8px;
-            display: flex;
+            padding: 1px 5px 1px 8px;
+            //display: flex;
             align-items: baseline;
-            .url {
-              max-width: 505px;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
+            .input-height-box {
+              display: inline-block;
+              .height-line {
+                display: block;
+                height: 0;
+                overflow-y: hidden;
+                max-width: 505px;
+                padding: 0 1px;
+              }
+              input.url {
+                width: 100%;
+                max-width: 505px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                border: none;
+                background: none;
+                outline: none;
+              }
             }
+
           }
           span.glyphicon-align-justify {
             margin-left: 10px;
@@ -763,7 +775,7 @@ html {
           span.glyphicon {
             margin-left: 10px;
           }
-          &:hover {
+          &:hover, &:focus-within {
             text-decoration: none;
             background-color: #19a1ce;
             .in-box {
