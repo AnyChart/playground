@@ -44,7 +44,7 @@
               :datasets      (:datasets data)
 
               :settings      {:show               false
-                              :tab                :general
+                              :tab                :javascript
                               :external-resources {:binary (first external-resources/binaries)
                                                    :theme  (first external-resources/themes)
                                                    :locale (first external-resources/locales)

@@ -10,6 +10,7 @@
             [playground.utils :as utils]
             [playground.utils.utils :as utils-main]))
 
+
 (defn navbar []
   [:header
    [:div.header-box
@@ -153,8 +154,6 @@
      ;  [:li [:a {:href "/signup"} "Sign Up"]])
 
      ]]])
-
-(defn footer [])
 
 
 ;(defn send-form []

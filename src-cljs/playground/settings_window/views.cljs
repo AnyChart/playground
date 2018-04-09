@@ -106,7 +106,8 @@
 
 (defn javascript-tab []
   [:div.javascript-tab.content
-   [:p.section-label "Scripts"]
+   [:p.section-label "Scripts"
+    [:span.question-small {:title "Add any script, drag to change the order, click to edit the path."}]]
    [:div.scripts-box
     (for [script @(rf/subscribe [:sample/scripts])]
       ^{:key script}
@@ -223,7 +224,8 @@
 (defn css-tab []
   [:div.javascript-tab.css-tab.content
 
-   [:p.section-label "Styles"]
+   [:p.section-label "Styles"
+    [:span.question-small {:title "Add any CSS, drag to change the order, click to edit the path."}]]
    [:div.scripts-box
     (for [style @(rf/subscribe [:sample/styles])]
       ^{:key style}
