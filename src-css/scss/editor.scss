@@ -746,13 +746,15 @@ html {
               .height-line {
                 display: block;
                 height: 0;
-                overflow-y: hidden;
-                max-width: 505px;
+                max-width: 500px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
                 padding: 0 1px;
               }
               input.url {
                 width: 100%;
-                max-width: 505px;
+                max-width: 500px;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;

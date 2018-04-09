@@ -117,10 +117,14 @@
         [:div.in-box
          [:div.input-height-box
           [:span.height-line script]
-          [:input.url {:type        "text"
-                       :value       script
-                       :on-key-down #(when (= 13 (.-keyCode %)) (.blur (-> % .-target)))
-                       :on-change   #(rf/dispatch [:settings/edit-script (-> % .-target .-value) idx])}]]
+          [:input.url {:type          "text"
+                       :default-value script
+                       :on-blur       #(rf/dispatch [:settings/edit-script (-> % .-target .-value) idx])
+                       :on-key-down   #(when (= 13 (.-keyCode %))
+                                         (.blur (-> % .-target))
+                                         (rf/dispatch [:settings/edit-script (-> % .-target .-value) idx]))
+                       ;:on-change   #(rf/dispatch [:settings/edit-script (-> % .-target .-value) idx])
+                       }]]
          [:span.glyphicon.glyphicon-remove {:on-click #(do
                                                          (.preventDefault %)
                                                          (rf/dispatch [:settings/remove-script script]))}]]]
@@ -241,10 +245,12 @@
         [:div.in-box
          [:div.input-height-box
           [:span.height-line style]
-          [:input.url {:type        "text"
-                       :value       style
-                       :on-key-down #(when (= 13 (.-keyCode %)) (.blur (-> % .-target)))
-                       :on-change   #(rf/dispatch [:settings/edit-style (-> % .-target .-value) idx])}]]
+          [:input.url {:type          "text"
+                       :default-value style
+                       :on-blur       #(rf/dispatch [:settings/edit-style (-> % .-target .-value) idx])
+                       :on-key-down   #(when (= 13 (.-keyCode %)) (.blur (-> % .-target)))
+                       ;:on-change   #(rf/dispatch [:settings/edit-style (-> % .-target .-value) idx])
+                       }]]
          [:span.glyphicon.glyphicon-remove {:on-click #(do
                                                          (.preventDefault %)
                                                          (rf/dispatch [:settings/remove-style style]))}]]]
