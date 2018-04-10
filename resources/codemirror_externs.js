@@ -11,4 +11,4 @@ splitMe.init = function(){}
 
 
 var Sortable = {}
-Sortable.create = function(elem, settings)
+Sortable.create = function(elem, settings) {}
