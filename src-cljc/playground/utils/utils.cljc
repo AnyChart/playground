@@ -173,3 +173,14 @@
       (update :description (comp trim strip-tags))
       (update :short-description (comp trim strip-tags))))
 
+
+(defn reorder-list
+  "For editor settings scripts and styles draggable sorting"
+  [lst old-index new-index]
+  (let [lst (vec lst)
+        el (nth lst old-index)
+        ;_ (println el)
+        scripts (vec (concat (subvec lst 0 old-index) (subvec lst (inc old-index) (count lst))))
+        ;_ (println scripts)
+        scripts (concat (subvec scripts 0 new-index) [el] (subvec scripts new-index (count scripts)))]
+    scripts))

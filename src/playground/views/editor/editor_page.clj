@@ -107,6 +107,11 @@
      ; splitter
      [:script {:src "/splitter/splitter.js" :type "text/javascript"}]
      [:link {:href "/splitter/splitter.css" :type "text/css" :rel "stylesheet"}]
+
+     ;; Sortable
+     [:script {:src "/js/Sortable.min.js"}]
+
+     ;; Styles
      [:link {:href (str "/css/editor.css?v=" (c/commit)) :rel "stylesheet"}]
      [:link {:href "https://cdn.anychart.com/fonts/2.7.2/anychart.css" :rel "stylesheet"}]
      [:link {:href "https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&subset=greek" :type "text/css" :rel "stylesheet"}]

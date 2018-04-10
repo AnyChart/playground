@@ -726,7 +726,8 @@ html {
     div.scripts-box {
       margin-bottom: 26px;
       div.script {
-        margin: 0 0 11px 0;
+        //margin: 0 0 11px 0;
+        padding: 5px 0;
         .script-box {
           background-color: white;
           color: white;
@@ -735,6 +736,9 @@ html {
           border-radius: 5px;
           position: relative;
           padding-left: 27px;
+          .glyphicon-align-justify{
+            cursor: move;
+          }
           .in-box {
             border-radius: 5px;
             background-color: #95bfd3;
@@ -774,10 +778,12 @@ html {
             left: -4px;
             top: 3px;
           }
-          span.glyphicon {
+          span.glyphicon-remove {
             margin-left: 10px;
+            cursor: pointer;
           }
-          &:hover, &:focus-within {
+          &:hover,
+          &:focus-within {
             text-decoration: none;
             background-color: #19a1ce;
             .in-box {
@@ -788,6 +794,25 @@ html {
             }
           }
         }
+        //&.sortable-chosen {
+        //  background-color: red;
+        //  .in-box {
+        //    background-color: red;
+        //  }
+        //}
+        //&.sortable-drag {
+        //  background-color: blue;
+        //  .in-box {
+        //    background-color: blue;
+        //  }
+        //}
+        //&.sortable-ghost{
+        //  background-color: green;
+        //  .in-box {
+        //    background-color: green;
+        //  }
+        //}
+
       }
     }
 

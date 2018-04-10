@@ -203,6 +203,7 @@
           (update-in [:sample :scripts] #(concat % [url]))
           (update-in [:tips :queue] conj url)))))
 
+
 (rf/reg-event-db
   :settings.external-resources/remove-js-by-type
   (fn [db [_ type]]
@@ -210,6 +211,7 @@
       (-> db
           (update-in [:sample :scripts] (fn [scripts] (remove #(= url %) scripts)))
           (update-in [:tips :queue] (fn [tips-urls] (remove #(= url %) tips-urls)))))))
+
 
 (rf/reg-event-db
   :settings/edit-script
@@ -219,13 +221,12 @@
                                         (let [scripts (vec scripts)]
                                           (assoc scripts index val)))))))
 
+
 (rf/reg-event-db
-  :settings/edit-style
-  (fn [db [_ val index]]
+  :settings/update-scripts-order
+  (fn [db [_ old-index new-index]]
     (-> db
-        (update-in [:sample :styles] (fn [styles]
-                                       (let [styles (vec styles)]
-                                         (assoc styles index val)))))))
+        (update-in [:sample :scripts] #(common-utils/reorder-list % old-index new-index)))))
 
 ;;======================================================================================================================
 ;; Add/remove css
@@ -238,6 +239,7 @@
           (update-in [:sample :styles] #(concat % [url]))
           (update-in [:tips :queue] conj url)))))
 
+
 (rf/reg-event-db
   :settings.external-resources/remove-css-by-type
   (fn [db [_ type]]
@@ -247,6 +249,20 @@
           (update-in [:tips :queue] (fn [tips-urls] (remove #(= url %) tips-urls)))))))
 
 
+(rf/reg-event-db
+  :settings/edit-style
+  (fn [db [_ val index]]
+    (-> db
+        (update-in [:sample :styles] (fn [styles]
+                                       (let [styles (vec styles)]
+                                         (assoc styles index val)))))))
+
+
+(rf/reg-event-db
+  :settings/update-styles-order
+  (fn [db [_ old-index new-index]]
+    (-> db
+        (update-in [:sample :styles] #(common-utils/reorder-list % old-index new-index)))))
 ;;======================================================================================================================
 ;; Data sets
 ;;======================================================================================================================

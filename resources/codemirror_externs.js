@@ -8,3 +8,7 @@ var Clipboard = function(elem, settings) {}
 
 var splitMe = {}
 splitMe.init = function(){}
+
+
+var Sortable = {}
+Sortable.create = function(elem, settings)
