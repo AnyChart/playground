@@ -9,7 +9,7 @@
                                                  (.create js/Sortable el (clj->js {:animation 150
                                                                                    :draggable ".script"
                                                                                    :handle    ".glyphicon-align-justify"
-                                                                                   :onEnd     (fn [e]
+                                                                                   :onEnd     (fn [^js/SortableOnEndEvent e]
                                                                                                 (rf/dispatch [:settings/update-scripts-order
                                                                                                               (.-oldIndex e) (.-newIndex e)]))})))
                          :reagent-render      (fn []

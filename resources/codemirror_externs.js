@@ -12,3 +12,7 @@ splitMe.init = function(){}
 
 var Sortable = {}
 Sortable.create = function(elem, settings) {}
+
+var SortableOnEndEvent = {}
+SortableOnEndEvent.prototype.oldIndex = function() {};
+SortableOnEndEvent.prototype.newIndex = function() {};
