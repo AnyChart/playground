@@ -200,7 +200,12 @@
   (fn [db [_ type]]
     (let [url (-> db :settings :external-resources type :url)]
       (-> db
-          (update-in [:sample :scripts] #(concat % [url]))
+          (update-in [:sample :scripts] #(if (or (string/ends-with? url "anychart-bundle.min.js")
+                                                 (string/ends-with? url "anychart-base.min.js")
+                                                 (string/ends-with? url "anychart-core.min.js"))
+                                           ;; add to start, otherwise to end
+                                           (cons url %)
+                                           (concat % [url])))
           (update-in [:tips :queue] conj url)))))
 
 
