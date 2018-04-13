@@ -32,40 +32,42 @@
       (when-not (-> data :sample :version-id)
         (.replaceState (.-history js/window) nil nil (utils/sample-url-with-version (:sample data))))
       (let [view (or (:view data) (:view @ls) :right)]
-        {:db {:editors       {:editors-height (editors-js/editors-height)
-                              :view           view
-                              :code-settings  {:show false}
-                              :iframe-update  0}
+        {:db {:editors        {:editors-height (editors-js/editors-height)
+                               :view           view
+                               :code-settings  {:show false}
+                               :iframe-update  0}
 
-              :sample        (:sample data)
-              :saved-sample  (:sample data)
-              :templates     (:templates data)
-              :user          (:user data)
-              :datasets      (:datasets data)
+              :sample         (:sample data)
+              :saved-sample   (:sample data)
+              :templates      (:templates data)
+              :user           (:user data)
+              :datasets       (:datasets data)
+              :versions-names (:versions-names data)
 
-              :settings      {:show               false
-                              :tab                :javascript
-                              :external-resources {:binary (first external-resources/binaries)
-                                                   :theme  (first external-resources/themes)
-                                                   :locale (first external-resources/locales)
-                                                   :map    (first external-resources/maps)
-                                                   :css    (first external-resources/css)}
-                              :general-tab        {:tags (map (fn [tag] {:name tag :selected false}) (-> data :sample :tags))}}
-              :embed         {:show    (:embed-show data)
-                              :tab     :embed
-                              :sub-tab :html
-                              :props   {:id     (common-utils/embed-name (-> data :sample))
-                                        :class  "anychart-embed"
-                                        :width  "600px"
-                                        :height "450px"}}
-              :tips          {:current []
-                              :queue   []}
-              :left-menu     {:show false}
-              :view-menu     {:show false}
-              :create-menu   {:show false}
-              :download-menu {:show false}
-              :local-storage ls
-              :data          (external-resources/compose-all-data (:datasets data))}}))))
+              :settings       {:show               false
+                               :tab                :javascript
+                               :selected-version   "latest"
+                               :external-resources {:binary (first external-resources/binaries)
+                                                    :theme  (first external-resources/themes)
+                                                    :locale (first external-resources/locales)
+                                                    :map    (first external-resources/maps)
+                                                    :css    (first external-resources/css)}
+                               :general-tab        {:tags (map (fn [tag] {:name tag :selected false}) (-> data :sample :tags))}}
+              :embed          {:show    (:embed-show data)
+                               :tab     :embed
+                               :sub-tab :html
+                               :props   {:id     (common-utils/embed-name (-> data :sample))
+                                         :class  "anychart-embed"
+                                         :width  "600px"
+                                         :height "450px"}}
+              :tips           {:current []
+                               :queue   []}
+              :left-menu      {:show false}
+              :view-menu      {:show false}
+              :create-menu    {:show false}
+              :download-menu  {:show false}
+              :local-storage  ls
+              :data           (external-resources/compose-all-data (:datasets data))}}))))
 
 
 (rf/reg-event-fx

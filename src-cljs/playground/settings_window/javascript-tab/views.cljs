@@ -59,6 +59,16 @@
      "Add"]]
 
    [:p.section-label.quick-add "Quick Add"]
+   ;[:div
+   ; [:div.form-group
+   ;  [:label {:for "settings-select-version" } "AnyChart v."]
+   ;  [:select.form-control {:id        "settings-select-version"
+   ;                         :on-change #(rf/dispatch [:settings.external-resources/change-version (-> % .-target .-value)])}
+   ;
+   ;   (for [v @(rf/subscribe [:settings/versions-names])]
+   ;     ^{:key (str "v" v)}
+   ;     [:option {:value v} v])
+   ;   ]]]
 
    [:div.row
     [:div.col-sm-6

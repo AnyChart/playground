@@ -78,36 +78,6 @@
 ;    :example     "anychart.data.loadJsonFile(\"https://cdn.anychart.com/charts-data/data_json.json\", function (data) {\n  chart = anychart.column();\n  chart.data(data);\n  chart.container(\"container\");\n  chart.draw();\n});"}])
 
 
-;(def ^:const themes
-;  [{:url "https://cdn.anychart.com/themes/latest/coffee.min.js", :name "Coffee" :js "coffee"}
-;   {:url "https://cdn.anychart.com/themes/latest/dark_blue.min.js", :name "Dark Blue" :js "darkBlue"}
-;   {:url "https://cdn.anychart.com/themes/latest/dark_earth.min.js", :name "Dark Earth" :js "darkEarth"}
-;   {:url "https://cdn.anychart.com/themes/latest/dark_glamour.min.js", :name "Dark Glamour" :js "darkGlamour"}
-;   {:url "https://cdn.anychart.com/themes/latest/dark_provence.min.js", :name "Dark Provence" :js "darkTurquoise"}
-;   {:url "https://cdn.anychart.com/themes/latest/dark_turquoise.min.js", :name "Dark Turquoise" :js "darkTurquoise"}
-;   {:url "https://cdn.anychart.com/themes/latest/defaultTheme.min.js", :name "Default Theme" :js "defaultTheme"}
-;   {:url "https://cdn.anychart.com/themes/latest/light_blue.min.js", :name "Light Blue" :js "lightBlue"}
-;   {:url "https://cdn.anychart.com/themes/latest/light_earth.min.js", :name "Light Earth" :js "lightEarth"}
-;   {:url "https://cdn.anychart.com/themes/latest/light_glamour.min.js", :name "Light Glamour" :js "lightGlamour"}
-;   {:url "https://cdn.anychart.com/themes/latest/light_provence.min.js", :name "Light Provence" :js "lightProvence"}
-;   {:url "https://cdn.anychart.com/themes/latest/light_turquoise.min.js", :name "Light Turquoise" :js "lightTurquoise"}
-;   {:url "https://cdn.anychart.com/themes/latest/monochrome.min.js", :name "Monochrome" :js "monochrome"}
-;   {:url "https://cdn.anychart.com/themes/latest/morning.min.js", :name "Morning" :js "morning"}
-;   {:url "https://cdn.anychart.com/themes/latest/pastel.min.js", :name "Pastel" :js "pastel"}
-;   {:url "https://cdn.anychart.com/themes/latest/sea.min.js", :name "Sea" :js "sea"}
-;   {:url "https://cdn.anychart.com/themes/latest/wines.min.js", :name "Wines" :js "wines"}])
-
-
-;(def ^:const locales
-;  [{:url "https://cdn.anychart.com/releases/latest-v8/locales/en-us.js", :name "English" :js "en-us"}
-;   {:url "https://cdn.anychart.com/releases/latest-v8/locales/de-de.js", :name "German - Deutsch" :js "de-de"}
-;   {:url "https://cdn.anychart.com/releases/latest-v8/locales/ru-ru.js", :name "Russian - Русский" :js "ru-ru"}
-;   {:url "https://cdn.anychart.com/releases/latest-v8/locales/es-es.js", :name "Spanish - Español" :js "es-es"}
-;   {:url "https://cdn.anychart.com/releases/latest-v8/locales/he-il.js", :name "Israel - עברית" :js "he-il"}
-;   {:url "https://cdn.anychart.com/releases/latest-v8/locales/zh-cn.js", :name "Chinese - 中文" :js "zh-cn"}
-;   {:url "https://cdn.anychart.com/releases/latest-v8/locales/hi-in.js", :name "India (Hindi) - हिंदी" :js "hi-in"}
-;   {:url "https://cdn.anychart.com/releases/latest-v8/locales/zh-hk.js", :name "Chinese (Hong Kong) - 中文" :js "zh-hk"}])
-
 ;;======================================================================================================================
 ;; Locales
 ;;======================================================================================================================

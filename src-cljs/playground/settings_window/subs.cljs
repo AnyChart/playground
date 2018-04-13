@@ -31,3 +31,5 @@
         max-editor-height))))
 
 (rf/reg-sub :settings/tags (fn [db _] (-> db :settings :general-tab :tags)))
+
+(rf/reg-sub :settings/versions-names (fn [db _] (cons "latest" (-> db :versions-names))))

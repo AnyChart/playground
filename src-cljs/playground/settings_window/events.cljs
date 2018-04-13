@@ -192,6 +192,11 @@
     (let [res (external-resources/get-css-by-url value)]
       (assoc-in db [:settings :external-resources :css] res))))
 
+(rf/reg-event-db
+  :settings.external-resources/change-version
+  (fn [db [_ version]]
+    (assoc-in db [:settings :selected-version] version)))
+
 ;;======================================================================================================================
 ;; Add/remove js
 ;;======================================================================================================================

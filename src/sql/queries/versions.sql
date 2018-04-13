@@ -5,6 +5,9 @@ VALUES(:name, :repo_id, :commit, :hidden, :config, :samples_count);
 -- name: sql-versions
 SELECT * FROM versions WHERE repo_id = :repo_id;
 
+-- name: sql-versions-by-repo-name
+SELECT name FROM versions WHERE repo_id = (SELECT id FROM repos WHERE name = :name);
+
 -- name: sql-versions-repos
 SELECT versions.name,
        versions.samples_count,
