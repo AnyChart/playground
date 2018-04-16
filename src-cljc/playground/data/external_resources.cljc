@@ -6,16 +6,16 @@
      :cljs
      (:require-macros [playground.data.external-resources-parser :as external-resources-parser])))
 
+
 ;;======================================================================================================================
 ;; Main data
 ;;======================================================================================================================
-
 (def data (external-resources-parser/parse-data-compile-time))
 
 ;;======================================================================================================================
 ;; Themes
 ;;======================================================================================================================
-(defn compose-themes []
+(defn compose-themes [data]
   (let [themes (:themes data)
         themes (map (fn [[url-name data]]
                       {:url         (str "https://cdn.anychart.com/releases/v8/themes/" (name url-name) ".js")
@@ -30,12 +30,12 @@
     themes))
 
 
-(def ^:const themes (compose-themes))
+(def ^:const themes (compose-themes data))
 
 ;;======================================================================================================================
 ;; Modules
 ;;======================================================================================================================
-(defn compose-modules []
+(defn compose-modules [data]
   (let [modules (remove (fn [[url-name data]] (:internal data)) (:modules data))
         modules (map (fn [[url-name data]]
                        {:name          (or (:name data) (str "Unnamed module with ID: " (name url-name)))
@@ -57,25 +57,14 @@
     {:chart-types-modules chart-types-modules
      :features-modules    feature-modules
      :bundle-modules      bundle-modules
-     :misc-moduls         misc-modules}))
+     :misc-modules         misc-modules}))
 
-(def ^:const all-modules (compose-modules))
+(def ^:const all-modules (compose-modules data))
 (def ^:const chart-types-modules (:chart-types-modules all-modules))
 (def ^:const feature-modules (:features-modules all-modules))
 (def ^:const bundle-modules (:bundle-modules all-modules))
-(def ^:const misc-modules (:misc-moduls all-modules))
-(def ^:const binaries (flatten (map second all-modules)))
-
-;(def ^:const binaries
-;  [{:url         "https://cdn.anychart.com/js/latest/anychart-bundle.min.js"
-;    :name        "AnyChart"
-;    :description "AnyChart is a flexible JavaScript (HTML5) based charting solution which will fit any need for data visualization."
-;    :example     "anychart.onDocumentLoad(function() {\n    // create an instance of pie chart with data\n    var chart = anychart.pie([\n        [\"Chocolate\", 5],\n        [\"Rhubarb compote\", 2],\n        [\"Crêpe Suzette\", 2],\n        [\"American blueberry\", 2],\n        [\"Buttermilk\", 1]\n    ]);\n    chart.title(\"Top 5 pancake fillings\");\n    // pass the container where chart will be drawn\n    chart.container(\"container\");\n    // call the chart draw() method to initiate chart drawing\n    chart.draw();\n});"}
-;
-;   {:url         "https://cdn.anychart.com/js/latest/data-adapter.min.js"
-;    :name        "Data Adapter"
-;    :description "TODO: Data Adapter description"
-;    :example     "anychart.data.loadJsonFile(\"https://cdn.anychart.com/charts-data/data_json.json\", function (data) {\n  chart = anychart.column();\n  chart.data(data);\n  chart.container(\"container\");\n  chart.draw();\n});"}])
+(def ^:const misc-modules (:misc-modules all-modules))
+(def ^:const binaries (flatten (vals all-modules)))
 
 
 ;;======================================================================================================================
@@ -153,6 +142,7 @@
 (defn get-css-by-url [url]
   (first (filter #(= url (:url %)) css)))
 
+
 ;;======================================================================================================================
 ;; Composition for tips
 ;;======================================================================================================================
@@ -200,6 +190,7 @@
            :type :dataset
            :example "TODO: Add example to https://static.anychart.com/cdn/anydata/common/index.json?")) datasets))
 
+
 (defn get-csss []
   (map (fn [{:keys [url name] :as item}]
          (assoc item
@@ -208,6 +199,7 @@
            :example (str "some code\nis needed here")
            :type :css))
        css))
+
 
 (defn compose-all-data [datasets]
   (concat

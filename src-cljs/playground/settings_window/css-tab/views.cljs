@@ -1,7 +1,7 @@
 (ns playground.settings-window.css-tab.views
   (:require [re-frame.core :as rf]
-            [playground.data.external-resources :as external-resources]
-            [reagent.core :as reagent]))
+            [reagent.core :as reagent]
+            [playground.settings-window.external-resources.views :as version-select]))
 
 
 (defn styles-box []
@@ -59,7 +59,9 @@
                                             (set! (.-value (.getElementById js/document "style-input")) ""))}
      "Add"]]
 
-   [:p.section-label.quick-add "Quick Add"]
+   ;[:p.section-label.quick-add "Quick Add"]
+   [:p.section-label.quick-add ""]
+   [version-select/version-select]
 
    [:div.row
     [:div.col-sm-6
@@ -70,7 +72,7 @@
       [:div.line
        [:select.form-control {:id        "settings-select-bin"
                               :on-change #(rf/dispatch [:settings.external-resources/css-select (-> % .-target .-value)])}
-        (for [res external-resources/css]
+        (for [res @(rf/subscribe [:settings.external-resources/css])]
           ^{:key res} [:option {:value (:url res)} (:name res)])]
        (if @(rf/subscribe [:settings.external-resources/added-css? :css])
          [:button.ac-btn.remove-btn {:type     "button"

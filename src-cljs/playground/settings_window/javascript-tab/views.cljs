@@ -1,6 +1,6 @@
 (ns playground.settings-window.javascript-tab.views
   (:require [re-frame.core :as rf]
-            [playground.data.external-resources :as external-resources]
+            [playground.settings-window.external-resources.views :as version-select]
             [reagent.core :as reagent]))
 
 
@@ -58,17 +58,9 @@
                                             (set! (.-value (.getElementById js/document "script-input")) ""))}
      "Add"]]
 
-   [:p.section-label.quick-add "Quick Add"]
-   ;[:div
-   ; [:div.form-group
-   ;  [:label {:for "settings-select-version" } "AnyChart v."]
-   ;  [:select.form-control {:id        "settings-select-version"
-   ;                         :on-change #(rf/dispatch [:settings.external-resources/change-version (-> % .-target .-value)])}
-   ;
-   ;   (for [v @(rf/subscribe [:settings/versions-names])]
-   ;     ^{:key (str "v" v)}
-   ;     [:option {:value v} v])
-   ;   ]]]
+   ;[:p.section-label.quick-add "Quick Add"]
+   [:p.section-label.quick-add ""]
+   [version-select/version-select]
 
    [:div.row
     [:div.col-sm-6
@@ -79,18 +71,12 @@
       [:div.line
        [:select.form-control {:id        "settings-select-bin"
                               :on-change #(rf/dispatch [:settings.external-resources/binaries-select (-> % .-target .-value)])}
-        [:optgroup {:label "Chart Types"}
-         (for [res external-resources/chart-types-modules]
-           ^{:key (:url res)} [:option {:value (:url res)} (:name res)])]
-        [:optgroup {:label "Features"}
-         (for [res external-resources/feature-modules]
-           ^{:key (:url res)} [:option {:value (:url res)} (:name res)])]
-        [:optgroup {:label "Bundles"}
-         (for [res external-resources/bundle-modules]
-           ^{:key (:url res)} [:option {:value (:url res)} (:name res)])]
-        [:optgroup {:label "Misc"}
-         (for [res external-resources/misc-modules]
-           ^{:key (:url res)} [:option {:value (:url res)} (:name res)])]]
+        (for [res @(rf/subscribe [:settings.external-resources/binaries-groups])]
+          ^{:key (:name res)}
+          [:optgroup {:label (:name res)}
+           (for [item (:items res)]
+             ^{:key item} [:option {:value (:url item)} (:name item)])])
+        ]
        (if @(rf/subscribe [:settings.external-resources/added-js? :binary])
          [:button.ac-btn.remove-btn {:type     "button"
                                      :on-click #(rf/dispatch [:settings.external-resources/remove-js-by-type :binary])} "Remove"]
@@ -107,7 +93,7 @@
       [:div.line
        [:select.form-control {:id        "settings-select-theme"
                               :on-change #(rf/dispatch [:settings.external-resources/themes-select (-> % .-target .-value)])}
-        (for [res external-resources/themes]
+        (for [res @(rf/subscribe [:settings.external-resources/themes])]
           ^{:key res} [:option {:value (:url res)} (:name res)])]
        (if @(rf/subscribe [:settings.external-resources/added-js? :theme])
          [:button.ac-btn.remove-btn {:type     "button"
@@ -124,7 +110,7 @@
       [:div.line
        [:select.form-control {:id        "settings-select-locale"
                               :on-change #(rf/dispatch [:settings.external-resources/locales-select (-> % .-target .-value)])}
-        (for [res external-resources/locales]
+        (for [res @(rf/subscribe [:settings.external-resources/locales])]
           ^{:key res} [:option {:value (:url res)} (:name res)])]
        (if @(rf/subscribe [:settings.external-resources/added-js? :locale])
          [:button.ac-btn.remove-btn {:type     "button"
@@ -143,7 +129,7 @@
                               :on-change #(rf/dispatch [:settings.external-resources/maps-select (-> % .-target .-value)])}
         ;(for [res external-resources/maps]
         ;  ^{:key res} [:option {:value (:url res)} (:name res)])
-        (for [res external-resources/maps-html]
+        (for [res @(rf/subscribe [:settings.external-resources/maps-groups])]
           ^{:key (:name res)}
           [:optgroup {:label (:name res)}
            (for [item (:items res)]

@@ -15,10 +15,11 @@
     (-> db
         (assoc-in [:settings :show] true)
         ;; set first default button value
-        (assoc-in [:settings :external-resources :binary] (first external-resources/binaries))
-        (assoc-in [:settings :external-resources :theme] (first external-resources/themes))
-        (assoc-in [:settings :external-resources :locale] (first external-resources/locales))
-        (assoc-in [:settings :external-resources :map] (first external-resources/maps)))))
+        (assoc-in [:settings :external-resources :binary] (first (-> db :settings :external-resources :data :modules :binaries)))
+        (assoc-in [:settings :external-resources :theme] (first (-> db :settings :external-resources :data :themes)))
+        (assoc-in [:settings :external-resources :locale] (first (-> db :settings :external-resources :data :locales)))
+        (assoc-in [:settings :external-resources :map] (first (-> db :settings :external-resources :data :geodata :maps)))
+        (assoc-in [:settings :external-resources :css] (first (-> db :settings :external-resources :data :css))))))
 
 (rf/reg-event-db
   :settings/hide
@@ -159,43 +160,7 @@
                                                (remove (partial = value) del-tags))))
       db)))
 
-;;======================================================================================================================
-;; External resources add/remove
-;;======================================================================================================================
-(rf/reg-event-db
-  :settings.external-resources/binaries-select
-  (fn [db [_ value]]
-    (let [res (external-resources/get-binary-by-url value)]
-      (assoc-in db [:settings :external-resources :binary] res))))
 
-(rf/reg-event-db
-  :settings.external-resources/themes-select
-  (fn [db [_ value]]
-    (let [res (external-resources/get-theme-by-url value)]
-      (assoc-in db [:settings :external-resources :theme] res))))
-
-(rf/reg-event-db
-  :settings.external-resources/locales-select
-  (fn [db [_ value]]
-    (let [res (external-resources/get-locale-by-url value)]
-      (assoc-in db [:settings :external-resources :locale] res))))
-
-(rf/reg-event-db
-  :settings.external-resources/maps-select
-  (fn [db [_ value]]
-    (let [res (external-resources/get-map-by-url value)]
-      (assoc-in db [:settings :external-resources :map] res))))
-
-(rf/reg-event-db
-  :settings.external-resources/css-select
-  (fn [db [_ value]]
-    (let [res (external-resources/get-css-by-url value)]
-      (assoc-in db [:settings :external-resources :css] res))))
-
-(rf/reg-event-db
-  :settings.external-resources/change-version
-  (fn [db [_ version]]
-    (assoc-in db [:settings :selected-version] version)))
 
 ;;======================================================================================================================
 ;; Add/remove js
@@ -273,6 +238,8 @@
   (fn [db [_ old-index new-index]]
     (-> db
         (update-in [:sample :styles] #(common-utils/reorder-list % old-index new-index)))))
+
+
 ;;======================================================================================================================
 ;; Data sets
 ;;======================================================================================================================

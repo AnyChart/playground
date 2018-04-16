@@ -78,16 +78,16 @@
          (for [res external-resources/misc-modules]
            ^{:key (:url res)} [:option {:value (:url res)} (:name res)])]
         [:optgroup {:label "Themes"}
-         (for [res external-resources/themes]
+         (for [res @(rf/subscribe [:settings.external-resources/themes])]
            ^{:key (:url res)} [:option {:value (:url res)} (:name res)])]
         [:optgroup {:label "Locales"}
-         (for [res external-resources/locales]
+         (for [res @(rf/subscribe [:settings.external-resources/locales])]
            ^{:key (:url res)} [:option {:value (:url res)} (:name res)])]
         ;[:optgroup {:label "Maps"}
         ; (for [res external-resources/maps]
         ;   ^{:key (:url res)} [:option {:value (:url res)} (:name res)])]
 
-        (for [res external-resources/maps-html]
+        (for [res @(rf/subscribe [:settings.external-resources/maps-groups])]
           [:optgroup {:label (:name res)}
            (for [item (:items res)]
              ^{:key item} [:option {:value (:url item)} (:name item)])])
