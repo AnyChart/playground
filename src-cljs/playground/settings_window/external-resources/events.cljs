@@ -9,13 +9,19 @@
 ;;======================================================================================================================
 ;; Make request and parse
 ;;======================================================================================================================
-(rf/reg-event-fx
+(rf/reg-event-db
   :settings.external-resources/on-modules-json-get
-  (fn [{db :db} [_ data]]
+  (fn [db [_ data]]
     (let [data (clojure.walk/keywordize-keys data)
           data (parser/data data (-> db :settings :selected-version))]
-      {:db       (-> db (assoc-in [:settings :external-resources :data] data))
-       :dispatch [:settings/show]})))
+      (-> db
+          (assoc-in [:settings :external-resources :data] data)
+          ;; set first default button value
+          (assoc-in [:settings :external-resources :binary] (first (-> data :modules :binaries)))
+          (assoc-in [:settings :external-resources :theme] (first (-> data :themes)))
+          (assoc-in [:settings :external-resources :locale] (first (-> data :locales)))
+          (assoc-in [:settings :external-resources :map] (first (-> data :geodata :maps)))
+          (assoc-in [:settings :external-resources :css] (first (-> data :css)))))))
 
 
 (rf/reg-event-db

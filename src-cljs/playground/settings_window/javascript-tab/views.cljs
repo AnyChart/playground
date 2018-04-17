@@ -70,8 +70,9 @@
        [:a.question-small {:href   "https://docs.anychart.com/Quick_Start/Modules"
                            :target "_blank"}]]
       [:div.line
-       [:select.form-control {:id        "settings-select-bin"
-                              :on-change #(rf/dispatch [:settings.external-resources/binaries-select (-> % .-target .-value)])}
+       [:select.form-control {:id            "settings-select-bin"
+                              :default-value @(rf/subscribe [:settings.external-resources/selected-resource :binary])
+                              :on-change     #(rf/dispatch [:settings.external-resources/binaries-select (-> % .-target .-value)])}
         (for [res @(rf/subscribe [:settings.external-resources/binaries-groups])]
           ^{:key (:name res)}
           [:optgroup {:label (:name res)}
@@ -92,8 +93,9 @@
        [:a.question-small {:href   "https://docs.anychart.com/Appearance_Settings/Themes"
                            :target "_blank"}]]
       [:div.line
-       [:select.form-control {:id        "settings-select-theme"
-                              :on-change #(rf/dispatch [:settings.external-resources/themes-select (-> % .-target .-value)])}
+       [:select.form-control {:id            "settings-select-theme"
+                              :default-value @(rf/subscribe [:settings.external-resources/selected-resource :theme])
+                              :on-change     #(rf/dispatch [:settings.external-resources/themes-select (-> % .-target .-value)])}
         (for [res @(rf/subscribe [:settings.external-resources/themes])]
           ^{:key res} [:option {:value (:url res)} (:name res)])]
        (if @(rf/subscribe [:settings.external-resources/added-js? :theme])
@@ -109,8 +111,9 @@
        [:a.question-small {:href   "https://docs.anychart.com/Common_Settings/Localization"
                            :target "_blank"}]]
       [:div.line
-       [:select.form-control {:id        "settings-select-locale"
-                              :on-change #(rf/dispatch [:settings.external-resources/locales-select (-> % .-target .-value)])}
+       [:select.form-control {:id            "settings-select-locale"
+                              :default-value @(rf/subscribe [:settings.external-resources/selected-resource :locale])
+                              :on-change     #(rf/dispatch [:settings.external-resources/locales-select (-> % .-target .-value)])}
         (for [res @(rf/subscribe [:settings.external-resources/locales])]
           ^{:key res} [:option {:value (:url res)} (:name res)])]
        (if @(rf/subscribe [:settings.external-resources/added-js? :locale])
@@ -126,8 +129,9 @@
        [:a.question-small {:href   "https://docs.anychart.com/Maps/Maps_List"
                            :target "_blank"}]]
       [:div.line
-       [:select.form-control {:id        "settings-select-map"
-                              :on-change #(rf/dispatch [:settings.external-resources/maps-select (-> % .-target .-value)])}
+       [:select.form-control {:id            "settings-select-map"
+                              :default-value @(rf/subscribe [:settings.external-resources/selected-resource :map])
+                              :on-change     #(rf/dispatch [:settings.external-resources/maps-select (-> % .-target .-value)])}
         ;(for [res external-resources/maps]
         ;  ^{:key res} [:option {:value (:url res)} (:name res)])
         (for [res @(rf/subscribe [:settings.external-resources/maps-groups])]

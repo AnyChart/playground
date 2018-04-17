@@ -10,22 +10,14 @@
 (rf/reg-event-db
   :settings/show
   (fn [db _]
-    (-> db
-        (assoc-in [:settings :show] true)
-        ;; set first default button value
-        (assoc-in [:settings :external-resources :binary] (first (-> db :settings :external-resources :data :modules :binaries)))
-        (assoc-in [:settings :external-resources :theme] (first (-> db :settings :external-resources :data :themes)))
-        (assoc-in [:settings :external-resources :locale] (first (-> db :settings :external-resources :data :locales)))
-        (assoc-in [:settings :external-resources :map] (first (-> db :settings :external-resources :data :geodata :maps)))
-        (assoc-in [:settings :external-resources :css] (first (-> db :settings :external-resources :data :css))))))
+    (assoc-in db [:settings :show] true)))
 
 (rf/reg-event-db
   :settings/hide
   (fn [db _]
     ;TODO: eliminate dispatch in event handler
     (rf/dispatch [:tips/add-from-queue])
-    (-> db
-        (assoc-in [:settings :show] false))))
+    (assoc-in db [:settings :show] false)))
 
 (rf/reg-event-db
   :settings/general-tab

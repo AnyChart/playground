@@ -71,8 +71,9 @@
        [:a.question-small {:href   "https://docs.anychart.com/Common_Settings/UI_Controls/AnyChart_UI"
                            :target "_blank"}]]
       [:div.line
-       [:select.form-control {:id        "settings-select-bin"
-                              :on-change #(rf/dispatch [:settings.external-resources/css-select (-> % .-target .-value)])}
+       [:select.form-control {:id            "settings-select-bin"
+                              :default-value @(rf/subscribe [:settings.external-resources/selected-resource :css])
+                              :on-change     #(rf/dispatch [:settings.external-resources/css-select (-> % .-target .-value)])}
         (for [res @(rf/subscribe [:settings.external-resources/css])]
           ^{:key res} [:option {:value (:url res)} (:name res)])]
        (if @(rf/subscribe [:settings.external-resources/added-css? :css])
