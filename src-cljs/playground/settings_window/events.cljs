@@ -1,9 +1,7 @@
 (ns playground.settings-window.events
   (:require [re-frame.core :as rf]
             [clojure.string :as string]
-            [playground.data.external-resources :as external-resources]
             [playground.data.tags :as tags-data]
-            [playground.utils :as utils]
             [playground.utils.utils :as common-utils]))
 
 ;;======================================================================================================================

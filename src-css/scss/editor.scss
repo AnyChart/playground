@@ -447,6 +447,9 @@ html {
       .code-context-menu-close-icon {
         cursor: pointer;
       }
+      select {
+        max-width: 200px;
+      }
     }
   }
 }

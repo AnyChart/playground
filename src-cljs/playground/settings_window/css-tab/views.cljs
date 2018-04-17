@@ -5,37 +5,38 @@
 
 
 (defn styles-box []
-  (reagent/create-class {:component-did-mount #(let [el (.getElementById js/document "styles-box")]
-                                                 (.create js/Sortable el (clj->js {:animation 150
-                                                                                   :draggable ".script"
-                                                                                   :handle    ".glyphicon-align-justify"
-                                                                                   :onEnd     (fn [e]
-                                                                                                (rf/dispatch [:settings/update-styles-order
-                                                                                                              (.-oldIndex e) (.-newIndex e)]))})))
-                         :reagent-render      (fn []
-                                                [:div#styles-box.scripts-box
-                                                 (for [[idx style] (map-indexed (fn [idx style] [idx style])
-                                                                                @(rf/subscribe [:sample/styles]))]
-                                                   ^{:key (str style "-" idx)}
-                                                   [:div.script
-                                                    [:span.script-box
-                                                     [:span.glyphicon.glyphicon-align-justify]
-                                                     [:div.in-box
-                                                      [:div.input-height-box
-                                                       [:span.height-line style]
-                                                       [:input.url {:type          "text"
-                                                                    :default-value style
-                                                                    :on-blur       #(rf/dispatch [:settings/edit-style (-> % .-target .-value) idx])
-                                                                    :on-key-down   #(when (= 13 (.-keyCode %))
-                                                                                      (.blur (-> % .-target))
-                                                                                      (rf/dispatch [:settings/edit-style (-> % .-target .-value) idx]))
-                                                                    ;:on-change   #(rf/dispatch [:settings/edit-style (-> % .-target .-value) idx])
-                                                                    }]]
-                                                      [:span.glyphicon.glyphicon-remove {:on-click #(do
-                                                                                                      (.preventDefault %)
-                                                                                                      (rf/dispatch [:settings/remove-style style]))}]]]
-                                                    ])]
-                                                )}))
+  (reagent/create-class
+    {:component-did-mount #(let [el (.getElementById js/document "styles-box")]
+                             (.create js/Sortable el (clj->js {:animation 150
+                                                               :draggable ".script"
+                                                               :handle    ".glyphicon-align-justify"
+                                                               :onEnd     (fn [e]
+                                                                            (rf/dispatch [:settings/update-styles-order
+                                                                                          (.-oldIndex e) (.-newIndex e)]))})))
+     :reagent-render      (fn []
+                            [:div#styles-box.scripts-box
+                             (for [[idx style] (map-indexed (fn [idx style] [idx style])
+                                                            @(rf/subscribe [:sample/styles]))]
+                               ^{:key (str style "-" idx)}
+                               [:div.script
+                                [:span.script-box
+                                 [:span.glyphicon.glyphicon-align-justify]
+                                 [:div.in-box
+                                  [:div.input-height-box
+                                   [:span.height-line style]
+                                   [:input.url {:type          "text"
+                                                :default-value style
+                                                :on-blur       #(rf/dispatch [:settings/edit-style (-> % .-target .-value) idx])
+                                                :on-key-down   #(when (= 13 (.-keyCode %))
+                                                                  (.blur (-> % .-target))
+                                                                  (rf/dispatch [:settings/edit-style (-> % .-target .-value) idx]))
+                                                ;:on-change   #(rf/dispatch [:settings/edit-style (-> % .-target .-value) idx])
+                                                }]]
+                                  [:span.glyphicon.glyphicon-remove {:on-click #(do
+                                                                                  (.preventDefault %)
+                                                                                  (rf/dispatch [:settings/remove-style style]))}]]]
+                                ])]
+                            )}))
 
 
 (defn css-tab []

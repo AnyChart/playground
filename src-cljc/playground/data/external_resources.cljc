@@ -86,13 +86,6 @@
 ;;======================================================================================================================
 ;; Maps
 ;;======================================================================================================================
-;(def ^:const maps
-;  [{:url "https://cdn.anychart.com/releases/latest-v8/geodata/custom/world/world.js", :name "World" :js "world"}
-;   {:url "https://cdn.anychart.com/releases/latest-v8/geodata/custom/world_source/world_source.js", :name "World Origin" :js "worldOrigin"}
-;   {:url "https://cdn.anychart.com/releases/latest-v8/geodata/countries/australia/australia.topo.js", :name "Australia" :js "australia"}
-;   {:url "https://cdn.anychart.com/releases/latest-v8/geodata/countries/united_states_of_america/united_states_of_america.topo.js", :name "USA" :js "usa"}
-;   {:url "https://cdn.anychart.com/releases/latest-v8/geodata/countries/france/france.topo.js", :name "France" :js "france"}])
-
 (defn compose-maps [data]
   (->> (:geodata data)
        (map
@@ -118,29 +111,6 @@
 (def ^:const css
   [{:url "https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css", :name "AnyChart UI"}
    {:url "https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css", :name "AnyChart Font"}])
-
-
-;;======================================================================================================================
-;; Getters
-;;======================================================================================================================
-(defn get-binary-by-url [url]
-  (first (filter #(= url (:url %)) binaries)))
-
-
-(defn get-theme-by-url [url]
-  (first (filter #(= url (:url %)) themes)))
-
-
-(defn get-locale-by-url [url]
-  (first (filter #(= url (:url %)) locales)))
-
-
-(defn get-map-by-url [url]
-  (first (filter #(= url (:url %)) maps)))
-
-
-(defn get-css-by-url [url]
-  (first (filter #(= url (:url %)) css)))
 
 
 ;;======================================================================================================================

@@ -1,10 +1,7 @@
 (ns playground.settings-window.views
   (:require [re-frame.core :as rf]
-            [playground.utils :as utils]
-            [playground.data.external-resources :as external-resources]
             [playground.settings-window.javascript-tab.views :as js-tab-views]
-            [playground.settings-window.css-tab.views :as css-tab-views]
-            [reagent.core :as reagent]))
+            [playground.settings-window.css-tab.views :as css-tab-views]))
 
 
 (defn nav-menu []

@@ -5,37 +5,38 @@
 
 
 (defn scripts-box []
-  (reagent/create-class {:component-did-mount #(let [el (.getElementById js/document "scripts-box")]
-                                                 (.create js/Sortable el (clj->js {:animation 150
-                                                                                   :draggable ".script"
-                                                                                   :handle    ".glyphicon-align-justify"
-                                                                                   :onEnd     (fn [^js/SortableOnEndEvent e]
-                                                                                                (rf/dispatch [:settings/update-scripts-order
-                                                                                                              (.-oldIndex e) (.-newIndex e)]))})))
-                         :reagent-render      (fn []
-                                                [:div#scripts-box.scripts-box
-                                                 (for [[idx script] (map-indexed (fn [idx script] [idx script])
-                                                                                 @(rf/subscribe [:sample/scripts]))]
-                                                   ^{:key (str script "-" idx)}
-                                                   [:div.script
-                                                    [:span.script-box
-                                                     [:span.glyphicon.glyphicon-align-justify]
-                                                     [:div.in-box
-                                                      [:div.input-height-box
-                                                       [:span.height-line script]
-                                                       [:input.url {:type          "text"
-                                                                    :default-value script
-                                                                    :on-blur       #(rf/dispatch [:settings/edit-script (-> % .-target .-value) idx])
-                                                                    :on-key-down   #(when (= 13 (.-keyCode %))
-                                                                                      (.blur (-> % .-target))
-                                                                                      (rf/dispatch [:settings/edit-script (-> % .-target .-value) idx]))
-                                                                    ;:on-change   #(rf/dispatch [:settings/edit-script (-> % .-target .-value) idx])
-                                                                    }]]
-                                                      [:span.glyphicon.glyphicon-remove {:on-click #(do
-                                                                                                      (.preventDefault %)
-                                                                                                      (rf/dispatch [:settings/remove-script script]))}]]]
-                                                    ])]
-                                                )}))
+  (reagent/create-class
+    {:component-did-mount #(let [el (.getElementById js/document "scripts-box")]
+                             (.create js/Sortable el (clj->js {:animation 150
+                                                               :draggable ".script"
+                                                               :handle    ".glyphicon-align-justify"
+                                                               :onEnd     (fn [^js/SortableOnEndEvent e]
+                                                                            (rf/dispatch [:settings/update-scripts-order
+                                                                                          (.-oldIndex e) (.-newIndex e)]))})))
+     :reagent-render      (fn []
+                            [:div#scripts-box.scripts-box
+                             (for [[idx script] (map-indexed (fn [idx script] [idx script])
+                                                             @(rf/subscribe [:sample/scripts]))]
+                               ^{:key (str script "-" idx)}
+                               [:div.script
+                                [:span.script-box
+                                 [:span.glyphicon.glyphicon-align-justify]
+                                 [:div.in-box
+                                  [:div.input-height-box
+                                   [:span.height-line script]
+                                   [:input.url {:type          "text"
+                                                :default-value script
+                                                :on-blur       #(rf/dispatch [:settings/edit-script (-> % .-target .-value) idx])
+                                                :on-key-down   #(when (= 13 (.-keyCode %))
+                                                                  (.blur (-> % .-target))
+                                                                  (rf/dispatch [:settings/edit-script (-> % .-target .-value) idx]))
+                                                ;:on-change   #(rf/dispatch [:settings/edit-script (-> % .-target .-value) idx])
+                                                }]]
+                                  [:span.glyphicon.glyphicon-remove {:on-click #(do
+                                                                                  (.preventDefault %)
+                                                                                  (rf/dispatch [:settings/remove-script script]))}]]]
+                                ])]
+                            )}))
 
 
 (defn javascript-tab []
