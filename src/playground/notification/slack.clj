@@ -1,7 +1,10 @@
 (ns playground.notification.slack
   (:require [com.stuartsierra.component :as component]
             [cheshire.core :refer [generate-string]]
-            [clj-http.client :as http]))
+            [clj-http.client :as http]
+            [taoensso.timbre :as timbre]
+            [clojure.string :as string]))
+
 
 (defrecord Notifier [config]
   component/Lifecycle
@@ -9,25 +12,46 @@
   (start [this] this)
   (stop [this] this))
 
+
 (defn new-notifier [config]
   (map->Notifier {:config config}))
+
 
 (defn- domain [notifier] (-> notifier :config :domain))
 (defn- prefix [notifier] (-> notifier :config :tag clojure.string/upper-case))
 
+
 (defn- format-exception [e]
   (str e "\n\n" (clojure.string/join "\n" (.getStackTrace e))))
 
+
+(defn console-message [attachments text]
+  (let [atts (map (fn [att]
+                    (str (:text att)
+                         (when (and (:text att) (seq (:fields att))) " | ")
+                         (string/join ", "
+                                      (map
+                                        (fn [field] (str (:title field) ": " (:value field)))
+                                        (:fields att)))))
+                  attachments)]
+    (str "\n" (when text (str text "\n")) (string/join "" atts))))
+
+
 (defn- notify-attach [notifier attachments & [text]]
-  (http/post (str "https://anychart-team.slack.com/services/hooks/incoming-webhook?token="
-                  (-> notifier :config :token))
-             {:form-params
-              {:payload (generate-string
-                          {:text        (or text "")
-                           :attachments attachments
-                           :mrkdwn      true
-                           :channel     (-> notifier :config :channel)
-                           :username    (-> notifier :config :username)})}}))
+  (try
+    (http/post (str "https://anychart-team.slack.com/services/hooks/incoming-webhook?token="
+                    (-> notifier :config :token))
+               {:form-params    {:payload (generate-string
+                                            {:text        (or text "")
+                                             :attachments attachments
+                                             :mrkdwn      true
+                                             :channel     (-> notifier :config :channel)
+                                             :username    (-> notifier :config :username)})}
+                :socket-timeout 5000
+                :conn-timeout   5000})
+    (catch Exception e
+      (timbre/error "Slack notification error:" e)
+      (timbre/info "Slack notification:" (console-message attachments text)))))
 
 
 ;; generator
@@ -49,6 +73,7 @@
                                              :short true})])}]]
     (notify-attach notifier attachments)))
 
+
 (defn complete-building [notifier project branches removed-branches queue-index]
   (let [text (str "#" queue-index " pg `" (prefix notifier) "` - complete")
         attachments [{:color     "#36a64f"
@@ -67,6 +92,7 @@
                                              :value (clojure.string/join ", " removed-branches)
                                              :short true})])}]]
     (notify-attach notifier attachments)))
+
 
 (defn complete-building-with-errors
   ([notifier project branches removed-branches queue-index]
@@ -91,16 +117,19 @@
                                               :short true})])}]]
      (notify-attach notifier attachments))))
 
+
 (defn complete-sync-message [project]
   {:color     "#36a64f"
    :mrkdwn_in ["text", "pretext"]
    :text      (str "Repository *" (:name project) "* synced\n")})
+
 
 (defn complete-sync-error-message [project]
   {:color     "danger"
    :mrkdwn_in ["text", "pretext"]
    :text      (str "Repository *" (:name project) "* synced error\n"
                    "```" (format-exception (:e project)) "```")})
+
 
 (defn complete-sync [notifier projects error-projects]
   (let [text (str "pg `" (prefix notifier) "` - synchronization complete")
