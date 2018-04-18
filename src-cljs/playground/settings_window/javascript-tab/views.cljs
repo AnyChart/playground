@@ -71,6 +71,7 @@
                            :target "_blank"}]]
       [:div.line
        [:select.form-control {:id            "settings-select-bin"
+                              :disabled      @(rf/subscribe [:settings.external-resources/loading])
                               :default-value @(rf/subscribe [:settings.external-resources/selected-resource :binary])
                               :on-change     #(rf/dispatch [:settings.external-resources/binaries-select (-> % .-target .-value)])}
         (for [res @(rf/subscribe [:settings.external-resources/binaries-groups])]
@@ -81,8 +82,10 @@
         ]
        (if @(rf/subscribe [:settings.external-resources/added-js? :binary])
          [:button.ac-btn.remove-btn {:type     "button"
+                                     :disabled @(rf/subscribe [:settings.external-resources/loading])
                                      :on-click #(rf/dispatch [:settings.external-resources/remove-js-by-type :binary])} "Remove"]
          [:button.ac-btn.add-btn {:type     "button"
+                                  :disabled @(rf/subscribe [:settings.external-resources/loading])
                                   :on-click #(rf/dispatch [:settings.external-resources/add-js-by-type :binary])} "Add"])]]
      ]
 
@@ -94,14 +97,17 @@
                            :target "_blank"}]]
       [:div.line
        [:select.form-control {:id            "settings-select-theme"
+                              :disabled      @(rf/subscribe [:settings.external-resources/loading])
                               :default-value @(rf/subscribe [:settings.external-resources/selected-resource :theme])
                               :on-change     #(rf/dispatch [:settings.external-resources/themes-select (-> % .-target .-value)])}
         (for [res @(rf/subscribe [:settings.external-resources/themes])]
           ^{:key res} [:option {:value (:url res)} (:name res)])]
        (if @(rf/subscribe [:settings.external-resources/added-js? :theme])
          [:button.ac-btn.remove-btn {:type     "button"
+                                     :disabled @(rf/subscribe [:settings.external-resources/loading])
                                      :on-click #(rf/dispatch [:settings.external-resources/remove-js-by-type :theme])} "Remove"]
          [:button.ac-btn.add-btn {:type     "button"
+                                  :disabled @(rf/subscribe [:settings.external-resources/loading])
                                   :on-click #(rf/dispatch [:settings.external-resources/add-js-by-type :theme])} "Add"])]]
      ]
 
@@ -112,14 +118,17 @@
                            :target "_blank"}]]
       [:div.line
        [:select.form-control {:id            "settings-select-locale"
+                              :disabled      @(rf/subscribe [:settings.external-resources/loading])
                               :default-value @(rf/subscribe [:settings.external-resources/selected-resource :locale])
                               :on-change     #(rf/dispatch [:settings.external-resources/locales-select (-> % .-target .-value)])}
         (for [res @(rf/subscribe [:settings.external-resources/locales])]
           ^{:key res} [:option {:value (:url res)} (:name res)])]
        (if @(rf/subscribe [:settings.external-resources/added-js? :locale])
          [:button.ac-btn.remove-btn {:type     "button"
+                                     :disabled @(rf/subscribe [:settings.external-resources/loading])
                                      :on-click #(rf/dispatch [:settings.external-resources/remove-js-by-type :locale])} "Remove"]
          [:button.ac-btn.add-btn {:type     "button"
+                                  :disabled @(rf/subscribe [:settings.external-resources/loading])
                                   :on-click #(rf/dispatch [:settings.external-resources/add-js-by-type :locale])} "Add"])]]
      ]
 
@@ -130,10 +139,9 @@
                            :target "_blank"}]]
       [:div.line
        [:select.form-control {:id            "settings-select-map"
+                              :disabled      @(rf/subscribe [:settings.external-resources/loading])
                               :default-value @(rf/subscribe [:settings.external-resources/selected-resource :map])
                               :on-change     #(rf/dispatch [:settings.external-resources/maps-select (-> % .-target .-value)])}
-        ;(for [res external-resources/maps]
-        ;  ^{:key res} [:option {:value (:url res)} (:name res)])
         (for [res @(rf/subscribe [:settings.external-resources/maps-groups])]
           ^{:key (:name res)}
           [:optgroup {:label (:name res)}
@@ -141,7 +149,9 @@
              ^{:key item} [:option {:value (:url item)} (:name item)])])]
        (if @(rf/subscribe [:settings.external-resources/added-js? :map])
          [:button.ac-btn.remove-btn {:type     "button"
+                                     :disabled @(rf/subscribe [:settings.external-resources/loading])
                                      :on-click #(rf/dispatch [:settings.external-resources/remove-js-by-type :map])} "Remove"]
          [:button.ac-btn.add-btn. {:type     "button"
+                                   :disabled @(rf/subscribe [:settings.external-resources/loading])
                                    :on-click #(rf/dispatch [:settings.external-resources/add-js-by-type :map])} "Add"])]]
      ]]])

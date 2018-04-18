@@ -41,3 +41,8 @@
 ;; Resources selected version
 (rf/reg-sub :settings.external-resources/selected-version
             (fn [db _] (-> db :settings :selected-version)))
+
+
+;; are resources being loaded or not at the moment
+(rf/reg-sub :settings.external-resources/loading
+            (fn [db _] (-> db :settings :external-resources :loading)))

@@ -15,6 +15,7 @@
     (let [data (clojure.walk/keywordize-keys data)
           data (parser/data data (-> db :settings :selected-version))]
       (-> db
+          (assoc-in [:settings :external-resources :loading] false)
           (assoc-in [:settings :external-resources :data] data)
           ;; set first default button value
           (assoc-in [:settings :external-resources :binary] (first (-> data :modules :binaries)))
@@ -28,7 +29,7 @@
   :settings.external-resources/on-modules-json-error
   (fn [db [_ data]]
     (js/alert "Can't load modules.json")
-    db))
+    (assoc-in db [:settings :external-resources :loading] false)))
 
 
 (rf/reg-fx
@@ -44,7 +45,8 @@
   :settings.external-resources/init-version
   (fn [{:keys [db]} _]
     (let [version (-> db :settings :selected-version)]
-      {:settings.external-resources/parse-modules-json version})))
+      {:db                                             (assoc-in db [:settings :external-resources :loading] true)
+       :settings.external-resources/parse-modules-json version})))
 
 
 (rf/reg-event-fx
