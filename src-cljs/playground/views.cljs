@@ -105,10 +105,10 @@
        [:ul.dropdown-menu
         {:style {:display (if @(rf/subscribe [:download-menu/show]) "block" "none")}}
         [:li [:a {:href @(rf/subscribe [:sample/download-html-url])}
-              [:img.icon {:src "/icons/editor/download-html.svg"}]
+              [:img.icon.download-icon {:src "/icons/editor/download-html.svg"}]
               "HTML with links"]]
         [:li [:a {:href @(rf/subscribe [:sample/download-zip-url])}
-              [:img.icon {:src "/icons/editor/download-zip.svg"}]
+              [:img.icon.download-icon {:src "/icons/editor/download-zip.svg"}]
               "ZIP with files"]]]]
 
       [:div.search-box
