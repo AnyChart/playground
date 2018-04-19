@@ -8,6 +8,9 @@ SELECT * FROM versions WHERE repo_id = :repo_id;
 -- name: sql-versions-by-repo-name
 SELECT name FROM versions WHERE repo_id = (SELECT id FROM repos WHERE name = :name);
 
+-- name: sql-versions-by-repos-names
+SELECT DISTINCT name FROM versions WHERE repo_id IN (SELECT id FROM repos WHERE name in (:repos_names));
+
 -- name: sql-versions-repos
 SELECT versions.name,
        versions.samples_count,

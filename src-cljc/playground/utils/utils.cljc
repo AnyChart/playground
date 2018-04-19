@@ -1,8 +1,14 @@
 (ns playground.utils.utils
   (:require [clojure.string :as string]))
 
+
 (defn released-version? [version-key]
   (re-matches #"^\d+\.\d+\.\d+$" version-key))
+
+
+(defn filter-released-versions [versions]
+  (filter released-version? versions))
+
 
 (defn replace-urls [version-name scripts]
   (map (fn [script]

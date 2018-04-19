@@ -13,11 +13,11 @@
             [playground.views.editor.editor-page :as editor-view]
             [playground.views.iframe :as iframe-view]
     ;; misc
+            [playground.utils.xml-pretty :as xml-pretty]
+            [playground.data.config :as c]
             [hiccup.core :as hiccup]
             [clojure.java.jdbc :as jdbc]
-            [clojure.string :as string]
-            [taoensso.timbre :as timbre]
-            [playground.utils.xml-pretty :as xml-pretty]))
+            [taoensso.timbre :as timbre]))
 
 ;; =====================================================================================================================
 ;; Samples pages handlers
@@ -30,7 +30,9 @@
         data-sets (db-req/data-sets (get-db request))
         embed-show (or (contains? (-> request :params) :export)
                        (= "export" (-> request :query-string)))
-        versions-names (db-req/versions-by-repo-name (get-db request) {:name "gallery"})
+        versions-names (cond->
+                         (db-req/versions-by-repos-names (get-db request) {:repos-names (db-req/raw-coll (c/repos-for-versions))})
+                         (c/released-versions) (utils/filter-released-versions))
         data {:canonical-url (if editor-view
                                (utils/full-canonical-url-standalone sample)
                                (utils/full-canonical-url sample))
@@ -57,7 +59,6 @@
                                                                  :repo-id (:repo-id sample)}))
                                 (db-req/update-sample-views-from-canonical-visits! conn {:url     (:url sample)
                                                                                          :repo-id (:repo-id sample)})))
-
     (response (editor-view/page data))))
 
 

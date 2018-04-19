@@ -96,8 +96,8 @@
 
 (defn -main [conf-path & args]
   (set-default-charset)
-  (c/set-config {:commit commit})
   (let [conf (read-config conf-path)]
+    (c/set-config (merge {:commit commit} conf))
     (if (= (s/conform ::core-spec/config conf) ::s/invalid)
       (timbre/info "Bad config file!\n" (s/explain-str ::core-spec/config conf))
       (let [sys (case (:mode conf)

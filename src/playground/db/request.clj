@@ -142,6 +142,13 @@
                                                         (map :name versions)))}))
 
 
+(def versions-by-repos-names (sql {:name          sql-versions-by-repos-names
+                                   :row-fn        underscore->dash
+                                   :result-set-fn (fn [versions]
+                                                    (sort (comp - #(version-clj/version-compare %1 %2))
+                                                          (map :name versions)))}))
+
+
 (def versions-repos (sql {:name   sql-versions-repos
                           :row-fn underscore->dash}))
 
