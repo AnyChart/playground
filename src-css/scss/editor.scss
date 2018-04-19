@@ -139,8 +139,9 @@ html {
                 -webkit-mask-image: url(/icons/editor/editor.svg);
               }
               &.icon-download {
-                mask-image: url(/icons/editor/download.svg);
-                -webkit-mask-image: url(/icons/editor/download.svg);
+                mask-image: url(/icons/editor/download2.svg);
+                -webkit-mask-image: url(/icons/editor/download2.svg);
+                transform: rotate(180deg);
                 width: 16px;
               }
             }
