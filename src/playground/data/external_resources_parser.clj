@@ -78,3 +78,20 @@
         s (json/generate-string data)]
     (spit (io/file "/media/ssd/sibental/playground-data/modules-v7.json") s))
   )
+
+
+;;======================================================================================================================
+;; modules.json generator for v8 8.0.0 8.0.1
+;;======================================================================================================================
+(defn go []
+  (let [data1 (json/parse-string (slurp "/media/ssd/sibental/playground-data/MODULES V8 GENERATION/modules-8.1.0.json") true)
+        data2 (json/parse-string (slurp "/media/ssd/sibental/playground-data/MODULES V8 GENERATION/modules-8.0.0.json") true)
+        new-data (assoc data2
+                         :locales (:locales data1)
+                         :geodata (:geodata data1)
+                         )
+        ]
+    (prn (keys data1))
+    (prn (keys data2))
+    (prn (keys new-data))
+    (spit (io/file "/media/ssd/sibental/playground-data/MODULES V8 GENERATION/modules-8.0.0-new.json") (json/generate-string new-data))))
