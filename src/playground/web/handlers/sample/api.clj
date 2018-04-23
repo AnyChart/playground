@@ -121,11 +121,12 @@
 
     :styles (if (seq (:styles sample))
               (:styles sample)
-              ["https://cdn.anychart.com/releases/8.1.0/css/anychart-ui.min.css"])
+              ["https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css"])
 
     :scripts (if (seq (:scripts sample))
                (:scripts sample)
-               ["https://cdn.anychart.com/releases/v8/js/anychart-bundle.min.js" "https://cdn.anychart.com/releases/8.1.0/js/anychart-ui.min.js"])
+               ["https://cdn.anychart.com/releases/v8/js/anychart-bundle.min.js"
+                "https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"])
     :url (:url sample)))
 
 
