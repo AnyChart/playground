@@ -1,7 +1,8 @@
 (ns playground.data.tags
   (:require [clojure.string :as string]
             [clojure.set :as set])
-  #?(:clj  (:require [playground.data.tags-macros :as tags-macros])
+  #?(:clj
+           (:require [playground.data.tags-macros :as tags-macros])
      :cljs (:require-macros [playground.data.tags-macros :as tags-macros])))
 
 (defn original-name->id-name [name]

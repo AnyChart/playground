@@ -57,7 +57,7 @@
     {:chart-types-modules chart-types-modules
      :features-modules    feature-modules
      :bundle-modules      bundle-modules
-     :misc-modules         misc-modules}))
+     :misc-modules        misc-modules}))
 
 (def ^:const all-modules (compose-modules data))
 (def ^:const chart-types-modules (:chart-types-modules all-modules))
