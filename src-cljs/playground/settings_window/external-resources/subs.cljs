@@ -21,7 +21,7 @@
 ;; Selects - get selected item
 (rf/reg-sub :settings.external-resources/selected-resource
             (fn [db [_ type]]
-              (-> db :settings :external-resources type :url)))
+              (or (-> db :settings :external-resources type :url) "")))
 
 
 ;; Selects buttons - is resource added (js/css)

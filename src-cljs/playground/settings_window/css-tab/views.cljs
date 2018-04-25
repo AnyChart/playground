@@ -70,17 +70,20 @@
       [:label {:for "settings-select-bin"} "AnyChart CSS"
        [:a.question-small {:href   "https://docs.anychart.com/Common_Settings/UI_Controls/AnyChart_UI"
                            :target "_blank"}]]
-      [:div.line
-       [:select.form-control {:id            "settings-select-bin"
-                              :disabled      @(rf/subscribe [:settings.external-resources/loading])
-                              :default-value @(rf/subscribe [:settings.external-resources/selected-resource :css])
-                              :on-change     #(rf/dispatch [:settings.external-resources/css-select (-> % .-target .-value)])}
-        (for [res @(rf/subscribe [:settings.external-resources/css])]
-          ^{:key res} [:option {:value (:url res)} (:name res)])]
-       (if @(rf/subscribe [:settings.external-resources/added-css? :css])
-         [:button.ac-btn.remove-btn {:type     "button"
-                                     :disabled @(rf/subscribe [:settings.external-resources/loading])
-                                     :on-click #(rf/dispatch [:settings.external-resources/remove-css-by-type :css])} "Remove"]
-         [:button.ac-btn.add-btn {:type     "button"
-                                  :disabled @(rf/subscribe [:settings.external-resources/loading])
-                                  :on-click #(rf/dispatch [:settings.external-resources/add-css-by-type :css])} "Add"])]]]]])
+      (let [loading @(rf/subscribe [:settings.external-resources/loading])
+            csss @(rf/subscribe [:settings.external-resources/css])
+            disabled (or loading (empty? csss))]
+        [:div.line
+         [:select.form-control {:id        "settings-select-bin"
+                                :disabled  disabled
+                                :value     @(rf/subscribe [:settings.external-resources/selected-resource :css])
+                                :on-change #(rf/dispatch [:settings.external-resources/css-select (-> % .-target .-value)])}
+          (for [res csss]
+            ^{:key res} [:option {:value (:url res)} (:name res)])]
+         (if @(rf/subscribe [:settings.external-resources/added-css? :css])
+           [:button.ac-btn.remove-btn {:type     "button"
+                                       :disabled disabled
+                                       :on-click #(rf/dispatch [:settings.external-resources/remove-css-by-type :css])} "Remove"]
+           [:button.ac-btn.add-btn {:type     "button"
+                                    :disabled disabled
+                                    :on-click #(rf/dispatch [:settings.external-resources/add-css-by-type :css])} "Add"])])]]]])
