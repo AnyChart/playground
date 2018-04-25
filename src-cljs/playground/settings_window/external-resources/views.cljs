@@ -6,9 +6,9 @@
   [:div
    [:div.form-group
     [:label {:for "settings-select-version"} "AnyChart version"]
-    [:select.form-control {:id            "settings-select-version"
-                           :default-value @(rf/subscribe [:settings.external-resources/selected-version])
-                           :on-change     #(rf/dispatch [:settings.external-resources/change-version (-> % .-target .-value)])}
+    [:select.form-control {:id        "settings-select-version"
+                           :value     @(rf/subscribe [:settings.external-resources/selected-version])
+                           :on-change #(rf/dispatch [:settings.external-resources/change-version (-> % .-target .-value)])}
 
 
      (for [v @(rf/subscribe [:settings/versions-names])]

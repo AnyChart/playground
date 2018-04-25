@@ -141,7 +141,6 @@
 
 
 (defn detect-version [scripts]
-  (println scripts)
   (let [bundles (filter (fn [script]
                           (or
                             (string/includes? script "anychart-bundle.min.js")
