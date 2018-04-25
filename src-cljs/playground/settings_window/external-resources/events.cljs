@@ -1,9 +1,9 @@
 (ns playground.settings-window.external-resources.events
   (:require [re-frame.core :as rf]
             [ajax.core :refer [GET POST]]
-            [clojure.string :as string]
             [camel-snake-kebab.core :as kebab]
-            [playground.settings-window.external-resources.parser :as parser]))
+            [playground.settings-window.external-resources.parser :as parser]
+            [playground.tips.tips-data :as tips-data]))
 
 
 ;;======================================================================================================================
@@ -17,6 +17,13 @@
       (-> db
           (assoc-in [:settings :external-resources :loading] false)
           (assoc-in [:settings :external-resources :data] data)
+          (assoc-in [:tips :data] (tips-data/compose-all-data
+                                    (-> data :modules :binaries)
+                                    (-> data :themes)
+                                    (-> data :locales)
+                                    (-> data :geodata :maps)
+                                    (-> data :css)
+                                    (-> db :datasets)))
           ;; set first default button value
           (assoc-in [:settings :external-resources :binary] (first (-> data :modules :binaries)))
           (assoc-in [:settings :external-resources :theme] (first (-> data :themes)))

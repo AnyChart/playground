@@ -20,11 +20,11 @@
           added-tips (reverse
                        (filter (fn [tip-url]
                                  (and
-                                   (some? (tips-data/get-tip tip-url (:data db)))
+                                   (some? (tips-data/get-tip tip-url db))
                                    (every? #(not= % tip-url) hidden-tips)
-                                   (every? #(not= % (:type (tips-data/get-tip tip-url (:data db)))) hidden-types)))
+                                   (every? #(not= % (:type (tips-data/get-tip tip-url db))) hidden-types)))
                                (-> db :tips :queue)))
-          new-tips (distinct (concat (map #(tips-data/get-tip % (:data db)) added-tips)
+          new-tips (distinct (concat (map #(tips-data/get-tip % db) added-tips)
                                      (-> db :tips :current)))]
       (-> db
           (assoc-in [:tips :current] new-tips)

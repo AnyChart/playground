@@ -42,7 +42,7 @@
             (fn [db _]
               (let [scripts (-> db :sample :scripts)
                     scripts-data (->> scripts
-                                      (map #(tips-data/get-tip % (-> db :data)))
+                                      (map #(tips-data/get-tip % db))
                                       (filter some?))]
                 scripts-data)))
 

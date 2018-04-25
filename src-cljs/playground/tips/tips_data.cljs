@@ -68,5 +68,5 @@
     (get-datasets datasets)))
 
 
-(defn get-tip [url all-data]
-  (first (filter #(= url (:url %)) all-data)))
+(defn get-tip [url db]
+  (first (filter #(= url (:url %)) (-> db :tips :data))))
