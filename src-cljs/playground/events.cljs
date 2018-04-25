@@ -5,9 +5,7 @@
             [playground.utils :as js-utils]
             [ajax.core :refer [GET POST]]
     ;[accountant.core :as accountant]
-            [clojure.string :as string]
             [playground.editors.js :as editors-js]
-            [playground.data.external-resources :as external-resources]
             [playground.utils.utils :as common-utils]
             [alandipert.storage-atom :refer [local-storage]]
             [playground.views.iframe :as iframe-view]
@@ -62,8 +60,7 @@
                     :view-menu      {:show false}
                     :create-menu    {:show false}
                     :download-menu  {:show false}
-                    :local-storage  ls
-                    :data           (external-resources/compose-all-data (:datasets data))}
+                    :local-storage  ls}
          :dispatch [:settings.external-resources/init-version]
          }))))
 

@@ -1,13 +1,15 @@
 (ns playground.editors.subs
   (:require [re-frame.core :as rf]
-            [playground.data.external-resources :as external-resources]
-            [playground.utils :as utils]))
+            [playground.tips.tips-data :as tips-data]))
+
 
 (rf/reg-sub :editors/height
             (fn [db _] (-> db :editors :editors-height)))
 
+
 (rf/reg-sub :editors/view
             (fn [db _] (-> db :editors :view)))
+
 
 (rf/reg-sub :editors/splitter-percents
             (fn [db _]
@@ -30,9 +32,9 @@
                                      (< style-percent style-percent-min) style-percent-min
                                      (> style-percent 50) 50
                                      :else style-percent)]
-                ;(utils/log "Calculate percent1: " height markup-lines style-lines)
-                ;(utils/log "Calculate percent3: " markup-percent markup-percent-min markup-percent*)
-                ;(utils/log "Calculate percent3: " style-percent style-percent-min style-percent*)
+                ;(println "Calculate percent1: " height markup-lines style-lines)
+                ;(println "Calculate percent3: " markup-percent markup-percent-min markup-percent*)
+                ;(println "Calculate percent3: " style-percent style-percent-min style-percent*)
                 [markup-percent* style-percent*])))
 
 
@@ -40,13 +42,14 @@
             (fn [db _]
               (let [scripts (-> db :sample :scripts)
                     scripts-data (->> scripts
-                                      (map #(external-resources/get-tip % (-> db :data)))
+                                      (map #(tips-data/get-tip % (-> db :data)))
                                       (filter some?))]
                 scripts-data)))
 
 
 (rf/reg-sub :editors.code-settings/show
             (fn [db _] (-> db :editors :code-settings :show)))
+
 
 (rf/reg-sub :editors/iframe-hider-show
             (fn [db _]
@@ -70,9 +73,11 @@
             (fn [db _]
               (-> db :editors :code :show-copy-button)))
 
+
 (rf/reg-sub :editors/show-style-copy-button
             (fn [db _]
               (-> db :editors :style :show-copy-button)))
+
 
 (rf/reg-sub :editors/show-markup-copy-button
             (fn [db _]
