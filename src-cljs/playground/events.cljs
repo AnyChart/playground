@@ -12,7 +12,8 @@
             [alandipert.storage-atom :refer [local-storage]]
             [playground.views.iframe :as iframe-view]
             [hiccups.runtime :as hiccupsrt]
-            [playground.utils.utils :as utils]))
+            [playground.utils.utils :as utils]
+            [playground.settings-window.external-resources.parser :as external-resources-parser]))
 
 
 (rf/reg-event-fx
@@ -46,7 +47,7 @@
 
                     :settings       {:show             false
                                      :tab              :javascript
-                                     :selected-version "latest"
+                                     :selected-version (external-resources-parser/detect-version (:scripts (:sample data)))
                                      :general-tab      {:tags (map (fn [tag] {:name tag :selected false}) (-> data :sample :tags))}}
                     :embed          {:show    (:embed-show data)
                                      :tab     :embed

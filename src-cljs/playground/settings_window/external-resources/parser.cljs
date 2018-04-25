@@ -9,6 +9,12 @@
     version))
 
 
+(defn url-to-version [url]
+  (case url
+    "v8" "latest"
+    url))
+
+
 (defn get-modules-url [version-url]
   (str "http://cdn.anychart.com/releases/" version-url "/js/modules.json"))
 
@@ -132,3 +138,23 @@
    :geodata (compose-maps data version)
    :modules (compose-modules data version)
    :css     (compose-css version)})
+
+
+(defn detect-version [scripts]
+  (println scripts)
+  (let [bundles (filter (fn [script]
+                          (or
+                            (string/includes? script "anychart-bundle.min.js")
+                            (string/includes? script "anychart-base.min.js")
+                            (string/includes? script "anychart.min.js")
+                            (string/includes? script "anystock.min.js")
+                            (string/includes? script "anygantt.min.js")
+                            (string/includes? script "anymap.min.js")))
+                        scripts)
+        bundle (first bundles)
+        v (if bundle
+            (if (string/starts-with? bundle "https://cdn.anychart.com/releases/")
+              (second (re-find #"https://cdn.anychart.com/releases/([^/]+)/.*" bundle))
+              (second (re-find #"https://cdn.anychart.com/js/([^/]+)/.*" bundle)))
+            "latest")]
+    (url-to-version v)))
