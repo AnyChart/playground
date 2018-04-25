@@ -13,10 +13,20 @@
   (str "http://cdn.anychart.com/releases/" version-url "/js/modules.json"))
 
 
+(defn v8? [version]
+  (string/starts-with? version "8."))
+
+
+(defn v7? [version]
+  (string/starts-with? version "7."))
+
+
 (defn compose-themes [data version]
   (let [themes (:themes data)
         themes (map (fn [[url-name data]]
-                      {:url         (str "https://cdn.anychart.com/releases/" (get-version-url version) "/themes/" (name url-name) ".js")
+                      {:url         (cond
+                                      (v7? version) (str "https://cdn.anychart.com/themes/" version "/" (name url-name) ".js")
+                                      :else (str "https://cdn.anychart.com/releases/" (get-version-url version) "/themes/" (name url-name) ".js"))
                        :name        (:name data)
                        :icon        (:icon data)
                        :description (:desc data)
@@ -35,7 +45,9 @@
                          item
                          {:name (str (:eng-name item) " - " (:native-name item))
                           :js   (name js-name)
-                          :url  (str "https://cdn.anychart.com/releases/" (get-version-url version) "/locales/" (name js-name) ".js")}))
+                          :url  (cond
+                                  (v7? version) (str "https://cdn.anychart.com/locale/1.0.0/" (name js-name) ".js")
+                                  :else (str "https://cdn.anychart.com/releases/" (get-version-url version) "/locales/" (name js-name) ".js"))}))
                      locales)]
     (sort-by :name locales)))
 
@@ -50,8 +62,11 @@
                                 (map (fn [[js item]]
                                        {:js   (name js)
                                         :name (:name item)
-                                        :url  (str "https://cdn.anychart.com/releases/" (get-version-url version) "/geodata/"
-                                                   (name type-name) "/" (name js) "/" (name js) ".js")}))
+                                        :url  (cond
+                                                (v7? version) (str "https://cdn.anychart.com/geodata/1.2.0/"
+                                                                   (name type-name) "/" (name js) "/" (name js) ".js")
+                                                :else (str "https://cdn.anychart.com/releases/" (get-version-url version) "/geodata/"
+                                                           (name type-name) "/" (name js) "/" (name js) ".js"))}))
                                 (sort-by :name))})
                  geodata)
         groups (sort-by :name groups)]
@@ -64,7 +79,9 @@
         modules (map (fn [[url-name data]]
                        {:name          (or (:name data) (str "Unnamed module with ID: " (name url-name)))
                         :description   (:desc data)
-                        :url           (str "https://cdn.anychart.com/releases/" (get-version-url version) "/js/" (name url-name) ".min.js")
+                        :url           (cond
+                                         (v7? version) (str "https://cdn.anychart.com/js/" version "/" (name url-name) ".min.js")
+                                         :else (str "https://cdn.anychart.com/releases/" (get-version-url version) "/js/" (name url-name) ".min.js"))
                         :example       "TODO: modules examples"
                         :internal-type (:type data)})
                      modules)
@@ -98,9 +115,13 @@
 
 
 (defn compose-css [version]
-  (let [css [{:url  (str "https://cdn.anychart.com/releases/" (get-version-url version) "/css/anychart-ui.min.css")
+  (let [css [{:url  (cond
+                      (v7? version) (str "https://cdn.anychart.com/css/" version "/anychart-ui.min.css")
+                      :else (str "https://cdn.anychart.com/releases/" (get-version-url version) "/css/anychart-ui.min.css"))
               :name "AnyChart UI"}
-             {:url  (str "https://cdn.anychart.com/releases/" (get-version-url version) "/fonts/css/anychart-font.min.css")
+             {:url  (cond
+                      (v7? version) (str "https://cdn.anychart.com/css/" version "/anychart-font.min.css")
+                      :else (str "https://cdn.anychart.com/releases/" (get-version-url version) "/fonts/css/anychart-font.min.css"))
               :name "AnyChart Font"}]]
     css))
 
