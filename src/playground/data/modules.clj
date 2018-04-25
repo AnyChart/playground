@@ -1,7 +1,10 @@
 (ns playground.data.modules
   (:require [cheshire.core :as json]
             [clojure.java.io :as io]
-            [playground.data.geodata :as geo]))
+            [playground.data.geodata :as geo]
+            [playground.data.locales :as locales]
+            [clojure.string :as string]
+            [clojure.java.shell :refer [sh]]))
 
 
 ;;======================================================================================================================
@@ -150,6 +153,7 @@
              :anychart        anychart}
    ;:locales {}
    :geodata geo/data
+   :locales locales/data
    :themes  {}
    })
 
@@ -158,6 +162,7 @@
   {:modules {:anychart-bundle bundle
              :anychart        anychart}
    :geodata geo/data
+   :locales locales/data
    :themes  {}
    })
 
@@ -166,6 +171,7 @@
   {:modules {:anychart-bundle bundle
              :anychart        anychart}
    :geodata geo/data
+   :locales locales/data
    :themes  {}
    })
 
@@ -173,6 +179,8 @@
 (def v7-2-0
   {:modules {:anychart-bundle bundle
              :anychart        anychart}
+   :geodata geo/data
+   :locales locales/data
    :themes  {}
    })
 
@@ -182,6 +190,7 @@
              :anychart        anychart
              :anygantt        anygantt}
    :geodata geo/data
+   :locales locales/data
    :themes  {}
    })
 
@@ -191,6 +200,7 @@
              :anychart        anychart
              :anygantt        anygantt}
    :geodata geo/data
+   :locales locales/data
    :themes  {}
    })
 
@@ -200,6 +210,7 @@
              :anychart        anychart
              :anygantt        anygantt}
    :geodata geo/data
+   :locales locales/data
    :themes  {}
    })
 
@@ -208,6 +219,7 @@
   {:modules {:anychart-bundle bundle
              :anychart        anychart}
    :geodata geo/data
+   :locales locales/data
    :themes  {}
    })
 
@@ -217,6 +229,7 @@
              :anychart        anychart
              :anygantt        anygantt}
    :geodata geo/data
+   :locales locales/data
    :themes  {}
    })
 
@@ -225,6 +238,7 @@
   {:modules {:anychart-bundle bundle
              :anychart        anychart}
    :geodata geo/data
+   :locales locales/data
    :themes  {}
    })
 
@@ -235,6 +249,7 @@
              :anygantt        anygantt
              :anymap          anymap}
    :geodata geo/data
+   :locales locales/data
    :themes  themes1
    })
 
@@ -246,6 +261,7 @@
              :anymap          anymap
              :anystock        anystock}
    :geodata geo/data
+   :locales locales/data
    :themes  themes1
    })
 
@@ -256,6 +272,7 @@
              :anymap          anymap
              :anystock        anystock}
    :geodata geo/data
+   :locales locales/data
    :themes  themes1
    })
 
@@ -266,6 +283,7 @@
              :anymap          anymap
              :anystock        anystock}
    :geodata geo/data
+   :locales locales/data
    :themes  themes1
    })
 
@@ -276,6 +294,7 @@
              :anymap          anymap
              :anystock        anystock}
    :geodata geo/data
+   :locales locales/data
    :themes  themes2
    })
 
@@ -289,6 +308,7 @@
 
              :anychart-ui     anychart-ui}
    :geodata geo/data
+   :locales locales/data
    :themes  themes2
    })
 
@@ -301,6 +321,7 @@
 
              :anychart-ui     anychart-ui}
    :geodata geo/data
+   :locales locales/data
    :themes  themes2
    })
 
@@ -313,6 +334,7 @@
 
              :anychart-ui     anychart-ui}
    :geodata geo/data
+   :locales locales/data
    :themes  themes2
    })
 
@@ -327,6 +349,7 @@
              :anychart-ui     anychart-ui
              :data-adapter    data-adapter}
    :geodata geo/data
+   :locales locales/data
    :themes  themes2
    })
 
@@ -341,6 +364,7 @@
              :anychart-ui     anychart-ui
              :data-adapter    data-adapter}
    :geodata geo/data
+   :locales locales/data
    :themes  themes2
    })
 
@@ -356,6 +380,7 @@
              :data-adapter    data-adapter
              :chart-editor    chart-editor}
    :geodata geo/data
+   :locales locales/data
    :themes  themes2
    })
 
@@ -370,6 +395,7 @@
              :data-adapter    data-adapter
              :chart-editor    chart-editor}
    :geodata geo/data
+   :locales locales/data
    :themes  themes2
    })
 
@@ -385,6 +411,7 @@
              :chart-editor    chart-editor
              :graphics        graphics}
    :geodata geo/data
+   :locales locales/data
    :themes  themes2
    })
 
@@ -399,10 +426,11 @@
              :data-adapter    data-adapter
              :chart-editor    chart-editor}
    :geodata geo/data
+   :locales locales/data
    :themes  themes2
    })
 
-(def v7-14-3
+(def v7-14-4
   {:modules {:anychart-bundle bundle
              :anychart        anychart
              :anygantt        anygantt
@@ -413,6 +441,7 @@
              :data-adapter    data-adapter
              :chart-editor    chart-editor}
    :geodata geo/data
+   :locales locales/data
    :themes  themes2
    })
 
@@ -432,11 +461,43 @@
     (catch Exception e (println e))))
 
 
-(defn gdata []
-  (let [data (json/parse-string (slurp "/media/ssd/sibental/playground-data/MODULES V8 GENERATION/modules-8.1.0.json") true)
-        data (:geodata data)
-        ;data (dissoc data :usa_states :canada_states :china_areas)
-        ]
-    (println data)
-    (println (keys data))
-    data))
+(def versions [
+               ["7.0.0" v7-0-0]
+               ["7.1.0" v7-1-0]
+               ["7.1.1" v7-1-1]
+               ["7.2.0" v7-2-0]
+               ["7.3.0" v7-3-0]
+               ["7.3.1" v7-3-1]
+               ["7.4.0" v7-4-0]
+               ["7.4.1" v7-4-1]
+               ["7.5.0" v7-5-0]
+               ["7.5.1" v7-5-1]
+               ["7.6.0" v7-6-0]
+               ["7.7.0" v7-7-0]
+               ["7.8.0" v7-8-0]
+               ["7.9.0" v7-9-0]
+               ["7.9.1" v7-9-1]
+               ["7.10.0" v7-10-0]
+               ["7.10.1" v7-10-1]
+               ["7.11.0" v7-11-1]
+               ["7.11.1" v7-11-1]
+               ["7.12.0" v7-12-0]
+               ["7.13.0" v7-13-0]
+               ["7.13.1" v7-13-1]
+               ["7.14.0" v7-14-0]
+               ["7.14.3" v7-14-3]
+               ["7.14.4" v7-14-4]
+               ])
+
+
+(defn generate-v [v data]
+  (let [data (json/generate-string data)
+        file-name "/media/ssd/sibental/playground-data/MODULES V7 GENERATION/modules.json"]
+    (spit (io/file (str file-name)) data)
+    (println (sh "/bin/bash" "-c" (str "scp \"" file-name "\" root@104.236.0.245:/apps/static/cdn/releases/" v "/js/modules.json")))))
+
+
+(defn generate-all [vs]
+  (doseq [[version data] vs]
+    (generate-v version data)))
+
