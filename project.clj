@@ -18,23 +18,23 @@
                  [com.stuartsierra/component "0.3.2"]
                  [ring-middleware-format "0.7.2"]
                  ;[ring "1.6.0"]
-                 [toml "0.1.2"]
+                 [toml "0.1.3"]
                  [cheshire "5.8.0"]
-                 [compojure "1.6.0"]
+                 [compojure "1.6.1"]
                  [com.taoensso/timbre "4.10.0"]
-                 [clj-http "3.7.0"]
+                 [clj-http "3.8.0"]
                  [version-clj "0.1.2"]
-                 [com.cognitect/transit-clj "0.8.300"]
+                 [com.cognitect/transit-clj "0.8.309"]
                  [org.apache.commons/commons-lang3 "3.7"]
                  [enlive "1.1.6"]
-                 [org.jsoup/jsoup "1.11.2"]
+                 [org.jsoup/jsoup "1.11.3"]
                  [selmer "1.11.7"]
-                 [clj-time "0.14.2"]
+                 [clj-time "0.14.3"]
                  [me.raynes/fs "1.4.6"]
                  [camel-snake-kebab "0.4.0"]
                  [hiccup "1.0.5"]
                  [net.sf.jtidy/jtidy "r938"]
-                 [instaparse "1.4.8"]
+                 [instaparse "1.4.9"]
 
                  ;; db
                  [mpg "1.3.0"]
@@ -42,10 +42,10 @@
                  [clojure.jdbc/clojure.jdbc-c3p0 "0.3.3"]
                  [yesql "0.5.3"]
                  ;[org.clojure/java.jdbc "0.6.1"]
-                 [org.clojure/java.jdbc "0.7.5"]
+                 [org.clojure/java.jdbc "0.7.6"]
                  [mysql/mysql-connector-java "6.0.6"]
                  [com.taoensso/carmine "2.16.0"]
-                 [cc.qbits/spandex "0.6.1"]
+                 [cc.qbits/spandex "0.6.2"]
 
                  ;; crypto
                  [buddy "2.0.0"]
@@ -66,7 +66,7 @@
 
                  ;; front-end
                  [org.clojure/clojurescript "1.9.908"]
-                 [reagent "0.7.0"]
+                 [reagent "0.8.0"]
                  [re-frame "0.10.5"]
                  [re-com "2.1.0"]
                  [alandipert/storage-atom "2.0.1"]
@@ -75,12 +75,12 @@
                  [com.andrewmcveigh/cljs-time "0.5.2"]
                  [hiccups "0.3.0"]
                  [secretary "1.2.3"]
-                 [com.cognitect/transit-cljs "0.8.243"]
-                 [venantius/accountant "0.2.3"]
+                 [com.cognitect/transit-cljs "0.8.256"]
+                 [venantius/accountant "0.2.4"]
 
                  ;; maxcdn dependencies
                  ;; https://mvnrepository.com/artifact/commons-codec/commons-codec
-                 [commons-codec/commons-codec "1.7"]
+                 [commons-codec/commons-codec "1.11"]
                  ;; https://mvnrepository.com/artifact/org.scribe/scribe
                  [org.scribe/scribe "1.3.7"]
                  ;; https://mvnrepository.com/artifact/org.json/json
@@ -94,7 +94,7 @@
          :target-path  "resources/public/css"
          :output-style :compressed}
   :profiles {:dev {:jvm-opts     ["-Dlocal=true"]
-                   :dependencies [[re-frisk "0.5.3"]]}}
+                   :dependencies [[re-frisk "0.5.4"]]}}
   :cljsbuild {:builds [
                        ;; editor
                        {:id           "dev"

@@ -140,6 +140,15 @@
    :css     (compose-css version)})
 
 
+(defn script-version [script]
+  (cond
+    (string/starts-with? script "https://cdn.anychart.com/releases/")
+    (second (re-find #"https://cdn.anychart.com/releases/([^/]+)/.*" script))
+    (string/starts-with? script "https://cdn.anychart.com/js/")
+    (second (re-find #"https://cdn.anychart.com/js/([^/]+)/.*" script))
+    :else nil))
+
+
 (defn detect-version [scripts]
   (let [bundles (filter (fn [script]
                           (or
@@ -152,8 +161,6 @@
                         scripts)
         bundle (first bundles)
         v (if bundle
-            (if (string/starts-with? bundle "https://cdn.anychart.com/releases/")
-              (second (re-find #"https://cdn.anychart.com/releases/([^/]+)/.*" bundle))
-              (second (re-find #"https://cdn.anychart.com/js/([^/]+)/.*" bundle)))
+            (script-version bundle)
             "latest")]
     (url-to-version v)))

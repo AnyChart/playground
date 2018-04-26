@@ -46,6 +46,7 @@
                     :settings       {:show             false
                                      :tab              :javascript
                                      :selected-version (external-resources-parser/detect-version (:scripts (:sample data)))
+                                     :detected-version (external-resources-parser/detect-version (:scripts (:sample data)))
                                      :general-tab      {:tags (map (fn [tag] {:name tag :selected false}) (-> data :sample :tags))}}
                     :embed          {:show    (:embed-show data)
                                      :tab     :embed

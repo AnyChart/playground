@@ -39,8 +39,8 @@
                       (when (and code-editor style-editor markup-editor)
                         (rf/dispatch [:editors/code-width-change (.-offsetWidth code-editor)])
                         (rf/dispatch [:editors/style-width-change (.-offsetWidth style-editor)])
-                        (rf/dispatch [:editors/markup-width-change (.-offsetWidth markup-editor)])))
-                    ) 50)
+                        (rf/dispatch [:editors/markup-width-change (.-offsetWidth markup-editor)]))))
+                  50)
 
   (.addEventListener js/window "resize" (fn [_] (rf/dispatch [:resize-window])))
   ;; for closing code editor context menu
