@@ -2,7 +2,7 @@
   (:require [clojure.string :as string]
             [playground.utils.utils :as common-utils]
             [re-frame.core :as rf]
-            [playground.settings-window.external-resources.parser :as external-resources-parser]))
+            [playground.settings-window.javascript-tab.version-detect :as version-detect]))
 
 
 ;;======================================================================================================================
@@ -12,9 +12,16 @@
   (re-frame.core/->interceptor
     :id :detect-version-interceptor
     :after (fn [context]
-             (let [detected-version (external-resources-parser/detect-version (-> context :effects :db :sample :scripts))]
+             (let [scripts (-> context :effects :db :sample :scripts)
+                   detected-version (version-detect/detect-version scripts)
+                   correct-scripts (version-detect/to-correct-scripts scripts detected-version)
+                   styles (-> context :effects :db :sample :styles)
+                   correct-styles (version-detect/to-correct-styles styles detected-version)]
                ;(println :detecte-version-interceptor detected-version)
-               (assoc-in context [:effects :db :settings :detected-version] detected-version)))))
+               (-> context
+                   (assoc-in [:effects :db :settings :detected-version] detected-version)
+                   (assoc-in [:effects :db :settings :javascript-tab :scripts] correct-scripts)
+                   (assoc-in [:effects :db :settings :css-tab :styles] correct-styles))))))
 
 
 (rf/reg-event-db

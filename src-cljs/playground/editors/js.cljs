@@ -26,12 +26,13 @@
 (defn editors-height []
   (- (window-height)
      58                                                     ; header height
-     70                                                     ; foother height
+     70                                                     ; footer height
      ))
 
 
 (defn init []
   ;; hide or show editors copy buttons
+  ;; TODO: remake it without re-frame pipeline, cause it's pollute re-frisk event history
   (js/setInterval (fn [_]
                     (let [code-editor (.getElementById js/document "code-editor")
                           style-editor (.getElementById js/document "style-editor")

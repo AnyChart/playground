@@ -11,11 +11,13 @@
             [playground.views.iframe :as iframe-view]
             [hiccups.runtime :as hiccupsrt]
             [playground.utils.utils :as utils]
-            [playground.settings-window.external-resources.parser :as external-resources-parser]))
+            [playground.settings-window.javascript-tab.version-detect :as version-detect]
+            [playground.settings-window.javascript-tab.events :refer [detect-version-interceptor]]))
 
 
 (rf/reg-event-fx
   :init
+  [detect-version-interceptor]
   (fn [_ [_ data]]
     (let [default-prefs {:hidden-tips  []
                          :hidden-types []
@@ -45,8 +47,7 @@
 
                     :settings       {:show             false
                                      :tab              :javascript
-                                     :selected-version (external-resources-parser/detect-version (:scripts (:sample data)))
-                                     :detected-version (external-resources-parser/detect-version (:scripts (:sample data)))
+                                     :selected-version (or (version-detect/detect-version (:scripts (:sample data))) "latest")
                                      :general-tab      {:tags (map (fn [tag] {:name tag :selected false}) (-> data :sample :tags))}}
                     :embed          {:show    (:embed-show data)
                                      :tab     :embed

@@ -791,6 +791,14 @@ html {
             margin-left: 10px;
             cursor: pointer;
           }
+          span.glyphicon-warning-sign {
+            position: absolute;
+            right: -25px;
+            top: 3px;
+            color: #df4e69;
+            font-size: 16px;
+            //cursor: pointer;
+          }
           &:hover,
           &:focus-within {
             text-decoration: none;

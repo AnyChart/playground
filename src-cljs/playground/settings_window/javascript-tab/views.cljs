@@ -15,8 +15,8 @@
                                                                                           (.-oldIndex e) (.-newIndex e)]))})))
      :reagent-render      (fn []
                             [:div#scripts-box.scripts-box
-                             (for [[idx script] (map-indexed (fn [idx script] [idx script])
-                                                             @(rf/subscribe [:sample/scripts]))]
+                             (for [[idx {script :script correct :correct}] (map-indexed (fn [idx script] [idx script])
+                                                                                        @(rf/subscribe [:settings.javascript-tab/correct-scripts]))]
                                ^{:key (str script "-" idx)}
                                [:div.script
                                 [:span.script-box
@@ -34,7 +34,13 @@
                                                 }]]
                                   [:span.glyphicon.glyphicon-remove {:on-click #(do
                                                                                   (.preventDefault %)
-                                                                                  (rf/dispatch [:settings/remove-script script]))}]]]
+                                                                                  (rf/dispatch [:settings/remove-script script]))}]]
+                                 (when (not correct)
+                                   [:span.glyphicon.glyphicon-warning-sign
+                                    {:title (str "This AnyChart module has different version and this conflict may lead to fatal errors. "
+                                                 "Fix this or proceed at your own risk.")}])
+
+                                 ]
                                 ])]
                             )}))
 
