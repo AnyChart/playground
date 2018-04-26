@@ -1,7 +1,9 @@
 (ns playground.settings-window.views
   (:require [re-frame.core :as rf]
-            [playground.settings-window.javascript-tab.views :as js-tab-views]
-            [playground.settings-window.css-tab.views :as css-tab-views]))
+            [playground.settings-window.javascript-tab.views :as js-tab-view]
+            [playground.settings-window.css-tab.views :as css-tab-view]
+            [playground.settings-window.datasets-tab.views :as datasets-tab-view]
+            [playground.settings-window.general-tab.views :as general-tab-view]))
 
 
 (defn nav-menu []
@@ -29,123 +31,19 @@
    ])
 
 
-(defn general-tab []
-  [:div.general-tab.content
-   [:div.form-group
-    [:label {:for "settings-name"} "Name"]
-    [:input.form-control {:id            "settings-name"
-                          :default-value @(rf/subscribe [:sample/name])
-                          :on-change     #(rf/dispatch [:settings/change-name (-> % .-target .-value)])}]]
-   [:div.form-group
-    [:label {:for "settings-short-desc"} "Short Description"]
-    [:textarea.form-control {:id        "settings-short-desc"
-                             :value     @(rf/subscribe [:sample/stripped-short-description])
-                             :on-change #(rf/dispatch [:settings/change-short-desc (-> % .-target .-value)])}]]
-   [:div.form-group
-    [:label {:for "settings-desc"} "Description"]
-    [:textarea.form-control {:id        "settings-desc"
-                             :style     {:max-height @(rf/subscribe [:settings.general-tab/description-height])}
-                             :value     @(rf/subscribe [:sample/stripped-description])
-                             :on-change #(rf/dispatch [:settings/change-desc (-> % .-target .-value)])}]]
-   [:div.form-group
-    [:label "Tags"]
-    [:div.tags-box
-     (for [tag @(rf/subscribe [:settings/tags])]
-       ^{:key (:name tag)}
-       [:a.tag {:on-click #(do
-                             ;(rf/dispatch [:settings/select-tag (:name tag)])
-                             (.focus (.getElementById js/document "tags-input")))
-                :class    (when (:selected tag) "selected")}
-        [:span (:name tag)]
-        [:span.glyphicon.glyphicon-remove
-         {:on-click #(rf/dispatch [:settings/remove-tag (:name tag)])}]])
-     [:input.form-control {:id          "tags-input"
-                           :placeholder "Add new tag"
-                           :on-key-down #(do                ;; TODO: move to somewhere else?
-                                           (when (= 13 (.-keyCode %))
-                                             (rf/dispatch [:settings/add-tag (-> % .-target .-value)])
-                                             (set! (-> % .-target .-value) ""))
-                                           (when (and (= 9 (.-keyCode %))
-                                                      (not= (-> % .-target .-value) ""))
-                                             (rf/dispatch [:settings/add-tag (-> % .-target .-value)])
-                                             (set! (-> % .-target .-value) "")
-                                             (.preventDefault %))
-                                           (when (and (= 8 (.-keyCode %))
-                                                      (= (-> % .-target .-value) ""))
-                                             (rf/dispatch [:settings/tags-backspace])))}]]]
-
-   ;[:div.form-inline
-   ; {:style {:padding-right "10px"}}
-   ;
-   ; [:div.form-group
-   ;  [:label {:for "settings-markup-type"} "Markup type"]
-   ;  [:select.form-control {:id            "settings-markupt-type"
-   ;                         :default-value @(rf/subscribe [:markup-type])}
-   ;   [:option "HTML"]
-   ;   [:option "Slim"]
-   ;   [:option "Pug"]]]
-   ;
-   ; [:div.form-group
-   ;  [:label {:for "settings-style-type"} "Style type"]
-   ;  [:select.form-control {:id            "settings-style-type"
-   ;                         :default-value @(rf/subscribe [:style-type])}
-   ;   [:option "CSS"]
-   ;   [:option "Sass"]
-   ;   [:option "LESS"]]]
-   ;
-   ; [:div.form-group
-   ;  [:label {:for "settings-code-type"} "Code type"]
-   ;  [:select.form-control {:id            "settings-code-type"
-   ;                         :default-value @(rf/subscribe [:code-type])}
-   ;   [:option "JavaScript"]
-   ;   [:option "CoffeeScript"]
-   ;   [:option "TypeScript"]]]]
-
-   ])
-
-
-(defn datasets-tab []
-  [:div.datasets-tab.content
-   [:div.row
-    (for [dataset @(rf/subscribe [:datasets])]
-      ^{:key (:name dataset)}
-      [:div.col-sm-4
-       [:div.item
-        [:div.hover-box
-         [:img {:src (:logo dataset)}]
-         [:span.title (:title dataset)]
-         [:p.info (:description dataset)]]
-        [:div.usage-sample-line
-         [:a.usage-sample {:href   (:sample dataset)
-                           :target "_blank"} "Usage Sample"]
-         [:a.question {:href (:sample dataset)}]]
-        (if (:added dataset)
-          [:div.added-label
-           [:span.glyphicon.glyphicon-ok]
-           [:span "Already added"]]
-          [:input.quick-add-btn {:type     "button"
-                                 :value    "Quick Add"
-                                 :on-click #(rf/dispatch [:settings/add-dataset dataset])}])
-        ;(for [tag (:tags dataset)]
-        ;  ^{:key tag} [:span.label.label-primary.tag tag])
-        ]
-       ]
-      )]])
-
-
 (defn settings-window []
   (when @(rf/subscribe [:settings/show])
     [:div.settings-window.hide-outside
      [nav-menu]
 
      (when @(rf/subscribe [:settings/general-tab?])
-       [general-tab])
+       [general-tab-view/general-tab])
 
      (when @(rf/subscribe [:settings/javascript-tab?])
-       [js-tab-views/javascript-tab])
+       [js-tab-view/javascript-tab])
 
      (when @(rf/subscribe [:settings/css-tab?])
-       [css-tab-views/css-tab])
+       [css-tab-view/css-tab])
 
      (when @(rf/subscribe [:settings/datasets-tab?])
-       [datasets-tab])]))
+       [datasets-tab-view/datasets-tab])]))

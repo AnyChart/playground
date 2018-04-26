@@ -2,15 +2,17 @@
   (:require [re-frame.core :as rf]
             [clojure.string :as string]
             [playground.data.tags :as tags-data]
-            [playground.utils.utils :as common-utils]))
+            [playground.utils.utils :as common-utils]
+            [playground.settings-window.external-resources.parser :as external-resources-parser]))
 
 ;;======================================================================================================================
-;; Settings
+;; Settings window
 ;;======================================================================================================================
 (rf/reg-event-db
   :settings/show
   (fn [db _]
     (assoc-in db [:settings :show] true)))
+
 
 (rf/reg-event-db
   :settings/hide
@@ -19,255 +21,26 @@
     (rf/dispatch [:tips/add-from-queue])
     (assoc-in db [:settings :show] false)))
 
+
 (rf/reg-event-db
   :settings/general-tab
   (fn [db _]
     (assoc-in db [:settings :tab] :general)))
+
 
 (rf/reg-event-db
   :settings/javascript-tab
   (fn [db _]
     (assoc-in db [:settings :tab] :javascript)))
 
+
 (rf/reg-event-db
   :settings/css-tab
   (fn [db _]
     (assoc-in db [:settings :tab] :css)))
 
+
 (rf/reg-event-db
   :settings/datasets-tab
   (fn [db _]
     (assoc-in db [:settings :tab] :datasets)))
-
-(rf/reg-event-db
-  :settings/change-name
-  (fn [db [_ name]]
-    (assoc-in db [:sample :name] name)))
-
-(rf/reg-event-db
-  :settings/change-short-desc
-  (fn [db [_ value]]
-    (assoc-in db [:sample :short-description] (common-utils/strip-tags value))))
-
-(rf/reg-event-db
-  :settings/change-desc
-  (fn [db [_ value]]
-    (assoc-in db [:sample :description] (common-utils/strip-tags value))))
-
-(rf/reg-event-db
-  :settings/add-script
-  (fn [db [_ value]]
-    (if (every? #(not= % value) (-> db :sample :scripts))
-      (-> db
-          (update-in [:sample :scripts] #(concat % [value]))
-          (update-in [:tips :queue] conj value))
-      db)))
-
-(rf/reg-event-db
-  :settings/remove-script
-  (fn [db [_ value]]
-    (-> db
-        (update-in [:sample :scripts] (fn [scripts] (remove #(= value %) scripts)))
-        (update-in [:tips :queue] (fn [tips-urls] (remove #(= value %) tips-urls))))))
-
-(rf/reg-event-db
-  :settings/add-style
-  (fn [db [_ value]]
-    (if (every? #(not= % value) (-> db :sample :styles))
-      (-> db
-          (update-in [:sample :styles] #(concat % [value]))
-          (update-in [:tips :queue] conj value))
-      db)))
-
-(rf/reg-event-db
-  :settings/remove-style
-  (fn [db [_ value]]
-    (update-in db [:sample :styles] (fn [styles] (remove #(= value %) styles)))))
-
-
-(rf/reg-event-db
-  :settings/refresh-tags
-  (fn [db _]
-    (let [tags-by-code (tags-data/get-tags-by-code (-> db :sample :code))
-          deleted-tags (-> db :sample :deleted-tags)
-          new-tags (distinct (concat (-> db :sample :tags)
-                                     (vec (clojure.set/difference
-                                            (set tags-by-code)
-                                            (set deleted-tags)))))
-          ;; to set :settings :general-tab :tags
-          settings-tags (-> db :settings :general-tab :tags)
-          new-settings-tags (map (fn [tag-name]
-                                   {:name     tag-name
-                                    :selected (boolean (:selected (first (filter #(= tag-name (:name %)) settings-tags))))})
-                                 new-tags)]
-      (-> db
-          (assoc-in [:sample :tags] new-tags)
-          (assoc-in [:settings :general-tab :tags] new-settings-tags)))))
-
-
-;;======================================================================================================================
-;; General tabs: tags
-;;======================================================================================================================
-(rf/reg-event-db
-  :settings/select-tag
-  (fn [db [_ tag-name]]
-    (-> db
-        (update-in [:settings :general-tab :tags]
-                   (fn [tags]
-                     (map (fn [tag]
-                            (if (= (:name tag) tag-name)
-                              (update tag :selected not)
-                              tag)) tags))))))
-
-(rf/reg-event-fx
-  :settings/tags-backspace
-  (fn [{db :db} _]
-    (let [last-tag (-> db :settings :general-tab :tags last)]
-      (if-not (:selected last-tag)
-        {:dispatch [:settings/select-tag (:name last-tag)]}
-        {:dispatch [:settings/remove-tag (:name last-tag)]}))))
-
-(rf/reg-event-db
-  :settings/remove-tag
-  (fn [db [_ value]]
-    (-> db
-        (update-in [:sample :tags] #(remove (partial = value) %))
-        (update-in [:settings :general-tab :tags] #(remove (fn [tag] (= value (:name tag))) %))
-        ;; add to deleted tags
-        (update-in [:sample :deleted-tags] (fn [del-tags]
-                                             (if (tags-data/anychart-tag? value)
-                                               (distinct (conj del-tags value))
-                                               del-tags))))))
-
-(rf/reg-event-db
-  :settings/add-tag
-  (fn [db [_ value]]
-    (if (every? (partial not= value) (-> db :sample :tags))
-      (-> db
-          (update-in [:sample :tags] concat [value])
-          (update-in [:settings :general-tab :tags] concat [{:name value :selected false}])
-          (update-in [:sample :deleted-tags] (fn [del-tags]
-                                               (remove (partial = value) del-tags))))
-      db)))
-
-
-
-;;======================================================================================================================
-;; Add/remove js
-;;======================================================================================================================
-(rf/reg-event-db
-  :settings.external-resources/add-js-by-type
-  (fn [db [_ type]]
-    (let [url (-> db :settings :external-resources type :url)]
-      (-> db
-          (update-in [:sample :scripts] #(if (or (string/ends-with? url "anychart-bundle.min.js")
-                                                 (string/ends-with? url "anychart-base.min.js")
-                                                 (string/ends-with? url "anychart-core.min.js"))
-                                           ;; add to start, otherwise to end
-                                           (cons url %)
-                                           (concat % [url])))
-          (update-in [:tips :queue] conj url)))))
-
-
-(rf/reg-event-db
-  :settings.external-resources/remove-js-by-type
-  (fn [db [_ type]]
-    (let [url (-> db :settings :external-resources type :url)]
-      (-> db
-          (update-in [:sample :scripts] (fn [scripts] (remove #(= url %) scripts)))
-          (update-in [:tips :queue] (fn [tips-urls] (remove #(= url %) tips-urls)))))))
-
-
-(rf/reg-event-db
-  :settings/edit-script
-  (fn [db [_ val index]]
-    (-> db
-        (update-in [:sample :scripts] (fn [scripts]
-                                        (let [scripts (vec scripts)]
-                                          (assoc scripts index val)))))))
-
-
-(rf/reg-event-db
-  :settings/update-scripts-order
-  (fn [db [_ old-index new-index]]
-    (-> db
-        (update-in [:sample :scripts] #(common-utils/reorder-list % old-index new-index)))))
-
-;;======================================================================================================================
-;; Add/remove css
-;;======================================================================================================================
-(rf/reg-event-db
-  :settings.external-resources/add-css-by-type
-  (fn [db [_ type]]
-    (let [url (-> db :settings :external-resources type :url)]
-      (-> db
-          (update-in [:sample :styles] #(concat % [url]))
-          (update-in [:tips :queue] conj url)))))
-
-
-(rf/reg-event-db
-  :settings.external-resources/remove-css-by-type
-  (fn [db [_ type]]
-    (let [url (-> db :settings :external-resources type :url)]
-      (-> db
-          (update-in [:sample :styles] (fn [scripts] (remove #(= url %) scripts)))
-          (update-in [:tips :queue] (fn [tips-urls] (remove #(= url %) tips-urls)))))))
-
-
-(rf/reg-event-db
-  :settings/edit-style
-  (fn [db [_ val index]]
-    (-> db
-        (update-in [:sample :styles] (fn [styles]
-                                       (let [styles (vec styles)]
-                                         (assoc styles index val)))))))
-
-
-(rf/reg-event-db
-  :settings/update-styles-order
-  (fn [db [_ old-index new-index]]
-    (-> db
-        (update-in [:sample :styles] #(common-utils/reorder-list % old-index new-index)))))
-
-
-;;======================================================================================================================
-;; Data sets
-;;======================================================================================================================
-(defn dataset-added? [dataset code]
-  (> (.indexOf code (:url dataset)) -1))
-
-(rf/reg-event-db
-  :settings/update-datasets
-  (fn [db _]
-    (let [code (-> db :sample :code)
-          datasets (-> db :datasets)
-          updated-datasets (map (fn [dataset]
-                                  (assoc dataset :added (dataset-added? dataset code)))
-                                datasets)]
-      (assoc db :datasets updated-datasets))))
-
-
-(rf/reg-event-fx
-  :settings/add-dataset
-  (fn [{:keys [db]} [_ dataset]]
-    (let [code (.getValue (-> db :editors :code :editor))]
-      (if-not (dataset-added? dataset code)
-        ;; add dataset
-        (do
-          ;; TODO: make event handler clean
-          (.setValue (.getDoc (-> db :editors :code :editor))
-                     (str "anychart.data.loadJsonFile('" (:url dataset) "', function(data) {\n"
-                          "  // use data object has following format\n"
-                          "  // {\n"
-                          "  // name: string,\n"
-                          "  // data: Array\n"
-                          "  // }\n"
-                          "});\n"
-                          code))
-          {:db         (update-in db [:tips :queue] conj (:url dataset))
-           :dispatch-n (list [:settings/update-datasets])})
-        ;; show alert
-        (do
-          ;; TODO: eliminate side-effect
-          (js/alert "Dataset has been already added.")
-          {:db db})))))
