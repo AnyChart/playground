@@ -8,7 +8,8 @@
             [playground.sidemenu.views :as sidemenu]
             [playground.search.views :as search]
             [playground.utils :as utils]
-            [playground.utils.utils :as utils-main]))
+            [playground.utils.utils :as utils-main]
+            [playground.data.consts :as consts]))
 
 
 (defn navbar []
@@ -41,15 +42,19 @@
             [:div.icon.icon-fork]
             [:span "Fork"]]]
 
-      [:li.dropdown
-       [:button.btn.btn-link {:on-click #(do
-                                           (rf/dispatch [:settings/refresh-tags])
-                                           (rf/dispatch [:settings/update-datasets])
-                                           (rf/dispatch [:settings/show]))
-                              :class    (when @(rf/subscribe [:settings/show]) "active")}
-        [:div.icon.icon-settings]
-        [:span "Settings"]
-        [:span.caret]]]
+      (let [show-warning (not @(rf/subscribe [:settings/correct-scripts-styles]))]
+        [:li.dropdown {:title (when show-warning consts/settings-warning)}
+         [:button.btn.btn-link {:on-click #(do
+                                             (rf/dispatch [:settings/refresh-tags])
+                                             (rf/dispatch [:settings/update-datasets])
+                                             (rf/dispatch [:settings/show]))
+                                :class    (when @(rf/subscribe [:settings/show]) "active")}
+          [:div.icon.icon-settings]
+          [:span "Settings"]
+          [:span.caret]
+          (when show-warning
+            [:span.glyphicon.glyphicon-warning-sign])
+          ]])
 
       [:li.dropdown
        [:button.btn.btn-link {:on-click #(rf/dispatch [:embed/show])

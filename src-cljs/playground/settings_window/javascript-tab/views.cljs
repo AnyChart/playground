@@ -1,6 +1,7 @@
 (ns playground.settings-window.javascript-tab.views
   (:require [re-frame.core :as rf]
             [playground.settings-window.external-resources.views :as version-select]
+            [playground.data.consts :as consts]
             [reagent.core :as reagent]))
 
 
@@ -22,7 +23,7 @@
                                 [:span.script-box
                                  [:span.glyphicon.glyphicon-align-justify]
                                  [:div.in-box
-                                  [:div.input-height-box
+                                  [:div.input-height-box {:title (when-not correct consts/script-style-warning)}
                                    [:span.height-line script]
                                    [:input.url {:type          "text"
                                                 :default-value script
@@ -37,9 +38,7 @@
                                                                                   (rf/dispatch [:settings/remove-script script]))}]]
                                  (when (not correct)
                                    [:span.glyphicon.glyphicon-warning-sign
-                                    {:title (str "This AnyChart module has different version and this conflict may lead to fatal errors. "
-                                                 "Fix this or proceed at your own risk.")}])
-
+                                    {:title consts/script-style-warning}])
                                  ]
                                 ])]
                             )}))

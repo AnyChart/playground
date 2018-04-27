@@ -1,7 +1,8 @@
 (ns playground.settings-window.css-tab.views
   (:require [re-frame.core :as rf]
             [reagent.core :as reagent]
-            [playground.settings-window.external-resources.views :as version-select]))
+            [playground.settings-window.external-resources.views :as version-select]
+            [playground.data.consts :as consts]))
 
 
 (defn styles-box []
@@ -22,7 +23,7 @@
                                 [:span.script-box
                                  [:span.glyphicon.glyphicon-align-justify]
                                  [:div.in-box
-                                  [:div.input-height-box
+                                  [:div.input-height-box {:title (when-not correct consts/script-style-warning)}
                                    [:span.height-line style]
                                    [:input.url {:type          "text"
                                                 :default-value style
@@ -37,8 +38,7 @@
                                                                                   (rf/dispatch [:settings/remove-style style]))}]]
                                  (when (not correct)
                                    [:span.glyphicon.glyphicon-warning-sign
-                                    {:title (str "This AnyChart module has different version and this conflict may lead to fatal errors. "
-                                                 "Fix this or proceed at your own risk.")}])
+                                    {:title consts/script-style-warning}])
                                  ]
                                 ])]
                             )}))

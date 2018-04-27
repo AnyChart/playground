@@ -151,6 +151,12 @@ html {
               }
             }
 
+            span.glyphicon-warning-sign {
+              color: $warning-sign-color;
+              margin-top: 2px;
+              margin-left: 4px;
+            }
+
             .search-box {
               display: inline-block;
               position: relative;
@@ -652,7 +658,7 @@ html {
     }
   }
   .remove-btn {
-    background-color: #df4e69;
+    background-color: $red-color;
     &:active {
       background-color: #cf4861;
     }
@@ -795,7 +801,7 @@ html {
             position: absolute;
             right: -25px;
             top: 3px;
-            color: #df4e69;
+            color: $warning-sign-color;
             font-size: 16px;
             //cursor: pointer;
           }

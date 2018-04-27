@@ -29,3 +29,11 @@
 
 
 (rf/reg-sub :settings/versions-names (fn [db _] (cons "latest" (-> db :versions-names))))
+
+
+(rf/reg-sub
+  :settings/correct-scripts-styles
+  (fn [_ _] [(rf/subscribe [:settings.javascript-tab/correct-tab])
+             (rf/subscribe [:settings.css-tab/correct-tab])])
+  (fn [[is-correct-scripts is-correct-styles] _]
+    (and is-correct-scripts is-correct-styles)))
