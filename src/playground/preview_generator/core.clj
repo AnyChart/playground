@@ -85,7 +85,7 @@
 
       (when (seq bad-results)
         (timbre/info "Bad results: " (count bad-results) "/" (count ids))
-        (doseq [er (take 10 result-ids)]
+        (doseq [er (take 10 bad-results)]
           (timbre/info "Bad result: " (:id er) (:url er) (:error er))))
 
       (when (seq result-ids)
