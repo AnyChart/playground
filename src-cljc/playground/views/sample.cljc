@@ -8,24 +8,51 @@
     #?(:clj
             [clj-time.format :as f]
        :cljs
-       [cljs-time.format :as f])))
+       [cljs-time.format :as f])
+            [clojure.string :as string]))
+
 
 (defn date [date]
   #?(:clj  (f/unparse (f/formatter "MMM d") (c/from-sql-date date))
      :cljs (f/unparse (f/formatter "MMM d") (c/to-date-time date))))
 
+
 (defn full-date [date]
   #?(:clj  (f/unparse (f/formatter "MMM d, yyyy") (c/from-sql-date date))
      :cljs (f/unparse (f/formatter "MMM d, yyyy") (c/to-date-time date))))
+
 
 (defn title [sample]
   (str (if (s/blank? (:name sample)) "Sample" (:name sample))
        " created by " (:fullname sample)))
 
+
 (defn image-alt [sample]
   (str (title sample)
        (when (seq (:short-description sample))
          (str ", " (:short-description sample)))))
+
+
+(defn repo-prefix [sample]
+  (when (:version-id sample)
+    (if (= "api" (:repo-name sample))
+      "API"
+      (string/capitalize (:repo-name sample)))
+    ;(first (string/split (:repo-title sample) #" "))
+    ))
+
+
+(defn name-sample [sample]
+  (if (s/blank? (:name sample))
+    "Noname sample"
+    (:name sample)))
+
+
+(defn long-name [sample]
+  (if (:version-id sample)
+    (str (repo-prefix sample) " / " (name-sample sample))
+    (name-sample sample)))
+
 
 (defn sample-landing [sample]
   [:div.col-lg-4.col-md-4.col-sm-6.col-xs-12
@@ -46,7 +73,7 @@
      [:p.name [:a {:target "_blank"
                    :href   (utils/url sample)
                    :title  (title sample)}
-               (if (s/blank? (:name sample)) "Noname sample" (:name sample))]]
+               (long-name sample)]]
      (when (seq (:short-description sample))
        [:p.description
         [:a {:target "_blank"

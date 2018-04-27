@@ -32,7 +32,8 @@
                             (string/includes? script "anychart.min.js")
                             (string/includes? script "anystock.min.js")
                             (string/includes? script "anygantt.min.js")
-                            (string/includes? script "anymap.min.js")))
+                            (string/includes? script "anymap.min.js")
+                            (string/includes? script "graphics.min.js")))
                         scripts)
         bundle (first bundles)
         v (when bundle
