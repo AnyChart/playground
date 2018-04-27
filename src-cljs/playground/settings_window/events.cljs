@@ -1,9 +1,6 @@
 (ns playground.settings-window.events
   (:require [re-frame.core :as rf]
-            [clojure.string :as string]
-            [playground.data.tags :as tags-data]
-            [playground.utils.utils :as common-utils]
-            [playground.settings-window.external-resources.parser :as external-resources-parser]))
+            [playground.modal-window.events :refer [show-modal-warning]]))
 
 ;;======================================================================================================================
 ;; Settings window
@@ -16,6 +13,7 @@
 
 (rf/reg-event-db
   :settings/hide
+  [show-modal-warning]
   (fn [db _]
     ;TODO: eliminate dispatch in event handler
     (rf/dispatch [:tips/add-from-queue])
@@ -24,23 +22,27 @@
 
 (rf/reg-event-db
   :settings/general-tab
+  [show-modal-warning]
   (fn [db _]
     (assoc-in db [:settings :tab] :general)))
 
 
 (rf/reg-event-db
   :settings/javascript-tab
+  [show-modal-warning]
   (fn [db _]
     (assoc-in db [:settings :tab] :javascript)))
 
 
 (rf/reg-event-db
   :settings/css-tab
+  [show-modal-warning]
   (fn [db _]
     (assoc-in db [:settings :tab] :css)))
 
 
 (rf/reg-event-db
   :settings/datasets-tab
+  [show-modal-warning]
   (fn [db _]
     (assoc-in db [:settings :tab] :datasets)))

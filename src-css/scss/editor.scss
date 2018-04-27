@@ -631,39 +631,6 @@ html {
     width: 183px;
   }
 
-  .ac-btn {
-    display: inline-block;
-    border: none;
-    text-transform: uppercase;
-    text-align: center;
-    font-size: 13px;
-    width: 73px;
-    height: 28px;
-    color: white;
-    border-radius: 4px;
-    outline: none;
-    padding: 0;
-    &:hover, &:active, &:focus {
-      text-decoration: none;
-    }
-  }
-  a.ac-btn {
-    line-height: 28px;
-  }
-  .add-btn {
-    background-color: #19a1ce;
-
-    &:active {
-      background-color: #1796bf;
-    }
-  }
-  .remove-btn {
-    background-color: $red-color;
-    &:active {
-      background-color: #cf4861;
-    }
-  }
-
   .question-small {
     &:before {
       content: '?';
@@ -956,7 +923,42 @@ html {
       }
     }
   }
+}
 
+//======================================================================================================================
+//  Buttons
+//======================================================================================================================
+.ac-btn {
+  display: inline-block;
+  border: none;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 13px;
+  width: 73px;
+  height: 28px;
+  color: white;
+  border-radius: 4px;
+  outline: none;
+  padding: 0;
+  &:hover, &:active, &:focus {
+    text-decoration: none;
+  }
+}
+a.ac-btn {
+  line-height: 28px;
+}
+.add-btn {
+  background-color: #19a1ce;
+
+  &:active {
+    background-color: #1796bf;
+  }
+}
+.remove-btn {
+  background-color: $red-color;
+  &:active {
+    background-color: #cf4861;
+  }
 }
 
 //======================================================================================================================
@@ -1099,5 +1101,48 @@ html {
     }
   }
 }
+
+
+.ac-modal {
+  position: fixed;
+  width: 100%;
+  height:100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1001;
+  background-color: #e7edef6b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .ac-modal-dialog {
+    text-align: left;
+    background: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    z-index: 1003;
+    padding: 20px;
+    max-width: 300px;
+    font-size: 12px;
+    margin-top: -40px;
+    .ac-modal-header {
+      padding-bottom: 10px;
+      border-bottom: 1px solid #e5e5e5;
+    }
+    .ac-modal-body {
+      padding: 10px 0;
+    }
+    .ac-modal-footer {
+      padding-top: 15px;
+      text-align: right;
+      border-top: 1px solid #e5e5e5;
+      button.ac-btn.add-btn {
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
 
 @import "editor/standalone";

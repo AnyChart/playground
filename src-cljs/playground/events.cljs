@@ -62,6 +62,7 @@
                     :view-menu      {:show false}
                     :create-menu    {:show false}
                     :download-menu  {:show false}
+                    :modal          {:show false}
                     :local-storage  ls}
          :dispatch [:settings.external-resources/init-version]
          }))))

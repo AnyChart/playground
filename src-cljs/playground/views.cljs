@@ -9,7 +9,8 @@
             [playground.search.views :as search]
             [playground.utils :as utils]
             [playground.utils.utils :as utils-main]
-            [playground.data.consts :as consts]))
+            [playground.data.consts :as consts]
+            [playground.modal-window.views :as modal-view]))
 
 
 (defn navbar []
@@ -192,4 +193,5 @@
    [tips/tips]
    [settings-window/settings-window]
    [export-window/export-window]
-   [sidemenu/view]])
+   [sidemenu/view]
+   [modal-view/window]])
