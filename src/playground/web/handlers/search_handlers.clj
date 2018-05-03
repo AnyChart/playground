@@ -5,7 +5,8 @@
             [playground.db.elastic :as elastic]
             [taoensso.timbre :as timbre]
             [playground.db.request :as db-req]
-            [playground.views.search.search-page :as search-view]))
+            [playground.views.search.search-page :as search-view]
+            [clojure.string :as string]))
 
 
 (defn search-page [request]
@@ -34,3 +35,17 @@
         end (<= (- (:total result) offset) samples-per-page)
         result (assoc result :end end)]
     (response result)))
+
+
+(defn search-hints [request]
+  (response (:all-tags (get-app-data request))))
+
+
+;(defn search-hints-by-query [request]
+;  (let [q (-> request :params :q)
+;        hints (sort (map :name (:all-tags (get-app-data request))))
+;        hints (take 30 (filter (fn [hint]
+;                                 (string/includes? (string/lower-case hint)
+;                                                   (string/lower-case (string/trim q))))
+;                               hints))]
+;    (response hints)))

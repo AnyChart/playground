@@ -4,4 +4,6 @@
 
 (rf/reg-sub :search/show (fn [db _] (-> db :search :show)))
 
-(rf/reg-sub :search/results (fn [db _] (-> db :search :results)))
+;(rf/reg-sub :search/results (fn [db _] (-> db :search :results)))
+
+(rf/reg-sub :search/query-hints (fn [db _] (-> db :search :query-hints)))

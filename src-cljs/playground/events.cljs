@@ -15,6 +15,9 @@
             [playground.settings-window.javascript-tab.events :refer [detect-version-interceptor]]))
 
 
+;;======================================================================================================================
+;; Init
+;;======================================================================================================================
 (rf/reg-event-fx
   :init
   [detect-version-interceptor]
@@ -33,39 +36,42 @@
       (when-not (-> data :sample :version-id)
         (.replaceState (.-history js/window) nil nil (utils/sample-url-with-version (:sample data))))
       (let [view (or (:view data) (:view @ls) :right)]
-        {:db       {:editors        {:editors-height (editors-js/editors-height)
-                                     :view           view
-                                     :code-settings  {:show false}
-                                     :iframe-update  0}
+        {:db         {:editors        {:editors-height (editors-js/editors-height)
+                                       :view           view
+                                       :code-settings  {:show false}
+                                       :iframe-update  0}
 
-                    :sample         (:sample data)
-                    :saved-sample   (:sample data)
-                    :templates      (:templates data)
-                    :user           (:user data)
-                    :datasets       (:datasets data)
-                    :versions-names (:versions-names data)
+                      :sample         (:sample data)
+                      :saved-sample   (:sample data)
+                      :templates      (:templates data)
+                      :user           (:user data)
+                      :datasets       (:datasets data)
+                      :versions-names (:versions-names data)
 
-                    :settings       {:show             false
-                                     :tab              :javascript
-                                     :selected-version (or (version-detect/detect-version (:scripts (:sample data))) "latest")
-                                     :general-tab      {:tags (map (fn [tag] {:name tag :selected false}) (-> data :sample :tags))}}
-                    :embed          {:show    (:embed-show data)
-                                     :tab     :embed
-                                     :sub-tab :html
-                                     :props   {:id     (common-utils/embed-name (-> data :sample))
-                                               :class  "anychart-embed"
-                                               :width  "600px"
-                                               :height "450px"}}
-                    :tips           {:current []
-                                     :queue   []}
-                    :left-menu      {:show false}
-                    :view-menu      {:show false}
-                    :create-menu    {:show false}
-                    :download-menu  {:show false}
-                    :modal          {:show false}
-                    :local-storage  ls}
-         :dispatch [:settings.external-resources/init-version]
-         }))))
+                      :settings       {:show             false
+                                       :tab              :javascript
+                                       :selected-version (or (version-detect/detect-version (:scripts (:sample data))) "latest")
+                                       :general-tab      {:tags (map (fn [tag] {:name tag :selected false}) (-> data :sample :tags))}}
+                      :embed          {:show    (:embed-show data)
+                                       :tab     :embed
+                                       :sub-tab :html
+                                       :props   {:id     (common-utils/embed-name (-> data :sample))
+                                                 :class  "anychart-embed"
+                                                 :width  "600px"
+                                                 :height "450px"}}
+                      :tips           {:current []
+                                       :queue   []}
+                      :left-menu      {:show false}
+                      :view-menu      {:show false}
+                      :create-menu    {:show false}
+                      :download-menu  {:show false}
+                      :modal          {:show false}
+                      :search         {:show        false
+                                       :hints       []
+                                       :query-hints []}
+                      :local-storage  ls}
+         :dispatch-n [[:settings.external-resources/init-version]
+                      [:search-hints-request]]}))))
 
 
 (rf/reg-event-fx
@@ -85,6 +91,7 @@
   (fn [db [_ type code]]
     (assoc-in db [:sample type] code)))
 
+
 (rf/reg-fx
   :update-iframe
   (fn [sample]
@@ -94,10 +101,12 @@
       (.write doc html)
       (.close doc))))
 
+
 (rf/reg-event-fx
   :run
   (fn [{db :db} _]
     {:update-iframe (-> db :sample)}))
+
 
 (rf/reg-event-fx
   :click-run
@@ -106,6 +115,10 @@
       {:dispatch [:view/editor]}
       {:db (update-in db [:editors :iframe-update] inc)})))
 
+
+;;======================================================================================================================
+;; Save sample
+;;======================================================================================================================
 (rf/reg-event-db
   :save
   (fn [db _]
@@ -116,6 +129,7 @@
            :handler       #(rf/dispatch [:save-response %1])
            :error-handler #(rf/dispatch [:save-error %1])})
     db))
+
 
 (rf/reg-event-fx
   :save-response
@@ -133,6 +147,7 @@
       {:db       db
        :dispatch [:save-error "bad status"]})))
 
+
 (rf/reg-event-db
   :save-error
   (fn [db [_ error]]
@@ -141,6 +156,9 @@
     db))
 
 
+;;======================================================================================================================
+;; Fork sample
+;;======================================================================================================================
 (rf/reg-event-db
   :fork
   (fn [db _]
@@ -152,6 +170,7 @@
            :handler       #(rf/dispatch [:fork-response %1])
            :error-handler #(rf/dispatch [:fork-error %1])})
     db))
+
 
 (rf/reg-event-fx
   :fork-response
@@ -169,6 +188,7 @@
       {:db       db
        :dispatch [:fork-error "bad status"]})))
 
+
 (rf/reg-event-db
   :fork-error
   (fn [db [_ error]]
@@ -176,6 +196,35 @@
     (js/alert "Fork error!")
     db))
 
+
+;;======================================================================================================================
+;; Search hints request
+;;======================================================================================================================
+(rf/reg-event-db
+  :search-hints-request
+  (fn [db _]
+    (GET "/search-hints"
+         {:handler       #(rf/dispatch [:search-hints-request-response %1])
+          :error-handler #(rf/dispatch [:search-hints-request-error %1])})
+    db))
+
+
+(rf/reg-event-db
+  :search-hints-request-response
+  (fn [db [_ data]]
+    (assoc-in db [:search :hints] (sort (map :name data)))))
+
+
+(rf/reg-event-db
+  :search-hints-request-error
+  (fn [db [_ error]]
+    (js-utils/log "Search hints request error" error)
+    db))
+
+
+;;======================================================================================================================
+;; Misc
+;;======================================================================================================================
 (rf/reg-event-db :sync-saved-sample
                  (fn [db _]
                    (assoc db :saved-sample (:sample db))))
@@ -185,12 +234,15 @@
 (rf/reg-event-db :view-menu/close (fn [db _] (assoc-in db [:view-menu :show] false)))
 (rf/reg-event-db :view-menu/show (fn [db _] (assoc-in db [:view-menu :show] true)))
 
+
 (rf/reg-event-db :create-menu/toggle (fn [db _] (update-in db [:create-menu :show] not)))
 (rf/reg-event-db :create-menu/close (fn [db _] (assoc-in db [:create-menu :show] false)))
 (rf/reg-event-db :create-menu/show (fn [db _] (assoc-in db [:create-menu :show] true)))
 
+
 (rf/reg-event-db :download-menu/show (fn [db _] (assoc-in db [:download-menu :show] true)))
 (rf/reg-event-db :download-menu/close (fn [db _] (assoc-in db [:download-menu :show] false)))
+
 
 ;;======================================================================================================================
 ;; Effects

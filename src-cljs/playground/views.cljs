@@ -117,13 +117,7 @@
               [:img.icon.download-icon {:src "/icons/editor/download-zip.svg"}]
               "ZIP with files"]]]]
 
-      [:div.search-box
-       [:input#search-input.search {:type        "text"
-                                    :placeholder "Search"
-                                    :on-key-down #(when (= 13 (.-keyCode %))
-                                                    (rf/dispatch [:search/search (-> % .-target .-value)]))}]
-       [:span.glyphicon.glyphicon-search]
-       [search/search-window]]
+      [search/search-input]
       ]]
 
     [:ul.nav.navbar-nav.navbar-right

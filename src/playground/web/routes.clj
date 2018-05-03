@@ -215,6 +215,8 @@
                                  mw/base-page-middleware))
            (POST "/search" [] (-> search-handlers/search
                                   mw/pagination-page-middleware))
+           (GET "/search-hints" [] (-> search-handlers/search-hints
+                                       mw/all-tags-middleware))
 
            ;; projects samples
            (GET "/:repo/:version/*" [] (-> sample-handlers/show-sample-editor mw/repo-sample))
