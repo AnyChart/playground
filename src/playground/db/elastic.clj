@@ -328,7 +328,7 @@
                                                    {:match {:short-description q}}]}})}}))
 
 
-(defn search [q conf]
+(defn search [conf q offset size]
   (try
     (let [data (parse q)
           ;_ (prn "Data: " data)
@@ -337,7 +337,9 @@
           conn (get-connection conf)
           data (s/request conn {:url    [(:index conf) (:type conf) :_search]
                                 :method :post
-                                :body   {:size 30 :query query}})
+                                :body   {:size  size
+                                         :from  offset
+                                         :query query}})
           hits (:hits (:body data))
           total (:total hits)
           samples (map (fn [hit]
@@ -346,7 +348,9 @@
           ;samples (map #(select-keys % [:name :tags]) samples)
           ]
       (timbre/info "Search - Total:" total ", Max Score:" (:max_score hits))
-      samples)
+      ;(println :elastic (:body data))
+      {:samples samples
+       :total   total})
     (catch Exception e (timbre/error "Search error:" (pr-str e)))))
 
 

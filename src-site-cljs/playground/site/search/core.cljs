@@ -9,7 +9,7 @@
 
 
 (defn on-load-search-results [data]
-  (let [samples data]
+  (let [samples (:samples data)]
     (.log js/console data)
 
     (style/setElementShown (dom/getElement "search-results-box") true)
@@ -21,11 +21,16 @@
             "Nothing found"))))
 
 
+(defn make-hint-request [q]
+  ;(GET "/search"
+  ;      {:params        {:q q}
+  ;       :handler       on-load-search-results
+  ;       :error-handler #(utils/log "Error!" %)})
+  )
+
+
 (defn make-search-request [q]
-  (POST "/search"
-        {:params        {:q q}
-         :handler       on-load-search-results
-         :error-handler #(utils/log "Error!" %)}))
+  (set! (.-href (.-location js/document)) (str "/search?q=" q)))
 
 
 (defn hide-all-menus [e]
@@ -38,7 +43,6 @@
     (event/listen input "keydown" (fn [e]
                                     (when (= (.-keyCode e) 13)
                                       (make-search-request (.-value input))))))
-
   (event/listen js/window "click" hide-all-menus))
 
 

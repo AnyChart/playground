@@ -13,12 +13,16 @@
 
 
 (defn date [date]
-  #?(:clj  (f/unparse (f/formatter "MMM d") (c/from-sql-date date))
+  #?(:clj  (f/unparse (f/formatter "MMM d") (cond
+                                              (string? date) (c/from-string date)
+                                              :else (c/from-sql-date date)))
      :cljs (f/unparse (f/formatter "MMM d") (c/to-date-time date))))
 
 
 (defn full-date [date]
-  #?(:clj  (f/unparse (f/formatter "MMM d, yyyy") (c/from-sql-date date))
+  #?(:clj  (f/unparse (f/formatter "MMM d, yyyy") (cond
+                                                    (string? date) (c/from-string date)
+                                                    :else (c/from-sql-date date)))
      :cljs (f/unparse (f/formatter "MMM d, yyyy") (c/to-date-time date))))
 
 

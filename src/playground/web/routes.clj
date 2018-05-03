@@ -210,7 +210,11 @@
                                                   mw/check-repo-middleware
                                                   mw/base-page-middleware))
 
-           (POST "/search" [] search-handlers/search)
+           (GET "/search" [] (-> search-handlers/search-page
+                                 mw/pagination-page-middleware
+                                 mw/base-page-middleware))
+           (POST "/search" [] (-> search-handlers/search
+                                  mw/pagination-page-middleware))
 
            ;; projects samples
            (GET "/:repo/:version/*" [] (-> sample-handlers/show-sample-editor mw/repo-sample))
