@@ -1,6 +1,7 @@
 (ns playground.search.views
   (:require [re-frame.core :as rf]
             [playground.views.search :as search-views]
+            [goog.dom :as dom]
             [clojure.string :as string]))
 
 
@@ -15,23 +16,31 @@
           [search-views/hint hint])]])))
 
 
+(defn start-search [q]
+  (let [q (string/trim q)]
+    (when (seq q)
+      (.open js/window (str "/search?q=" q) "_blank"))))
+
+
 (defn search-input []
   [:div.search-box
    [:input#search-input.search {:type        "text"
                                 :placeholder "Search"
+                                :value       @(rf/subscribe [:search/query])
+                                :on-change   #(rf/dispatch [:search/change-query (-> % .-target .-value)])
                                 :on-key-down #(let [q (-> % .-target .-value)]
-                                                (when (and (= 13 (.-keyCode %))
-                                                           (seq q))
-                                                  ;(rf/dispatch [:search/search q])
-                                                  (.open js/window (str "/search?q=" (string/trim q)) "_blank")))
-                                :on-key-up   #(let [q (-> % .-target .-value)]
+                                                (when (= 13 (.-keyCode %))
+                                                  (start-search q)))
+                                :on-key-up   #(let [q (string/trim (-> % .-target .-value))]
                                                 (if (and (not= 13 (.-keyCode %))
-                                                         (> (count q) 1))
+                                                         (pos? (count q)))
                                                   (rf/dispatch [:search/show-hints q])
                                                   (rf/dispatch [:search/hide-hints])))
-                                :on-click    #(let [q (-> % .-target .-value)]
+                                :on-click    #(let [q (string/trim (-> % .-target .-value))]
                                                 (.stopPropagation %)
-                                                (when (> (count q) 1)
+                                                (when (pos? (count q))
                                                   (rf/dispatch [:search/show-hints q])))}]
-   [:span.glyphicon.glyphicon-search]
+   [:span#search-input-icon.glyphicon.glyphicon-search {:on-click
+                                                        #(let [q (.-value (dom/getElement "search-input"))]
+                                                           (start-search q))}]
    [search-window]])

@@ -59,21 +59,25 @@
 (defn init []
   (let [input (dom/getElement "search-input")]
     (event/listen input "keydown" (fn [e]
-                                    (let [q (-> e .-target .-value)]
+                                    (let [q (string/trim (-> e .-target .-value))]
                                       (when (and (= (.-keyCode e) 13)
                                                  (seq q))
                                         (make-search-request q)))))
     (event/listen input "keyup" (fn [e]
-                                  (let [q (-> e .-target .-value)]
+                                  (let [q (string/trim (-> e .-target .-value))]
                                     (if (and (not= (.-keyCode e) 13)
-                                             (> (count q) 1))
+                                             (pos? (count q)))
                                       (show-hints q)
                                       (hide-hints)))))
     (event/listen input "click" (fn [e]
-                                  (let [q (-> e .-target .-value)]
+                                  (let [q (string/trim (-> e .-target .-value))]
                                     (.stopPropagation e)
-                                    (when (> (count q) 1)
-                                      (show-hints q))))))
+                                    (when (pos? (count q))
+                                      (show-hints q)))))
+    (event/listen (dom/getElement "search-input-icon") "click" (fn [e]
+                                                                 (let [q (string/trim (.-value input))]
+                                                                   (when (seq q)
+                                                                     (make-search-request q))))))
   (GET "/search-hints"
        {:handler       #(let [hints (sort (map :name %))]
                           (reset! *hints hints))

@@ -190,7 +190,8 @@ html {
                 position: absolute;
                 right: 0;
                 padding: 10px;
-                pointer-events: none;
+                //pointer-events: none;
+                cursor: pointer;
               }
               #search-results-box.results {
                 z-index: 2;

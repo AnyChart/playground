@@ -186,7 +186,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
          [:input#search-input.search {:type        "text"
                                       :placeholder "Search"
                                       :value       (or q "")}]
-         [:span.glyphicon.glyphicon-search]
+         [:span#search-input-icon.glyphicon.glyphicon-search]
          [:div#search-results-box.results {:style "display:none;"}
           [:div#search-results]]]
 

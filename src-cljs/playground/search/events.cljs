@@ -41,6 +41,22 @@
 
 
 (rf/reg-event-db
+  :search/change-query
+  (fn [db [_ query]]
+    (assoc-in db [:search :query] query)))
+
+
+;(rf/reg-event-db
+;  :search/start-search
+;  (fn [db _]
+;    (let [q (string/trim (-> db :search :query))]
+;      (when (seq q)
+;        (println :start-search q)
+;        (.open js/window (str "/search?q=" (string/trim q)) "_blank"))
+;      db)))
+
+
+(rf/reg-event-db
   :search/hide-hints
   (fn [db _]
     (-> db
