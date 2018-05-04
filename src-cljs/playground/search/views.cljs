@@ -1,8 +1,15 @@
 (ns playground.search.views
   (:require [re-frame.core :as rf]
-            [playground.views.search :as search-views]
             [goog.dom :as dom]
             [clojure.string :as string]))
+
+
+(defn hint-view [hint-query]
+  [:div.search-result
+   [:a {:href   (str "/search?q=" hint-query)
+        :target "_blank"
+        :title  hint-query}
+    hint-query]])
 
 
 (defn search-window []
@@ -13,7 +20,7 @@
        [:div#search-results
         (for [hint hints]
           ^{:key hint}
-          [search-views/hint hint])]])))
+          [hint-view hint])]])))
 
 
 (defn start-search [q]

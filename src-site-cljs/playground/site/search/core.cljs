@@ -4,12 +4,18 @@
             [goog.events :as event]
             [goog.style :as style]
             [playground.site.utils :as utils]
-            [playground.views.search :as search-view]
             [ajax.core :refer [GET POST]]
             [clojure.string :as string]))
 
 
 (def *hints (atom []))
+
+
+(defn hint-view [hint-query]
+  [:div.search-result
+   [:a {:href   (str "/search?q=" hint-query)
+        :title  hint-query}
+    hint-query]])
 
 
 ;(defn on-load-search-results [data]
@@ -47,13 +53,20 @@
         (dom/removeChildren (dom/getElement "search-results"))
         (set! (.-innerHTML (.getElementById js/document "search-results"))
               (if (pos? (count hints))
-                (apply str (map #(-> % search-view/hint h/html) hints))
+                (apply str (map #(-> % hint-view h/html) hints))
                 "Nothing found")))
       (hide-hints))))
 
 
 (defn make-search-request [q]
-  (set! (.-href (.-location js/document)) (str "/search?q=" q)))
+  (let [q (string/trim q)
+        on-search-page (= "/search" (.-pathname js/location))]
+    (when (seq q)
+      (set! (.-href (.-location js/document)) (str "/search?q=" q))
+      ;(if on-search-page
+      ;  (set! (.-href (.-location js/document)) (str "/search?q=" q))
+      ;  (.open js/window (str "/search?q=" q) "_blank"))
+      )))
 
 
 (defn init []
