@@ -46,8 +46,8 @@
 
 (defn javascript-tab []
   [:div.javascript-tab.content
-   [:p.section-label "Scripts"
-    [:span.question-small {:title "Add any script, drag to change the order, click to edit the path."}]]
+   [:p.section-label {:title consts/scripts-title} "Scripts"
+    [:span.question-small]]
    [scripts-box]
 
    [:div.line

@@ -1,6 +1,14 @@
 (ns playground.data.consts)
 
 
+(def ^:const scripts-title
+  "Add any script, drag to change the order, click to edit the path.")
+
+
+(def ^:const styles-title
+  "Add any CSS, drag to change the order, click to edit the path.")
+
+
 (def ^:const script-style-warning
   (str "This AnyChart module has different version and this conflict may lead to fatal errors. "
        "Fix this or proceed at your own risk."))

@@ -47,8 +47,8 @@
 (defn css-tab []
   [:div.javascript-tab.css-tab.content
 
-   [:p.section-label "Styles"
-    [:span.question-small {:title "Add any CSS, drag to change the order, click to edit the path."}]]
+   [:p.section-label {:title consts/styles-title} "Styles"
+    [:span.question-small]]
    [styles-box]
 
    [:div.line
