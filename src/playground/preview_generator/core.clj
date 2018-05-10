@@ -10,7 +10,8 @@
             [playground.db.request :as db-req]
             [com.climate.claypoole :as cp]
             [clojure.string :as string]
-            [playground.utils.utils :as utils])
+            [playground.utils.utils :as utils]
+            [playground.preview-generator.download :as download])
   (:import (com.maxcdn MaxCDN)))
 
 
@@ -71,6 +72,7 @@
                                          (-> samples first :name)
                                          (count ids)))
     (fs/mkdirs (-> generator :conf :images-dir))
+    (download/clear)
     (let [
           ;result (doall (pmap #(phantom/generate-img (-> generator :conf :phantom-engine)
           ;                                           (-> generator :conf :generator)
