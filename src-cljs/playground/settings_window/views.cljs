@@ -3,7 +3,8 @@
             [playground.settings-window.javascript-tab.views :as js-tab-view]
             [playground.settings-window.css-tab.views :as css-tab-view]
             [playground.settings-window.datasets-tab.views :as datasets-tab-view]
-            [playground.settings-window.general-tab.views :as general-tab-view]))
+            [playground.settings-window.general-tab.views :as general-tab-view]
+            [playground.data.consts :as consts]))
 
 
 (defn nav-menu []
@@ -13,15 +14,25 @@
          :role     "button"
          :on-click #(rf/dispatch [:settings/general-tab])} "General"]]
 
-   [:li {:class (when @(rf/subscribe [:settings/javascript-tab?]) "active")}
-    [:a {:href     "javascript:;"
-         :role     "button"
-         :on-click #(rf/dispatch [:settings/javascript-tab])} "JavaScript"]]
+   (let [correct @(rf/subscribe [:settings.javascript-tab/correct-tab])]
+     [:li {:class (when @(rf/subscribe [:settings/javascript-tab?]) "active")}
+      [:a {:href     "javascript:;"
+           :role     "button"
+           :title    (when-not correct consts/settings-warning)
+           :on-click #(rf/dispatch [:settings/javascript-tab])}
+       "JavaScript"
+       (when-not correct
+         [:span.glyphicon.glyphicon-warning-sign])]])
 
-   [:li {:class (when @(rf/subscribe [:settings/css-tab?]) "active")}
-    [:a {:href     "javascript:;"
-         :role     "button"
-         :on-click #(rf/dispatch [:settings/css-tab])} "CSS"]]
+   (let [correct @(rf/subscribe [:settings.css-tab/correct-tab])]
+     [:li {:class (when @(rf/subscribe [:settings/css-tab?]) "active")}
+      [:a {:href     "javascript:;"
+           :role     "button"
+           :title    (when-not correct consts/settings-warning)
+           :on-click #(rf/dispatch [:settings/css-tab])}
+       "CSS"
+       (when-not correct
+         [:span.glyphicon.glyphicon-warning-sign])]])
 
    ;; TODO: wait datasests texts
    ;[:li {:class (when @(rf/subscribe [:settings/datasets-tab?]) "active")}

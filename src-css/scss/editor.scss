@@ -570,6 +570,11 @@ html {
         background-color: #c2eaf7;
         border: none;
       }
+      span.glyphicon-warning-sign {
+        margin-left: 4px;
+        color: $warning-sign-color;
+        font-size: 15px;
+      }
     }
     li:last-child > a {
       margin-right: 0;

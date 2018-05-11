@@ -99,19 +99,19 @@
      :features-modules    feature-modules
      :bundle-modules      bundle-modules
      :misc-modules        misc-modules
-     :binaries-groups     [{:name  "Chart Types"
-                            :type  :chart-type
-                            :items chart-types-modules}
-                           {:name  "Features"
-                            :type  :feature
-                            :items feature-modules}
-                           {:name  "Bundles"
+     :binaries-groups     [{:name  "Bundles"
                             :type  :bundle
                             :items bundle-modules}
                            {:name  "Misc"
                             :type  :misc
-                            :items misc-modules}]
-     :binaries            (concat chart-types-modules feature-modules bundle-modules misc-modules)}))
+                            :items misc-modules}
+                           {:name  "Chart Types"
+                            :type  :chart-type
+                            :items chart-types-modules}
+                           {:name  "Features"
+                            :type  :feature
+                            :items feature-modules}]
+     :binaries            (concat bundle-modules misc-modules chart-types-modules feature-modules)}))
 
 
 (defn compose-css [version]
