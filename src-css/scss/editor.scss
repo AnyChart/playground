@@ -730,7 +730,8 @@ html {
           .in-box {
             border-radius: 5px;
             background-color: #95bfd3;
-            padding: 1px 5px 1px 8px;
+            //padding: 1px 5px 1px 8px;
+            padding: 1px 5px 1px 6px;
             //display: flex;
             align-items: baseline;
             .input-height-box {
@@ -742,7 +743,7 @@ html {
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
-                padding: 0 1px;
+                padding: 0 3px;
               }
               input.url {
                 width: 100%;
@@ -753,6 +754,12 @@ html {
                 border: none;
                 background: none;
                 outline: none;
+                padding: 1px 2px;
+                &:focus {
+                  background-color: white;
+                  //color: #19a1ce;
+                  color: $text-color;
+                }
               }
             }
 
@@ -767,7 +774,7 @@ html {
             top: 3px;
           }
           span.glyphicon-remove {
-            margin-left: 10px;
+            margin-left: 8px;
             cursor: pointer;
           }
           span.glyphicon-warning-sign {
