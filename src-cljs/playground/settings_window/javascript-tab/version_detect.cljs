@@ -8,6 +8,12 @@
     url))
 
 
+(defn version-to-url [version]
+  (case version
+    "latest" "v8"
+    version))
+
+
 (defn script-version [script]
   (cond
     (string/starts-with? script "https://cdn.anychart.com/releases/")
@@ -58,3 +64,24 @@
          {:correct (correct-script? style detected-version)
           :style   style})
        styles))
+
+
+(defn replace-version [version script]
+  (let [version (version-to-url version)]
+    (-> script
+       (string/replace #"https://cdn.anychart.com/releases/([^/]+)/.*"
+                       (fn [[s old-version]]
+                         (string/replace-first s (re-pattern old-version) version)))
+       (string/replace #"https://cdn.anychart.com/js/([^/]+)/.*"
+                       (fn [[s old-version]]
+                         (string/replace-first s (re-pattern old-version) version)))
+       (string/replace #"https://cdn.anychart.com/themes/([^/]+)/.*"
+                       (fn [[s old-version]]
+                         (string/replace-first s (re-pattern old-version) version)))
+       (string/replace #"https://cdn.anychart.com/css/([^/]+)/.*"
+                       (fn [[s old-version]]
+                         (string/replace-first s (re-pattern old-version) version))))))
+
+
+(defn replace-version-scripts [version scripts]
+  (map #(replace-version version %) scripts))

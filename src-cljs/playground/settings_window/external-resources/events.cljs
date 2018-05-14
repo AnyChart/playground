@@ -3,7 +3,9 @@
             [ajax.core :refer [GET POST]]
             [camel-snake-kebab.core :as kebab]
             [playground.settings-window.external-resources.parser :as parser]
-            [playground.tips.tips-data :as tips-data]))
+            [playground.tips.tips-data :as tips-data]
+            [playground.settings-window.javascript-tab.version-detect :as version-detect]
+            [playground.settings-window.javascript-tab.events :refer [detect-version-interceptor]]))
 
 
 ;;======================================================================================================================
@@ -58,8 +60,12 @@
 
 (rf/reg-event-fx
   :settings.external-resources/change-version
+  [detect-version-interceptor]
   (fn [{db :db} [_ version]]
-    {:db       (assoc-in db [:settings :selected-version] version)
+    {:db       (-> db
+                   (assoc-in [:settings :selected-version] version)
+                   (assoc-in [:sample :scripts] (version-detect/replace-version-scripts version (-> db :sample :scripts)))
+                   (assoc-in [:sample :styles] (version-detect/replace-version-scripts version (-> db :sample :styles))))
      :dispatch [:settings.external-resources/init-version]}))
 
 
