@@ -15,19 +15,7 @@
 
 
 (defn script-version [script]
-  (cond
-    (string/starts-with? script "https://cdn.anychart.com/releases/")
-    (second (re-find #"https://cdn.anychart.com/releases/([^/]+)/.*" script))
-
-    (string/starts-with? script "https://cdn.anychart.com/js/")
-    (second (re-find #"https://cdn.anychart.com/js/([^/]+)/.*" script))
-
-    (string/starts-with? script "https://cdn.anychart.com/themes/")
-    (second (re-find #"https://cdn.anychart.com/themes/([^/]+)/.*" script))
-
-    (string/starts-with? script "https://cdn.anychart.com/css/")
-    (second (re-find #"https://cdn.anychart.com/css/([^/]+)/.*" script))
-    :else nil))
+  (last (re-find #"^https?://cdn.anychart.com/(releases|js|css|themes)/([^/]+)/.*$" script)))
 
 
 (defn detect-version [scripts]
@@ -68,19 +56,9 @@
 
 (defn replace-version [version script]
   (let [version (version-to-url version)]
-    (-> script
-       (string/replace #"https://cdn.anychart.com/releases/([^/]+)/.*"
-                       (fn [[s old-version]]
-                         (string/replace-first s (re-pattern old-version) version)))
-       (string/replace #"https://cdn.anychart.com/js/([^/]+)/.*"
-                       (fn [[s old-version]]
-                         (string/replace-first s (re-pattern old-version) version)))
-       (string/replace #"https://cdn.anychart.com/themes/([^/]+)/.*"
-                       (fn [[s old-version]]
-                         (string/replace-first s (re-pattern old-version) version)))
-       (string/replace #"https://cdn.anychart.com/css/([^/]+)/.*"
-                       (fn [[s old-version]]
-                         (string/replace-first s (re-pattern old-version) version))))))
+    (string/replace script #"^https?://cdn.anychart.com/(releases|js|css|themes)/([^/]+)/.*$"
+                    (fn [[s type old-version]]
+                      (string/replace-first s (re-pattern old-version) version)))))
 
 
 (defn replace-version-scripts [version scripts]
