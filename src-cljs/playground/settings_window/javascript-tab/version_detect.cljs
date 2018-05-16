@@ -47,7 +47,8 @@
   (map-indexed (fn [idx script]
                  {:warning (cond
                              (not (correct-script? script detected-version)) consts/script-style-warning
-                             (< idx detected-version-index) consts/script-order-warning)
+                             (and (script-version script)
+                                  (< idx detected-version-index)) consts/script-order-warning)
                   :script  script})
                scripts))
 
