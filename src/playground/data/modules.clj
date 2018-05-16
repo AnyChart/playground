@@ -4,7 +4,8 @@
             [playground.data.geodata :as geo]
             [playground.data.locales :as locales]
             [clojure.string :as string]
-            [clojure.java.shell :refer [sh]]))
+            [clojure.java.shell :refer [sh]]
+            [com.rpl.specter :refer :all]))
 
 
 ;;======================================================================================================================
@@ -500,4 +501,29 @@
 (defn generate-all [vs]
   (doseq [[version data] vs]
     (generate-v version data)))
+
+
+;; and info to anychart-bundle, base, core, set internal to default-theme for versions 8.0.0 and 8.0.1
+(defn t1 []
+  (let [data (json/parse-string (slurp "/media/ssd/sibental/playground-data/MODULES V8 GENERATION/modules-8.0.1.json") true)
+        (->> data
+             (transform [:modules :anychart-bundle] (fn [m]
+                                                      (assoc m :type :bundle
+                                                               :name "AnyChart Bundle"
+                                                               :desc "AnyChart Bundle module"
+                                                               :docs "https://docs.anychart.com/Quick_Start/Modules#bundle")))
+             (transform [:modules :anychart-base] (fn [m]
+                                                    (assoc m :type :bundle
+                                                             :name "AnyChart Base"
+                                                             :desc "AnyChart Base is a handy module that contains: Core, Pie/Donut, Basic cartesian charts and Scatter"
+                                                             :docs "https://docs.anychart.com/Quick_Start/Modules#base")))
+             (transform [:modules :anychart-core] (fn [m]
+                                                    (assoc m :type :core
+                                                             :name "AnyChart Core Module"
+                                                             :desc "AnyChart Core is the core of engine, it is needed whenever you use any module (except Bundle and Base)."
+                                                             :docs "https://docs.anychart.com/Quick_Start/Modules#core")))
+             (transform [:modules :anychart-default-theme] (fn [m]
+                                                             (assoc m :type :internal))))]
+    (spit (io/file "/media/ssd/sibental/playground-data/MODULES V8 GENERATION/modules-8.0.1-new.json")
+          (json/generate-string data))))
 

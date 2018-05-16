@@ -35,6 +35,7 @@
                  [hiccup "1.0.5"]
                  [net.sf.jtidy/jtidy "r938"]
                  [instaparse "1.4.9"]
+                 [com.rpl/specter "1.1.1"]
 
                  ;; db
                  [mpg "1.3.0"]
