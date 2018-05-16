@@ -20,8 +20,8 @@
 
 
 (def ^:const settings-warning
-  "One or several AnyChart modules have conflicting versions, it is recommended that you fix this issue.")
+  "One or several AnyChart modules have conflicting versions or bad positions, it is recommended that you fix this issue.")
 
 
 (def ^:const modal-window-warning
-  "One or several AnyChart modules have conflicting versions, it is recommended that you fix this issue. Are you sure you want to proceed?")
+  "One or several AnyChart modules have conflicting versions or bad positions, it is recommended that you fix this issue. Are you sure you want to proceed?")
