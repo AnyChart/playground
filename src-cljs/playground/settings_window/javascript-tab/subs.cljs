@@ -9,4 +9,4 @@
 
 (rf/reg-sub :settings.javascript-tab/correct-tab
             (fn [db _]
-              (every? true? (map :correct (-> db :settings :javascript-tab :scripts)))))
+              (every? nil? (map :warning (-> db :settings :javascript-tab :scripts)))))

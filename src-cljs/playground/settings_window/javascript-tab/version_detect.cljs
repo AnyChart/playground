@@ -1,5 +1,6 @@
 (ns playground.settings-window.javascript-tab.version-detect
-  (:require [clojure.string :as string]))
+  (:require [clojure.string :as string]
+            [playground.data.consts :as consts]))
 
 
 (defn url-to-version [url]
@@ -19,37 +20,41 @@
 
 
 (defn detect-version [scripts]
-  (let [bundles (filter (fn [script]
-                          (or
-                            (string/includes? script "anychart-bundle.min.js")
-                            (string/includes? script "anychart-base.min.js")
-                            (string/includes? script "anychart.min.js")
-                            (string/includes? script "anystock.min.js")
-                            (string/includes? script "anygantt.min.js")
-                            (string/includes? script "anymap.min.js")
-                            (string/includes? script "graphics.min.js")))
-                        scripts)
-        bundle (first bundles)
-        v (when bundle
-            (script-version bundle))]
-    (url-to-version v)))
+  (let [bundles (keep-indexed (fn [idx script]
+                                (when (or
+                                        (string/includes? script "anychart-bundle.min.js")
+                                        (string/includes? script "anychart-base.min.js")
+                                        (string/includes? script "anychart.min.js")
+                                        (string/includes? script "anystock.min.js")
+                                        (string/includes? script "anygantt.min.js")
+                                        (string/includes? script "anymap.min.js")
+                                        (string/includes? script "graphics.min.js"))
+                                  {:index idx :script script}))
+                              scripts)
+        result (first bundles)]
+    (when result
+      {:index   (:index result)
+       :version (url-to-version (script-version (:script result)))})))
 
 
 (defn correct-script? [script detected-version]
   (let [current-version (url-to-version (script-version script))]
-    (or (nil? current-version) (= current-version detected-version))))
+    (or (nil? current-version)
+        (= current-version detected-version))))
 
 
-(defn to-correct-scripts [scripts detected-version]
-  (map (fn [script]
-         {:correct (correct-script? script detected-version)
-          :script  script})
-       scripts))
+(defn to-correct-scripts [scripts detected-version detected-version-index]
+  (map-indexed (fn [idx script]
+                 {:warning (cond
+                             (not (correct-script? script detected-version)) consts/script-style-warning
+                             (< idx detected-version-index) consts/script-order-warning)
+                  :script  script})
+               scripts))
 
 
 (defn to-correct-styles [styles detected-version]
   (map (fn [style]
-         {:correct (correct-script? style detected-version)
+         {:warning (when-not (correct-script? style detected-version) consts/script-style-warning)
           :style   style})
        styles))
 

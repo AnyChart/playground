@@ -16,14 +16,14 @@
                                                                                           (.-oldIndex e) (.-newIndex e)]))})))
      :reagent-render      (fn []
                             [:div#scripts-box.scripts-box
-                             (for [[idx {script :script correct :correct}] (map-indexed (fn [idx script] [idx script])
+                             (for [[idx {script :script warning :warning}] (map-indexed (fn [idx script] [idx script])
                                                                                         @(rf/subscribe [:settings.javascript-tab/correct-scripts]))]
                                ^{:key (str script "-" idx)}
                                [:div.script
                                 [:span.script-box
                                  [:span.glyphicon.glyphicon-align-justify]
                                  [:div.in-box
-                                  [:div.input-height-box {:title (when-not correct consts/script-style-warning)}
+                                  [:div.input-height-box {:title warning}
                                    [:span.height-line script]
                                    [:input.url {:type          "text"
                                                 :default-value script
@@ -36,9 +36,9 @@
                                   [:span.glyphicon.glyphicon-remove {:on-click #(do
                                                                                   (.preventDefault %)
                                                                                   (rf/dispatch [:settings/remove-script script]))}]]
-                                 (when (not correct)
+                                 (when warning
                                    [:span.glyphicon.glyphicon-warning-sign
-                                    {:title consts/script-style-warning}])
+                                    {:title warning}])
                                  ]
                                 ])]
                             )}))

@@ -28,9 +28,7 @@
                                 :on-click #(rf/dispatch [:modal/hide])} "Close"]
        [:button.ac-btn.remove-btn {:type     "button"
                                    :on-click #(rf/dispatch [:modal/proceed])} "Proceed"]
-       ]
-      ]
-     ]
+       ]]]
 
 
     ;:div {:class "modal fade" :tabindex "-1" :role "dialog"}

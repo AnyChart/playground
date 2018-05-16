@@ -50,7 +50,8 @@
 
                       :settings       {:show             false
                                        :tab              :javascript
-                                       :selected-version (or (version-detect/detect-version (:scripts (:sample data))) "latest")
+                                       :selected-version (or (:version (version-detect/detect-version (:scripts (:sample data))))
+                                                             "latest")
                                        :general-tab      {:tags (map (fn [tag] {:name tag :selected false}) (-> data :sample :tags))}}
                       :embed          {:show    (:embed-show data)
                                        :tab     :embed

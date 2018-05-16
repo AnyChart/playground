@@ -9,4 +9,4 @@
 
 (rf/reg-sub :settings.css-tab/correct-tab
             (fn [db _]
-              (every? true? (map :correct (-> db :settings :css-tab :styles)))))
+              (every? nil? (map :warning (-> db :settings :css-tab :styles)))))

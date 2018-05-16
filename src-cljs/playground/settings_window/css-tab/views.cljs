@@ -16,14 +16,14 @@
                                                                                           (.-oldIndex e) (.-newIndex e)]))})))
      :reagent-render      (fn []
                             [:div#styles-box.scripts-box
-                             (for [[idx {style :style correct :correct}] (map-indexed (fn [idx style] [idx style])
+                             (for [[idx {style :style warning :warning}] (map-indexed (fn [idx style] [idx style])
                                                                                       @(rf/subscribe [:settings.css-tab/correct-styles]))]
                                ^{:key (str style "-" idx)}
                                [:div.script
                                 [:span.script-box
                                  [:span.glyphicon.glyphicon-align-justify]
                                  [:div.in-box
-                                  [:div.input-height-box {:title (when-not correct consts/script-style-warning)}
+                                  [:div.input-height-box {:title warning}
                                    [:span.height-line style]
                                    [:input.url {:type          "text"
                                                 :default-value style
@@ -36,9 +36,9 @@
                                   [:span.glyphicon.glyphicon-remove {:on-click #(do
                                                                                   (.preventDefault %)
                                                                                   (rf/dispatch [:settings/remove-style style]))}]]
-                                 (when (not correct)
+                                 (when warning
                                    [:span.glyphicon.glyphicon-warning-sign
-                                    {:title consts/script-style-warning}])
+                                    {:title warning}])
                                  ]
                                 ])]
                             )}))

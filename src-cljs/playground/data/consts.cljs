@@ -14,6 +14,11 @@
        "Fix this or proceed at your own risk."))
 
 
+(def ^:const script-order-warning
+  (str "This AnyChart module must be after main AnyChart Bundle or AnyChart Base module. "
+       "Fix this or proceed at your own risk."))
+
+
 (def ^:const settings-warning
   "One or several AnyChart modules have conflicting versions, it is recommended that you fix this issue.")
 

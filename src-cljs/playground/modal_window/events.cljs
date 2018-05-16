@@ -25,8 +25,8 @@
              (let [styles (-> context :effects :db :settings :css-tab :styles)
                    scripts (-> context :effects :db :settings :javascript-tab :scripts)
 
-                   incorrect-scripts (some false? (map :correct scripts))
-                   incorrect-styles (some false? (map :correct styles))
+                   incorrect-scripts (some some? (map :warning scripts))
+                   incorrect-styles (some some? (map :warning styles))
 
                    was-on-scripts-tab (= (-> context :coeffects :db :settings :tab) :javascript)
                    was-on-styles-tab (= (-> context :coeffects :db :settings :tab) :css)
