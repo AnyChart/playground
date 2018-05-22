@@ -1,28 +1,19 @@
 (ns playground.notification.slack
-  (:require [com.stuartsierra.component :as component]
-            [cheshire.core :refer [generate-string]]
+  (:require [cheshire.core :refer [generate-string]]
             [clj-http.client :as http]
             [taoensso.timbre :as timbre]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [playground.data.config :as c]))
 
 
-(defrecord Notifier [config]
-  component/Lifecycle
-
-  (start [this] this)
-  (stop [this] this))
-
-
-(defn new-notifier [config]
-  (map->Notifier {:config config}))
-
-
-(defn- domain [notifier] (-> notifier :config :domain))
-(defn- prefix [notifier] (-> notifier :config :tag clojure.string/upper-case))
+(defn prefix [notifier] (-> (c/prefix) string/upper-case))
+(defn token [notifier] (-> notifier :config :slack :token))
+(defn channel [notifier] (-> notifier :config :slack :channel))
+(defn username [notifier] (-> notifier :config :slack :username))
 
 
 (defn- format-exception [e]
-  (str e "\n\n" (clojure.string/join "\n" (.getStackTrace e))))
+  (str e "\n\n" (string/join "\n" (.getStackTrace e))))
 
 
 (defn console-message [attachments text]
@@ -39,14 +30,13 @@
 
 (defn- notify-attach [notifier attachments & [text]]
   (try
-    (http/post (str "https://anychart-team.slack.com/services/hooks/incoming-webhook?token="
-                    (-> notifier :config :token))
+    (http/post (str "https://anychart-team.slack.com/services/hooks/incoming-webhook?token=" (token notifier))
                {:form-params    {:payload (generate-string
                                             {:text        (or text "")
                                              :attachments attachments
                                              :mrkdwn      true
-                                             :channel     (-> notifier :config :channel)
-                                             :username    (-> notifier :config :username)})}
+                                             :channel     (channel notifier)
+                                             :username    (username notifier)})}
                 :socket-timeout 5000
                 :conn-timeout   5000})
     (catch Exception e
@@ -65,11 +55,11 @@
                                            :short true}
                                           (when (seq branches)
                                             {:title "Branches"
-                                             :value (clojure.string/join ", " branches)
+                                             :value (string/join ", " branches)
                                              :short true})
                                           (when (seq removed-branches)
                                             {:title "Removed branches"
-                                             :value (clojure.string/join ", " removed-branches)
+                                             :value (string/join ", " removed-branches)
                                              :short true})])}]]
     (notify-attach notifier attachments)))
 
@@ -85,11 +75,11 @@
                                            :short true}
                                           (when (seq branches)
                                             {:title "Branches"
-                                             :value (clojure.string/join ", " branches)
+                                             :value (string/join ", " branches)
                                              :short true})
                                           (when (seq removed-branches)
                                             {:title "Removed branches"
-                                             :value (clojure.string/join ", " removed-branches)
+                                             :value (string/join ", " removed-branches)
                                              :short true})])}]]
     (notify-attach notifier attachments)))
 
@@ -109,11 +99,11 @@
                                             :short true}
                                            (when (seq branches)
                                              {:title "Branches"
-                                              :value (clojure.string/join ", " branches)
+                                              :value (string/join ", " branches)
                                               :short true})
                                            (when (seq removed-branches)
                                              {:title "Removed branches"
-                                              :value (clojure.string/join ", " removed-branches)
+                                              :value (string/join ", " removed-branches)
                                               :short true})])}]]
      (notify-attach notifier attachments))))
 

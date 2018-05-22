@@ -4,7 +4,7 @@
             [playground.db.core :as db]
             [playground.web.core :as web]
             [playground.generator.core :as generator]
-            [playground.notification.slack :as slack]
+            [playground.notification.core :as notifier]
             [playground.redis.core :as redis]
             [playground.preview-generator.core :as pw-generator]
             [playground.utils.utils :as utils]
@@ -53,7 +53,7 @@
   (component/system-map
     :db (db/new-jdbc (:db conf))
     :redis (redis/new-redis (:redis conf))
-    :notifier (slack/new-notifier (-> conf :notifications :slack))
+    :notifier (notifier/new-notifier (-> conf :notifications))
     :generator (component/using (generator/new-generator conf)
                                 [:db :notifier :redis])
     :preview-generator (component/using (pw-generator/new-preview-generator (:previews conf))
@@ -66,7 +66,7 @@
   (component/system-map
     :db (db/new-jdbc (:db conf))
     :redis (redis/new-redis (:redis conf))
-    :notifier (slack/new-notifier (-> conf :notifications :slack))
+    :notifier (notifier/new-notifier (-> conf :notifications))
     :generator (component/using (generator/new-generator conf)
                                 [:db :notifier :redis])))
 
@@ -82,7 +82,7 @@
   (component/system-map
     :db (db/new-jdbc (:db conf))
     :redis (redis/new-redis (:redis conf))
-    :notifier (slack/new-notifier (-> conf :notifications :slack))
+    :notifier (notifier/new-notifier (-> conf :notifications))
     :preview-generator (component/using (pw-generator/new-preview-generator (:previews conf))
                                         [:db :redis :notifier])))
 

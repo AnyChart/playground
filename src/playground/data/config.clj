@@ -1,12 +1,16 @@
 (ns playground.data.config)
 
+;; Utils
+(defonce data nil)
 
-(defonce common nil)
+(defn set-config [conf] (alter-var-root (var data) (constantly conf)))
 
-(defn set-config [conf] (alter-var-root (var common) (constantly conf)))
 
-(defn commit [] (:commit common))
+;; Getters
+(defn prefix [] (-> data :common :prefix))
 
-(defn repos-for-versions [] (-> common :editor :repos-for-versions))
+(defn commit [] (:commit data))
 
-(defn released-versions [] (-> common :editor :released-versions))
+(defn repos-for-versions [] (-> data :editor :repos-for-versions))
+
+(defn released-versions [] (-> data :editor :released-versions))

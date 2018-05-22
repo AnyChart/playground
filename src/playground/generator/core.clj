@@ -10,7 +10,7 @@
             [playground.generator.utils :refer [copy-dir]]
             [playground.db.request :as db-req]
             [playground.db.elastic :as elastic]
-            [playground.notification.slack :as slack]
+            [playground.notification.core :as notifier]
             [playground.redis.core :as redis]
             [playground.repo.git :as git]
             [playground.utils.utils :as utils]
@@ -160,9 +160,9 @@
     (doseq [repo deleted-repos]
       (delete-repo db repo))
     (let [result (map #(check-repository generator db % (get-repo-by-name-fn @% db-repos)) repos)]
-      (slack/complete-sync notifier
-                           (remove :e result)
-                           (filter :e result)))))
+      (notifier/complete-sync notifier
+                              (remove :e result)
+                              (filter :e result)))))
 
 
 ;; =====================================================================================================================
@@ -250,6 +250,7 @@
 (defn update-branch [db redis repo branch versions generator queue-index]
   (try
     (info "Update branch: " branch)
+    (notifier/start-version-building  (:notifier generator) (:name @repo) (:name branch) queue-index)
     (let [path (version-path @repo (:name branch))
           git-path (git-path path)]
       (fs/delete-dir path)
@@ -259,11 +260,12 @@
         (git/checkout git-repo (:name branch))
         (git/pull git-repo @repo)
         (build-branch db redis repo branch path versions)))
+    (notifier/complete-version-building (:notifier generator) (:name @repo) (:name branch) queue-index )
     nil
     (catch Exception e
       (do (error e)
           (error (.getMessage e))
-          ;(slack/build-failed (:notifier generator) (:name project) (:name branch) queue-index e)
+          (notifier/complete-version-building-error (:notifier generator) (:name @repo) (:name branch) queue-index e)
           {:branch branch :e e}))))
 
 
@@ -296,7 +298,7 @@
         (info "DB branches: " (pr-str (map :name db-branches)))
         (info "Updated branches: " (pr-str (map :name updated-branches)))
         (info "Removed branches: " (pr-str (map :name removed-branches)))
-        (slack/start-build (:notifier generator) (:name @repo) (map :name updated-branches) (map :name removed-branches) queue-index)
+        (notifier/start-build (:notifier generator) (:name @repo) (map :name updated-branches) (map :name removed-branches) queue-index)
         ;; delete old branches
         (doseq [branch removed-branches]
           (elastic/remove-branch (:name @repo) (:name branch) (-> db :config :elastic))
@@ -317,13 +319,13 @@
 
           (fs/delete-dir (versions-path @repo))
           (if (not-empty errors)
-            (slack/complete-building-with-errors (:notifier generator) (:name @repo) (map :name updated-branches)
-                                                 (map :name removed-branches) queue-index (-> errors first :e))
-            (slack/complete-building (:notifier generator) (:name @repo) (map :name updated-branches) (map :name removed-branches) queue-index))))
+            (notifier/complete-building-with-errors (:notifier generator) (:name @repo) (map :name updated-branches)
+                                                    (map :name removed-branches) queue-index (-> errors first :e))
+            (notifier/complete-building (:notifier generator) (:name @repo) (map :name updated-branches) (map :name removed-branches) queue-index))))
       (catch Exception e
         (do (error e)
             (error (.getMessage e))
-            (slack/complete-building-with-errors (:notifier generator) (:name @repo) [] [] queue-index e))))))
+            (notifier/complete-building-with-errors (:notifier generator) (:name @repo) [] [] queue-index e))))))
 
 
 (defn update-repository-by-repo-name [generator db repo-name]

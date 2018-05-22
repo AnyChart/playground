@@ -190,3 +190,7 @@
         ;_ (println scripts)
         scripts (concat (subvec scripts 0 new-index) [el] (subvec scripts new-index (count scripts)))]
     scripts))
+
+
+(defn format-exception [e]
+  (str e "\n\n" (apply str (interpose "\n" (.getStackTrace e)))))
