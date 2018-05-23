@@ -63,24 +63,36 @@
 ;; =====================================================================================================================
 ;; Notifications functions
 ;; =====================================================================================================================
-(defn start-version-building [notifier project version queue-index]
-  (let [msg (str "[PG " (c/prefix) "] #" queue-index " " (b (str project "/" version)) " - "
+(defn start-version-building [notifier project  {author :author
+                                                 commit-message :message
+                                                 version :name
+                                                 commit :commit} queue-index]
+  (let [msg (str "[PG " (c/prefix) "] #" queue-index " " (b (str project "/" version))
+                 " \"" commit-message "\" @" author " (" (subs commit 0 7) ") - "
                  "build start\n")]
     (send-message (config notifier) msg)
     (when (utils/released-version? version)
       (send-release-message (config notifier) msg))))
 
 
-(defn complete-version-building [notifier project version queue-index]
-  (let [msg (str "[PG " (c/prefix) "] #" queue-index " " (b (str project "/" version)) " - "
+(defn complete-version-building [notifier project  {author :author
+                                                    commit-message :message
+                                                    version :name
+                                                    commit :commit} queue-index]
+  (let [msg (str "[PG " (c/prefix) "] #" queue-index " " (b (str project "/" version))
+                 " \"" commit-message "\" @" author " (" (subs commit 0 7) ") - "
                  "build complete\n")]
     (send-message (config notifier) msg)
     (when (utils/released-version? version)
       (send-release-message (config notifier) msg))))
 
 
-(defn complete-version-building-error [notifier project version queue-index e]
-  (let [msg (str "[PG " (c/prefix) "] #" queue-index " " (b (str project "/" version)) " - "
+(defn complete-version-building-error [notifier project  {author :author
+                                                          commit-message :message
+                                                          version :name
+                                                          commit :commit} queue-index e]
+  (let [msg (str "[PG " (c/prefix) "] #" queue-index " " (b (str project "/" version))
+                 " \"" commit-message "\" @" author " (" (subs commit 0 7) ") - "
                  "build error\n"
                  (when e
                    (-> (utils/format-exception e) (font "#777777" 11) i)))]

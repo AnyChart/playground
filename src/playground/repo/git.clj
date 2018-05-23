@@ -2,11 +2,13 @@
   (:import (org.eclipse.jgit.api Git TransportConfigCallback)
            (org.eclipse.jgit.transport UsernamePasswordCredentialsProvider JschConfigSessionFactory SshSessionFactory)
            (org.eclipse.jgit.util FS)
-           (java.io File))
+           (java.io File)
+           (org.eclipse.jgit.revwalk RevWalk))
   (:require [clojure.java.shell :refer [sh with-sh-env with-sh-dir]]
             [me.raynes.fs :as fs]
     ;[gita.core :refer :all]
-            [clojure.string :refer [split]]))
+            [clojure.string :refer [split]]
+            [clojure.string :as string]))
 
 
 ;(def ^:dynamic *ssh-session-config* {"StrictHostKeyChecking" "no"
@@ -24,9 +26,12 @@
 ;                                                   (.getBytes "nbvcxz"))))))
 
 
-;;============ main
+;;======================================================================================================================
+;; main
+;;======================================================================================================================
 (defn get-git [path]
   (Git/open (File. path)))
+
 
 (defn get-trasport-config-callback [secret-key-path public-key-path passphrase]
   (let [transportConfigCallback (proxy [TransportConfigCallback] []
@@ -42,7 +47,10 @@
                                                                                (.getBytes passphrase))))))))]
     transportConfigCallback))
 
-;;============ clone
+
+;;======================================================================================================================
+;; clone
+;;======================================================================================================================
 (defn clone-http [remote-path local-path & [user password]]
   (fs/delete-dir local-path)
   (fs/mkdirs local-path)
@@ -52,6 +60,7 @@
     (when (and user password)
       (.setCredentialsProvider clone-command (UsernamePasswordCredentialsProvider. user password)))
     (.call clone-command)))
+
 
 (defn clone-ssh [remote-path local-path & [secret-key-path public-key-path passphraze]]
   (fs/delete-dir local-path)
@@ -63,6 +72,7 @@
       (.setTransportConfigCallback clone-command (get-trasport-config-callback secret-key-path public-key-path passphraze)))
     (.call clone-command)))
 
+
 (defn clone [repo path]
   (let [type (:type repo)
         data (get repo type)]
@@ -70,12 +80,16 @@
       :ssh (clone-ssh (:ssh data) path (:secret-key data) (:public-key data) (:passphrase data))
       :https (clone-http (:https data) path (:login data) (:password data)))))
 
-;;============ fetch
+
+;;======================================================================================================================
+;; fetch
+;;======================================================================================================================
 (defn fetch-ssh [git & [secret-key-path public-key-path passphraze]]
   (let [fetch-command (.fetch git)]
     (.setRemoveDeletedRefs fetch-command true)
     (.setTransportConfigCallback fetch-command (get-trasport-config-callback secret-key-path public-key-path passphraze))
     (.call fetch-command)))
+
 
 (defn fetch-http [git & [user password]]
   (let [fetch-command (.fetch git)]
@@ -84,32 +98,55 @@
       (.setCredentialsProvider fetch-command (UsernamePasswordCredentialsProvider. user password)))
     (.call fetch-command)))
 
+
 (defn fetch [repo]
   (case (:type @repo)
     :ssh (fetch-ssh (:git @repo) (-> @repo :ssh :secret-key) (-> @repo :ssh :public-key) (-> @repo :ssh :passphrase))
     :https (fetch-http (:git @repo) (-> @repo :https :login) (-> @repo :https :password))))
 
-;;============ branches
+
+;;======================================================================================================================
+;; branches
+;;======================================================================================================================
 (defn full-branch-name->branch-name [branch-name]
   (last (split branch-name #"/")))
+
 
 (defn branch-list-local [^Git git]
   (let [branches (-> git (.branchList) (.call))]
     (map #(full-branch-name->branch-name (.getName %)) (seq branches))))
+
+
+(defn drop-last-slash [s]
+  (if (string/ends-with? s "\n")
+    (subs s 0 (dec (count s)))
+    s))
+
 
 (defn branch-list [^Git git]
   (let [branches (-> git
                      (.branchList)
                      (.setListMode org.eclipse.jgit.api.ListBranchCommand$ListMode/REMOTE)
                      (.call))]
-    (map #(hash-map :name (full-branch-name->branch-name (.getName %))
-                    :commit (.getName (.getObjectId %))) (seq branches))))
+    (map #(let [object-id (.getObjectId %)
+                rev-walk (RevWalk. (.getRepository git))
+                rev-commit (.parseCommit rev-walk object-id)
+                data {:name    (full-branch-name->branch-name (.getName %))
+                      :commit  (.getName object-id)
+                      :message (drop-last-slash (.getFullMessage rev-commit))
+                      :author  (.getName (.getAuthorIdent rev-commit))}]
+            (.close rev-walk)
+            data)
+         (seq branches))))
 
 
 (defn version-list [branches]
   (filter #(re-matches #"\d+\.\d+\.\d+" %) branches))
 
-;;=========== checkout
+
+;;======================================================================================================================
+;; checkout
+;;======================================================================================================================
 (defn checkout [^Git git branch-name]
   (-> git
       (.checkout)
@@ -119,11 +156,15 @@
       (.setStartPoint (str "origin/" branch-name))
       (.call)))
 
-;;=========== pull
+
+;;======================================================================================================================
+;; pull
+;;======================================================================================================================
 (defn pull-ssh [git & [secret-key-path public-key-path passphraze]]
   (let [command (.pull git)]
     (.setTransportConfigCallback command (get-trasport-config-callback secret-key-path public-key-path passphraze))
     (.call command)))
+
 
 (defn pull-http [git & [user password]]
   (let [command (.pull git)]
@@ -131,12 +172,16 @@
       (.setCredentialsProvider command (UsernamePasswordCredentialsProvider. user password)))
     (.call command)))
 
+
 (defn pull [git repo]
   (case (:type repo)
     :ssh (pull-ssh git (-> repo :ssh :secret-key) (-> repo :ssh :public-key) (-> repo :ssh :passphrase))
     :https (pull-http git (-> repo :https :login) (-> repo :https :password))))
 
-;;=========== revparse
+
+;;======================================================================================================================
+;; revparse
+;;======================================================================================================================
 (defn current-commit [git-path]
   (let [git-repo (get-git git-path)]
     (subs (.getName (.getObjectId (.getRef (.getRepository git-repo) "HEAD"))) 0 7)))
