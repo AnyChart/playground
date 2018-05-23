@@ -10,7 +10,7 @@
 
 
 (defn get-modules-url [version-url]
-  (str "http://cdn.anychart.com/releases/" version-url "/js/modules.json"))
+  (str "https://cdn.anychart.com/releases/" version-url "/js/modules.json"))
 
 
 (defn v8? [version]
