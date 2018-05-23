@@ -250,7 +250,7 @@
 (defn update-branch [db redis repo branch versions generator queue-index]
   (try
     (info "Update branch: " branch)
-    (notifier/start-version-building  (:notifier generator) (:name @repo) branch queue-index)
+    (notifier/start-version-building (:notifier generator) (:name @repo) branch queue-index)
     (let [path (version-path @repo (:name branch))
           git-path (git-path path)]
       (fs/delete-dir path)
@@ -260,7 +260,7 @@
         (git/checkout git-repo (:name branch))
         (git/pull git-repo @repo)
         (build-branch db redis repo branch path versions)))
-    (notifier/complete-version-building (:notifier generator) (:name @repo) branch queue-index )
+    (notifier/complete-version-building (:notifier generator) (:name @repo) branch queue-index)
     nil
     (catch Exception e
       (do (error e)
