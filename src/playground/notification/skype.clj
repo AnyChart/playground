@@ -42,8 +42,10 @@
       (timbre/error "Skype send message error: " message e (.getStackTrace e)))))
 
 
-(defn send-release-message [conf message]
-  (when (:release-chat-id conf)
+(defn send-release-message [conf version message]
+  (when (and (:release-chat-id conf)
+             (utils/released-version? version)
+             (= (c/prefix) "prod"))
     (send-message (assoc conf :chat-id (:release-chat-id conf)) message)))
 
 
@@ -71,8 +73,7 @@
                  " \"" commit-message "\" @" author " (" (subs commit 0 7) ") - "
                  (-> "start" (font "#4183C4")) "\n")]
     (send-message (config notifier) msg)
-    (when (utils/released-version? version)
-      (send-release-message (config notifier) msg))))
+    (send-release-message (config notifier) version msg)))
 
 
 (defn complete-version-building [notifier project {author         :author
@@ -83,8 +84,7 @@
                  " \"" commit-message "\" @" author " (" (subs commit 0 7) ") - "
                  (-> "complete" (font "#36a64f")) "\n")]
     (send-message (config notifier) msg)
-    (when (utils/released-version? version)
-      (send-release-message (config notifier) msg))))
+    (send-release-message (config notifier) version msg)))
 
 
 (defn complete-version-building-error [notifier project {author         :author
@@ -97,8 +97,7 @@
                  (when e
                    (-> (utils/format-exception e) (font "#777777" 11) i)))]
     (send-message (config notifier) msg)
-    (when (utils/released-version? version)
-      (send-release-message (config notifier) msg))))
+    (send-release-message (config notifier) version msg)))
 
 
 ;(defn complete-building-with-errors [notifier branches queue-index e]
