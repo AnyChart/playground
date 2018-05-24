@@ -18,7 +18,8 @@
             [playground.web.utils :as web-utils]
             [playground.web.auth-base :as auth-base]
             [clojure.java.shell :as shell]
-            [clojure.java.jdbc :as jdbc]))
+            [clojure.java.jdbc :as jdbc]
+            [clojure.string :as string]))
 
 ;; =====================================================================================================================
 ;; Component
@@ -279,6 +280,14 @@
     update-branches))
 
 
+(defn need-update-branch [branch]
+     (or (utils/released-version? (:name branch))
+         (= (:name branch) "develop")
+         (= (:name branch) "master")
+         (string/includes? (:message branch) "#pg")
+         (string/includes? (:message branch) "#all")))
+
+
 (defn update-repository [generator db repo]
   (let [queue-index (swap! (:queue-index (:conf generator)) inc)]
     (try
@@ -306,7 +315,9 @@
           (remove-previews (:name @repo) (:name branch) (-> generator :conf :images-dir)))
 
         ;; update branches
-        (let [result (doall (map #(update-branch db (:redis generator) repo % db-branches generator queue-index) updated-branches))
+        (let [result (doall (map #(when (need-update-branch %)
+                                    (update-branch db (:redis generator) repo % db-branches generator queue-index))
+                                 updated-branches))
               errors (filter some? result)]
           ;; update latest field
           (let [latest-version (db-req/last-version db {:repo-id (:id @repo)})]
