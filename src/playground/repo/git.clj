@@ -3,7 +3,8 @@
            (org.eclipse.jgit.transport UsernamePasswordCredentialsProvider JschConfigSessionFactory SshSessionFactory)
            (org.eclipse.jgit.util FS)
            (java.io File)
-           (org.eclipse.jgit.revwalk RevWalk))
+           (org.eclipse.jgit.revwalk RevWalk)
+           (org.eclipse.jgit.api.errors DetachedHeadException))
   (:require [clojure.java.shell :refer [sh with-sh-env with-sh-dir]]
             [me.raynes.fs :as fs]
     ;[gita.core :refer :all]
@@ -127,17 +128,22 @@
   (let [branches (-> git
                      (.branchList)
                      (.setListMode org.eclipse.jgit.api.ListBranchCommand$ListMode/REMOTE)
-                     (.call))]
-    (map #(let [object-id (.getObjectId %)
-                rev-walk (RevWalk. (.getRepository git))
-                rev-commit (.parseCommit rev-walk object-id)
-                data {:name    (full-branch-name->branch-name (.getName %))
-                      :commit  (.getName object-id)
-                      :message (drop-last-slash (.getFullMessage rev-commit))
-                      :author  (.getName (.getAuthorIdent rev-commit))}]
-            (.close rev-walk)
-            data)
-         (seq branches))))
+                     (.call))
+        ;; for release versions (that are stored in tags)
+        tags (-> git
+                 (.tagList)
+                 (.call))
+        branches (map #(let [object-id (.getObjectId %)
+                             rev-walk (RevWalk. (.getRepository git))
+                             rev-commit (.parseCommit rev-walk object-id)
+                             data {:name    (full-branch-name->branch-name (.getName %))
+                                   :commit  (.getName object-id)
+                                   :message (drop-last-slash (.getFullMessage rev-commit))
+                                   :author  (.getName (.getAuthorIdent rev-commit))}]
+                         (.close rev-walk)
+                         data)
+                      (concat branches tags))]
+    (sort-by :name (distinct branches))))
 
 
 (defn version-list [branches]
@@ -147,13 +153,13 @@
 ;;======================================================================================================================
 ;; checkout
 ;;======================================================================================================================
-(defn checkout [^Git git branch-name]
+(defn checkout [^Git git branch-name commit]
   (-> git
       (.checkout)
       (.setName branch-name)
       (.setCreateBranch (not-any? #{branch-name} (branch-list-local git)))
       (.setForce true)
-      (.setStartPoint (str "origin/" branch-name))
+      (.setStartPoint commit)
       (.call)))
 
 
@@ -174,9 +180,12 @@
 
 
 (defn pull [git repo]
-  (case (:type repo)
-    :ssh (pull-ssh git (-> repo :ssh :secret-key) (-> repo :ssh :public-key) (-> repo :ssh :passphrase))
-    :https (pull-http git (-> repo :https :login) (-> repo :https :password))))
+  (try
+    (case (:type repo)
+     :ssh (pull-ssh git (-> repo :ssh :secret-key) (-> repo :ssh :public-key) (-> repo :ssh :passphrase))
+     :https (pull-http git (-> repo :https :login) (-> repo :https :password)))
+    ;; catch pull for tag - when in released version
+    (catch DetachedHeadException e nil)))
 
 
 ;;======================================================================================================================

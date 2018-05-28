@@ -258,7 +258,7 @@
       ;(fs/copy-dir (repo-path @repo) path)
       (copy-dir (repo-path @repo) path)
       (let [git-repo (git/get-git git-path)]
-        (git/checkout git-repo (:name branch))
+        (git/checkout git-repo (:name branch) (:commit branch))
         (git/pull git-repo @repo)
         (build-branch db redis repo branch path versions)))
     (notifier/complete-version-building (:notifier generator) (:name @repo) branch queue-index)
