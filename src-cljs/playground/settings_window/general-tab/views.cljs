@@ -16,10 +16,12 @@
                              :on-change #(rf/dispatch [:settings/change-short-desc (-> % .-target .-value)])}]]
    [:div.form-group
     [:label {:for "settings-desc"} "Description"]
-    [:textarea.form-control {:id        "settings-desc"
-                             :style     {:max-height @(rf/subscribe [:settings.general-tab/description-height])}
-                             :value     @(rf/subscribe [:sample/stripped-description])
-                             :on-change #(rf/dispatch [:settings/change-desc (-> % .-target .-value)])}]]
+    (if @(rf/subscribe [:user-sample?])
+      [:textarea.form-control {:id        "settings-desc"
+                               :style     {:max-height @(rf/subscribe [:settings.general-tab/description-height])}
+                               :value     @(rf/subscribe [:sample/description])
+                               :on-change #(rf/dispatch [:settings/change-desc (-> % .-target .-value)])}]
+      [:div  {:dangerouslySetInnerHTML {:__html @(rf/subscribe [:sample/description])}}])]
    [:div.form-group
     [:label "Tags"]
     [:div.tags-box

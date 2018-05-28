@@ -8,6 +8,7 @@
             [clojure.string :as string])
   (:import (org.jsoup Jsoup)))
 
+
 (defn- ^String trim-newline-left [^CharSequence s]
   (loop [index 0]
     (if (= 0 (.length s))
@@ -17,14 +18,17 @@
           (recur (inc index))
           (.. s (subSequence index (.length s)) toString))))))
 
+
 (defn trim-trailing [s]
   (clojure.string/replace s #"\s*$" ""))
+
 
 (defn space-count [s]
   (loop [index 0]
     (if (= (.charAt s index) \space)
       (recur (inc index))
       index)))
+
 
 (defn trim-code
   "Delete so many spaces from string start as it have at first line"
@@ -38,6 +42,13 @@
 
 (defn replace-white-spaces [s]
   (string/replace s #"\s+" " "))
+
+
+(defn fix-description [s]
+  (-> s
+      (string/replace #"\s+" " ")
+      (string/replace #">\s+<" "><")
+      string/trim))
 
 
 (defn parse-html-sample [s]
@@ -79,7 +90,7 @@
                [])
         all-tags (sort (distinct (concat tags (tags-data/get-tags-by-code code))))]
     {:name              name
-     :description       (string/trim description)
+     :description       (fix-description description)
      :short-description (-> short-description replace-white-spaces string/trim)
 
      :tags              all-tags
