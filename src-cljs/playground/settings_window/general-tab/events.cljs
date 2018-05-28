@@ -22,9 +22,7 @@
 (rf/reg-event-db
   :settings/change-desc
   (fn [db [_ value]]
-    (assoc-in db [:sample :description]
-              ;(common-utils/strip-tags value)
-              value)))
+    (assoc-in db [:sample :description] (common-utils/strip-scripts value))))
 
 
 (rf/reg-event-db

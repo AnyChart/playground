@@ -161,6 +161,11 @@
     (-> s (string/replace #"<[^>]*>" ""))))
 
 
+(defn strip-scripts [s]
+  (when (string? s)
+    (-> s (string/replace #"<script[^>]*>.*(?=</script)</script[^>]*>" ""))))
+
+
 (defn trim [s]
   (when (string? s)
     (string/trim s)))
