@@ -1,10 +1,11 @@
 (ns playground.repo.git
   (:import (org.eclipse.jgit.api Git TransportConfigCallback)
-           (org.eclipse.jgit.transport UsernamePasswordCredentialsProvider JschConfigSessionFactory SshSessionFactory TagOpt)
+           (org.eclipse.jgit.transport UsernamePasswordCredentialsProvider JschConfigSessionFactory SshSessionFactory TagOpt RefSpec)
            (org.eclipse.jgit.util FS)
            (java.io File)
            (org.eclipse.jgit.revwalk RevWalk)
-           (org.eclipse.jgit.api.errors DetachedHeadException))
+           (org.eclipse.jgit.api.errors DetachedHeadException)
+           (java.util ArrayList))
   (:require [clojure.java.shell :refer [sh with-sh-env with-sh-dir]]
             [me.raynes.fs :as fs]
     ;[gita.core :refer :all]
@@ -86,17 +87,23 @@
 ;; fetch
 ;;======================================================================================================================
 (defn fetch-ssh [git & [secret-key-path public-key-path passphraze]]
-  (let [fetch-command (.fetch git)]
+  (let [fetch-command (.fetch git)
+        specs (ArrayList.)]
+    (.add specs (RefSpec. "+refs/tags/*:refs/tags/*"))
     (.setRemoveDeletedRefs fetch-command true)
     (.setTagOpt fetch-command TagOpt/FETCH_TAGS)
+    (.setRefSpecs fetch-command specs)
     (.setTransportConfigCallback fetch-command (get-trasport-config-callback secret-key-path public-key-path passphraze))
     (.call fetch-command)))
 
 
 (defn fetch-http [git & [user password]]
-  (let [fetch-command (.fetch git)]
+  (let [fetch-command (.fetch git)
+        specs (ArrayList.)]
+    (.add specs (RefSpec. "+refs/tags/*:refs/tags/*"))
     (.setRemoveDeletedRefs fetch-command true)
     (.setTagOpt fetch-command TagOpt/FETCH_TAGS)
+    (.setRefSpecs fetch-command specs)
     (when (and user password)
       (.setCredentialsProvider fetch-command (UsernamePasswordCredentialsProvider. user password)))
     (.call fetch-command)))
