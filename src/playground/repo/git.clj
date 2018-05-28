@@ -1,6 +1,6 @@
 (ns playground.repo.git
   (:import (org.eclipse.jgit.api Git TransportConfigCallback)
-           (org.eclipse.jgit.transport UsernamePasswordCredentialsProvider JschConfigSessionFactory SshSessionFactory)
+           (org.eclipse.jgit.transport UsernamePasswordCredentialsProvider JschConfigSessionFactory SshSessionFactory TagOpt)
            (org.eclipse.jgit.util FS)
            (java.io File)
            (org.eclipse.jgit.revwalk RevWalk)
@@ -88,6 +88,7 @@
 (defn fetch-ssh [git & [secret-key-path public-key-path passphraze]]
   (let [fetch-command (.fetch git)]
     (.setRemoveDeletedRefs fetch-command true)
+    (.setTagOpt fetch-command TagOpt/FETCH_TAGS)
     (.setTransportConfigCallback fetch-command (get-trasport-config-callback secret-key-path public-key-path passphraze))
     (.call fetch-command)))
 
@@ -95,6 +96,7 @@
 (defn fetch-http [git & [user password]]
   (let [fetch-command (.fetch git)]
     (.setRemoveDeletedRefs fetch-command true)
+    (.setTagOpt fetch-command TagOpt/FETCH_TAGS)
     (when (and user password)
       (.setCredentialsProvider fetch-command (UsernamePasswordCredentialsProvider. user password)))
     (.call fetch-command)))
