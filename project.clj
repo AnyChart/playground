@@ -54,7 +54,7 @@
 
                  ;; git
                  ;[im.chit/gita "0.2.5"]
-                 [org.eclipse.jgit/org.eclipse.jgit "4.5.0.201609210915-r"]
+                 [org.eclipse.jgit/org.eclipse.jgit "4.11.0.201803080745-r"]
                  ;[clj-jgit "0.8.9"]
                  ;[ilevd/clj-jgit "0.8.8"]
 
