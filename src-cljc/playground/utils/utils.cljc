@@ -181,7 +181,7 @@
 
 (defn prepare-sample [sample]
   (-> sample
-      (update :description (comp trim strip-tags))
+      (update :description (comp trim strip-scripts))
       (update :short-description (comp trim strip-tags))))
 
 

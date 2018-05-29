@@ -281,11 +281,11 @@
 
 
 (defn need-update-branch [branch]
-     (or (utils/released-version? (:name branch))
-         (= (:name branch) "develop")
-         (= (:name branch) "master")
-         (string/includes? (:message branch) "#pg")
-         (string/includes? (:message branch) "#all")))
+  (or (utils/released-version? (:name branch))
+      (= (:name branch) "develop")
+      (= (:name branch) "master")
+      (string/includes? (:message branch) "#pg")
+      (string/includes? (:message branch) "#all")))
 
 
 (defn update-repository [generator db repo]

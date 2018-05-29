@@ -191,8 +191,8 @@
 (defn pull [git repo]
   (try
     (case (:type repo)
-     :ssh (pull-ssh git (-> repo :ssh :secret-key) (-> repo :ssh :public-key) (-> repo :ssh :passphrase))
-     :https (pull-http git (-> repo :https :login) (-> repo :https :password)))
+      :ssh (pull-ssh git (-> repo :ssh :secret-key) (-> repo :ssh :public-key) (-> repo :ssh :passphrase))
+      :https (pull-http git (-> repo :https :login) (-> repo :https :password)))
     ;; catch pull for tag - when in released version
     (catch DetachedHeadException e nil)))
 
