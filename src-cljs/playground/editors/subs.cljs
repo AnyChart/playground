@@ -1,6 +1,7 @@
 (ns playground.editors.subs
   (:require [re-frame.core :as rf]
-            [playground.tips.tips-data :as tips-data]))
+            [playground.tips.tips-data :as tips-data]
+            [clojure.string :as string]))
 
 
 (rf/reg-sub :editors/height
@@ -13,26 +14,29 @@
 
 (rf/reg-sub :editors/splitter-percents
             (fn [db _]
-              (let [markup-lines (-> db :sample :markup clojure.string/split-lines count)
-                    style-lines (-> db :sample :style clojure.string/split-lines count)
-                    ;code-lines (-> db :sample :code clojure.string/split-lines count)
-                    height (- (-> db :editors :editors-height) 16)
+              (let [markup-lines (-> db :sample :markup string/split-lines count)
+                    style-lines (-> db :sample :style string/split-lines count)
+                    ;code-lines (-> db :sample :code string/split-lines count)
+                    height (-> db :editors :editors-height)
 
-                    markup-percent (.ceil js/Math (/ (* (+ 4 (* 17.0 markup-lines)) 100) height))
-                    markup-percent-min (.ceil js/Math (/ (* (+ 4 (* 17.0 3)) 100) height))
+                    markup-height (+ 40 (* 17.0 markup-lines))
+                    markup-height-min 70
+                    markup-percent (.ceil js/Math (/ (* markup-height 100) height))
+                    markup-percent-min (.ceil js/Math (/ (* markup-height-min 100) height))
                     markup-percent* (cond
                                       (< markup-percent markup-percent-min) markup-percent-min
                                       (> markup-percent 33) 33
                                       :else markup-percent)
-                    style-percent (.ceil js/Math (/ (* (+ 8 (* 17.0 style-lines)) 100)
-                                                    (- (* height (- 100 markup-percent) 0.01) 20)))
-                    style-percent-min (.ceil js/Math (/ (* (+ 8 (* 17.0 3)) 100)
-                                                        (- (* height (- 100 markup-percent) 0.01) 20)))
+
+                    style-height (+ 42 (* 17.0 style-lines))
+                    style-height-min 70
+                    style-percent (.ceil js/Math (/ (* style-height 100) (- height markup-height)))
+                    style-percent-min (.ceil js/Math (/ (* style-height-min 100) (- height markup-height)))
                     style-percent* (cond
                                      (< style-percent style-percent-min) style-percent-min
                                      (> style-percent 50) 50
                                      :else style-percent)]
-                ;(println "Calculate percent1: " height markup-lines style-lines)
+                ;(println "Calculate percent1: " markup-lines style-lines height markup-width style-width)
                 ;(println "Calculate percent3: " markup-percent markup-percent-min markup-percent*)
                 ;(println "Calculate percent3: " style-percent style-percent-min style-percent*)
                 [markup-percent* style-percent*])))
