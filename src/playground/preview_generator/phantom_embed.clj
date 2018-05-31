@@ -20,11 +20,12 @@
 (def phantom-viewport-width 868)
 (def phantom-viewport-height 420)
 
+
 (def image-width 620)
 (def image-height 300)
 
 
-(defn- create-driver []
+(defn create-driver []
   (let [caps (DesiredCapabilities.)
         cliArgsCap (ArrayList.)]
     (.add cliArgsCap "--webdriver-loglevel=NONE")
@@ -35,8 +36,10 @@
     (.setCapability caps PhantomJSDriverService/PHANTOMJS_GHOSTDRIVER_CLI_ARGS "--logLevel=NONE")
     (init-driver {:webdriver (PhantomJSDriver. caps)})))
 
+
 (defn create-drivers []
   [(create-driver) (create-driver) (create-driver) (create-driver)])
+
 
 (defn setup-queue [drivers]
   (let [queue (java.util.concurrent.ConcurrentLinkedQueue.)]
@@ -45,14 +48,15 @@
     queue))
 
 
-(defn- get-free-driver [drivers-queue]
+(defn get-free-driver [drivers-queue]
   (.poll drivers-queue))
 
-(defn- return-driver [driver drivers-queue]
+
+(defn return-driver [driver drivers-queue]
   (.add drivers-queue driver))
 
 
-(defn- exec-script-to-png [d sample image-path]
+(defn exec-script-to-png [d sample image-path]
   ;(timbre/info "Generate image -" (:url sample) (:image-url sample) (keys sample))
   (let [prev-handles (.getWindowHandles (:webdriver d))]
     (execute-script d "window.open(\"\")")

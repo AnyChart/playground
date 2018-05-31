@@ -39,7 +39,8 @@
 
                  ;; db
                  [mpg "1.3.0"]
-                 [org.postgresql/postgresql "9.4.1207"]
+                 ;[org.postgresql/postgresql "9.4.1207"]
+                 [org.postgresql/postgresql "42.2.2"]
                  [clojure.jdbc/clojure.jdbc-c3p0 "0.3.3"]
                  [yesql "0.5.3"]
                  ;[org.clojure/java.jdbc "0.6.1"]
