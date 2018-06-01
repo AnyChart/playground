@@ -311,6 +311,7 @@
         (info "Actual branches: " (pr-str (names actual-branches)))
         (info "DB branches: " (pr-str (names db-branches)))
         (info "Changed branches: " (pr-str (names changed-branches)))
+        (info "Updated branches: " (pr-str (names updated-branches)))
         (info "Removed branches: " (pr-str (names removed-branches)))
         (notifier/start-build (:notifier generator)
                               (:name @repo)

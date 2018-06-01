@@ -87,10 +87,17 @@
 ;; fetch
 ;;======================================================================================================================
 (defn fetch-ssh [git & [secret-key-path public-key-path passphraze]]
+  (let [fetch-command (.fetch git)]
+    (.setRemoveDeletedRefs fetch-command true)
+    (.setTransportConfigCallback fetch-command (get-trasport-config-callback secret-key-path public-key-path passphraze))
+    (.call fetch-command)))
+
+
+(defn fetch-tags-ssh [git & [secret-key-path public-key-path passphraze]]
   (let [fetch-command (.fetch git)
         specs (ArrayList.)]
+    ;(.add specs (RefSpec. "+refs/heads/*:refs/remotes/origin/*"))
     (.add specs (RefSpec. "+refs/tags/*:refs/tags/*"))
-    (.add specs (RefSpec. "+refs/heads/*:refs/remotes/origin/*"))
     (.setRemoveDeletedRefs fetch-command true)
     (.setTagOpt fetch-command TagOpt/FETCH_TAGS)
     (.setRefSpecs fetch-command specs)
@@ -99,10 +106,18 @@
 
 
 (defn fetch-http [git & [user password]]
+  (let [fetch-command (.fetch git)]
+    (.setRemoveDeletedRefs fetch-command true)
+    (when (and user password)
+      (.setCredentialsProvider fetch-command (UsernamePasswordCredentialsProvider. user password)))
+    (.call fetch-command)))
+
+
+(defn fetch-tags-http [git & [user password]]
   (let [fetch-command (.fetch git)
         specs (ArrayList.)]
     (.add specs (RefSpec. "+refs/tags/*:refs/tags/*"))
-    (.add specs (RefSpec. "+refs/heads/*:refs/remotes/origin/*"))
+    ;(.add specs (RefSpec. "+refs/heads/*:refs/remotes/origin/*"))
     (.setRemoveDeletedRefs fetch-command true)
     (.setTagOpt fetch-command TagOpt/FETCH_TAGS)
     (.setRefSpecs fetch-command specs)
@@ -113,8 +128,12 @@
 
 (defn fetch [repo]
   (case (:type @repo)
-    :ssh (fetch-ssh (:git @repo) (-> @repo :ssh :secret-key) (-> @repo :ssh :public-key) (-> @repo :ssh :passphrase))
-    :https (fetch-http (:git @repo) (-> @repo :https :login) (-> @repo :https :password))))
+    :ssh (do
+           (fetch-ssh (:git @repo) (-> @repo :ssh :secret-key) (-> @repo :ssh :public-key) (-> @repo :ssh :passphrase))
+           (fetch-tags-ssh (:git @repo) (-> @repo :ssh :secret-key) (-> @repo :ssh :public-key) (-> @repo :ssh :passphrase)))
+    :https (do
+             (fetch-http (:git @repo) (-> @repo :https :login) (-> @repo :https :password))
+             (fetch-tags-http (:git @repo) (-> @repo :https :login) (-> @repo :https :password)))))
 
 
 ;;======================================================================================================================
