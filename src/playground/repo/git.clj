@@ -90,6 +90,7 @@
   (let [fetch-command (.fetch git)
         specs (ArrayList.)]
     (.add specs (RefSpec. "+refs/tags/*:refs/tags/*"))
+    (.add specs (RefSpec. "+refs/heads/*:refs/remotes/origin/*"))
     (.setRemoveDeletedRefs fetch-command true)
     (.setTagOpt fetch-command TagOpt/FETCH_TAGS)
     (.setRefSpecs fetch-command specs)
@@ -101,6 +102,7 @@
   (let [fetch-command (.fetch git)
         specs (ArrayList.)]
     (.add specs (RefSpec. "+refs/tags/*:refs/tags/*"))
+    (.add specs (RefSpec. "+refs/heads/*:refs/remotes/origin/*"))
     (.setRemoveDeletedRefs fetch-command true)
     (.setTagOpt fetch-command TagOpt/FETCH_TAGS)
     (.setRefSpecs fetch-command specs)
