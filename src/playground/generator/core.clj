@@ -270,13 +270,14 @@
           {:branch branch :e e}))))
 
 
-(defn need-update-branch? [branch db-branches]
+(defn changed-branch? [branch db-branches]
   (let [db-branch (first (filter #(= (:name branch) (:name %)) db-branches))]
-    (or (nil? db-branch) (not= (:commit branch) (:commit db-branch)))))
+    (or (nil? db-branch)
+        (not= (:commit branch) (:commit db-branch)))))
 
 
-(defn branches-for-update [actual-branches db-branches]
-  (let [update-branches (filter #(need-update-branch? % db-branches) actual-branches)]
+(defn changed-branches [actual-branches db-branches]
+  (let [update-branches (filter #(changed-branch? % db-branches) actual-branches)]
     update-branches))
 
 
@@ -286,6 +287,9 @@
       (= (:name branch) "master")
       (string/includes? (:message branch) "#pg")
       (string/includes? (:message branch) "#all")))
+
+
+(defn names [branches] (map :name branches))
 
 
 (defn update-repository [generator db repo]
@@ -300,14 +304,19 @@
                               (filter #(re-matches (re-pattern (:branches @repo)) (:name %)) branch-list)
                               branch-list)
             db-branches (db-req/versions db {:repo-id (:id @repo)})
-            updated-branches (branches-for-update actual-branches db-branches)
+            changed-branches (changed-branches actual-branches db-branches)
+            updated-branches (filter need-update-branch changed-branches)
             removed-branches (branches-for-remove actual-branches db-branches)]
-        (info "Branch list: " (pr-str (map :name branch-list)))
-        (info "Actual branches: " (pr-str (map :name actual-branches)))
-        (info "DB branches: " (pr-str (map :name db-branches)))
-        (info "Updated branches: " (pr-str (map :name updated-branches)))
-        (info "Removed branches: " (pr-str (map :name removed-branches)))
-        (notifier/start-build (:notifier generator) (:name @repo) (map :name updated-branches) (map :name removed-branches) queue-index)
+        (info "Branch list: " (pr-str (names branch-list)))
+        (info "Actual branches: " (pr-str (names actual-branches)))
+        (info "DB branches: " (pr-str (names db-branches)))
+        (info "Changed branches: " (pr-str (names changed-branches)))
+        (info "Removed branches: " (pr-str (names removed-branches)))
+        (notifier/start-build (:notifier generator)
+                              (:name @repo)
+                              (names changed-branches)
+                              (names updated-branches)
+                              (names removed-branches) queue-index)
         ;; delete old branches
         (doseq [branch removed-branches]
           (elastic/remove-branch (:name @repo) (:name branch) (-> db :config :elastic))
@@ -315,9 +324,7 @@
           (remove-previews (:name @repo) (:name branch) (-> generator :conf :images-dir)))
 
         ;; update branches
-        (let [result (doall (map #(when (need-update-branch %)
-                                    (update-branch db (:redis generator) repo % db-branches generator queue-index))
-                                 updated-branches))
+        (let [result (doall (map #(update-branch db (:redis generator) repo % db-branches generator queue-index) updated-branches))
               errors (filter some? result)]
           ;; update latest field
           (let [latest-version (db-req/last-version db {:repo-id (:id @repo)})]
@@ -330,13 +337,23 @@
 
           (fs/delete-dir (versions-path @repo))
           (if (not-empty errors)
-            (notifier/complete-building-with-errors (:notifier generator) (:name @repo) (map :name updated-branches)
-                                                    (map :name removed-branches) queue-index (-> errors first :e))
-            (notifier/complete-building (:notifier generator) (:name @repo) (map :name updated-branches) (map :name removed-branches) queue-index))))
+            (notifier/complete-building-with-errors (:notifier generator)
+                                                    (:name @repo)
+                                                    (names changed-branches)
+                                                    (names updated-branches)
+                                                    (names removed-branches)
+                                                    queue-index
+                                                    (-> errors first :e))
+            (notifier/complete-building (:notifier generator)
+                                        (:name @repo)
+                                        (names changed-branches)
+                                        (names updated-branches)
+                                        (names removed-branches)
+                                        queue-index))))
       (catch Exception e
         (do (error e)
             (error (.getMessage e))
-            (notifier/complete-building-with-errors (:notifier generator) (:name @repo) [] [] queue-index e))))))
+            (notifier/complete-building-with-errors (:notifier generator) (:name @repo) [] [] [] queue-index e))))))
 
 
 (defn update-repository-by-repo-name [generator db repo-name]

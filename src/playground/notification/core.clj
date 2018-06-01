@@ -14,20 +14,20 @@
   (map->Notifier {:config config}))
 
 
-(defn start-build [notifier project branches removed-branches queue-index]
-  (slack/start-build notifier project branches removed-branches queue-index)
+(defn start-build [notifier project branches updated-branches removed-branches queue-index]
+  (slack/start-build notifier project branches updated-branches removed-branches queue-index)
   ;(skype/start-build notifier project branches removed-branches queue-index)
   )
 
 
-(defn complete-building [notifier project branches removed-branches queue-index]
-  (slack/complete-building notifier project branches removed-branches queue-index)
+(defn complete-building [notifier project branches updated-branches removed-branches queue-index]
+  (slack/complete-building notifier project branches updated-branches removed-branches queue-index)
   ;(skype/complete-building notifier project branches removed-branches queue-index)
   )
 
 
-(defn complete-building-with-errors [notifier project branches removed-branches queue-index e]
-  (slack/complete-building-with-errors notifier project branches removed-branches queue-index e)
+(defn complete-building-with-errors [notifier project branches updated-branches removed-branches queue-index e]
+  (slack/complete-building-with-errors notifier project branches updated-branches removed-branches queue-index e)
   ;(skype/complete-building-with-errors notifier project branches removed-branches queue-index e)
   )
 

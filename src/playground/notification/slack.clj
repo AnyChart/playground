@@ -45,7 +45,7 @@
 
 
 ;; generator
-(defn start-build [notifier project branches removed-branches queue-index]
+(defn start-build [notifier project branches updated-branches removed-branches queue-index]
   (let [attachments [{:color     "#4183C4"
                       :text      (str "#" queue-index " pg `" (prefix notifier) "` - start")
                       :mrkdwn_in ["text", "pretext"]
@@ -54,8 +54,12 @@
                                            :value project
                                            :short true}
                                           (when (seq branches)
-                                            {:title "Branches"
+                                            {:title "Changed branches"
                                              :value (string/join ", " branches)
+                                             :short true})
+                                          (when (seq updated-branches)
+                                            {:title "Branches to update"
+                                             :value (string/join ", " updated-branches)
                                              :short true})
                                           (when (seq removed-branches)
                                             {:title "Removed branches"
@@ -64,7 +68,7 @@
     (notify-attach notifier attachments)))
 
 
-(defn complete-building [notifier project branches removed-branches queue-index]
+(defn complete-building [notifier project branches updated-branches removed-branches queue-index]
   (let [text (str "#" queue-index " pg `" (prefix notifier) "` - complete")
         attachments [{:color     "#36a64f"
                       :text      text
@@ -74,8 +78,12 @@
                                            :value project
                                            :short true}
                                           (when (seq branches)
-                                            {:title "Branches"
+                                            {:title "Changed branches"
                                              :value (string/join ", " branches)
+                                             :short true})
+                                          (when (seq updated-branches)
+                                            {:title "Updated branches"
+                                             :value (string/join ", " updated-branches)
                                              :short true})
                                           (when (seq removed-branches)
                                             {:title "Removed branches"
@@ -84,28 +92,29 @@
     (notify-attach notifier attachments)))
 
 
-(defn complete-building-with-errors
-  ([notifier project branches removed-branches queue-index]
-   (complete-building-with-errors notifier project branches removed-branches queue-index nil))
-  ([notifier project branches removed-branches queue-index e]
-   (let [text (str "#" queue-index " pg `" (prefix notifier) "` - complete with errors"
-                   (when e (str "\n```" (format-exception e) "```")))
-         attachments [{:color     "danger"
-                       :text      text
-                       :mrkdwn_in ["text", "pretext"]
-                       :fields    (filter some?
-                                          [{:title "Project"
-                                            :value project
-                                            :short true}
-                                           (when (seq branches)
-                                             {:title "Branches"
-                                              :value (string/join ", " branches)
-                                              :short true})
-                                           (when (seq removed-branches)
-                                             {:title "Removed branches"
-                                              :value (string/join ", " removed-branches)
-                                              :short true})])}]]
-     (notify-attach notifier attachments))))
+(defn complete-building-with-errors [notifier project branches updated-branches removed-branches queue-index e]
+  (let [text (str "#" queue-index " pg `" (prefix notifier) "` - complete with errors"
+                  (when e (str "\n```" (format-exception e) "```")))
+        attachments [{:color     "danger"
+                      :text      text
+                      :mrkdwn_in ["text", "pretext"]
+                      :fields    (filter some?
+                                         [{:title "Project"
+                                           :value project
+                                           :short true}
+                                          (when (seq branches)
+                                            {:title "Changed branches"
+                                             :value (string/join ", " branches)
+                                             :short true})
+                                          (when (seq updated-branches)
+                                            {:title "Updated branches"
+                                             :value (string/join ", " updated-branches)
+                                             :short true})
+                                          (when (seq removed-branches)
+                                            {:title "Removed branches"
+                                             :value (string/join ", " removed-branches)
+                                             :short true})])}]]
+    (notify-attach notifier attachments)))
 
 
 (defn complete-sync-message [project]
