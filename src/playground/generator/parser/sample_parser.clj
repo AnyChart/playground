@@ -1,11 +1,10 @@
 (ns playground.generator.parser.sample-parser
   (:require [net.cgrand.enlive-html :as html]
             [taoensso.timbre :refer [info error]]
-            [clojure.string :as s :refer (trim-newline)]
+            [clojure.string :as string :refer (trim-newline)]
             [clojure.java.io :refer [file]]
             [toml.core :as toml]
-            [playground.data.tags :as tags-data]
-            [clojure.string :as string])
+            [playground.data.tags :as tags-data])
   (:import (org.jsoup Jsoup)))
 
 
@@ -20,7 +19,7 @@
 
 
 (defn trim-trailing [s]
-  (clojure.string/replace s #"\s*$" ""))
+  (string/replace s #"\s*$" ""))
 
 
 (defn space-count [s]
@@ -37,7 +36,7 @@
     (let [trailing-s (-> s trim-trailing trim-newline-left)
           space-count (space-count (last (string/split-lines trailing-s)))
           pattern (re-pattern (str "(?m)^[ ]{" space-count "}"))]
-      (clojure.string/replace trailing-s pattern ""))))
+      (string/replace trailing-s pattern ""))))
 
 
 (defn replace-white-spaces [s]
@@ -146,9 +145,9 @@
 
 (defn replace-vars [s vars]
   (reduce (fn [s [key value]]
-            (clojure.string/replace s
-                                    (re-pattern (str "\\{\\{" (name key) "\\}\\}"))
-                                    value))
+            (string/replace s
+                            (re-pattern (str "\\{\\{" (name key) "\\}\\}"))
+                            value))
           s vars))
 
 
@@ -159,7 +158,7 @@
 (defn parse [base-path group config sample]
   ;(prn "parse sample: " base-path group config sample)
   (let [path (sample-path base-path group sample)
-        name (clojure.string/replace sample #"\.(html|sample)$" "")
+        name (string/replace sample #"\.(html|sample)$" "")
         sample-str (-> path slurp (replace-vars (:vars config)))
         base-info (cond (.endsWith path ".html") (parse-html-sample sample-str)
                         (.endsWith path ".sample") (if (html? sample-str)
@@ -167,7 +166,7 @@
                                                      (parse-toml-sample path sample-str)))]
     (when base-info
       (assoc base-info
-        :name (or (:name base-info) (clojure.string/replace name #"_" " "))
+        :name (or (:name base-info) (string/replace name #"_" " "))
         :hidden (= name "Coming_Soon")
         :url (str (.substring group 1)
-                  (clojure.string/replace name #"%" "%25"))))))
+                  (string/replace name #"%" "%25"))))))
