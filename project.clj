@@ -91,10 +91,25 @@
             [lein-cljsbuild "1.1.5"]
             [lein-kibit "0.1.3"]
             [deraen/sass4clj "0.3.1"]
-            [deraen/lein-sass4clj "0.3.1"]]
+            [deraen/lein-sass4clj "0.3.1"]
+            [lein-asset-minifier "0.4.4"]]
   :sass {:source-paths ["src-css/scss"]
          :target-path  "resources/public/css"
          :output-style :compressed}
+  :minify-assets [
+                  ;[:html {:source "dev/resource/html" :target "dev/minified/html"}]
+                  ;[:css {:source "dev/resources/css" :target "dev/minified/css/styles.min.css"}]
+                  [:js {:source ["resources/public/codemirror/lib/codemirror.js"
+                                 "resources/public/codemirror/addon/scroll/simplescrollbars.js"
+                                 "resources/public/codemirror/mode/javascript/javascript.js"
+                                 "resources/public/codemirror/mode/css/css.js"
+                                 "resources/public/codemirror/mode/xml/xml.js"
+                                 "resources/public/codemirror/mode/htmlmixed/htmlmixed.js"]
+                        :target "resources/public/js/codemirror.min.js"}]
+                  [:js {:source ["resources/public/js/clipboard.min.js"
+                                 "resources/public/splitter/splitter.js"
+                                 "resources/public/js/Sortable.min.js"]
+                        :target "resources/public/js/clipboard-splitter-sortable.min.js"}]]
   :profiles {:dev {:jvm-opts     ["-Dlocal=true"]
                    :dependencies [[re-frisk "0.5.4"]]}}
   :cljsbuild {:builds [

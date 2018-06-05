@@ -88,38 +88,37 @@
      ; Latest compiled and minified JavaScript
      [:script {:src "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"}]
 
-     [:link {:type "text/css" :rel "stylesheet" :href "https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic"}]
-     [:link {:type "text/css" :rel "stylesheet" :href "https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300"}]
-
      ; codemirror
-     [:script {:src "/codemirror/lib/codemirror.js"}]
-     [:link {:href "/codemirror/lib/codemirror.css" :rel "stylesheet"}]
+     [:link {:href "/codemirror/lib/codemirror.min.css" :rel "stylesheet"}]
      [:link {:href "/codemirror/addon/scroll/simplescrollbars.css" :rel "stylesheet"}]
-     [:script {:src "/codemirror/addon/scroll/simplescrollbars.js"}]
-     [:script {:src "/codemirror/mode/javascript/javascript.js"}]
-     [:script {:src "/codemirror/mode/css/css.js"}]
-     [:script {:src "/codemirror/mode/xml/xml.js"}]
-     [:script {:src "/codemirror/mode/htmlmixed/htmlmixed.js"}]
+     [:script {:src "/js/codemirror.min.js"}]
 
-     ; clipboard
-     [:script {:src "/js/clipboard.min.js"}]
-
-     ; splitter
-     [:script {:src "/splitter/splitter.js" :type "text/javascript"}]
+     ; clipboard - to copy text from editors to clipboard [:script {:src "/js/clipboard.min.js"}]
+     ; splitter - split/resize editors                    [:script {:src "/splitter/splitter.js" :type "text/javascript"}]
+     ; Sortable -to move scripts/styles in settings       [:script {:src "/js/Sortable.min.js"}]
      [:link {:href "/splitter/splitter.css" :type "text/css" :rel "stylesheet"}]
+     [:script {:src "/js/clipboard-splitter-sortable.min.js"}]
 
-     ;; Sortable
-     [:script {:src "/js/Sortable.min.js"}]
-
-     ;; Styles
+     "<!--[if IE]>"
      [:link {:href (str "/css/editor.css?v=" (c/commit)) :rel "stylesheet"}]
      [:link {:href "https://cdn.anychart.com/fonts/2.7.2/anychart.css" :rel "stylesheet"}]
      [:link {:href "https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&subset=greek" :type "text/css" :rel "stylesheet"}]
+     [:link {:href "https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic" :rel "stylesheet" :type "text/css"}]
+     [:link {:href "https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300" :rel "stylesheet" :type "text/css"}]
+     "<!--[if IE]>"
+
      [:script {:type "text/javascript"} "window.HIDE_SHARING_BUTTONS = true;"]
      page/head-tag-manager]
 
 
     [:body
+     ;; styles
+     [:link {:href (str "/css/editor.css?v=" (c/commit)) :rel "stylesheet"}]
+     [:link {:href "https://cdn.anychart.com/fonts/2.7.2/anychart.css" :rel "stylesheet"}]
+     [:link {:href "https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&subset=greek" :type "text/css" :rel "stylesheet"}]
+     [:link {:href "https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic" :rel "stylesheet" :type "text/css"}]
+     [:link {:href "https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300" :rel "stylesheet" :type "text/css"}]
+
      [:script {:type "text/javascript"} "window.HIDE_SHARING_BUTTONS = true;"]
      page/body-tag-manager
 
