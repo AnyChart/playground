@@ -3,7 +3,9 @@
             [playground.web.helpers :refer :all]
             [version-clj.core :as version-clj :refer [version-compare]]
             [playground.web.auth :as auth]
+            [playground.data.tags :as data-tags]
             [playground.web.utils :as web-utils]))
+
 
 ;; =====================================================================================================================
 ;; Repo, version middleware for projects info
@@ -15,6 +17,7 @@
       (when repo
         (handler (assoc-in request [:app :repo] repo))))))
 
+
 (defn check-version-middleware [handler]
   (fn [request]
     (let [repo (get-repo request)
@@ -25,6 +28,7 @@
                       (db-req/last-version (get-db request) {:repo-id (:id repo)}))]
         (when version
           (handler (assoc-in request [:app :version] version)))))))
+
 
 ;; =====================================================================================================================
 ;; Samples middlewares
@@ -45,12 +49,14 @@
       (when sample
         (handler (assoc-in request [:app :sample] full-sample))))))
 
+
 (defn check-last-user-sample-middleware [handler]
   (fn [request]
     (let [hash (-> request :route-params :hash)
           sample (db-req/last-sample-by-hash (get-db request) {:url hash})]
       (when sample
         (handler (assoc-in request [:app :sample] sample))))))
+
 
 (defn check-user-sample-middleware [handler]
   (fn [request]
@@ -60,6 +66,7 @@
                                                           :version version})]
       (when sample
         (handler (assoc-in request [:app :sample] sample))))))
+
 
 (defn check-template-middleware [handler]
   (fn [request]
@@ -71,6 +78,7 @@
       (when sample
         (handler (assoc-in request [:app :sample] new-sample))))))
 
+
 ;; =====================================================================================================================
 ;; Middlewares for all repos, templates,
 ;; tags for footer and tags for tags-page
@@ -80,30 +88,42 @@
     (handler (assoc-in request [:app :templates]
                        (db-req/templates (get-db request))))))
 
+
 (defn repos-middleware [handler]
   (fn [request]
     (handler (assoc-in request [:app :repos]
                        (db-req/repos (get-db request))))))
+
 
 (defn tags-middleware [handler]
   (fn [request]
     (handler (assoc-in request [:app :tags]
                        (db-req/top-tags (get-db request) {:limit 7})))))
 
+
 (defn all-tags-middleware [handler]
   (fn [request]
     (handler (assoc-in request [:app :all-tags]
                        (db-req/tags (get-db request))))))
+
+
+(defn all-tags-anychart-filter-middleware [handler]
+  (fn [request]
+    (handler
+      (update-in request [:app :all-tags] data-tags/filter-anychart-tags))))
+
 
 (defn data-sets-middleware [handler]
   (fn [request]
     (handler (assoc-in request [:app :data-sets]
                        (db-req/top-data-sets (get-db request) {:limit 7})))))
 
+
 (defn all-data-sets-middleware [handler]
   (fn [request]
     (handler (assoc-in request [:app :all-data-sets]
                        (db-req/data-sets (get-db request))))))
+
 
 (defn pagination-page-middleware [handler]
   (fn [request]
@@ -114,6 +134,7 @@
                  0)]
       (when (>= page 0)
         (handler (assoc-in request [:app :page] page))))))
+
 
 ;; =====================================================================================================================
 ;; Aggregation functions
@@ -130,6 +151,7 @@
         check-perm-fn
         auth/check-anonymous-middleware)))
 
+
 (defn repo-sample [handler]
   (-> handler
       check-sample-middleware
@@ -137,10 +159,12 @@
       check-repo-middleware
       auth/check-anonymous-middleware))
 
+
 (defn last-user-sample [handler]
   (-> handler
       check-last-user-sample-middleware
       auth/check-anonymous-middleware))
+
 
 (defn user-sample [handler]
   (-> handler

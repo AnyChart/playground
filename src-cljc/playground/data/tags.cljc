@@ -5,6 +5,7 @@
            (:require [playground.data.tags-macros :as tags-macros])
      :cljs (:require-macros [playground.data.tags-macros :as tags-macros])))
 
+
 (defn original-name->id-name [name]
   (-> name
       string/lower-case
@@ -15,6 +16,7 @@
 
 
 (def tags-data (tags-macros/parse-data-compile-time))
+
 
 (def rules (:rules tags-data))
 
@@ -33,13 +35,16 @@
                       tags-from-rules)]
     (sort-by :name all-tags)))
 
+
 (def all-tags (get-all-tags))
+
 
 ;; for tags page
 (defn get-tag-data [tag]
   (first (filter (fn [tag-data]
                    (or (= tag (:id tag-data))
                        (= tag (:name tag-data)))) all-tags)))
+
 
 ;; for generation
 (defn get-tags-by-code [code]
@@ -49,12 +54,18 @@
                               res)) [] rules)]
     (sort (distinct tags-code))))
 
+
 ;; whether anychart tag or user tag
 (defn anychart-tag? [tag]
   (some (fn [tag-data]
           (or (= tag (:id tag-data))
               (= tag (:name tag-data))))
         all-tags))
+
+
+(defn filter-anychart-tags [tags]
+  (filter #(anychart-tag? (:name %)) tags))
+
 
 (defn original-name-by-id [tag]
   (:name (first (filter (fn [tag-data]

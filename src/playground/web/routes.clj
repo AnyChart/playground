@@ -54,11 +54,13 @@
 
            (GET "/" [] (-> landing-handlers/landing-page
                            mw/pagination-page-middleware
+                           mw/all-tags-anychart-filter-middleware
                            mw/all-tags-middleware
                            mw/base-page-middleware))
 
            (GET "/sitemap.xml" [] (-> sitemap-handler/sitemap-page
                                       mw/repos-middleware
+                                      mw/all-tags-anychart-filter-middleware
                                       mw/all-tags-middleware
                                       mw/all-data-sets-middleware))
 
@@ -122,6 +124,7 @@
            ;; ==========================================================================================================
            ;(GET "/tags/" [] redirect-slash)
            (GET "/tags" [] (-> tag-handlers/tags-page
+                               mw/all-tags-anychart-filter-middleware
                                mw/all-tags-middleware
                                mw/base-page-middleware))
 

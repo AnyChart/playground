@@ -78,9 +78,7 @@
            [:a.popular-tag-button
             {:title (str "Tag - " (:name tag))
              :href  (str "/tags/" (tags-data/original-name->id-name (:name tag)))}
-            (:name tag)]
-           )
-         ]
+            (:name tag)])]
 
         [:div.tags-box
          [:div.row
