@@ -5,6 +5,7 @@
             [playground.utils.utils :as utils]
             [ajax.core :refer [GET POST]]))
 
+
 ;;======================================================================================================================
 ;; Editors
 ;;======================================================================================================================
@@ -34,6 +35,7 @@
   :resize-window
   (fn [db _]
     (assoc-in db [:editors :editors-height] (editors-js/editors-height))))
+
 
 ;;======================================================================================================================
 ;; Editors views
@@ -79,17 +81,20 @@
     (update-view db :right)
     (assoc-in db [:editors :view] :right)))
 
+
 (rf/reg-event-db
   :view/bottom
   (fn [db _]
     (update-view db :bottom)
     (assoc-in db [:editors :view] :bottom)))
 
+
 (rf/reg-event-db
   :view/top
   (fn [db _]
     (update-view db :top)
     (assoc-in db [:editors :view] :top)))
+
 
 (rf/reg-event-fx
   :view/standalone

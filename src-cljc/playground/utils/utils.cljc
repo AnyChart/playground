@@ -10,6 +10,14 @@
   (filter released-version? versions))
 
 
+(defn released-8-version? [s]
+  (re-matches #"^8\.\d+\.\d+$" s))
+
+
+(defn filter-8-released-versions [versions]
+  (filter released-8-version? versions))
+
+
 (defn replace-urls [version-name scripts]
   (map (fn [script]
          (if (= script "../anychart-bundle.min.js")

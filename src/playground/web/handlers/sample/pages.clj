@@ -32,7 +32,7 @@
                        (= "export" (-> request :query-string)))
         versions-names (cond->
                          (db-req/versions-by-repos-names (get-db request) {:repos-names (db-req/raw-coll (c/repos-for-versions))})
-                         (c/released-versions) (utils/filter-released-versions))
+                         (c/released-versions) (utils/filter-8-released-versions))
         data {:canonical-url (if editor-view
                                (utils/full-canonical-url-standalone sample)
                                (utils/full-canonical-url sample))
