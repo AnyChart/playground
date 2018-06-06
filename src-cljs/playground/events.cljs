@@ -104,9 +104,15 @@
 
 
 (rf/reg-event-fx
-  :run
+  :on-update-iframe
   (fn [{db :db} _]
     {:update-iframe (-> db :sample)}))
+
+
+(rf/reg-event-db
+  :run
+  (fn [db _]
+    (update-in db [:editors :iframe-update] inc)))
 
 
 (rf/reg-event-fx
@@ -114,7 +120,7 @@
   (fn [{db :db} _]
     (if (= :standalone (-> db :editors :view))
       {:dispatch [:view/editor]}
-      {:db (update-in db [:editors :iframe-update] inc)})))
+      {:dispatch [:run]})))
 
 
 ;;======================================================================================================================

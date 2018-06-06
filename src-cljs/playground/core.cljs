@@ -17,11 +17,14 @@
 
 (enable-console-print!)
 
+
 (defn init [data]
   (rf/dispatch-sync [:init data]))
 
+
 (defn mount-html []
   (reagent/render-component [views/app] (.getElementById js/document "main-container")))
+
 
 (defn ^:export run [data]
   (let [r (t/reader :json)

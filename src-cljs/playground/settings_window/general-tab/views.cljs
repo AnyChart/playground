@@ -21,7 +21,7 @@
                                :style     {:max-height @(rf/subscribe [:settings.general-tab/description-height])}
                                :value     @(rf/subscribe [:sample/description])
                                :on-change #(rf/dispatch [:settings/change-desc (-> % .-target .-value)])}]
-      [:div  {:dangerouslySetInnerHTML {:__html @(rf/subscribe [:sample/description])}}])]
+      [:div {:dangerouslySetInnerHTML {:__html @(rf/subscribe [:sample/description])}}])]
    [:div.form-group
     [:label "Tags"]
     [:div.tags-box

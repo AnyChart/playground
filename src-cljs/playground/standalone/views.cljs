@@ -5,7 +5,7 @@
 
 
 (defn iframe-standalone []
-  (reagent/create-class {:component-did-mount #(rf/dispatch [:run])
+  (reagent/create-class {:component-did-mount #(rf/dispatch [:on-update-iframe])
                          :reagent-render      (fn []
                                                 [:iframe {:id                "result-iframe"
                                                           :name              "result-iframe"
