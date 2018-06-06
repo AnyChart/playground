@@ -6,6 +6,7 @@
 (defn get-version-url [version]
   (case version
     "latest" "v8"
+    "Release Candidate" "rc"
     version))
 
 

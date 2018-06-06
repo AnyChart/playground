@@ -6,12 +6,14 @@
 (defn url-to-version [url]
   (case url
     "v8" "latest"
+    "rc" "Release Candidate"
     url))
 
 
 (defn version-to-url [version]
   (case version
     "latest" "v8"
+    "Release Candidate" "rc"
     version))
 
 
