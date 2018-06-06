@@ -62,11 +62,12 @@
   :settings.external-resources/change-version
   [detect-version-interceptor]
   (fn [{db :db} [_ version]]
-    {:db       (-> db
-                   (assoc-in [:settings :selected-version] version)
-                   (assoc-in [:sample :scripts] (version-detect/replace-version-scripts version (-> db :sample :scripts)))
-                   (assoc-in [:sample :styles] (version-detect/replace-version-scripts version (-> db :sample :styles))))
-     :dispatch [:settings.external-resources/init-version]}))
+    {:db         (-> db
+                     (assoc-in [:settings :selected-version] version)
+                     (assoc-in [:sample :scripts] (version-detect/replace-version-scripts version (-> db :sample :scripts)))
+                     (assoc-in [:sample :styles] (version-detect/replace-version-scripts version (-> db :sample :styles))))
+     :dispatch-n [[:settings.external-resources/init-version]
+                  [:run]]}))
 
 
 ;;======================================================================================================================

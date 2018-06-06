@@ -9,9 +9,6 @@
     [:select.form-control {:id        "settings-select-version"
                            :value     @(rf/subscribe [:settings.external-resources/selected-version])
                            :on-change #(rf/dispatch [:settings.external-resources/change-version (-> % .-target .-value)])}
-
-
      (for [v @(rf/subscribe [:settings/versions-names])]
        ^{:key (str "v" v)}
-       [:option {:value v} v])
-     ]]])
+       [:option {:value v} v])]]])
