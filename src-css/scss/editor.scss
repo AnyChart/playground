@@ -724,7 +724,7 @@ html {
           border-radius: 5px;
           position: relative;
           padding-left: 27px;
-          .glyphicon-align-justify{
+          .glyphicon-align-justify {
             cursor: move;
           }
           .in-box {
@@ -957,9 +957,11 @@ html {
     text-decoration: none;
   }
 }
+
 a.ac-btn {
   line-height: 28px;
 }
+
 .add-btn {
   background-color: #19a1ce;
 
@@ -967,6 +969,7 @@ a.ac-btn {
     background-color: #1796bf;
   }
 }
+
 .remove-btn {
   background-color: $red-color;
   &:active {
@@ -1115,11 +1118,10 @@ a.ac-btn {
   }
 }
 
-
 .ac-modal {
   position: fixed;
   width: 100%;
-  height:100%;
+  height: 100%;
   top: 0;
   bottom: 0;
   left: 0;
@@ -1133,7 +1135,7 @@ a.ac-btn {
   .ac-modal-dialog {
     text-align: left;
     background: white;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     z-index: 1003;
     padding: 20px;
     max-width: 300px;
@@ -1157,5 +1159,39 @@ a.ac-btn {
   }
 }
 
+.tooltiped {
+  position: relative;
+  display: inline-block;
+
+  .tooltip {
+    //visibility: hidden;
+    opacity: 0;
+    font-size: 12px;
+    max-width: 440px;
+    white-space: nowrap;
+    background-color: #555;
+    color: #fff;
+
+    border-radius: 6px;
+    padding: 5px 7px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    //left: 50%;
+    //margin-left: -60px;
+
+    //transition: opacity 0.3s;
+    //transition: opacity .5s ease-out 1s;
+    a {
+      display: block;
+      color: #aae0f9;
+    }
+  }
+  &:hover .tooltip {
+    transition: opacity .5s ease-out 1s;
+    //visibility: visible;
+    opacity: 1;
+  }
+}
 
 @import "editor/standalone";

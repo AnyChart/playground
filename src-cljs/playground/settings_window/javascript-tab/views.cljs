@@ -48,6 +48,15 @@
   [:div.javascript-tab.content
    [:p.section-label {:title consts/scripts-title} "Scripts"
     [:span.question-small]]
+
+   ;[:p.section-label
+   ; "Scripts"
+   ; [:span.question-small.tooltiped
+   ;  [:span.tooltip
+   ;   consts/scripts-title
+   ;   [:a {:href "https://docs.anychart.com"
+   ;        :target "_blank"
+   ;        :data-delay  "{'show':'500', 'hide':'100'}"} "Read more >>"]]]]
    [scripts-box]
 
    [:div.line

@@ -4,7 +4,7 @@
            (org.eclipse.jgit.util FS)
            (java.io File)
            (org.eclipse.jgit.revwalk RevWalk)
-           (org.eclipse.jgit.api.errors DetachedHeadException)
+           (org.eclipse.jgit.api.errors DetachedHeadException NoHeadException)
            (java.util ArrayList))
   (:require [clojure.java.shell :refer [sh with-sh-env with-sh-dir]]
             [me.raynes.fs :as fs]
@@ -215,7 +215,8 @@
       :ssh (pull-ssh git (-> repo :ssh :secret-key) (-> repo :ssh :public-key) (-> repo :ssh :passphrase))
       :https (pull-http git (-> repo :https :login) (-> repo :https :password)))
     ;; catch pull for tag - when in released version
-    (catch DetachedHeadException e nil)))
+    ;; NoHeadException DetachedHeadException
+    (catch Exception e nil)))
 
 
 ;;======================================================================================================================
