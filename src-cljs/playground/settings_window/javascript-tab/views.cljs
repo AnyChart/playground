@@ -46,17 +46,10 @@
 
 (defn javascript-tab []
   [:div.javascript-tab.content
-   [:p.section-label {:title consts/scripts-title} "Scripts"
-    [:span.question-small]]
+   [:p.section-label "Scripts"
+    [:span.question-small.tooltiped
+     [:span.tooltip consts/scripts-title]]]
 
-   ;[:p.section-label
-   ; "Scripts"
-   ; [:span.question-small.tooltiped
-   ;  [:span.tooltip
-   ;   consts/scripts-title
-   ;   [:a {:href "https://docs.anychart.com"
-   ;        :target "_blank"
-   ;        :data-delay  "{'show':'500', 'hide':'100'}"} "Read more >>"]]]]
    [scripts-box]
 
    [:div.line
@@ -81,8 +74,10 @@
     [:div.col-sm-6
      [:div.form-group
       [:label {:for "settings-select-bin"} "AnyChart Binaries"
-       [:a.question-small {:href   "https://docs.anychart.com/Quick_Start/Modules"
-                           :target "_blank"}]]
+       [:span.question-small.tooltiped
+        [:span.tooltip "AnyChart Binaries"
+         [:a {:href   "https://docs.anychart.com/Quick_Start/Modules"
+              :target "_blank"} "Read more >>"]]]]
       (let [loading @(rf/subscribe [:settings.external-resources/loading])
             groups @(rf/subscribe [:settings.external-resources/binaries-groups])
             disabled (or loading (empty? groups))]
@@ -111,8 +106,10 @@
     [:div.col-sm-6
      [:div.form-group
       [:label {:for "settings-select-theme"} "AnyChart Themes"
-       [:a.question-small {:href   "https://docs.anychart.com/Appearance_Settings/Themes"
-                           :target "_blank"}]]
+       [:span.question-small.tooltiped
+        [:span.tooltip "AnyChart Themes"
+         [:a {:href   "https://docs.anychart.com/Appearance_Settings/Themes"
+              :target "_blank"} "Read more >>"]]]]
       (let [themes @(rf/subscribe [:settings.external-resources/themes])
             loading @(rf/subscribe [:settings.external-resources/loading])
             disabled (or loading (empty? themes))]
@@ -135,8 +132,10 @@
     [:div.col-sm-6
      [:div.form-group
       [:label {:for "settings-select-locale"} "AnyChart Locales"
-       [:a.question-small {:href   "https://docs.anychart.com/Common_Settings/Localization"
-                           :target "_blank"}]]
+       [:span.question-small.tooltiped
+        [:span.tooltip "AnyChart Themes"
+         [:a {:href   "https://docs.anychart.com/Common_Settings/Localization"
+              :target "_blank"} "Read more >>"]]]]
       (let [loading @(rf/subscribe [:settings.external-resources/loading])
             locales @(rf/subscribe [:settings.external-resources/locales])
             disabled (or loading (empty? locales))]
@@ -159,8 +158,10 @@
     [:div.col-sm-6
      [:div.form-group
       [:label {:for "settings-select-map"} "AnyChart Geo Data"
-       [:a.question-small {:href   "https://docs.anychart.com/Maps/Maps_List"
-                           :target "_blank"}]]
+       [:a.question-small.tooltiped
+        [:span.tooltip "AnyChart Geo Data"
+         [:a {:href   "https://docs.anychart.com/Maps/Maps_List"
+              :target "_blank"} "Read more >>"]]]]
       (let [loading @(rf/subscribe [:settings.external-resources/loading])
             groups @(rf/subscribe [:settings.external-resources/maps-groups])
             disabled (or loading (empty? groups))]

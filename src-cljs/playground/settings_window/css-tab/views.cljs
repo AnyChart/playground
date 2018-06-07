@@ -47,8 +47,9 @@
 (defn css-tab []
   [:div.javascript-tab.css-tab.content
 
-   [:p.section-label {:title consts/styles-title} "Styles"
-    [:span.question-small]]
+   [:p.section-label.tooltiped "Styles"
+    [:span.question-small.tooltiped
+     [:span.tooltip consts/styles-title]]]
    [styles-box]
 
    [:div.line
@@ -73,8 +74,10 @@
     [:div.col-sm-6
      [:div.form-group
       [:label {:for "settings-select-bin"} "AnyChart CSS"
-       [:a.question-small {:href   "https://docs.anychart.com/Common_Settings/UI_Controls/AnyChart_UI"
-                           :target "_blank"}]]
+       [:span.question-small.tooltiped
+        [:span.tooltip "AnyChart CSS"
+         [:a {:href   "https://docs.anychart.com/Quick_Start/Modules"
+              :target "_blank"} "Read more >>"]]]]
       (let [loading @(rf/subscribe [:settings.external-resources/loading])
             csss @(rf/subscribe [:settings.external-resources/css])
             disabled (or loading (empty? csss))]

@@ -638,6 +638,7 @@ html {
   }
 
   .question-small {
+    margin-left: 10px;
     &:before {
       content: '?';
       color: white;
@@ -648,7 +649,7 @@ html {
       height: 12px;
       display: inline-block;
       position: relative;
-      left: 10px;
+      left: 0;
       top: 0;
       font-size: 11px;
       line-height: 10px;
@@ -1162,34 +1163,30 @@ a.ac-btn {
 .tooltiped {
   position: relative;
   display: inline-block;
-
   .tooltip {
-    //visibility: hidden;
-    opacity: 0;
     font-size: 12px;
     max-width: 440px;
     white-space: nowrap;
     background-color: #555;
     color: #fff;
-
     border-radius: 6px;
     padding: 5px 7px;
     position: absolute;
     z-index: 1;
-    bottom: 125%;
-    //left: 50%;
-    //margin-left: -60px;
-
-    //transition: opacity 0.3s;
-    //transition: opacity .5s ease-out 1s;
+    bottom: 100%;
+    margin-left: -5px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s ease-out 0.1s, visibility 0.3s;
     a {
+      margin-top: 2px;
       display: block;
-      color: #aae0f9;
+      color: #afdbf1;
     }
   }
   &:hover .tooltip {
-    transition: opacity .5s ease-out 1s;
-    //visibility: visible;
+    transition: opacity .2s ease-out;
+    visibility: visible;
     opacity: 1;
   }
 }
