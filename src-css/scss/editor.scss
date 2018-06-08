@@ -1163,10 +1163,13 @@ a.ac-btn {
 .tooltiped {
   position: relative;
   display: inline-block;
-  .tooltip {
+  .tooltip-box {
     font-size: 12px;
+    font-weight: normal;
+    text-transform: none;
+    min-width: 360px;
     max-width: 440px;
-    white-space: nowrap;
+    //white-space: nowrap;
     background-color: #555;
     color: #fff;
     border-radius: 6px;
@@ -1177,14 +1180,17 @@ a.ac-btn {
     margin-left: -5px;
     visibility: hidden;
     opacity: 0;
+    //visibility: visible;
+    //opacity: 1;
     transition: opacity 0.2s ease-out 0.1s, visibility 0.3s;
+    //display: inline-block !important;
     a {
       margin-top: 2px;
       display: block;
       color: #afdbf1;
     }
   }
-  &:hover .tooltip {
+  &:hover .tooltip-box {
     transition: opacity .2s ease-out;
     visibility: visible;
     opacity: 1;

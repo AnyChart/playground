@@ -48,7 +48,7 @@
   [:div.javascript-tab.content
    [:p.section-label "Scripts"
     [:span.question-small.tooltiped
-     [:span.tooltip consts/scripts-title]]]
+     [:span.tooltip-box consts/scripts-title]]]
 
    [scripts-box]
 
@@ -75,7 +75,7 @@
      [:div.form-group
       [:label {:for "settings-select-bin"} "AnyChart Binaries"
        [:span.question-small.tooltiped
-        [:span.tooltip "AnyChart Binaries"
+        [:span.tooltip-box consts/anychart-binaries-title
          [:a {:href   "https://docs.anychart.com/Quick_Start/Modules"
               :target "_blank"} "Read more >>"]]]]
       (let [loading @(rf/subscribe [:settings.external-resources/loading])
@@ -107,7 +107,7 @@
      [:div.form-group
       [:label {:for "settings-select-theme"} "AnyChart Themes"
        [:span.question-small.tooltiped
-        [:span.tooltip "AnyChart Themes"
+        [:span.tooltip-box consts/anychart-themes-title
          [:a {:href   "https://docs.anychart.com/Appearance_Settings/Themes"
               :target "_blank"} "Read more >>"]]]]
       (let [themes @(rf/subscribe [:settings.external-resources/themes])
@@ -133,7 +133,7 @@
      [:div.form-group
       [:label {:for "settings-select-locale"} "AnyChart Locales"
        [:span.question-small.tooltiped
-        [:span.tooltip "AnyChart Themes"
+        [:span.tooltip-box consts/anychart-locales-title
          [:a {:href   "https://docs.anychart.com/Common_Settings/Localization"
               :target "_blank"} "Read more >>"]]]]
       (let [loading @(rf/subscribe [:settings.external-resources/loading])
@@ -159,7 +159,7 @@
      [:div.form-group
       [:label {:for "settings-select-map"} "AnyChart Geo Data"
        [:a.question-small.tooltiped
-        [:span.tooltip "AnyChart Geo Data"
+        [:span.tooltip-box consts/anychart-geo-title
          [:a {:href   "https://docs.anychart.com/Maps/Maps_List"
               :target "_blank"} "Read more >>"]]]]
       (let [loading @(rf/subscribe [:settings.external-resources/loading])

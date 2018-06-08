@@ -49,7 +49,7 @@
 
    [:p.section-label.tooltiped "Styles"
     [:span.question-small.tooltiped
-     [:span.tooltip consts/styles-title]]]
+     [:span.tooltip-box consts/styles-title]]]
    [styles-box]
 
    [:div.line
@@ -75,7 +75,7 @@
      [:div.form-group
       [:label {:for "settings-select-bin"} "AnyChart CSS"
        [:span.question-small.tooltiped
-        [:span.tooltip "AnyChart CSS"
+        [:span.tooltip-box "AnyChart CSS"
          [:a {:href   "https://docs.anychart.com/Quick_Start/Modules"
               :target "_blank"} "Read more >>"]]]]
       (let [loading @(rf/subscribe [:settings.external-resources/loading])

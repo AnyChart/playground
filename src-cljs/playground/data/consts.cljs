@@ -5,6 +5,22 @@
   "Add any script, drag to change the order, click to edit the path.")
 
 
+(def ^:const anychart-binaries-title
+  "AnyChart Library has a lot of different modules, choose only those you need to speed up the loading time.")
+
+
+(def ^:const anychart-locales-title
+  "AnyChart Locales files are needed when you want to use AnyChart localization options.")
+
+
+(def ^:const anychart-themes-title
+  "AnyChart Themes is a set of ready to use presets of visual settings.")
+
+
+(def ^:const anychart-geo-title
+  "A AnyChart GEO Data are files required by AnyMap module to display the geographical maps.")
+
+
 (def ^:const styles-title
   "Add any CSS, drag to change the order, click to edit the path.")
 
