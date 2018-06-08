@@ -196,7 +196,7 @@
 
         (if (:error res)
           (do
-            (try (.quit driver)
+            (try (quit driver)
                  (catch Exception e (timbre/error "Quit driver error: " e)))
             (return-driver (create-driver) (-> generator :drivers-queue)))
           (return-driver driver (-> generator :drivers-queue)))
