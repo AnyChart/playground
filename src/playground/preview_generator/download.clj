@@ -18,7 +18,7 @@
                    (let [{status :status data :body} (try (http/get path)
                                                           (catch Exception e
                                                             (timbre/error "failed to download for previews cache:" path)
-                                                            ""))]
+                                                            {:status -1 :body ""}))]
                      (assoc state path data))
                    state))))
 
