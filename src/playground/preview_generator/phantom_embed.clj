@@ -78,7 +78,7 @@
 
               styles
               (try
-                (doseq [style (:styles-data sample)]
+                (doseq [style (download/get-urls (:styles sample))]
                   (execute-script d "var css = document.createElement('style');
                                    css.type = 'text/css';
                                    css.innerHTML = arguments[0];
@@ -86,16 +86,16 @@
                                   [style]))
                 (catch Exception e (str "Failed to set css\n" (.getMessage e))))
 
-              styles-urls
-              (try
-                (doseq [style-url (download/get-urls (:styles sample))]
-                  (execute-script d "var link = document.createElement('link');
-                                   link.type = 'text/css';
-                                   link.rel = 'stylesheet';
-                                   link.href = arguments[0];
-                                   document.head.appendChild(link);"
-                                  [style-url]))
-                (catch Exception e (str "Failed to set css\n" (.getMessage e))))
+              ;styles-urls
+              ;(try
+              ;  (doseq [style-url (:styles sample)]
+              ;    (execute-script d "var link = document.createElement('link');
+              ;                     link.type = 'text/css';
+              ;                     link.rel = 'stylesheet';
+              ;                     link.href = arguments[0];
+              ;                     document.head.appendChild(link);"
+              ;                    [style-url]))
+              ;  (catch Exception e (str "Failed to set css\n" (.getMessage e))))
 
               css
               (try
@@ -146,7 +146,7 @@
 
               results [startup
                        styles
-                       styles-urls
+                       ; styles-urls
                        css
                        scripts
                        script
