@@ -34,8 +34,10 @@
                               chart-type
                               (chartopedia/get-relations chart-type))))))
 
+
 (defn chart-types-categories-page [request]
   (chart-type-categories-view/page (get-app-data request) chartopedia/categories))
+
 
 (defn chart-types-category-page [request]
   (let [category-name (-> request :params :category)]

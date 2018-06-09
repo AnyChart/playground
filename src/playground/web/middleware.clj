@@ -129,7 +129,7 @@
   (fn [request]
     (let [page-param (-> request :params :page)
           page (if page-param
-                 (try (-> request :params :page Integer/parseInt dec)
+                 (try (dec (Integer/parseInt page-param))
                       (catch Exception _ -1))
                  0)]
       (when (>= page 0)

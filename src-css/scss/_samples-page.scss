@@ -7,11 +7,13 @@
     font-size: 13px;
     text-transform: uppercase;
     padding: 5px 12px;
-    margin-right: 10px;
     &:hover{
       background-color: #19a1ce;
       color: white;
     }
+  }
+  .next-button{
+    float: right;
   }
 }
 

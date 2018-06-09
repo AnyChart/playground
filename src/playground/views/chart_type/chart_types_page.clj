@@ -2,11 +2,14 @@
   (:require [hiccup.page :as hiccup-page]
             [playground.views.common :as page]))
 
+
 (def ^:const chart-count 25)
+
 
 (defn is-end [all-charts page]
   (let [pages (int (Math/ceil (/ all-charts chart-count)))]
     (>= page (dec pages))))
+
 
 (defn page [data chart-types & [end page]]
   (hiccup-page/html5

@@ -7,8 +7,10 @@
             [playground.views.prev-next-buttons :as prev-next-buttons]
             [playground.site.pages.chart-type-page-utils :as chart-type-page-utils]))
 
+
 (defn get-id [text]
   (string/replace (string/lower-case text) #" " "-"))
+
 
 (defn page [{:keys [page tag] :as data} chart-type relations]
   (hiccup-page/html5
