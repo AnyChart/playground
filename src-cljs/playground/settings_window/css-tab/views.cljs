@@ -75,7 +75,7 @@
      [:div.form-group
       [:label {:for "settings-select-bin"} "AnyChart CSS"
        [:span.question-small.tooltiped
-        [:span.tooltip-box "AnyChart CSS"
+        [:span.tooltip-box consts/anychart-css
          [:a {:href   "https://docs.anychart.com/Quick_Start/Modules"
               :target "_blank"} "Read more >>"]]]]
       (let [loading @(rf/subscribe [:settings.external-resources/loading])
