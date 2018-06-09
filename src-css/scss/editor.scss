@@ -194,7 +194,7 @@ html {
                 cursor: pointer;
               }
               #search-results-box.results {
-                z-index: 2;
+                z-index: 200;
                 text-align: left;
                 min-width: 200px;
                 padding: 10px;
@@ -1163,10 +1163,12 @@ a.ac-btn {
 .tooltiped {
   position: relative;
   display: inline-block;
-  .tooltip {
+  .tooltip-box {
     font-size: 12px;
+    font-weight: normal;
+    text-transform: none;
     max-width: 440px;
-    white-space: nowrap;
+    white-space: pre;
     background-color: #555;
     color: #fff;
     border-radius: 6px;
@@ -1177,6 +1179,8 @@ a.ac-btn {
     margin-left: -5px;
     visibility: hidden;
     opacity: 0;
+    //visibility: visible;
+    //opacity: 1;
     transition: opacity 0.2s ease-out 0.1s, visibility 0.3s;
     a {
       margin-top: 2px;
@@ -1184,7 +1188,7 @@ a.ac-btn {
       color: #afdbf1;
     }
   }
-  &:hover .tooltip {
+  &:hover .tooltip-box {
     transition: opacity .2s ease-out;
     visibility: visible;
     opacity: 1;
