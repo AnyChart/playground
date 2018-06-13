@@ -175,7 +175,7 @@
    (info "Remove (previous) branch:" retry (:name branch))
    (if (pos? retry)
      (try
-       (jdbc/with-db-transaction [conn (:db-spec db)]
+       (jdbc/with-db-transaction [conn (:db-spec db) {:isolation :serializable}]
                                  (db-req/delete-version-visits! conn {:version-id (:id branch)})
                                  (db-req/delete-samples! conn {:version-id (:id branch)})
                                  (db-req/delete-version! conn {:id (:id branch)}))
