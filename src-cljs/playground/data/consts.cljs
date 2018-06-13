@@ -35,7 +35,8 @@
 
 
 (def ^:const anychart-css
-  (str "AnyChart CSS"))
+  (str "AnyChart CSS file is required for AnyChart UI components,\n"
+       "like context menu or zoom buttons, to work properly."))
 
 
 ;; =====================================================================================================================
