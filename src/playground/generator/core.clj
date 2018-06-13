@@ -184,8 +184,8 @@
          (remove-branch db branch (dec retry))))
      (do
        (timbre/info "REMOVE BRANCH retry exceeded")
-       (throw (Exception. (str "REMOVE BRANCH " (:name branch " ERROR")))))))
-  ([db branch] (remove-branch db branch 3)))
+       (throw (Exception. (str "REMOVE BRANCH " (:name branch) " ERROR"))))))
+  ([db branch] (remove-branch db branch 100)))
 
 
 (defn need-remove-branch? [db-branch actual-branches]
