@@ -175,7 +175,7 @@
    (info "Remove (previous) branch:" retry (:name branch))
    (if (pos? retry)
      (try
-       (jdbc/with-db-transaction [conn (:db-spec db)]
+       (jdbc/with-db-transaction [conn (:db-spec db) {:isolation :serializable}]
                                  (db-req/delete-version-visits! conn {:version-id (:id branch)})
                                  (db-req/delete-samples! conn {:version-id (:id branch)})
                                  (db-req/delete-version! conn {:id (:id branch)}))
@@ -184,8 +184,8 @@
          (remove-branch db branch (dec retry))))
      (do
        (timbre/info "REMOVE BRANCH retry exceeded")
-       (throw (Exception. (str "REMOVE BRANCH " (:name branch " ERROR")))))))
-  ([db branch] (remove-branch db branch 3)))
+       (throw (Exception. (str "REMOVE BRANCH " (:name branch) " ERROR"))))))
+  ([db branch] (remove-branch db branch 100)))
 
 
 (defn need-remove-branch? [db-branch actual-branches]

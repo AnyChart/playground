@@ -47,10 +47,12 @@
     ;; when not "new" sample
     (when (:id sample)
       (jdbc/with-db-transaction [conn (:db-spec (get-db request))]
-                                (when-not (db-req/get-visit conn {:sample-id (:id sample)
-                                                                  :user-id   (:id user)})
-                                  (db-req/visit! conn {:sample-id (:id sample)
-                                                       :user-id   (:id user)}))
+                                ;; collect visits just for user samples and future purpose
+                                (when-not (:version-id sample)
+                                  (when-not (db-req/get-visit conn {:sample-id (:id sample)
+                                                                    :user-id   (:id user)})
+                                    (db-req/visit! conn {:sample-id (:id sample)
+                                                         :user-id   (:id user)})))
                                 (when-not (db-req/get-canonical-visit conn {:user-id (:id user)
                                                                             :url     (:url sample)
                                                                             :repo-id (:repo-id sample)})
