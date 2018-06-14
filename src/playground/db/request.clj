@@ -264,10 +264,6 @@
   (doall (map :id                                           ; :generated-key for MySQL
               (insert-multiple! db :samples (map #(insert-sample % version-id) samples)))))
 
-;(def update-sample-views! (sql {:name sql-update-sample-views!}))
-
-(def set-sample-views! (sql {:name sql-set-sample-views!}))
-
 (def update-samples-preview! (sql {:name sql-update-samples-preview!}))
 
 (def user-samples-without-preview (sql {:name sql-user-samples-without-preview}))
@@ -291,8 +287,6 @@
 (def delete-version-visits! (sql {:name sql-delete-version-visits!}))
 
 (def delete-repo-visits! (sql {:name sql-delete-repo-visits!}))
-
-;l(def copy-visits! (sql {:name sql-copy-visits!}))
 
 ;; canonical visits
 (def get-canonical-visit (sql {:name          sql-get-canonical-visit
