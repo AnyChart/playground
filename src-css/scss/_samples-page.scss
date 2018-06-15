@@ -1,5 +1,8 @@
 .prev-next-buttons {
   margin-bottom: 20px;
+  height: 30px;
+  display: flex;
+  justify-content: space-between;
   .prev-button, .next-button{
     background: none;
     border: 1px solid #19a1ce;
@@ -14,6 +17,25 @@
   }
   .next-button{
     float: right;
+  }
+  .pagination {
+    margin: 0;
+    li {
+      a {
+        color:  #19a1ce;
+        background-color: transparent;
+        border-color: #19a1ce;
+        padding: 5px 12px;
+        &:hover {
+          color: white;
+          background-color: #19a1ce;
+        }
+      }
+      &.active a {
+        color: white;
+        background-color: #19a1ce;
+      }
+    }
   }
 }
 

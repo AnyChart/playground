@@ -2,7 +2,7 @@
   (:require-macros [hiccups.core :as h])
   (:require [playground.site.landing :refer [samples-per-page samples-per-block samples-per-landing
                                              change-title
-                                             init-buttons update-buttons]]
+                                             init-buttons update-buttons update-pagination]]
             [playground.views.sample :as sample-view]
             [playground.site.utils :as utils]
             [ajax.core :refer [GET POST]]
@@ -17,9 +17,13 @@
 (def *page (atom 0))
 (def *is-end (atom false))
 (def *q (atom nil))
+(def *total (atom 0))
+(def *max-page (atom 0))
 (def *loading (atom false))
 
+
 (declare load-search-samples)
+
 
 (defn on-search-samples-load [data]
   (dom/removeChildren (dom/getElement "search-samples"))
@@ -34,7 +38,8 @@
                   @*is-end
                   (str "/search?q=" @*q "&page=")
                   load-search-samples
-                  *loading))
+                  *loading)
+  (update-pagination *page *max-page *loading (str "/search?q=" @*q "&page=") load-search-samples))
 
 
 (defn load-search-samples []
@@ -46,13 +51,16 @@
          :error-handler #(utils/log "Error!" %)}))
 
 
-(defn ^:export startSearchPage [_end _page _q]
+(defn ^:export startSearchPage [_end _page _total-items _q]
   ;(utils/log "Start tag page: " _end _page _q)
   (reset! *is-end _end)
   (reset! *page _page)
   (reset! *q _q)
+  (reset! *total _total-items)
+  (reset! *max-page (dec (int (.ceil js/Math (/ _total-items 12)))))
   (init-buttons "search-samples-prev"
                 "search-samples-next"
                 *page
                 load-search-samples
-                *loading))
+                *loading)
+  (update-pagination *page *max-page *loading (str "/search?q=" @*q "&page=") load-search-samples))

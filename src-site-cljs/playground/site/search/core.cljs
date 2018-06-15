@@ -13,29 +13,9 @@
 
 (defn hint-view [hint-query]
   [:div.search-result
-   [:a {:href   (str "/search?q=" hint-query)
-        :title  hint-query}
+   [:a {:href  (str "/search?q=" hint-query)
+        :title hint-query}
     hint-query]])
-
-
-;(defn on-load-search-results [data]
-;  (let [samples (:samples data)]
-;    (.log js/console data)
-;
-;    (style/setElementShown (dom/getElement "search-results-box") true)
-;    (dom/removeChildren (dom/getElement "search-results"))
-;
-;    (set! (.-innerHTML (.getElementById js/document "search-results"))
-;          (if (pos? (count samples))
-;            (apply str (map #(-> % search-view/result-item h/html) samples))
-;            "Nothing found"))))
-
-
-;(defn make-hint-request [q]
-;  (GET "/search"
-;        {:params        {:q q}
-;         :handler       on-load-search-results
-;         :error-handler #(utils/log "Error!" %)}))
 
 
 (defn hide-hints []
@@ -59,14 +39,9 @@
 
 
 (defn make-search-request [q]
-  (let [q (string/trim q)
-        on-search-page (= "/search" (.-pathname js/location))]
+  (let [q (string/trim q)]
     (when (seq q)
-      (set! (.-href (.-location js/document)) (str "/search?q=" q))
-      ;(if on-search-page
-      ;  (set! (.-href (.-location js/document)) (str "/search?q=" q))
-      ;  (.open js/window (str "/search?q=" q) "_blank"))
-      )))
+      (set! (.-href (.-location js/document)) (str "/search?q=" q)))))
 
 
 (defn init []
@@ -95,16 +70,10 @@
        {:handler       #(let [hints (sort (map :name %))]
                           (reset! *hints hints))
         :error-handler #(utils/log "Error!" %)})
+
   (event/listen js/window "click" (fn [e]
                                     (when (not (.-defaultPrevented e))
                                       (hide-hints)))))
 
 
 (init)
-
-
-;(defn ^:export setSearchInput
-;  ([repo]
-;   (set! (.-value (dom/getElement "search-input")) (str "p:" repo " ")))
-;  ([repo version]
-;   (set! (.-value (dom/getElement "search-input")) (str "p:" repo " " "v:" version " "))))

@@ -1,6 +1,7 @@
 (ns playground.site.landing
   (:require-macros [hiccups.core :as h])
   (:require [goog.dom :as dom]
+            [goog.dom.TagName :as TagName]
             [goog.events :as event]
             [goog.style :as style]
             [playground.site.utils :as utils]
@@ -28,10 +29,10 @@
     (set! (.-innerHTML d) s)
     (.-firstChild d)))
 
+
 ;;======================================================================================================================
 ;; Init buttons
 ;;======================================================================================================================
-
 (defn add-prev-event [prev-btn-id *page load-fn *loading]
   (when-let [btn (dom/getElement prev-btn-id)]
     (event/listen btn "click" (fn [e]
@@ -51,6 +52,7 @@
                                   (swap! *page inc)
                                   (load-fn))))))
 
+
 (defn init-buttons [prev-btn-id next-btn-id *page load-fn *loading]
   (add-prev-event prev-btn-id *page load-fn *loading)
   (add-next-event next-btn-id *page load-fn *loading))
@@ -59,27 +61,30 @@
 ;;======================================================================================================================
 ;; Update buttons
 ;;======================================================================================================================
+(defn set-prev-button [id *page url]
+  (let [elem (dom/getElement id)]
+    (if (pos? @*page)
+      (do
+        (style/setStyle elem "visibility" "visible")
+        (.setAttribute elem "href" (str url @*page))
+        (.setAttribute elem "title" (str "Prev page, " @*page)))
+      (do
+        (style/setStyle elem "visibility" "hidden")
+        (.setAttribute elem "href" "#")
+        (.setAttribute elem "title" "")))))
 
-(defn add-or-remove-prev-button-if-need [id *page url load-fn *loading]
-  (if (pos? @*page)
-    (when-not (.getElementById js/document id)
-      (let [container (.getElementById js/document "prev-next-buttons")]
-        ;(.prepend container (str-to-elem (h/html (prev-next-buttons-common/prev-button id @*page url))))
-        (.insertAdjacentHTML container "afterbegin" (h/html (prev-next-buttons-common/prev-button id @*page url)))
-        (add-prev-event id *page load-fn *loading)))
-    (if-let [btn (.getElementById js/document id)]
-      (.remove btn))))
 
-
-(defn add-or-remove-next-button-if-need [id *page end url load-fn *loading]
-  (if-not end
-    (when-not (.getElementById js/document id)
-      (let [container (.getElementById js/document "prev-next-buttons")]
-        ;(.append container (str-to-elem (h/html (prev-next-buttons-common/next-button id @*page url))))
-        (.insertAdjacentHTML container "beforeend" (h/html (prev-next-buttons-common/next-button id @*page url)))
-        (add-next-event id *page load-fn *loading)))
-    (if-let [btn (.getElementById js/document id)]
-      (.remove btn))))
+(defn set-next-button [id *page end url]
+  (let [elem (dom/getElement id)]
+    (if-not end
+      (do
+        (style/setStyle elem "visibility" "visible")
+        (.setAttribute elem "href" (str url (inc (inc @*page))))
+        (.setAttribute elem "title" (str "Next page, " (inc (inc @*page)))))
+      (do
+        (style/setStyle elem "visibility" "hidden")
+        (.setAttribute elem "href" "#")
+        (.setAttribute elem "title" "")))))
 
 
 (defn update-buttons [prev-btn-id
@@ -89,14 +94,25 @@
                       url
                       load-fn
                       *loading]
-  (add-or-remove-prev-button-if-need prev-btn-id *page url load-fn *loading)
-  (add-or-remove-next-button-if-need next-btn-id *page end url load-fn *loading)
-  (let [prev-button (dom/getElement prev-btn-id)
-        next-button (dom/getElement next-btn-id)]
-    (when prev-button
-      (.setAttribute prev-button "href" (str url @*page))
-      (.setAttribute prev-button "title" (str "Prev page, " @*page)))
-    (when next-button
-      (.setAttribute next-button "href" (str url (inc (inc @*page))))
-      (.setAttribute next-button "title" (str "Next page, " (inc (inc @*page))))))
+  (set-prev-button prev-btn-id *page url)
+  (set-next-button next-btn-id *page end url)
   (reset! *loading false))
+
+
+(defn update-pagination [*page *max-page *loading url load-fn]
+  (let [markup (h/html (prev-next-buttons-common/pagination-markup @*page @*max-page url))
+        pagination-box (dom/getElementByClass "pagination-box")]
+    (dom/removeChildren pagination-box)
+    (set! (.-innerHTML pagination-box) markup)
+    (let [buttons (dom/getElementsByTagName TagName/LI pagination-box)]
+      (dotimes [i (.-length buttons)]
+        (let [button (aget buttons i)]
+          (event/listen button "click" #(let [num (.-textContent (.-target %))
+                                              num (js/parseInt num)]
+                                          (.preventDefault %)
+                                          ;(println "click" num)
+                                          (when (pos? num)
+                                            (when-not @*loading
+                                              (reset! *loading true)
+                                              (reset! *page (dec num))
+                                              (load-fn))))))))))

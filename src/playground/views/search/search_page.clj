@@ -25,11 +25,12 @@
          (for [sample samples]
            (sample-view/sample-landing sample))]
 
-        (prev-next-buttons/buttons "search-samples-prev"
-                                   "search-samples-next"
-                                   page
-                                   (:end data)
-                                   (str "/search?q=" q "&page="))
+        (prev-next-buttons/pagination "search-samples-prev"
+                                      "search-samples-next"
+                                      page
+                                      (:end data)
+                                      total
+                                      (str "/search?q=" q "&page="))
         ]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
@@ -37,6 +38,6 @@
      (page/jquery-script)
      (page/bootstrap-script)
      (page/site-script)
-     [:script (page/run-js-fn "playground.site.pages.search_page.startSearchPage" (:end data) page q)]
+     [:script (page/run-js-fn "playground.site.pages.search_page.startSearchPage" (:end data) page total q)]
 
      ]))
