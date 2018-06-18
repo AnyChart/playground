@@ -178,6 +178,6 @@ FROM samples
   LEFT JOIN versions ON samples.version_id = versions.id
   LEFT JOIN repos ON versions.repo_id = repos.id
   LEFT JOIN users ON samples.owner_id = users.id
-  WHERE samples.id NOT IN (SELECT id FROM templates) AND
+  WHERE samples.id NOT IN (SELECT sample_id FROM templates) AND
         ((samples.latest AND samples.version_id IS NULL) OR
           samples.version_id IS NOT NULL);
