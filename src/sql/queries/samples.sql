@@ -172,10 +172,12 @@ SELECT
   samples.preview,
   samples.latest,
   versions.name as version_name,
-  repos.name as repo_name
+  repos.name as repo_name,
+  users.fullname
 FROM samples
   LEFT JOIN versions ON samples.version_id = versions.id
   LEFT JOIN repos ON versions.repo_id = repos.id
+  LEFT JOIN users ON samples.owner_id = users.id
   WHERE samples.id NOT IN (SELECT id FROM templates) AND
         ((samples.latest AND samples.version_id IS NULL) OR
           samples.version_id IS NOT NULL);
