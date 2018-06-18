@@ -15,13 +15,10 @@
         result (elastic/search (-> (get-db request) :config :elastic)
                                q
                                (* samples-per-page page)
-                               samples-per-page)
-        total (:total result)
-        end (>= (* (inc page) samples-per-page) total)]
+                               samples-per-page)]
     (search-view/page (merge (get-app-data request)
                              {:q      q
                               :page   page
-                              :end    end
                               :result result}))))
 
 
@@ -31,9 +28,7 @@
         result (elastic/search (-> (get-db request) :config :elastic)
                                q
                                offset
-                               samples-per-page)
-        end (<= (- (:total result) offset) samples-per-page)
-        result (assoc result :end end)]
+                               samples-per-page)]
     (response result)))
 
 

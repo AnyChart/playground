@@ -7,7 +7,8 @@
     [playground.web.handlers.constants :refer :all]
     [playground.web.utils :as web-utils :refer [response]]
     ;; views
-    [playground.views.landing-page :as landing-view]))
+    [playground.views.landing-page :as landing-view]
+    [playground.db.elastic :as elastic]))
 
 
 ;; =====================================================================================================================
@@ -34,6 +35,9 @@
         offset (if (int? offset*) offset* (Integer/parseInt offset*))
         samples (db-req/top-samples (get-db request) {:count  (inc samples-per-landing)
                                                       :offset offset})
+        ;samples (time (elastic/top-samples (-> (get-db request) :config :elastic)
+        ;                                   offset
+        ;                                   (inc samples-per-landing)))
         result {:samples (take samples-per-landing samples)
                 :end     (< (count samples) (inc samples-per-landing))}]
     (response result)))

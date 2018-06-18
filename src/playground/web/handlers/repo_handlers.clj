@@ -8,7 +8,9 @@
             [playground.views.repo.repo-page :as repo-view]
             [playground.views.repo.version-page :as version-view]
     ;; consts
-            [playground.web.handlers.constants :refer :all]))
+            [playground.web.handlers.constants :refer :all]
+    ;; elastic
+            [playground.db.elastic :as elastic]))
 
 
 (defn repos-page [request]
@@ -28,13 +30,16 @@
   (let [repo (get-repo request)
         version (get-version request)
         page (get-pagination request)
-        samples (db-req/samples-by-version (get-db request) {:version_id (:id version)
-                                                             :offset     (* samples-per-page page)
-                                                             :count      (inc samples-per-page)})]
-    (when (seq samples)
+        ;samples (db-req/samples-by-version (get-db request) {:version_id (:id version)
+        ;                                                     :offset     (* samples-per-page page)
+        ;                                                     :count      (inc samples-per-page)})
+        result (elastic/version-samples (-> (get-db request) :config :elastic)
+                                        (:id version)
+                                        (* samples-per-page page)
+                                        samples-per-page)]
+    (when (seq (:samples result))
       (version-view/page (merge (get-app-data request)
-                                {:samples (take samples-per-page samples)
-                                 :end     (< (count samples) (inc samples-per-page))
+                                {:result  result
                                  :page    page
                                  :version version
                                  :repo    repo})))))
@@ -44,9 +49,11 @@
   (let [offset* (-> request :params :offset)
         offset (if (int? offset*) offset* (Integer/parseInt offset*))
         version-id (-> request :params :version_id)
-        samples (db-req/samples-by-version (get-db request) {:version_id version-id
-                                                             :count      (inc samples-per-page)
-                                                             :offset     offset})
-        result {:samples (take samples-per-page samples)
-                :end     (< (count samples) (inc samples-per-page))}]
+        ;samples (time (db-req/samples-by-version (get-db request) {:version_id version-id
+        ;                                                       :count      (inc samples-per-page)
+        ;                                                       :offset     offset}))
+        result (elastic/version-samples (-> (get-db request) :config :elastic)
+                                        version-id
+                                        offset
+                                        samples-per-page)]
     (response result)))

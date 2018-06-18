@@ -10,7 +10,14 @@
   (str "p:" repo-name " v:" version-name " "))
 
 
-(defn page [{:keys [repo version page] :as data}]
+(defn page [{repo            :repo
+             version         :version
+             page            :page
+             {samples  :samples
+              total    :total
+              max-page :max-page
+              end      :end} :result
+             :as             data}]
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title (version-page-utils/title (:name version) page (-> data :repo :title))})
@@ -25,15 +32,15 @@
        [:div.container-fluid.content-container
         [:p.popular-label "Version " [:b "samples"]]
         [:div#version-samples.row.samples-container
-         (for [sample (:samples data)]
+         (for [sample samples]
            (sample-view/sample-landing sample))]
 
-        (prev-next-buttons/buttons "version-samples-prev"
-                                   "version-samples-next"
-                                   page
-                                   (:end data)
-                                   (str "/projects/" (:name repo) "/" (:name version) "?page="))
-
+        (prev-next-buttons/pagination "version-samples-prev"
+                                      "version-samples-next"
+                                      page
+                                      max-page
+                                      end
+                                      (str "/projects/" (:name repo) "/" (:name version) "?page="))
         ]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
@@ -42,8 +49,10 @@
      (page/bootstrap-script)
      (page/site-script)
      [:script (page/run-js-fn "playground.site.pages.version_page.startVersionPage"
-                              (:end data)
                               page
+                              max-page
+                              end
+                              total
                               (-> data :version :id)
                               (:name version)
                               (-> data :repo :title))]]))

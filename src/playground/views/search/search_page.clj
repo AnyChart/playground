@@ -6,7 +6,13 @@
             [playground.views.prev-next-buttons :as prev-next-buttons]))
 
 
-(defn page [{page :page q :q {samples :samples total :total} :result :as data}]
+(defn page [{q               :q
+             page            :page
+             {samples  :samples
+              total    :total
+              max-page :max-page
+              end      :end} :result
+             :as             data}]
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title       (search-page-utils/title q page)
@@ -28,8 +34,8 @@
         (prev-next-buttons/pagination "search-samples-prev"
                                       "search-samples-next"
                                       page
-                                      (:end data)
-                                      total
+                                      max-page
+                                      end
                                       (str "/search?q=" q "&page="))
         ]]
 
@@ -38,6 +44,5 @@
      (page/jquery-script)
      (page/bootstrap-script)
      (page/site-script)
-     [:script (page/run-js-fn "playground.site.pages.search_page.startSearchPage" (:end data) page total q)]
-
+     [:script (page/run-js-fn "playground.site.pages.search_page.startSearchPage" page max-page end total q)]
      ]))

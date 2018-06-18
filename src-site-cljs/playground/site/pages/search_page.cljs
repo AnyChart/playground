@@ -15,10 +15,11 @@
 ;; Search page
 ;;======================================================================================================================
 (def *page (atom 0))
-(def *is-end (atom false))
-(def *q (atom nil))
-(def *total (atom 0))
 (def *max-page (atom 0))
+(def *is-end (atom false))
+(def *total (atom 0))
+
+(def *q (atom nil))
 (def *loading (atom false))
 
 
@@ -51,13 +52,13 @@
          :error-handler #(utils/log "Error!" %)}))
 
 
-(defn ^:export startSearchPage [_end _page _total-items _q]
+(defn ^:export startSearchPage [_page _max-page _end _total _q]
   ;(utils/log "Start tag page: " _end _page _q)
-  (reset! *is-end _end)
   (reset! *page _page)
+  (reset! *max-page _max-page)
+  (reset! *is-end _end)
+  (reset! *total _total)
   (reset! *q _q)
-  (reset! *total _total-items)
-  (reset! *max-page (dec (int (.ceil js/Math (/ _total-items 12)))))
   (init-buttons "search-samples-prev"
                 "search-samples-next"
                 *page

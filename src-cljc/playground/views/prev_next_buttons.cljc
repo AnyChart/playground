@@ -66,13 +66,12 @@
   (dec (int (Math/ceil (/ total items-perpage)))))
 
 
-(defn pagination [prev-id next-id page end total url]
+(defn pagination [prev-id next-id page max-page end url]
   [:div#prev-next-buttons.prev-next-buttons
    (prev-button prev-id page url (pos? page))
 
    [:div.pagination-box
-    (let [max-page (get-max-page total 12)]
-      (when (pos? max-page)
-        (pagination-markup page max-page url)))]
+    (when (pos? max-page)
+      (pagination-markup page max-page url))]
 
    (next-button next-id page url (not end))])

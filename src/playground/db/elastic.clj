@@ -50,10 +50,12 @@
                                    :fields {:keyword {:type "keyword" :ignore_above 256}}}
                :name              {:type   "text"
                                    :fields {:keyword {:type "keyword" :ignore_above 256}}}
+               :name-kw           {:type "keyword"}
                :version-id        {:type "long"}
                :likes             {:type "long"}
                :repo-name         {:type "keyword"}
                :full-url          {:type "keyword"}
+               :fullname          {:type "keyword"}
                :latest            {:type "boolean"}
                :preview           {:type "boolean"}
                :id                {:type "long"}
@@ -99,7 +101,8 @@
    (-> sample
        (select-keys (keys (:properties mapping)))
        (update :repo-name #(or % repo-name))
-       (update :version-name #(or % version-name)))))
+       (update :version-name #(or % version-name))
+       (assoc :name-kw (:name sample)))))
 
 
 (defn bulk-samples [samples conf]
@@ -149,6 +152,7 @@
   (try
     (let [conn (get-connection conf)
           samples (db-req/search-samples db)
+          samples (map prepare-sample samples)
           samples-groups (partition-all 20000 samples)]
       (timbre/info "Elastic load samples total:" (count samples))
       (doseq [samples samples-groups]
@@ -266,7 +270,6 @@
 ;; =====================================================================================================================
 ;; Search
 ;; =====================================================================================================================
-
 ; Parser for search string:
 ; project:api version:8.1.0 tag:'line chart' chart name
 (def parser
@@ -328,6 +331,10 @@
                                                    {:match {:short-description q}}]}})}}))
 
 
+(defn get-max-page [total items-per-page]
+  (dec (int (Math/ceil (/ total items-per-page)))))
+
+
 (defn search [conf q offset size]
   (try
     (let [data (parse q)
@@ -349,8 +356,10 @@
           ]
       (timbre/info "Search - Total:" total ", Max Score:" (:max_score hits))
       ;(println :elastic (:body data))
-      {:samples samples
-       :total   total})
+      {:samples  samples
+       :total    total
+       :end      (<= (- total offset) size)
+       :max-page (get-max-page total size)})
     (catch Exception e (timbre/error "Search error:" (pr-str e)))))
 
 
@@ -366,3 +375,59 @@
           hits (map :_source (take 10 (:hits data)))]
       (prn total (keys data)))
     (catch Exception e (timbre/error (pr-str e)))))
+
+
+;; =====================================================================================================================
+;; Top samples
+;; =====================================================================================================================
+(defn top-samples [conf offset size]
+  (try
+    (let [conn (get-connection conf)
+          data (s/request conn {:url    [(:index conf) (:type conf) :_search]
+                                :method :post
+                                :body   {:size  size
+                                         :from  offset
+                                         :sort  [{"likes" {:order "desc"}}
+                                                 {"views" {:order "desc"}}
+                                                 {"name-kw" {:order "asc"}}
+                                                 ]
+                                         :query {:term {:latest true}}
+                                         }})
+          hits (:hits (:body data))
+          total (:total hits)
+          samples (map (fn [hit]
+                         (assoc (:_source hit) :score (:_score hit)))
+                       (:hits hits))]
+      {:samples  samples
+       :total    total
+       :end      (<= (- total offset) size)
+       :max-page (get-max-page total size)}
+      samples)
+    (catch Exception e (timbre/error "Elastic top samples error:" (pr-str e)))))
+
+
+;; =====================================================================================================================
+;; Version samples
+;; =====================================================================================================================
+(defn version-samples [conf version-id offset size]
+  (try
+    (let [conn (get-connection conf)
+          data (s/request conn {:url    [(:index conf) (:type conf) :_search]
+                                :method :post
+                                :body   {:size  size
+                                         :from  offset
+                                         :sort  [{"likes" {:order "desc"}}
+                                                 {"views" {:order "desc"}}
+                                                 {"name-kw" {:order "asc"}}]
+                                         :query {:term {:version-id version-id}}
+                                         }})
+          hits (:hits (:body data))
+          total (:total hits)
+          samples (map (fn [hit]
+                         (assoc (:_source hit) :score (:_score hit)))
+                       (:hits hits))]
+      {:samples  samples
+       :total    total
+       :end      (<= (- total offset) size)
+       :max-page (get-max-page total size)})
+    (catch Exception e (timbre/error "Elastic top samples error:" (pr-str e)))))
