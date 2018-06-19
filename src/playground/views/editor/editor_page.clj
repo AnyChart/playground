@@ -128,4 +128,4 @@
 
      [:script {:src (str "/js/playground.js?v=" (c/commit)) :type "text/javascript"}]
      [:script {:type "text/javascript"}
-      (page/run-js-fn "playground.core.run" (StringEscapeUtils/escapeJson data))]]))
+      (page/run-js-fn "playground.core.run" data)]]))

@@ -46,6 +46,8 @@
                :create-date       {:type "date"}
                :tags              {:type   "text"
                                    :fields {:keyword {:type "keyword" :ignore_above 256}}}
+               :tags-kw           {:type       "keyword"
+                                   :normalizer :lowercase_normalizer}
                :short-description {:type   "text"
                                    :fields {:keyword {:type "keyword" :ignore_above 256}}}
                :name              {:type   "text"
@@ -63,7 +65,6 @@
                :url               {:type "keyword"}
                :version           {:type "long"}
                :views             {:type "long"}}})
-
 
 
 (def conf {:host  "http://127.0.0.1:9200"
@@ -102,7 +103,8 @@
        (select-keys (keys (:properties mapping)))
        (update :repo-name #(or % repo-name))
        (update :version-name #(or % version-name))
-       (assoc :name-kw (:name sample)))))
+       (assoc :name-kw (:name sample))
+       (assoc :tags-kw (:tags sample)))))
 
 
 (defn bulk-samples [samples conf]
@@ -130,21 +132,13 @@
   (try
     (let [conn (get-connection conf)
           data (s/request conn {:url    [(:index conf)]
-                                :method :put})]
+                                :method :put
+                                :body   {:settings {:analysis {:normalizer {:lowercase_normalizer {"type"        "custom"
+                                                                                                   "char_filter" []
+                                                                                                   "filter"      ["lowercase"]}}}}
+                                         :mappings {(:type conf) mapping}}})]
       data)
     (catch Exception e (timbre/error "set mapping error:" (pr-str e)))))
-
-
-(defn set-mapping [conf]
-  (timbre/info "Elastic set mapping")
-  (try
-    (let [conn (get-connection conf)
-          data (s/request conn {:url    [(:index conf) :_mapping (:type conf)]
-                                :method :post
-                                :body   mapping})]
-      data)
-    (catch Exception e
-      (timbre/error "Elastic set mapping error:" (pr-str e)))))
 
 
 (defn load-samples [db conf]
@@ -169,7 +163,6 @@
   (jdbc/with-db-transaction [conn (:db-spec db) {:isolation :serializable}]
                             (delete-index conf)
                             (create-index conf)
-                            (set-mapping conf)
                             (load-samples conn conf)))
 
 
@@ -321,11 +314,12 @@
                           1 {:term {:version-name (first versions)}}
                           {:bool {:should (mapv (fn [v] {:term {:version-name v}}) versions)}})
 
-        tags-filter (map (fn [t] {:match {:tags t}}) tags)
+        tags-filter (map (fn [t] {:match {:tags-kw t}}) tags)
         must-filter (filter some? (concat [projects-filter versions-filter] tags-filter))]
 
     {:bool {:filter {:bool {:must must-filter}}
             :must   (when (seq q) {:bool {:should [{:match {:name q}}
+                                                   {:match {:tags-kw q}}
                                                    {:match {:tags q}}
                                                    {:match {:description q}}
                                                    {:match {:short-description q}}]}})}}))
@@ -344,9 +338,10 @@
           conn (get-connection conf)
           data (s/request conn {:url    [(:index conf) (:type conf) :_search]
                                 :method :post
-                                :body   {:size  size
-                                         :from  offset
-                                         :query query}})
+                                :body   {:size    size
+                                         :from    offset
+                                         :_source {:excludes [:name-kw :tags-kw]}
+                                         :query   query}})
           hits (:hits (:body data))
           total (:total hits)
           samples (map (fn [hit]
@@ -385,13 +380,13 @@
     (let [conn (get-connection conf)
           data (s/request conn {:url    [(:index conf) (:type conf) :_search]
                                 :method :post
-                                :body   {:size  size
-                                         :from  offset
-                                         :sort  [{"likes" {:order "desc"}}
-                                                 {"views" {:order "desc"}}
-                                                 {"name-kw" {:order "asc"}}
-                                                 ]
-                                         :query {:term {:latest true}}
+                                :body   {:size    size
+                                         :from    offset
+                                         :sort    [{"likes" {:order "desc"}}
+                                                   {"views" {:order "desc"}}
+                                                   {"name-kw" {:order "asc"}}]
+                                         :_source {:excludes [:name-kw :tags-kw]}
+                                         :query   {:term {:latest true}}
                                          }})
           hits (:hits (:body data))
           total (:total hits)
@@ -414,12 +409,13 @@
     (let [conn (get-connection conf)
           data (s/request conn {:url    [(:index conf) (:type conf) :_search]
                                 :method :post
-                                :body   {:size  size
-                                         :from  offset
-                                         :sort  [{"likes" {:order "desc"}}
-                                                 {"views" {:order "desc"}}
-                                                 {"name-kw" {:order "asc"}}]
-                                         :query {:term {:version-id version-id}}
+                                :body   {:size    size
+                                         :from    offset
+                                         :sort    [{"likes" {:order "desc"}}
+                                                   {"views" {:order "desc"}}
+                                                   {"name-kw" {:order "asc"}}]
+                                         :_source {:excludes [:name-kw :tags-kw]}
+                                         :query   {:term {:version-id version-id}}
                                          }})
           hits (:hits (:body data))
           total (:total hits)

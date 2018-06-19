@@ -5,7 +5,8 @@
             [clojure.java.io :as io]
             [clojure.string :as string]
             [playground.data.tags :as tags-data]
-            [playground.data.config :as c]))
+            [playground.data.config :as c])
+  (:import (org.apache.commons.lang3 StringEscapeUtils)))
 
 
 (def head-tag-manager "<!-- Google Tag Manager -->
@@ -51,7 +52,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
        fn-name "("
        (->> params
             (map #(if (string? %)
-                    (str "\"" % "\"")
+                    (str "\"" (StringEscapeUtils/escapeJson %) "\"")
                     %))
             (string/join ","))
        ");"))

@@ -21,7 +21,8 @@
      [:div.wrapper.tag-page
 
       (page/nav (:templates data)
-                (:user data))
+                (:user data)
+                q)
 
       [:div.content
        [:div.container-fluid.content-container
