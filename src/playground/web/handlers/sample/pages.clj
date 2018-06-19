@@ -17,7 +17,17 @@
             [playground.data.config :as c]
             [hiccup.core :as hiccup]
             [clojure.java.jdbc :as jdbc]
-            [taoensso.timbre :as timbre]))
+            [taoensso.timbre :as timbre]
+            [clj-http.client :as http]
+            [cheshire.core :as json]))
+
+
+;(defn get-anychart-repo-versions []
+;  (let [data (http/get "https://api.github.com/repos/AnyChart/AnyChart/branches?per_page=100")
+;        branches (json/parse-string (:body data) true)
+;        branches (map :name branches)]
+;    branches))
+
 
 ;; =====================================================================================================================
 ;; Samples pages handlers

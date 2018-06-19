@@ -12,7 +12,14 @@
   (string/replace (string/lower-case text) #" " "-"))
 
 
-(defn page [{:keys [page tag] :as data} chart-type relations]
+(defn page [{page            :page
+             tag             :tag
+             {samples  :samples
+              total    :total
+              max-page :max-page
+              end      :end} :result
+             :as             data}
+            chart-type relations]
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title       (chart-type-page-utils/title (:name chart-type) page)
@@ -28,8 +35,7 @@
         [:div.row.info
          [:div.col-md-6.column1
           [:h1 [:b (:name chart-type)]]
-          [:div.description (string/trim (:description chart-type))]
-          ]
+          [:div.description (string/trim (:description chart-type))]]
 
          [:div.col-md-6.column2
           (when (seq relations)
@@ -47,8 +53,7 @@
                [:div [:a {:href link} link]])]
             [:div.note "Read more information in our documentation:"
              (for [[k v] (:docsLinks chart-type)]
-               [:div [:a {:href v} k]])]]]
-          ]
+               [:div [:a {:href v} k]])]]]]
          ]
 
         ;[:iframe.clear-iFrame
@@ -60,19 +65,19 @@
         ;  :id          "pg-frame"
         ;  :frameborder "0"}]
 
-        (when (seq (:samples data))
+        (when (seq samples)
           [:h2.popular-label.samples-label "Samples"])
 
         [:div#tag-samples.row.samples-container
-         (for [sample (:samples data)]
+         (for [sample samples]
            (sample-view/sample-landing sample))]
 
-        (prev-next-buttons/buttons "tag-samples-prev"
-                                   "tag-samples-next"
-                                   page
-                                   (:end data)
-                                   (str "/chart-types/" (:id chart-type) "?page="))
-
+        (prev-next-buttons/pagination "tag-samples-prev"
+                                      "tag-samples-next"
+                                      page
+                                      max-page
+                                      end
+                                      (str "/chart-types/" (:id chart-type) "?page="))
         ]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
@@ -80,8 +85,9 @@
      (page/bootstrap-script)
      (page/site-script)
      [:script (page/run-js-fn "playground.site.pages.chart_type_page.startChartTypePage"
-                              (:end data)
                               page
+                              max-page
+                              end
                               tag
                               (:id chart-type)
                               (:name chart-type))]]))

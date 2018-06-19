@@ -10,7 +10,8 @@
             [playground.views.chart-type.chart-types-categories-page :as chart-type-categories-view]
             [playground.views.chart-type.chart-types-category-page :as chart-type-category-view]
     ;; data
-            [playground.web.chartopedia :as chartopedia]))
+            [playground.web.chartopedia :as chartopedia]
+            [playground.db.elastic :as elastic]))
 
 
 (defn chart-types-page [request]
@@ -23,13 +24,16 @@
     (when-let [chart-type (chartopedia/get-chart chart-name)]
       (let [tag (:name chart-type)
             page (get-pagination request)
-            samples (db-req/samples-by-tag (get-db request) {:count  (inc samples-per-block)
-                                                             :offset (* samples-per-block page)
-                                                             :tag    tag})]
-        (chart-type-view/page (merge {:samples (take samples-per-block samples)
-                                      :end     (< (count samples) (inc samples-per-block))
-                                      :page    page
-                                      :tag     tag}
+            ;samples (db-req/samples-by-tag (get-db request) {:count  (inc samples-per-block)
+            ;                                                 :offset (* samples-per-block page)
+            ;                                                 :tag    tag})
+            result (elastic/tag-samples (-> (get-db request) :config :elastic)
+                                        tag
+                                        (* samples-per-block page)
+                                        samples-per-block)]
+        (chart-type-view/page (merge {:result result
+                                      :page   page
+                                      :tag    tag}
                                      (get-app-data request))
                               chart-type
                               (chartopedia/get-relations chart-type))))))

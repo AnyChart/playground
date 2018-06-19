@@ -49,7 +49,7 @@
          :error-handler #(utils/log "Error!" %)}))
 
 
-(defn ^:export startTagPage [_page _max-page _end  _tag]
+(defn ^:export startTagPage [_page _max-page _end _tag]
   ;(utils/log "Start tag page: " _page _max-page _end _tag)
   (reset! *page _page)
   (reset! *max-page _max-page)

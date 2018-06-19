@@ -52,7 +52,7 @@
                                    :fields {:keyword {:type "keyword" :ignore_above 256}}}
                :name              {:type   "text"
                                    :fields {:keyword {:type "keyword" :ignore_above 256}}}
-               :name-kw           {:type "keyword"
+               :name-kw           {:type       "keyword"
                                    :normalizer :lowercase_normalizer}
                :version-id        {:type "long"}
                :likes             {:type "long"}

@@ -1,7 +1,7 @@
 (ns playground.site.pages.chart-type-page
   (:require-macros [hiccups.core :as h])
   (:require [playground.site.landing :refer [samples-per-page samples-per-block samples-per-landing
-                                             change-title
+                                             change-title update-pagination
                                              init-buttons update-buttons]]
             [playground.views.sample :as sample-view]
             [playground.site.utils :as utils]
@@ -13,7 +13,9 @@
 ;; Chart type tags page
 ;;======================================================================================================================
 (def *page (atom 0))
+(def *max-page (atom 0))
 (def *is-end (atom false))
+
 (def *tag (atom nil))
 (def *chart-type-name (atom nil))
 (def *chart-type-id (atom nil))
@@ -34,7 +36,8 @@
                   @*is-end
                   (str "/chart-types/" @*chart-type-id "?page=")
                   load-tag-samples
-                  *loading))
+                  *loading)
+  (update-pagination *page *max-page *loading (str "/chart-types/" @*chart-type-id "?page=") load-tag-samples))
 
 
 (defn load-tag-samples []
@@ -46,10 +49,11 @@
          :error-handler #(utils/log "Error!" %)}))
 
 
-(defn ^:export startChartTypePage [_end _page _tag _chart-type-id _chart-type-name]
-  ;(utils/log "Start tag page: " _end _page _tag _chart-type-id)
-  (reset! *is-end _end)
+(defn ^:export startChartTypePage [_page _max-page _end _tag _chart-type-id _chart-type-name]
+  ;(utils/log "Start tag page: " _page _max-page _end  _tag _chart-type-id)
   (reset! *page _page)
+  (reset! *max-page _max-page)
+  (reset! *is-end _end)
   (reset! *tag _tag)
   (reset! *chart-type-id _chart-type-id)
   (reset! *chart-type-name _chart-type-name)
@@ -57,4 +61,5 @@
                 "tag-samples-next"
                 *page
                 load-tag-samples
-                *loading))
+                *loading)
+  (update-pagination *page *max-page *loading (str "/chart-types/" @*chart-type-id "?page=") load-tag-samples))

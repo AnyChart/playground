@@ -102,18 +102,18 @@
 (defn update-pagination [*page *max-page *loading url load-fn]
   (when (pos? @*max-page)
     (let [markup (h/html (prev-next-buttons-common/pagination-markup @*page @*max-page url))
-         pagination-box (dom/getElementByClass "pagination-box")]
-     (dom/removeChildren pagination-box)
-     (set! (.-innerHTML pagination-box) markup)
-     (let [buttons (dom/getElementsByTagName TagName/LI pagination-box)]
-       (dotimes [i (.-length buttons)]
-         (let [button (aget buttons i)]
-           (event/listen button "click" #(let [num (.-textContent (.-target %))
-                                               num (js/parseInt num)]
-                                           (.preventDefault %)
-                                           ;(println "click" num)
-                                           (when (pos? num)
-                                             (when-not @*loading
-                                               (reset! *loading true)
-                                               (reset! *page (dec num))
-                                               (load-fn)))))))))))
+          pagination-box (dom/getElementByClass "pagination-box")]
+      (dom/removeChildren pagination-box)
+      (set! (.-innerHTML pagination-box) markup)
+      (let [buttons (dom/getElementsByTagName TagName/LI pagination-box)]
+        (dotimes [i (.-length buttons)]
+          (let [button (aget buttons i)]
+            (event/listen button "click" #(let [num (.-textContent (.-target %))
+                                                num (js/parseInt num)]
+                                            (.preventDefault %)
+                                            ;(println "click" num)
+                                            (when (pos? num)
+                                              (when-not @*loading
+                                                (reset! *loading true)
+                                                (reset! *page (dec num))
+                                                (load-fn)))))))))))
