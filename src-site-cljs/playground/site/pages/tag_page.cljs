@@ -1,7 +1,7 @@
 (ns playground.site.pages.tag-page
   (:require-macros [hiccups.core :as h])
   (:require [playground.site.landing :refer [samples-per-page samples-per-block samples-per-landing
-                                             change-title
+                                             change-title update-pagination
                                              init-buttons update-buttons]]
             [playground.views.sample :as sample-view]
             [playground.site.utils :as utils]
@@ -14,11 +14,14 @@
 ;; Tags page
 ;;======================================================================================================================
 (def *page (atom 0))
+(def *max-page (atom 0))
 (def *is-end (atom false))
+
 (def *tag (atom nil))
 (def *loading (atom false))
 
 (declare load-tag-samples)
+
 
 (defn on-tag-samples-load [data]
   (dom/removeChildren (dom/getElement "tag-samples"))
@@ -33,7 +36,8 @@
                   @*is-end
                   (str "/tags/" (tags-data/original-name->id-name @*tag) "?page=")
                   load-tag-samples
-                  *loading))
+                  *loading)
+  (update-pagination *page *max-page *loading (str "/tags/" (tags-data/original-name->id-name @*tag) "?page=") load-tag-samples))
 
 
 (defn load-tag-samples []
@@ -45,13 +49,15 @@
          :error-handler #(utils/log "Error!" %)}))
 
 
-(defn ^:export startTagPage [_end _page _tag]
-  ;(utils/log "Start tag page: " _end _page _tag)
-  (reset! *is-end _end)
+(defn ^:export startTagPage [_page _max-page _end  _tag]
+  ;(utils/log "Start tag page: " _page _max-page _end _tag)
   (reset! *page _page)
+  (reset! *max-page _max-page)
+  (reset! *is-end _end)
   (reset! *tag _tag)
   (init-buttons "tag-samples-prev"
                 "tag-samples-next"
                 *page
                 load-tag-samples
-                *loading))
+                *loading)
+  (update-pagination *page *max-page *loading (str "/tags/" (tags-data/original-name->id-name @*tag) "?page=") load-tag-samples))

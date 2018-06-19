@@ -52,7 +52,8 @@
                                    :fields {:keyword {:type "keyword" :ignore_above 256}}}
                :name              {:type   "text"
                                    :fields {:keyword {:type "keyword" :ignore_above 256}}}
-               :name-kw           {:type "keyword"}
+               :name-kw           {:type "keyword"
+                                   :normalizer :lowercase_normalizer}
                :version-id        {:type "long"}
                :likes             {:type "long"}
                :repo-name         {:type "keyword"}
@@ -419,11 +420,35 @@
                                          }})
           hits (:hits (:body data))
           total (:total hits)
-          samples (map (fn [hit]
-                         (assoc (:_source hit) :score (:_score hit)))
-                       (:hits hits))]
+          samples (map :_source (:hits hits))]
       {:samples  samples
        :total    total
        :end      (<= (- total offset) size)
        :max-page (get-max-page total size)})
     (catch Exception e (timbre/error "Elastic top samples error:" (pr-str e)))))
+
+
+;; =====================================================================================================================
+;; Tag samples
+;; =====================================================================================================================
+(defn tag-samples [conf tag offset size]
+  (try
+    (let [conn (get-connection conf)
+          data (s/request conn {:url    [(:index conf) (:type conf) :_search]
+                                :method :post
+                                :body   {:size    size
+                                         :from    offset
+                                         :sort    [{"likes" {:order "desc"}}
+                                                   {"views" {:order "desc"}}
+                                                   {"name-kw" {:order "asc"}}]
+                                         :_source {:excludes [:name-kw :tags-kw]}
+                                         :query   {:bool {:filter [{:match {:tags-kw tag}}
+                                                                   {:match {:latest true}}]}}}})
+          hits (:hits (:body data))
+          total (:total hits)
+          samples (map :_source (:hits hits))]
+      {:samples  samples
+       :total    total
+       :end      (<= (- total offset) size)
+       :max-page (get-max-page total size)})
+    (catch Exception e (timbre/error "Elastic tag samples error:" (pr-str e)))))

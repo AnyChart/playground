@@ -14,7 +14,14 @@
     (str "t:" tag)))
 
 
-(defn page [{:keys [page tag tag-data] :as data}]
+(defn page [{page            :page
+             tag             :tag
+             tag-data        :tag-data
+             {samples  :samples
+              total    :total
+              max-page :max-page
+              end      :end} :result
+             :as             data}]
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title       (tag-page-utils/title tag page)
@@ -37,14 +44,15 @@
           [:h2 "Samples"])
 
         [:div#tag-samples.row.samples-container
-         (for [sample (:samples data)]
+         (for [sample samples]
            (sample-view/sample-landing sample))]
 
-        (prev-next-buttons/buttons "tag-samples-prev"
-                                   "tag-samples-next"
-                                   page
-                                   (:end data)
-                                   (str "/tags/" (tags-data/original-name->id-name tag) "?page="))
+        (prev-next-buttons/pagination "tag-samples-prev"
+                                      "tag-samples-next"
+                                      page
+                                      max-page
+                                      end
+                                      (str "/tags/" (tags-data/original-name->id-name tag) "?page="))
         ]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
@@ -52,4 +60,4 @@
      (page/jquery-script)
      (page/bootstrap-script)
      (page/site-script)
-     [:script (page/run-js-fn "playground.site.pages.tag_page.startTagPage" (:end data) page tag)]]))
+     [:script (page/run-js-fn "playground.site.pages.tag_page.startTagPage" page max-page end tag)]]))
