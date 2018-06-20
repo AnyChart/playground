@@ -13,6 +13,9 @@
 ;; =====================================================================================================================
 ;; Constants
 ;; =====================================================================================================================
+(def ^:const elastic-max-result-window 50000)
+
+
 (def mapping-default {:properties
                       {:description       {:type   "text",
                                            :fields {:keyword {:type "keyword", :ignore_above 256}}},
@@ -134,7 +137,7 @@
     (let [conn (get-connection conf)
           data (s/request conn {:url    [(:index conf)]
                                 :method :put
-                                :body   {:settings {:max_result_window 50000
+                                :body   {:settings {:max_result_window elastic-max-result-window
                                                     :analysis          {:normalizer
                                                                         {:lowercase_normalizer {"type"        "custom"
                                                                                                 "char_filter" []
@@ -328,8 +331,19 @@
                                                    {:match {:short-description q}}]}})}}))
 
 
+;; =====================================================================================================================
+;; Pagination Requests Utils
+;; =====================================================================================================================
 (defn get-max-page [total items-per-page]
   (dec (int (Math/ceil (/ total items-per-page)))))
+
+
+(defn make-result [samples total size offset]
+  (let [total (min total elastic-max-result-window)]
+    {:samples  samples
+     :total    total
+     :end      (<= (- total offset) size)
+     :max-page (get-max-page total size)}))
 
 
 (defn search [conf q offset size]
@@ -349,30 +363,23 @@
           total (:total hits)
           samples (map (fn [hit]
                          (assoc (:_source hit) :score (:_score hit)))
-                       (:hits hits))
-          ;samples (map #(select-keys % [:name :tags]) samples)
-          ]
-      (timbre/info "Search - Total:" total ", Max Score:" (:max_score hits))
-      ;(println :elastic (:body data))
-      {:samples  samples
-       :total    total
-       :end      (<= (- total offset) size)
-       :max-page (get-max-page total size)})
+                       (:hits hits))]
+      (timbre/info "Search:" q ", total:" total ", max Score:" (:max_score hits))
+      (make-result samples total size offset))
     (catch Exception e (timbre/error "Search error:" (pr-str e)))))
 
 
-
-(defn get-all [conf]
-  (try
-    (let [conn (get-connection conf)
-          data (s/request conn {:url    [:pg_local :samples :_search]
-                                :method :get
-                                :body   {:query {:match_all {}}}})
-          data (:hits (:body data))
-          total (:total data)
-          hits (map :_source (take 10 (:hits data)))]
-      (prn total (keys data)))
-    (catch Exception e (timbre/error (pr-str e)))))
+;(defn get-all [conf]
+;  (try
+;    (let [conn (get-connection conf)
+;          data (s/request conn {:url    [:pg_local :samples :_search]
+;                                :method :get
+;                                :body   {:query {:match_all {}}}})
+;          data (:hits (:body data))
+;          total (:total data)
+;          hits (map :_source (take 10 (:hits data)))]
+;      (prn total (keys data)))
+;    (catch Exception e (timbre/error (pr-str e)))))
 
 
 ;; =====================================================================================================================
@@ -389,17 +396,13 @@
                                                    {"views" {:order "desc"}}
                                                    {"name-kw" {:order "asc"}}]
                                          :_source {:excludes [:name-kw :tags-kw]}
-                                         :query   {:term {:latest true}}
-                                         }})
+                                         :query   {:term {:latest true}}}})
           hits (:hits (:body data))
           total (:total hits)
           samples (map (fn [hit]
                          (assoc (:_source hit) :score (:_score hit)))
                        (:hits hits))]
-      {:samples  samples
-       :total    total
-       :end      (<= (- total offset) size)
-       :max-page (get-max-page total size)})
+      (make-result samples total size offset))
     (catch Exception e (timbre/error "Elastic top samples error:" (pr-str e)))))
 
 
@@ -417,15 +420,11 @@
                                                    {"views" {:order "desc"}}
                                                    {"name-kw" {:order "asc"}}]
                                          :_source {:excludes [:name-kw :tags-kw]}
-                                         :query   {:term {:version-id version-id}}
-                                         }})
+                                         :query   {:term {:version-id version-id}}}})
           hits (:hits (:body data))
           total (:total hits)
           samples (map :_source (:hits hits))]
-      {:samples  samples
-       :total    total
-       :end      (<= (- total offset) size)
-       :max-page (get-max-page total size)})
+      (make-result samples total size offset))
     (catch Exception e (timbre/error "Elastic top samples error:" (pr-str e)))))
 
 
@@ -448,8 +447,5 @@
           hits (:hits (:body data))
           total (:total hits)
           samples (map :_source (:hits hits))]
-      {:samples  samples
-       :total    total
-       :end      (<= (- total offset) size)
-       :max-page (get-max-page total size)})
+      (make-result samples total size offset))
     (catch Exception e (timbre/error "Elastic tag samples error:" (pr-str e)))))
