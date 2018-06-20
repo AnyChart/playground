@@ -32,17 +32,18 @@
             [playground.web.handlers.sitemap-handler :as sitemap-handler]
             [playground.web.handlers.generator-handlers :as generator-handlers]
             [playground.web.handlers.search-handlers :as search-handlers]
-            ))
+            [playground.data.config :as c]))
+
 
 ;; =====================================================================================================================
 ;; Route utils
 ;; =====================================================================================================================
-
 (defn redirect-slash [request]
   (redirect (web-utils/drop-slash (:uri request)) 301))
 
 (defn page-404 [request]
   (view-404/page (get-app-data request)))
+
 
 ;; =====================================================================================================================
 ;; Routes
@@ -183,6 +184,7 @@
            (GET "/_user_previews_" [] generator-handlers/user-previews)
            (GET "/_repo_previews_" [] generator-handlers/repo-previews)
            (GET "/_refresh_views_" [] generator-handlers/refresh-views)
+           (GET "/_update_anychart_versions_" [] (c/update-anychart-versions))
 
            (GET "/:repo/_update_" [] (-> generator-handlers/update-repo
                                          mw/check-repo-middleware))

@@ -22,13 +22,6 @@
             [cheshire.core :as json]))
 
 
-;(defn get-anychart-repo-versions []
-;  (let [data (http/get "https://api.github.com/repos/AnyChart/AnyChart/branches?per_page=100")
-;        branches (json/parse-string (:body data) true)
-;        branches (map :name branches)]
-;    branches))
-
-
 ;; =====================================================================================================================
 ;; Samples pages handlers
 ;; =====================================================================================================================
@@ -42,7 +35,8 @@
                        (= "export" (-> request :query-string)))
         versions-names (cond->
                          (db-req/versions-by-repos-names (get-db request) {:repos-names (db-req/raw-coll (c/repos-for-versions))})
-                         (c/released-versions) (utils/filter-8-released-versions))
+                         (c/released-versions) (utils/filter-8-released-versions)
+                         (not (c/released-versions)) (c/add-anychart-versions))
         data {:canonical-url (if editor-view
                                (utils/full-canonical-url-standalone sample)
                                (utils/full-canonical-url sample))
