@@ -185,6 +185,7 @@
            (GET "/_repo_previews_" [] generator-handlers/repo-previews)
            (GET "/_refresh_views_" [] generator-handlers/refresh-views)
            (GET "/_update_anychart_versions_" [] (c/update-anychart-versions))
+           (POST "/_update_anychart_versions_" [] (c/update-anychart-versions))
 
            (GET "/:repo/_update_" [] (-> generator-handlers/update-repo
                                          mw/check-repo-middleware))
