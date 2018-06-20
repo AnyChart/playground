@@ -1,7 +1,7 @@
 (ns playground.site.pages.landing-page
   (:require-macros [hiccups.core :as h])
   (:require [playground.site.landing :refer [samples-per-page samples-per-block samples-per-landing
-                                             change-title
+                                             change-title update-pagination
                                              init-buttons update-buttons]]
             [playground.views.sample :as sample-view]
             [playground.site.utils :as utils]
@@ -13,10 +13,14 @@
 ;; Landing page
 ;;======================================================================================================================
 (def *page (atom 0))
+(def *max-page (atom 0))
 (def *is-end (atom false))
+
 (def *loading (atom false))
 
+
 (declare load-popular-samples)
+
 
 (defn on-popular-samples-load [data]
   (dom/removeChildren (dom/getElement "popular-samples"))
@@ -31,7 +35,8 @@
                   @*is-end
                   "/?page="
                   load-popular-samples
-                  *loading))
+                  *loading)
+  (update-pagination *page *max-page *loading "/?page=" load-popular-samples))
 
 
 (defn load-popular-samples []
@@ -41,14 +46,16 @@
          :error-handler #(utils/log "Error!" %)}))
 
 
-(defn ^:export startLanding [_end _page]
-  (reset! *is-end _end)
+(defn ^:export startLanding [_page _max-page _end]
   (reset! *page _page)
+  (reset! *max-page _max-page)
+  (reset! *is-end _end)
   (init-buttons "popular-samples-prev"
                 "popular-samples-next"
                 *page
                 load-popular-samples
-                *loading))
+                *loading)
+  (update-pagination *page *max-page *loading "/?page=" load-popular-samples))
 
 ;;======================================================================================================================
 ;; Landing page: tag block

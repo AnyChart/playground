@@ -134,9 +134,11 @@
     (let [conn (get-connection conf)
           data (s/request conn {:url    [(:index conf)]
                                 :method :put
-                                :body   {:settings {:analysis {:normalizer {:lowercase_normalizer {"type"        "custom"
-                                                                                                   "char_filter" []
-                                                                                                   "filter"      ["lowercase"]}}}}
+                                :body   {:settings {:max_result_window 50000
+                                                    :analysis          {:normalizer
+                                                                        {:lowercase_normalizer {"type"        "custom"
+                                                                                                "char_filter" []
+                                                                                                "filter"      ["lowercase"]}}}}
                                          :mappings {(:type conf) mapping}}})]
       data)
     (catch Exception e (timbre/error "set mapping error:" (pr-str e)))))
@@ -397,8 +399,7 @@
       {:samples  samples
        :total    total
        :end      (<= (- total offset) size)
-       :max-page (get-max-page total size)}
-      samples)
+       :max-page (get-max-page total size)})
     (catch Exception e (timbre/error "Elastic top samples error:" (pr-str e)))))
 
 

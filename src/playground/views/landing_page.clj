@@ -7,7 +7,13 @@
             [playground.data.tags :as tags-data]))
 
 
-(defn page [{:keys [page tags-page all-tags] :as data}]
+(defn page [{{samples  :samples
+              total    :total
+              max-page :max-page
+              end      :end} :result
+             page            :page
+             all-tags        :all-tags
+             :as             data}]
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title       (landing/title page)
@@ -39,14 +45,15 @@
 
         [:p.popular-label "Popular " [:b "samples"]]
         [:div#popular-samples.row.samples-container
-         (for [sample (:samples data)]
+         (for [sample samples]
            (sample-view/sample-landing sample))]
 
-        (prev-next-buttons/buttons "popular-samples-prev"
-                                   "popular-samples-next"
-                                   page
-                                   (:end data)
-                                   "/?page=")
+        (prev-next-buttons/pagination "popular-samples-prev"
+                                      "popular-samples-next"
+                                      page
+                                      max-page
+                                      end
+                                      "/?page=")
 
         [:p.popular-label.popular-tags-label "Popular " [:b "tags"]]
 
@@ -56,7 +63,6 @@
             {:title (str "Tag - " (:name tag))
              :href  (str "/tags/" (tags-data/original-name->id-name (:name tag)))}
             (:name tag)])]
-
         ]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
@@ -64,4 +70,4 @@
      (page/jquery-script)
      (page/bootstrap-script)
      (page/site-script)
-     [:script (page/run-js-fn "playground.site.pages.landing_page.startLanding" (:end data) page)]]))
+     [:script (page/run-js-fn "playground.site.pages.landing_page.startLanding" page max-page end)]]))
