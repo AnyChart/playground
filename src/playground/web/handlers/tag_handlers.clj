@@ -44,8 +44,7 @@
 
 ;; API
 (defn top-tag-samples [request]
-  (let [offset* (-> request :params :offset)
-        offset (if (int? offset*) offset* (Integer/parseInt offset*))
+  (let [offset (-> request :params :offset)
         samples-count (-> request :params :samples-count)
         tag (-> request :params :tag)
         ;samples (time (db-req/samples-by-tag (get-db request) {:tag    tag

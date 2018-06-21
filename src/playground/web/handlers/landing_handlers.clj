@@ -34,8 +34,7 @@
 ;; API
 ;; =====================================================================================================================
 (defn top-landing-samples [request]
-  (let [offset* (-> request :params :offset)
-        offset (if (int? offset*) offset* (Integer/parseInt offset*))
+  (let [offset (-> request :params :offset)
         result (elastic/top-samples (-> (get-db request) :config :elastic)
                                     offset
                                     samples-per-landing)

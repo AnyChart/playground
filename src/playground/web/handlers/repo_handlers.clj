@@ -47,8 +47,7 @@
 
 ;; API
 (defn top-version-samples [request]
-  (let [offset* (-> request :params :offset)
-        offset (if (int? offset*) offset* (Integer/parseInt offset*))
+  (let [offset (-> request :params :offset)
         version-id (-> request :params :version_id)
         ;samples (time (db-req/samples-by-version (get-db request) {:version_id version-id
         ;                                                       :count      (inc samples-per-page)
