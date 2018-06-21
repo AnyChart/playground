@@ -27,6 +27,7 @@ before_install:
 - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 - git submodule update --init --recursive
 install:
+  - sudo pip install --upgrade pip
   - sudo pip install requests --upgrade
 after_success:
 - if [ "$TRAVIS_BRANCH" == "master" ]; then export APP="pg-prod"; fi
