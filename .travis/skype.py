@@ -62,7 +62,6 @@ def success_msg():
 
 
 def notify(skype_id, skype_key, skype_chat_id, company_repo, branch, build_id, build_num, success):
-  print(skype_id, skype_key, skype_chat_id, company_repo, branch, build_id, build_num, success)
   msg = '[PG travis] #{build_num} <b>{branch}</b> "{commit_msg}" @{commit_author} ({commit_hash}) - {msg}'\
          .format(build_num=build_num, branch=branch, commit_msg=commit_msg(), commit_author=commit_author(), 
                  commit_hash=commit_hash(), msg=(success_msg() if int(success) else failed_msg()))
