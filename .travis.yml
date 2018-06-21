@@ -41,6 +41,8 @@ after_success:
 - ssh-add ~/.ssh/id_rsa
 - scp target/pg-standalone.jar root@138.68.237.182:/apps/$APP/pg-standalone.jar
 - ssh root@138.68.237.182 "supervisorctl restart $APP"
+after_failure:
+- .travis/skype.py $skype_id $skype_key $skype_chat_id $TRAVIS_REPO_SLUG $TRAVIS_BRANCH $TRAVIS_BUILD_ID $TRAVIS_BUILD_NUMBER 0
 notifications:
   slack:
     secure: LGrosP+UjObWZGdvS3+HKWu9OO65ns8ILRgUPRbHHvIvkf/cIFiO/srQijqzmghauDgJp8GUjPYemH+6poTyS4X+vXqbN35wZ3fwNPX0Qoyv9P86DySky/XhUjCDQ9dhMut7MzK/uTwzVJh6euwHKzxMsfSpKjKj6OqN55uqn8NQlvuF31TaglEb+UarybwdOgG57EmxdJOBJZNVFvLk26PVEnQ9Eclz377kgNi7ZwHM1byJBeowiAwpunVqPvlze95KYyvx/+l7E9MjKJB0Ytg4mJiRzcIdK7bNBS3QNGmBPCWj5PVyF72Dy0+X8wt8nR+VLE4ACG9JWBLXMx2vmGj/zcJ6XUBjNKLZPl3P0sYcWA/pHJQTffETnJf+Knr5jaYwquSP85EvNMKrqpqgYEihw8MNIe7vC1Pj7n1UK8MsaHlxB1fNhvrKxjQjAa4u/aXeaCcFULSZ1Zs0qTme12O7k+4YXP/75iywh9S4KQDxq1vgKaVLi1ZIOecAPzrx50aY0A385gc/EFWZ2Oo6742V+1ICkful4TP1MOb77SQFWEfOGjd3k0GVnxAXBmHq4M/ps4HDvy5C6zlCvhQQV76m39R+oSUP/YrXU97nGCgYLAF72yBiqvSxT8Qw5W+6xzYQdmRpRz4h1qQVPrwX9US0QjIsBBAGtZsn514pB7M=
