@@ -65,6 +65,11 @@
 ;; =====================================================================================================================
 ;; Notifications functions
 ;; =====================================================================================================================
+(defn application-start [notifier]
+  (let [msg (str "[PG " (c/prefix) "] " (-> "application has been started" (font "#4183C4") b) "\n")]
+    (send-message (config notifier) msg)))
+
+
 (defn start-version-building [notifier project {author         :author
                                                 commit-message :message
                                                 version        :name

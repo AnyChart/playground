@@ -107,6 +107,7 @@
                   (get-full-system conf))]
         (utils/init-preview-prefix (-> conf :previews :url-prefix))
         (alter-var-root #'system (constantly (component/start-system sys)))
+        (notifier/application-start (:notifier system))
         system))))
 
 

@@ -1,7 +1,8 @@
 (ns playground.notification.core
   (:require [com.stuartsierra.component :as component]
             [playground.notification.slack :as slack]
-            [playground.notification.skype :as skype]))
+            [playground.notification.skype :as skype]
+            [playground.data.config :as c]))
 
 
 (defrecord Notifier [config]
@@ -12,6 +13,11 @@
 
 (defn new-notifier [config]
   (map->Notifier {:config config}))
+
+
+(defn application-start [notifier]
+  (when-not (= (c/prefix) "local")
+    (skype/application-start notifier)))
 
 
 (defn start-build [notifier project branches updated-branches removed-branches queue-index]
