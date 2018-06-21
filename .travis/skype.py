@@ -62,14 +62,17 @@ def success_msg():
 
 
 def notify_start(skype_id, skype_key, skype_chat_id, company_repo, branch, build_id, build_num, success):
+  print(skype_id, skype_key, skype_chat_id, company_repo, branch, build_id, build_num, success)
   msg = '[PG deploy] #{build_num} <b>{branch}</b> "{commit_msg}" @{commit_author} ({commit_hash}) - {msg}'\
          .format(build_num=build_num, branch=branch, commit_msg=commit_msg(), commit_author=commit_author(), 
-                 commit_hash=commit_hash(), msg=(success_msg() if int(success) else failed_msg()))
+                 commit_hash=commit_hash(), msg='deploy start')
   report = "<a href=\"https://travis-ci.com/" + company_repo + "/builds/" + str(build_id) + "\">See report</a>"
+  print(msg)
   __send_notification(skype_id, skype_key, skype_chat_id, msg + "\n" + report)
 
 
 def notify_end(skype_id, skype_key, skype_chat_id, company_repo, branch, build_id, build_num, success):
+  print(skype_id, skype_key, skype_chat_id, company_repo, branch, build_id, build_num, success)
   msg = '[PG deploy] #{build_num} <b>{branch}</b> "{commit_msg}" @{commit_author} ({commit_hash}) - {msg}'\
          .format(build_num=build_num, branch=branch, commit_msg=commit_msg(), commit_author=commit_author(), 
                  commit_hash=commit_hash(), msg=(success_msg() if int(success) else failed_msg()))
