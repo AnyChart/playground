@@ -26,9 +26,12 @@ before_install:
 - mv id_rsa ~/.ssh/id_rsa
 - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 - git submodule update --init --recursive
+install:
+  - pip install requests
 after_success:
 - if [ "$TRAVIS_BRANCH" == "master" ]; then export APP="pg-prod"; fi
 - if [ "$TRAVIS_BRANCH" == "staging" ]; then export APP="pg-stg"; fi
+- .travis/skype.py $skype_id $skype_key $skype_chat_id $TRAVIS_REPO_SLUG $TRAVIS_BRANCH $TRAVIS_BUILD_ID $TRAVIS_BUILD_NUMBER 1
 - echo "Deploying to $SERVER"
 - mv .travis/id_rsa.pub ~/.ssh/id_rsa.pub
 - chmod 400 ~/.ssh/id_rsa
