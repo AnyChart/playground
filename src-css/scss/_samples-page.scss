@@ -32,9 +32,12 @@
         background-color: transparent;
         border-color: #19a1ce;
         padding: 5px 12px;
-        &:hover {
+        &:hover:not(.dots) {
           color: white;
           background-color: #19a1ce;
+        }
+        &.dots {
+          cursor: default;
         }
       }
       &.active a {

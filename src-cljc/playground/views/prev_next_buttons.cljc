@@ -58,7 +58,7 @@
            (inc i)
            [:span {:class "sr-only"}]]]
          [:li
-          [:a {:href "#"}
+          [:a.dots {:href "#" :rel "nofollow"}
            [:span {:aria-hidden true} "..."]]]))]))
 
 
