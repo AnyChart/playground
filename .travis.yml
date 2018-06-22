@@ -27,9 +27,7 @@ before_install:
 - chmod 400 id_rsa
 - mv id_rsa ~/.ssh/id_rsa
 - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-- git submodule update --init --recursive
-- git submodule update --recursive --remote
-- git submodule foreach git pull origin master
+- git submodule update --remote
 install:
   - sudo pip install requests --upgrade
 after_success:
