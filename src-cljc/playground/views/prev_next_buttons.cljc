@@ -1,8 +1,8 @@
 (ns playground.views.prev-next-buttons)
 
 
-(defn prev-button [id page url is-visible]
-  [:a.prev-button.btn.btn-default {:id    id
+(defn prev-button [class page url is-visible]
+  [:a.prev-button.btn.btn-default {:class class
                                    :style (str "visibility: " (if is-visible "visible" "hidden") ";")
                                    :href  (if is-visible (str url page) "#")
                                    :title (when is-visible (str "Prev page, " page))}
@@ -10,8 +10,8 @@
    " Prev"])
 
 
-(defn next-button [id page url is-visible]
-  [:a.next-button.btn.btn-default {:id    id
+(defn next-button [class page url is-visible]
+  [:a.next-button.btn.btn-default {:class class
                                    :style (str "visibility: " (if is-visible "visible" "hidden") ";")
                                    :href  (if is-visible (str url (-> page inc inc)) "#")
                                    :title (when is-visible (str "Next page, " (-> page inc inc)))}
@@ -66,12 +66,12 @@
   (dec (int (Math/ceil (/ total items-perpage)))))
 
 
-(defn pagination [prev-id next-id page max-page end url]
-  [:div#prev-next-buttons.prev-next-buttons
-   (prev-button prev-id page url (pos? page))
+(defn pagination [prev-class next-class page max-page end url class]
+  [:div#prev-next-buttons.prev-next-buttons {:class class}
+   (prev-button prev-class page url (pos? page))
 
    [:div.pagination-box
     (when (pos? max-page)
       (pagination-markup page max-page url))]
 
-   (next-button next-id page url (not end))])
+   (next-button next-class page url (not end))])

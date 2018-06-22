@@ -12,6 +12,16 @@
   (string/replace (string/lower-case text) #" " "-"))
 
 
+(defn pagination [page max-page end chart-type class]
+  (prev-next-buttons/pagination "tag-samples-prev"
+                                "tag-samples-next"
+                                page
+                                max-page
+                                end
+                                (str "/chart-types/" (:id chart-type) "?page=")
+                                class))
+
+
 (defn page [{page            :page
              tag             :tag
              {samples  :samples
@@ -68,16 +78,12 @@
         (when (seq samples)
           [:h2.popular-label.samples-label "Samples"])
 
+        ;(pagination page max-page end chart-type "top")
         [:div#tag-samples.row.samples-container
          (for [sample samples]
            (sample-view/sample-landing sample))]
 
-        (prev-next-buttons/pagination "tag-samples-prev"
-                                      "tag-samples-next"
-                                      page
-                                      max-page
-                                      end
-                                      (str "/chart-types/" (:id chart-type) "?page="))
+        (pagination page max-page end chart-type "bottom")
         ]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]

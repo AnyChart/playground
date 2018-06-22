@@ -1,5 +1,11 @@
 .prev-next-buttons {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  &.top {
+    margin-top: 20px;
+  }
+  &.bottom {
+    margin-bottom: 45px;
+  }
   height: 30px;
   display: flex;
   justify-content: space-between;

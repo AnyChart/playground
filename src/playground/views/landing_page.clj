@@ -7,6 +7,16 @@
             [playground.data.tags :as tags-data]))
 
 
+(defn pagination [page max-page end class]
+  (prev-next-buttons/pagination "popular-samples-prev"
+                                "popular-samples-next"
+                                page
+                                max-page
+                                end
+                                "/?page="
+                                class))
+
+
 (defn page [{{samples  :samples
               total    :total
               max-page :max-page
@@ -44,16 +54,12 @@
        [:div.container-fluid.content-container
 
         [:p.popular-label "Popular " [:b "samples"]]
+        (pagination page max-page end "top")
         [:div#popular-samples.row.samples-container
          (for [sample samples]
            (sample-view/sample-landing sample))]
 
-        (prev-next-buttons/pagination "popular-samples-prev"
-                                      "popular-samples-next"
-                                      page
-                                      max-page
-                                      end
-                                      "/?page=")
+        (pagination page max-page end "bottom")
 
         [:p.popular-label.popular-tags-label "Popular " [:b "tags"]]
 

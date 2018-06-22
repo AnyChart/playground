@@ -14,6 +14,15 @@
     (str "t:" tag)))
 
 
+(defn pagination [page max-page end tag class]
+  (prev-next-buttons/pagination "tag-samples-prev"
+                                "tag-samples-next"
+                                page
+                                max-page
+                                end
+                                (str "/tags/" (tags-data/original-name->id-name tag) "?page=")
+                                class))
+
 (defn page [{page            :page
              tag             :tag
              tag-data        :tag-data
@@ -43,16 +52,12 @@
         (when (seq (:description tag-data))
           [:h2 "Samples"])
 
+        (pagination page max-page end tag "top")
         [:div#tag-samples.row.samples-container
          (for [sample samples]
            (sample-view/sample-landing sample))]
 
-        (prev-next-buttons/pagination "tag-samples-prev"
-                                      "tag-samples-next"
-                                      page
-                                      max-page
-                                      end
-                                      (str "/tags/" (tags-data/original-name->id-name tag) "?page="))
+        (pagination page max-page end tag "bottom")
         ]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]

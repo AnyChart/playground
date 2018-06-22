@@ -10,6 +10,16 @@
   (str "p:" repo-name " v:" version-name " "))
 
 
+(defn pagination [page max-page end repo version class]
+  (prev-next-buttons/pagination "version-samples-prev"
+                                "version-samples-next"
+                                page
+                                max-page
+                                end
+                                (str "/projects/" (:name repo) "/" (:name version) "?page=")
+                                class))
+
+
 (defn page [{repo            :repo
              version         :version
              page            :page
@@ -31,17 +41,14 @@
       [:div.content
        [:div.container-fluid.content-container
         [:p.popular-label "Version " [:b "samples"]]
+
+        (pagination page max-page end repo version "top")
+
         [:div#version-samples.row.samples-container
          (for [sample samples]
            (sample-view/sample-landing sample))]
 
-        (prev-next-buttons/pagination "version-samples-prev"
-                                      "version-samples-next"
-                                      page
-                                      max-page
-                                      end
-                                      (str "/projects/" (:name repo) "/" (:name version) "?page="))
-        ]]
+        (pagination page max-page end repo version "bottom")]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
 
