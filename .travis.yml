@@ -29,7 +29,7 @@ before_install:
 - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 - git submodule update --init --recursive
 - git submodule update --recursive --remote
-- git submodule foreach git pull
+- git submodule foreach git pull origin master
 install:
   - sudo pip install requests --upgrade
 after_success:
