@@ -9,7 +9,7 @@
             [playground.generator.data-sets :as data-sets]
             [playground.generator.utils :refer [copy-dir]]
             [playground.db.request :as db-req]
-            [playground.db.elastic :as elastic]
+            [playground.elastic.core :as elastic]
             [playground.notification.core :as notifier]
             [playground.redis.core :as redis]
             [playground.repo.git :as git]
@@ -211,7 +211,7 @@
     (some-> path slurp (toml/read :keywordize))))
 
 
-(defn build-branch [db redis repo branch path versions]
+(defn build-branch [db elastic redis repo branch path versions]
   (info "Build branch: " path (:name branch))
   (let [version-config (-> (read-version-config (str path "/config.toml"))
                            (assoc-in [:vars :branch-name] (:name branch)))
@@ -227,9 +227,9 @@
                                              :samples-count (count samples)})]
     (timbre/info "Insert samples: " (count samples))
     (when (seq samples)
-      (elastic/remove-branch (:name @repo) (:name branch) (-> db :config :elastic))
+      (elastic/remove-branch elastic (:name @repo) (:name branch))
       (let [ids (db-req/add-samples! db version-id samples)]
-        (elastic/add-branch samples (:name @repo) (:name branch) (-> db :config :elastic))
+        (elastic/add-branch elastic samples (:name @repo) (:name branch))
         ;;  set views
         (doseq [sample samples]
           (db-req/update-sample-views-from-canonical-visits! db {:url     (:url sample)
@@ -260,7 +260,7 @@
       (let [git-repo (git/get-git git-path)]
         (git/checkout git-repo (:name branch) (:commit branch))
         (git/pull git-repo @repo)
-        (build-branch db redis repo branch path versions)))
+        (build-branch db (:elastic generator) redis repo branch path versions)))
     (notifier/complete-version-building (:notifier generator) (:name @repo) branch queue-index)
     nil
     (catch Exception e
@@ -320,7 +320,7 @@
                               (names removed-branches) queue-index)
         ;; delete old branches
         (doseq [branch removed-branches]
-          (elastic/remove-branch (:name @repo) (:name branch) (-> db :config :elastic))
+          (elastic/remove-branch (-> generator :elastic) (:name @repo) (:name branch))
           (remove-branch db branch)
           (remove-previews (:name @repo) (:name branch) (-> generator :conf :images-dir)))
 

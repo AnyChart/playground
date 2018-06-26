@@ -1,175 +1,38 @@
-(ns playground.db.elastic
-  (:require [qbits.spandex :as s]
+(ns playground.elastic.core
+  (:require [playground.elastic.helpers :refer [bulk-samples prepare-sample]]
+            [playground.elastic.consts :as elastic-consts]
+            [playground.elastic.init :as elastic-init]
+            [qbits.spandex :as s]
             [cheshire.core :as json]
-            [playground.db.request :as db-req]
             [taoensso.timbre :as timbre]
             [clojure.core.async :as async]
             [clojure.java.jdbc :as jdbc]
             [instaparse.core :as insta]
-            [clojure.string :as string]))
-
-; :headers {"Content-Type" "application/json; charset=UTF-8"}
-
-;; =====================================================================================================================
-;; Constants
-;; =====================================================================================================================
-(def ^:const elastic-max-result-window 50000)
-
-
-(def mapping-default {:properties
-                      {:description       {:type   "text",
-                                           :fields {:keyword {:type "keyword", :ignore_above 256}}},
-                       :create-date       {:type "date"},
-                       :tags              {:type   "text",
-                                           :fields {:keyword {:type "keyword", :ignore_above 256}}},
-                       :short-description {:type   "text",
-                                           :fields {:keyword {:type "keyword", :ignore_above 256}}},
-                       :name              {:type   "text",
-                                           :fields {:keyword {:type "keyword", :ignore_above 256}}},
-                       :version-id        {:type "long"},
-                       :likes             {:type "long"},
-                       :repo-name         {:type   "text",
-                                           :fields {:keyword {:type "keyword", :ignore_above 256}}},
-                       :full-url          {:type   "text",
-                                           :fields {:keyword {:type "keyword", :ignore_above 256}}},
-                       :latest            {:type "boolean"},
-                       :preview           {:type "boolean"},
-                       :id                {:type "long"},
-                       :version-name      {:type   "text",
-                                           :fields {:keyword {:type "keyword", :ignore_above 256}}},
-                       :url               {:type   "text",
-                                           :fields {:keyword {:type "keyword", :ignore_above 256}}},
-                       :version           {:type "long"},
-                       :views             {:type "long"}}})
-
-
-(def mapping {:properties
-              {:description       {:type   "text"
-                                   :fields {:keyword {:type "keyword" :ignore_above 256}}}
-               :create-date       {:type "date"}
-               :tags              {:type   "text"
-                                   :fields {:keyword {:type "keyword" :ignore_above 256}}}
-               :tags-kw           {:type       "keyword"
-                                   :normalizer :lowercase_normalizer}
-               :short-description {:type   "text"
-                                   :fields {:keyword {:type "keyword" :ignore_above 256}}}
-               :name              {:type   "text"
-                                   :fields {:keyword {:type "keyword" :ignore_above 256}}}
-               :name-kw           {:type       "keyword"
-                                   :normalizer :lowercase_normalizer}
-               :version-id        {:type "long"}
-               :likes             {:type "long"}
-               :repo-name         {:type "keyword"}
-               :full-url          {:type "keyword"}
-               :fullname          {:type "keyword"}
-               :latest            {:type "boolean"}
-               :preview           {:type "boolean"}
-               :id                {:type "long"}
-               :version-name      {:type "keyword"}
-               :url               {:type "keyword"}
-               :version           {:type "long"}
-               :views             {:type "long"}}})
-
-
-(def conf {:host  "http://127.0.0.1:9200"
-           :index "pg_local"
-           :type  "samples"})
-
-
-(def sample {:description       ""
-             :create-date       "2018-02-22T08:55:35Z"
-             :tags              ["Tag Cloud" "Weighted List Chart" "Word Cloud"]
-             :short-description ""
-             :name              "BCT Tag Cloud Chart 13"
-             :version-id        246
-             :likes             0
-             :repo-name         "docs"
-             :full-url          "/docs/8.1.0/samples/BCT_Tag_Cloud_Chart_13"
-             :latest            true
-             :preview           true
-             :id                133737
-             :version-name      "8.1.0"
-             :url               "samples/BCT_Tag_Cloud_Chart_13"
-             :version           0
-             :views             0})
-
-;; =====================================================================================================================
-;; Helpers
-;; =====================================================================================================================
-(defn get-connection [conf]
-  (s/client {:hosts [(:host conf)]}))
-
-
-(defn prepare-sample
-  ([sample] (prepare-sample sample nil nil))
-  ([sample repo-name version-name]
-   (-> sample
-       (select-keys (keys (:properties mapping)))
-       (update :repo-name #(or % repo-name))
-       (update :version-name #(or % version-name))
-       (assoc :name-kw (:name sample))
-       (assoc :tags-kw (:tags sample)))))
-
-
-(defn bulk-samples [samples conf]
-  (mapcat (fn [sample]
-            [{:index {:_index (:index conf)
-                      :_type  (:type conf)}}
-             sample])
-          samples))
+            [clojure.string :as string]
+            [com.stuartsierra.component :as component]))
 
 
 ;; =====================================================================================================================
-;; Init elastic
+;; Component
 ;; =====================================================================================================================
-(defn delete-index [conf]
-  (try
-    (timbre/info "Elastic delete index")
-    (let [conn (get-connection conf)
-          data (s/request conn {:url    [(:index conf)]
-                                :method :delete})]
-      (timbre/info "Elastic delete index:" data))
-    (catch Exception e (timbre/error "Delete index error, probably already deleted"))))
+(defrecord Elastic [conf db conn]
+  component/Lifecycle
+  (start [this]
+    (timbre/info "ElasticSearch component start")
+    (let [comp (assoc this :conn (s/client {:hosts [(:host conf)]}))]
+      (elastic-init/init (assoc comp :db db :conf conf))
+      comp))
+  (stop [this]
+    (timbre/info "ElasticSearch component stop")
+    (s/close! (:conn this))))
 
 
-(defn create-index [conf]
-  (try
-    (let [conn (get-connection conf)
-          data (s/request conn {:url    [(:index conf)]
-                                :method :put
-                                :body   {:settings {:max_result_window elastic-max-result-window
-                                                    :analysis          {:normalizer
-                                                                        {:lowercase_normalizer {"type"        "custom"
-                                                                                                "char_filter" []
-                                                                                                "filter"      ["lowercase"]}}}}
-                                         :mappings {(:type conf) mapping}}})]
-      data)
-    (catch Exception e (timbre/error "set mapping error:" (pr-str e)))))
+(defn new-elastic [conf]
+  (map->Elastic {:conf conf}))
 
 
-(defn load-samples [db conf]
-  (timbre/info "Elastic load samples")
-  (try
-    (let [conn (get-connection conf)
-          samples (db-req/search-samples db)
-          samples (map prepare-sample samples)
-          samples-groups (partition-all 20000 samples)]
-      (timbre/info "Elastic load samples total:" (count samples))
-      (doseq [samples samples-groups]
-        (let [samples-list (bulk-samples samples conf)]
-          (timbre/info "Elastic load samples: " (count samples))
-          (s/request conn {:url    "/_bulk"
-                           :method :put
-                           :body   (s/chunks->body samples-list)}))))
-    (catch Exception e (timbre/error "Elastic load samples error:" (pr-str e)))))
-
-
-(defn init [db conf]
-  (timbre/info "Elastic init")
-  (jdbc/with-db-transaction [conn (:db-spec db) {:isolation :serializable}]
-                            (delete-index conf)
-                            (create-index conf)
-                            (load-samples conn conf)))
+(defn get-connection [elastic]
+  (:conn elastic))
 
 
 ;; =====================================================================================================================
@@ -211,51 +74,47 @@
     (catch Exception e (timbre/error "Elastic sample-by-url error:" (pr-str e)))))
 
 
-(defn remove-sample-by-url [url conf]
+(defn remove-sample-by-url [{conn :conn conf :conf} url]
   (timbre/info "Elastic remove sample by url:" url)
   (try
-    (let [conn (get-connection conf)
-          data (s/request conn {:url    [(:index conf) (:type conf) :_delete_by_query]
+    (let [data (s/request conn {:url    [(:index conf) (:type conf) :_delete_by_query]
                                 :method :post
                                 :body   {:query {:bool {:filter [{:term {:url url}}]}}}})]
       data)
     (catch Exception e (timbre/error "Elastic remove-sample-by-url error:" (pr-str e)))))
 
 
-(defn add-sample [sample conf]
+(defn add-sample [{conn :conn conf :conf} sample]
   (timbre/info "Elastic: add sample" (:url sample))
   (try
-    (let [conn (get-connection conf)]
-      (s/request conn {:url    [(:index conf) (:type conf)]
-                       :method :post
-                       :body   (prepare-sample sample)}))
+    (s/request conn {:url    [(:index conf) (:type conf)]
+                     :method :post
+                     :body   (prepare-sample sample)})
     (catch Exception e (timbre/error "Elastic add-sample error:" (pr-str e)))))
 
 
-(defn replace-sample [sample conf]
-  (remove-sample-by-url (:url sample) conf)
-  (add-sample sample conf))
+(defn replace-sample [elastic sample]
+  (remove-sample-by-url elastic (:url sample))
+  (add-sample elastic sample))
 
 
 ;; =====================================================================================================================
 ;; Remove branch
 ;; =====================================================================================================================
-(defn remove-branch [repo-name version-name conf]
+(defn remove-branch [{conn :conn conf :conf} repo-name version-name]
   (timbre/info "Remove branch:" repo-name version-name)
-  (let [conn (get-connection conf)]
-    (try
-      (let [data (s/request conn {:url    [(:index conf) (:type conf) :_delete_by_query]
-                                  :method :post
-                                  :body   {:query {:bool {:filter [{:term {:repo-name repo-name}}
-                                                                   {:term {:version-name version-name}}]}}}})]
-        data)
-      (catch Exception e (timbre/error "Elastic remove branch error:" (pr-str e))))))
+  (try
+    (let [data (s/request conn {:url    [(:index conf) (:type conf) :_delete_by_query]
+                                :method :post
+                                :body   {:query {:bool {:filter [{:term {:repo-name repo-name}}
+                                                                 {:term {:version-name version-name}}]}}}})]
+      data)
+    (catch Exception e (timbre/error "Elastic remove branch error:" (pr-str e)))))
 
 
-(defn add-branch [samples repo-name version-name conf]
+(defn add-branch [{conn :conn conf :conf} samples repo-name version-name]
   (timbre/info "Add branch:" repo-name version-name)
-  (let [conn (get-connection conf)
-        samples (map #(prepare-sample % repo-name version-name) samples)
+  (let [samples (map #(prepare-sample % repo-name version-name) samples)
         samples-list (bulk-samples samples conf)]
     (try
       (let [data (s/request conn {:url    "/_bulk"
@@ -339,20 +198,19 @@
 
 
 (defn make-result [samples total size offset]
-  (let [total (min total elastic-max-result-window)]
+  (let [total (min total elastic-consts/elastic-max-result-window)]
     {:samples  samples
      :total    total
      :end      (<= (- total offset) size)
      :max-page (get-max-page total size)}))
 
 
-(defn search [conf q offset size]
+(defn search [{conn :conn conf :conf} q offset size]
   (try
     (let [data (parse q)
           ;_ (prn "Data: " data)
           query (e-query data)
           ;_ (clojure.pprint/pprint query)
-          conn (get-connection conf)
           data (s/request conn {:url    [(:index conf) (:type conf) :_search]
                                 :method :post
                                 :body   {:size    size
@@ -369,26 +227,12 @@
     (catch Exception e (timbre/error "Search error:" (pr-str e)))))
 
 
-;(defn get-all [conf]
-;  (try
-;    (let [conn (get-connection conf)
-;          data (s/request conn {:url    [:pg_local :samples :_search]
-;                                :method :get
-;                                :body   {:query {:match_all {}}}})
-;          data (:hits (:body data))
-;          total (:total data)
-;          hits (map :_source (take 10 (:hits data)))]
-;      (prn total (keys data)))
-;    (catch Exception e (timbre/error (pr-str e)))))
-
-
 ;; =====================================================================================================================
 ;; Top samples
 ;; =====================================================================================================================
-(defn top-samples [conf offset size]
+(defn top-samples [{conn :conn conf :conf} offset size]
   (try
-    (let [conn (get-connection conf)
-          data (s/request conn {:url    [(:index conf) (:type conf) :_search]
+    (let [data (s/request conn {:url    [(:index conf) (:type conf) :_search]
                                 :method :post
                                 :body   {:size    size
                                          :from    offset
@@ -409,10 +253,9 @@
 ;; =====================================================================================================================
 ;; Version samples
 ;; =====================================================================================================================
-(defn version-samples [conf version-id offset size]
+(defn version-samples [{conn :conn conf :conf} version-id offset size]
   (try
-    (let [conn (get-connection conf)
-          data (s/request conn {:url    [(:index conf) (:type conf) :_search]
+    (let [data (s/request conn {:url    [(:index conf) (:type conf) :_search]
                                 :method :post
                                 :body   {:size    size
                                          :from    offset
@@ -431,10 +274,9 @@
 ;; =====================================================================================================================
 ;; Tag samples
 ;; =====================================================================================================================
-(defn tag-samples [conf tag offset size]
+(defn tag-samples [{conn :conn conf :conf} tag offset size]
   (try
-    (let [conn (get-connection conf)
-          data (s/request conn {:url    [(:index conf) (:type conf) :_search]
+    (let [data (s/request conn {:url    [(:index conf) (:type conf) :_search]
                                 :method :post
                                 :body   {:size    size
                                          :from    offset

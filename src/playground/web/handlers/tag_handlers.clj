@@ -1,17 +1,19 @@
 (ns playground.web.handlers.tag-handlers
-  (:require [playground.db.request :as db-req]
+  (:require
+    ;; components
+    [playground.db.request :as db-req]
+    [playground.elastic.core :as elastic]
     ;; web
-            [playground.web.helpers :refer :all]
-            [playground.web.utils :as web-utils :refer [response]]
+    [playground.web.helpers :refer :all]
+    [playground.web.utils :as web-utils :refer [response]]
     ;; views
-            [playground.views.tag.tags-page :as tags-view]
-            [playground.views.tag.tag-page :as tag-view]
-            [playground.views.tag.tags-stat-page :as tags-stat-view]
+    [playground.views.tag.tags-page :as tags-view]
+    [playground.views.tag.tag-page :as tag-view]
+    [playground.views.tag.tags-stat-page :as tags-stat-view]
     ;; data
-            [playground.data.tags :as tags-data]
+    [playground.data.tags :as tags-data]
     ;; consts
-            [playground.web.handlers.constants :refer :all]
-            [playground.db.elastic :as elastic]))
+    [playground.web.handlers.constants :refer :all]))
 
 
 (defn tags-page [request]
@@ -25,7 +27,7 @@
         ;samples (db-req/samples-by-tag (get-db request) {:count  (inc samples-per-page)
         ;                                                 :offset (* samples-per-page page)
         ;                                                 :tag    tag-dashed-id})
-        result (elastic/tag-samples (-> (get-db request) :config :elastic)
+        result (elastic/tag-samples (get-elastic request)
                                     tag
                                     (* samples-per-page page)
                                     samples-per-page)
@@ -50,7 +52,7 @@
         ;samples (time (db-req/samples-by-tag (get-db request) {:tag    tag
         ;                                                  :count  (inc samples-count)
         ;                                                  :offset offset}))
-        result (elastic/tag-samples (-> (get-db request) :config :elastic)
+        result (elastic/tag-samples (get-elastic request)
                                     tag
                                     offset
                                     samples-count)]
