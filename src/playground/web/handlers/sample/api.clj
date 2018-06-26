@@ -3,6 +3,7 @@
     ;; comp
     [playground.db.request :as db-req]
     [playground.redis.core :as redis]
+    [playground.elastic.core :as elastic]
     ;; handlers
     [playground.web.handlers.sample.pages :as sample-handlers]
     ;; web
@@ -11,13 +12,12 @@
     ;; misc
     [clojure.string :as string]
     [clojure.java.jdbc :as jdbc]
+    [ring.util.response :refer [redirect]]
+    [clojure.set :as set]
     ;;spec
     [clojure.spec.alpha :as s]
     [playground.spec.sample :as sample-spec]
-    [clojure.set :as set]
-    [ring.util.response :refer [redirect]]
-    [playground.data.tags :as tags-data]
-    [playground.db.elastic :as elastic]))
+    [playground.data.tags :as tags-data]))
 
 
 (defn run [request]
@@ -51,7 +51,7 @@
                        :owner-id (-> request :session :user :id))]
     (let [id (db-req/add-sample! (get-db request) sample-saved)
           sample-with-id (assoc sample-saved :id id)]
-      (elastic/add-sample sample-with-id (-> (get-db request) :config :elastic))
+      (elastic/add-sample sample-with-id (get-elastic request))
       (db-req/update-version-user-samples-latest! (get-db request) {:latest  true
                                                                     :url     hash
                                                                     :version 0})
@@ -95,7 +95,7 @@
                                                                                                     :repo-id (:repo-id sample)})
                                            id))
             sample-with-id (assoc sample-saved :id id)]
-        (elastic/replace-sample sample-with-id (-> (get-db request) :config :elastic))
+        (elastic/replace-sample (get-elastic request) sample-with-id)
         (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [id])
         (future (db-req/update-tags-mw! (get-db request)))
         (response {:status   :ok

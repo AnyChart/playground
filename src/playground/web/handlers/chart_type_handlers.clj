@@ -1,17 +1,19 @@
 (ns playground.web.handlers.chart-type-handlers
-  (:require [playground.db.request :as db-req]
+  (:require
+    ;; components
+    [playground.db.request :as db-req]
+    [playground.elastic.core :as elastic]
     ;; web
-            [playground.web.helpers :refer :all]
+    [playground.web.helpers :refer :all]
     ;; consts
-            [playground.web.handlers.constants :refer :all]
+    [playground.web.handlers.constants :refer :all]
     ;; views
-            [playground.views.chart-type.chart-types-page :as chart-types-view]
-            [playground.views.chart-type.chart-type-page :as chart-type-view]
-            [playground.views.chart-type.chart-types-categories-page :as chart-type-categories-view]
-            [playground.views.chart-type.chart-types-category-page :as chart-type-category-view]
+    [playground.views.chart-type.chart-types-page :as chart-types-view]
+    [playground.views.chart-type.chart-type-page :as chart-type-view]
+    [playground.views.chart-type.chart-types-categories-page :as chart-type-categories-view]
+    [playground.views.chart-type.chart-types-category-page :as chart-type-category-view]
     ;; data
-            [playground.web.chartopedia :as chartopedia]
-            [playground.db.elastic :as elastic]))
+    [playground.web.chartopedia :as chartopedia]))
 
 
 (defn chart-types-page [request]
@@ -27,7 +29,7 @@
             ;samples (db-req/samples-by-tag (get-db request) {:count  (inc samples-per-block)
             ;                                                 :offset (* samples-per-block page)
             ;                                                 :tag    tag})
-            result (elastic/tag-samples (-> (get-db request) :config :elastic)
+            result (elastic/tag-samples (get-elastic request)
                                         tag
                                         (* samples-per-block page)
                                         samples-per-block)]

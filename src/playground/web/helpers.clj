@@ -3,6 +3,8 @@
 ;; component
 (defn get-db [request] (-> request :component :db))
 
+(defn get-elastic [request] (-> request :component :elastic))
+
 (defn get-redis [request] (-> request :component :redis))
 
 (defn get-config [request] (-> request :component :conf))

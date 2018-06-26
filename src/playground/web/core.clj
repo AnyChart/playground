@@ -13,7 +13,6 @@
             [ring.util.response :refer [redirect]]
             [playground.web.routes :refer [app-routes]]
             [playground.web.sessions :as session]
-            [playground.db.elastic :as elastic]
             [clojure.string :as string]
             [me.raynes.fs :as fs]))
 
@@ -54,12 +53,11 @@
       (handler request))))
 
 
-(defrecord Web [server conf db]
+(defrecord Web [server conf db elastic]
   component/Lifecycle
 
   (start [component]
     (timbre/info "Web start" conf)
-    (elastic/init db (-> db :config :elastic))
     (fs/delete-dir (:zip-folder conf))
     (assoc component :server (web/run
                                (-> (create-web-handler component)

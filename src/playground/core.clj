@@ -2,6 +2,7 @@
   (:require [playground.spec.app-config :as core-spec]
             [playground.repo.git :as git]
             [playground.db.core :as db]
+            [playground.elastic.core :as elastic]
             [playground.web.core :as web]
             [playground.generator.core :as generator]
             [playground.notification.core :as notifier]
@@ -52,14 +53,16 @@
 (defn get-full-system [conf]
   (component/system-map
     :db (db/new-jdbc (:db conf))
+    :elastic (component/using (elastic/new-elastic (-> conf :db :elastic))
+                              [:db])
     :redis (redis/new-redis (:redis conf))
     :notifier (notifier/new-notifier (-> conf :notifications))
     :generator (component/using (generator/new-generator conf)
-                                [:db :notifier :redis])
+                                [:db :notifier :redis :elastic])
     :preview-generator (component/using (pw-generator/new-preview-generator (:previews conf))
                                         [:db :redis :notifier])
     :web (component/using (web/new-web (merge (:web conf) (:previews conf) {:commit commit}))
-                          [:db :redis])))
+                          [:db :redis :elastic])))
 
 
 (defn get-worker-system [conf]

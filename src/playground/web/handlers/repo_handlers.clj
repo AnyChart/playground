@@ -1,16 +1,17 @@
 (ns playground.web.handlers.repo-handlers
-  (:require [playground.db.request :as db-req]
+  (:require
+    ;; components
+    [playground.db.request :as db-req]
+    [playground.elastic.core :as elastic]
     ;; web
-            [playground.web.helpers :refer :all]
-            [playground.web.utils :as web-utils :refer [response]]
+    [playground.web.helpers :refer :all]
+    [playground.web.utils :as web-utils :refer [response]]
     ;; views
-            [playground.views.repo.repos-page :as repos-view]
-            [playground.views.repo.repo-page :as repo-view]
-            [playground.views.repo.version-page :as version-view]
+    [playground.views.repo.repos-page :as repos-view]
+    [playground.views.repo.repo-page :as repo-view]
+    [playground.views.repo.version-page :as version-view]
     ;; consts
-            [playground.web.handlers.constants :refer :all]
-    ;; elastic
-            [playground.db.elastic :as elastic]))
+    [playground.web.handlers.constants :refer :all]))
 
 
 (defn repos-page [request]
@@ -33,7 +34,7 @@
         ;samples (db-req/samples-by-version (get-db request) {:version_id (:id version)
         ;                                                     :offset     (* samples-per-page page)
         ;                                                     :count      (inc samples-per-page)})
-        result (elastic/version-samples (-> (get-db request) :config :elastic)
+        result (elastic/version-samples (get-elastic request)
                                         (:id version)
                                         (* samples-per-page page)
                                         samples-per-page)]
@@ -52,7 +53,7 @@
         ;samples (time (db-req/samples-by-version (get-db request) {:version_id version-id
         ;                                                       :count      (inc samples-per-page)
         ;                                                       :offset     offset}))
-        result (elastic/version-samples (-> (get-db request) :config :elastic)
+        result (elastic/version-samples (get-elastic request)
                                         version-id
                                         offset
                                         samples-per-page)]

@@ -2,13 +2,13 @@
   (:require
     ;; comp
     [playground.db.request :as db-req]
+    [playground.elastic.core :as elastic]
     ;; web
     [playground.web.helpers :refer :all]
     [playground.web.handlers.constants :refer :all]
     [playground.web.utils :as web-utils :refer [response]]
     ;; views
-    [playground.views.landing-page :as landing-view]
-    [playground.db.elastic :as elastic]))
+    [playground.views.landing-page :as landing-view]))
 
 
 ;; =====================================================================================================================
@@ -21,7 +21,7 @@
         ;                                              :offset (* samples-per-landing samples-page)})
         ;result {:samples (take samples-per-landing samples)
         ;        :end     (< (count samples) (inc samples-per-landing))}
-        result (elastic/top-samples (-> (get-db request) :config :elastic)
+        result (elastic/top-samples (get-elastic request)
                                     (* samples-per-landing samples-page)
                                     samples-per-landing)]
     (when (seq (:samples result))
@@ -35,7 +35,7 @@
 ;; =====================================================================================================================
 (defn top-landing-samples [request]
   (let [offset (-> request :params :offset)
-        result (elastic/top-samples (-> (get-db request) :config :elastic)
+        result (elastic/top-samples (get-elastic request)
                                     offset
                                     samples-per-landing)
         ;samples (db-req/top-samples (get-db request) {:count  (inc samples-per-landing)
