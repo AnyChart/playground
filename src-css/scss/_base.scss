@@ -164,7 +164,8 @@ html {
           display: block;
           content: "";
           height: 96px;
-          background-color: #264571;
+          //background-color: #264571;
+          background-color: #047CC3;
           position: absolute;
         }
         &:after {
@@ -174,7 +175,8 @@ html {
           display: block;
           content: "";
           height: 96px;
-          background-color: #0d2e5c;
+          //background-color: #0d2e5c;
+          background-color: #0462A1;
           position: absolute;
           z-index: 1;
         }
@@ -207,19 +209,28 @@ html {
               }
             }
             &:nth-child(1) {
-              background-color: #264571;
+              //background-color: #264571;
+              background-color: #047CC3;
             }
             &:nth-child(2) {
-              background-color: #203f6c;
+              //background-color: #203f6c;
+              background-color: #0076BA;
             }
             &:nth-child(3) {
-              background-color: #193a66;
+              //background-color: #193a66;
+              background-color: #006EB2;
             }
             &:nth-child(4) {
-              background-color: #133461;
+              //background-color: #133461;
+              background-color: #0968A9;
             }
             &:nth-child(5) {
-              background-color: #0d2e5c;
+              //background-color: #0d2e5c;
+              background-color: #0462A1;
+            }
+            &:nth-child(6) {
+              //background-color: #0d2e5c;
+              background-color: #00558A;
             }
             &:hover {
               background-color: #1978a4;
@@ -258,7 +269,7 @@ html {
           margin-top: 23px;
         }
         .caption {
-          color: #80a9bd;
+          color: $footer-caption-color;
         }
         .dataset {
           overflow: hidden;
