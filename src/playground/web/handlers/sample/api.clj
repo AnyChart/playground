@@ -17,7 +17,8 @@
     ;;spec
     [clojure.spec.alpha :as s]
     [playground.spec.sample :as sample-spec]
-    [playground.data.tags :as tags-data]))
+    [playground.data.tags :as tags-data])
+  (:import (java.util Date)))
 
 
 (defn run [request]
@@ -41,7 +42,7 @@
 
 
 (defn fork [request]
-  ;(prn "Fork: " (-> request :session :user) (-> request :params :sample))
+  (prn "Fork: " (-> request :session :user) (-> request :params :sample))
   (let [sample (-> request :params :sample)
         sample (web-utils/clean-sample sample)
         hash (web-utils/sample-hash (get-db request))
@@ -51,7 +52,9 @@
                        :owner-id (-> request :session :user :id))]
     (let [id (db-req/add-sample! (get-db request) sample-saved)
           sample-with-id (assoc sample-saved :id id)]
-      (elastic/add-sample sample-with-id (get-elastic request))
+      (elastic/add-sample (get-elastic request) (assoc sample-with-id
+                                                  :fullname (-> request :session :user :fullname)
+                                                  :create-date (Date.)))
       (db-req/update-version-user-samples-latest! (get-db request) {:latest  true
                                                                     :url     hash
                                                                     :version 0})
@@ -95,7 +98,9 @@
                                                                                                     :repo-id (:repo-id sample)})
                                            id))
             sample-with-id (assoc sample-saved :id id)]
-        (elastic/replace-sample (get-elastic request) sample-with-id)
+        (elastic/replace-sample (get-elastic request) (assoc sample-with-id
+                                                        :fullname (-> request :session :user :fullname)
+                                                        :create-date (Date.)))
         (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [id])
         (future (db-req/update-tags-mw! (get-db request)))
         (response {:status   :ok
