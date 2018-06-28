@@ -3,7 +3,7 @@
   a {
     display: inline-block;
     text-transform: uppercase;
-    color: #008ebe;
+    color: $intro-bg-color;
     padding: 7px 12px;
     font-weight: 600;
     cursor: pointer;
@@ -13,14 +13,14 @@
     }
     &:hover, &:focus{
       text-decoration: none;
-      background-color: #c2dae5;
+      background-color: $tab-active-bg-hover-color;
       span {
         border: none;
       }
     }
     &.active {
       color: white;
-      background-color: #19a1ce;
+      background-color: $tab-active-bg-color;
       text-decoration: none;
       span{
         border: none;
@@ -51,7 +51,7 @@
       background-color: white;
       //width: 165px;
       //height: 165px;
-      color: #008ebe;
+      color: $intro-bg-color;
       box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
 
       @include transition(150ms, ease);

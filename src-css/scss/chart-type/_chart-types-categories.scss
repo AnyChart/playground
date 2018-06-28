@@ -5,7 +5,7 @@ html body .chart-types-categories-page {
     h1 {
       font-size: 51px;
     }
-    background-image: url('/tags-page/bg.png');
+    //background-image: url('/tags-page/bg.png');
     background-position: center;
   }
 
@@ -37,14 +37,15 @@ html body .chart-types-categories-page {
           .name {
             font-weight: bold;
             margin: 0 0 5px 0;
+            font-size: 15px;
           }
           .description {
             margin: 0 0 18px 0;
             font-size: 12px;
           }
           .learn-more-label {
-            color: #008ebe;
-            border: 1px solid #008ebe;
+            color: $intro-bg-color;
+            border: 1px solid $intro-bg-color;
             padding: 5px 11px;
             border-radius: 3px;
             text-transform: uppercase;
@@ -52,7 +53,7 @@ html body .chart-types-categories-page {
             &:hover {
               text-decoration: none;
               color: white;
-              background-color: #19a1ce;
+              background-color: $tab-active-bg-color;
             }
           }
         }

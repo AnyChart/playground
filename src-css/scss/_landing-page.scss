@@ -10,14 +10,14 @@
 
   .popular-tags-box {
     overflow: hidden;
-    height: 160px;
+    height: 170px;
     margin-bottom: 50px;
 
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    .popular-tag-button {
-      font-weight: 600;
+    .popular-tag-button{
+      margin: 0 8px 12px 0;
     }
   }
 

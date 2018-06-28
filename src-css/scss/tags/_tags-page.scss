@@ -5,7 +5,7 @@ html body .tags-page {
     h1 {
       font-size: 51px;
     }
-    background-image: url('/tags-page/bg.png');
+    //background-image: url('/tags-page/bg.png');
     background-position: center;
   }
 
@@ -13,24 +13,6 @@ html body .tags-page {
 
     .tags-box {
       margin: 50px 0;
-    }
-
-    .popular-tags-box {
-      margin: 18px 0 15px 0;
-      .popular-tag-button {
-        display: inline-block;
-        background-color: #95bfd3;
-        margin: 0 12px 12px 0;
-        color: white;
-        padding: 3px 10px;
-        border-radius: 4px;
-        font-weight: bold;
-        text-decoration: none;
-        cursor: pointer;
-        &:hover, &:focus {
-          background-color: #19a1ce;
-        }
-      }
     }
 
     .flex-content {
@@ -49,10 +31,10 @@ html body .tags-page {
         margin: 0 0 10px 0;
       }
       a {
-        color: #008ebe;
+        color: $intro-bg-color;
         max-width: 200px;
         &:hover, &:focus {
-          color: #003d92;
+          color: $tag-label-hover-color;
         }
       }
     }

@@ -238,7 +238,7 @@ html {
               background-color: #00558A;
             }
             &:hover {
-              background-color: #1978a4;
+              background-color: $create-button-bg-hover-color;
               text-decoration: none;
             }
           }
