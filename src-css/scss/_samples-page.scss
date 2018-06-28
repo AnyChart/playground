@@ -11,13 +11,13 @@
   justify-content: space-between;
   .prev-button, .next-button{
     background: none;
-    border: 1px solid #19a1ce;
-    color: #19a1ce;
+    border: 1px solid $intro-bg-color;
+    color: $intro-bg-color;
     font-size: 13px;
     text-transform: uppercase;
     padding: 5px 12px;
     &:hover{
-      background-color: #19a1ce;
+      background-color: $intro-bg-color;
       color: white;
     }
   }
@@ -28,13 +28,13 @@
     margin: 0;
     li {
       a {
-        color:  #19a1ce;
+        color:  $intro-bg-color;
         background-color: transparent;
-        border-color: #19a1ce;
+        border-color: $intro-bg-color;
         padding: 5px 12px;
         &:hover:not(.dots) {
           color: white;
-          background-color: #19a1ce;
+          background-color: $intro-bg-color;
         }
         &.dots {
           cursor: default;
@@ -42,7 +42,7 @@
       }
       &.active a {
         color: white;
-        background-color: #19a1ce;
+        background-color: $intro-bg-color;
         z-index: auto;
       }
     }
@@ -57,7 +57,7 @@
 
 .popular-label{
   color: $red-color;
-  font-size: 15px;
+  font-size: 18px;
   text-transform: uppercase;
   margin: 40px 0 10px;
 }
@@ -121,7 +121,7 @@
     margin-bottom: 4px;
     a {
       font-size: 14px;
-      color: #008ebe;
+      color: $sample-name-color;
     }
   }
   .description {
@@ -147,7 +147,7 @@
     }
   }
   .bottom-info {
-    color: #80a9bd;
+    color: $sample-author-color;
     .likes-and-views {
       float: right;
       padding-left: 10px;
@@ -159,10 +159,10 @@
         padding-right: 8px;
       }
       a {
-        color: #80a9bd;
+        color: $sample-author-color;
         &:hover, &:focus{
           text-decoration: none;
-          color: #80a9bd;
+          color: $sample-author-color;
         }
       }
       .likes{
@@ -175,7 +175,7 @@
       overflow: hidden;
     }
     p:last-of-type {
-      margin: 0px;
+      margin: 0;
     }
   }
 }

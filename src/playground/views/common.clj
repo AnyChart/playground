@@ -147,13 +147,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         [:span.icon-bar]]
        [:a.navbar-brand
         {:href "/" :title "Playground Home"}
-        [:img {:alt    "AnyChart"
-               :height "26"
-               :width  "26"
-               :style  "display:inline-block"
-               :src    "/logo400x400.png"}]
-        "AnyChart "
-        [:b "Playground"]]]
+        [:div.border-icon]
+        [:div.chart-row
+         [:span.chart-col.green]
+         [:span.chart-col.orange]
+         [:span.chart-col.red]]
+        [:div.brand-label "AnyChart " [:b "Playground"]]]]
 
       ;; left navbar
       [:div#navbar.navbar-collapse.collapse

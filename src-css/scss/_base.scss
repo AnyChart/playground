@@ -43,6 +43,11 @@ html {
             &:hover {
               color: white;
             }
+            div.brand-label {
+              margin-left: 10px;
+              margin-top: 4px;
+              float: right;
+            }
           }
         }
         ul.nav.navbar-nav {
@@ -52,10 +57,10 @@ html {
             a {
               font-size: 13px;
               font-weight: 600;
-              color: #19a1ce;
+              color: $intro-bg-color;
               line-height: 30px;
               &:hover {
-                background-color: #c2eaf7;
+                background-color: $header-menu-bg-hover-color;
               }
             }
           }
@@ -64,7 +69,7 @@ html {
             padding: 7px 12px;
             background-color: rgba(0, 0, 0, 0);
             &:hover, &:active, &:focus {
-              color: #58cdf5;
+              color: $nav-bg-links-hover-color;
             }
           }
         }
@@ -76,7 +81,7 @@ html {
             input.search {
               margin-top: 5px;
               padding: 4px 30px 4px 10px;
-              background-color: #42628c;
+              background-color: $search-box-bg-color;
               //border: 1px solid #1796bf;
               outline: none;
               border: none;
@@ -85,7 +90,7 @@ html {
                 color: #8eafe0;
               }
               &:focus {
-                background-color: #476896;
+                background-color: $search-box-bg-hover-color;
                 color: white;
               }
             }
@@ -288,10 +293,10 @@ html {
   align-items: center;
   margin: 70px 0 50px;
   .copyright {
-    color: #80a9bd;
+    color: $copyright-color;
     font-size: 11px;
     a {
-      color: #80a9bd;
+      color: $copyright-color;
     }
   }
   .footer-inner {
@@ -317,8 +322,8 @@ html {
         line-height: 23px;
         text-align: center;
         border-radius: 50%;
-        color: #95bfd3;
-        background-color: #d5e3e8;
+        color: $sn-color;
+        background-color: $sn-bg-color;
         &.tw {
           font-size: 17px;
           line-height: 26px;
@@ -328,7 +333,7 @@ html {
         }
         &:hover, &:focus {
           color: white;
-          background-color: #19a1ce;
+          background-color: $sn-bg-hover-color;
         }
       }
     }

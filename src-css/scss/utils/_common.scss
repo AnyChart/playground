@@ -20,7 +20,7 @@ a {
     text-decoration: none;
     cursor: pointer;
     &:hover, &:focus {
-      background-color: #19a1ce;
+      background-color: $intro-bg-color;
     }
   }
 }
