@@ -19,9 +19,12 @@
 
     [:div.logo
      [:div.logo-img {:on-click #(rf/dispatch [:left-menu/toggle])}
-      [:img {:src "/icons/editor/logo.svg"}]]
-     [:a.logo-label {:href "/"}
-      "AnyChart " [:b "Playground"]]]
+      [:div.border-icon]
+      [:div.chart-row
+       [:span.chart-col.green]
+       [:span.chart-col.orange]
+       [:span.chart-col.red]]]
+     [:div.brand-label [:a.logo-label {:href "/"} "AnyChart " [:b "Playground"]]]]
 
     [:div.top-menu
      [:ul.nav.navbar-nav.left-navbar

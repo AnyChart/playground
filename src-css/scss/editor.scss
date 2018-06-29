@@ -1,6 +1,7 @@
 @import "utils/vars";
 @import "utils/common";
 @import "utils/mixins";
+@import "utils/brand-icon";
 
 html {
   /* for footer */
@@ -45,17 +46,24 @@ html {
           .logo-img {
             height: 58px;
             width: 56px;
-            background-color: #1e87b4;
+            background-color: $intro-bg-color;
             display: inline-block;
             cursor: pointer;
-            img {
-              height: 28px;
-              width: 28px;
-              margin: 15px 14px;
+            position: relative;
+            .border-icon {
+              margin-top: 14px;
+              margin-left: 14px;
+            }
+            .chart-row {
+              bottom: 20px;
             }
           }
+          .brand-label {
+            float: right;
+            margin-top: 16px;
+          }
           .logo-label {
-            color: #19a1ce;
+            color: $intro-bg-color;
             font-size: 18px;
             margin-left: 13px;
             @media (max-width: 920px) {
@@ -101,7 +109,7 @@ html {
               height: 20px;
               width: 20px;
               display: inline-block;
-              background-color: #19a1ce;
+              background-color: $intro-bg-color;
               margin-right: 4px;
               mask-size: contain;
               -webkit-mask-size: contain;
@@ -223,7 +231,7 @@ html {
 
           & > li > button {
             outline: none;
-            color: #19a1ce;
+            color: $intro-bg-color;
             display: flex;
             padding: 7px 12px;
             border: none;
@@ -258,13 +266,13 @@ html {
             button, a {
               font-size: 13px;
               font-weight: 600;
-              color: #19a1ce;
+              color: $intro-bg-color;
               line-height: 30px;
               padding: 3px 20px;
               width: 100%;
               text-align: left;
               &:hover {
-                background-color: #c2eaf7;
+                background-color: $header-menu-bg-hover-color;
                 text-decoration: none;
               }
             }
@@ -305,25 +313,22 @@ html {
     }
 
     .footer-bottom-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
       height: 70px;
       width: 100%;
       position: absolute;
       bottom: 0;
       background: white;
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      margin: 0;
       padding: 23px 0;
       border-top: 1px solid #e6edf1;
-
       .copyright {
-        color: #80a9bd;
+        color: $copyright-color;
         font-size: 11px;
         a {
-          color: #80a9bd;
+          color: $copyright-color;
         }
       }
       .footer-inner {
@@ -349,8 +354,8 @@ html {
             line-height: 23px;
             text-align: center;
             border-radius: 50%;
-            color: #95bfd3;
-            background-color: #d5e3e8;
+            color: $sn-color;
+            background-color: $sn-bg-color;
             &.tw {
               font-size: 17px;
               line-height: 26px;
@@ -360,7 +365,7 @@ html {
             }
             &:hover, &:focus {
               color: white;
-              background-color: #19a1ce;
+              background-color: $sn-bg-hover-color;
             }
           }
         }
@@ -377,12 +382,12 @@ html {
 
   .editor-container {
     position: relative;
-    background-color: #ecf2f4;
+    background-color: $main-bg-color;
 
     .top-line {
       width: 100%;
       height: 35px;
-      background-color: #ecf2f4;
+      background-color: $main-bg-color;
       //border-bottom: 1px solid #95bfd3;
       .editor-label-name {
         font-size: 12px;
@@ -473,9 +478,9 @@ html {
   height: 100%;
   font-size: 12px;
   word-wrap: break-word;
-  background-color: #ecf2f4;
+  background-color: $main-bg-color;
   .CodeMirror-gutters {
-    background-color: #ecf2f4;
+    background-color: $main-bg-color;
     //border-right: 1px solid #95bfd3;
     border-right: none;
   }
