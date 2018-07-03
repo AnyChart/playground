@@ -153,6 +153,12 @@ html {
           padding: 0 40px;
           .description {
             font-size: 18px;
+            a {
+              color: #a9d9ff;
+              &:hover{
+                color: white;
+              }
+            }
           }
         }
         h1 {
@@ -169,8 +175,7 @@ html {
           display: block;
           content: "";
           height: 96px;
-          //background-color: #264571;
-          background-color: #047CC3;
+          background-color: #287ec6;
           position: absolute;
         }
         &:after {
@@ -180,8 +185,7 @@ html {
           display: block;
           content: "";
           height: 96px;
-          //background-color: #0d2e5c;
-          background-color: #0462A1;
+          background-color: #37629d;
           position: absolute;
           z-index: 1;
         }
@@ -204,7 +208,9 @@ html {
             cursor: pointer;
             font-size: 15px;
             img {
-              margin: 0 10px 0 0;
+              margin: 9px 10px 0 0;
+              height: 28px;
+              max-width: 46px; // to crop geomap icon
             }
             div.text {
               text-transform: uppercase;
@@ -214,28 +220,22 @@ html {
               }
             }
             &:nth-child(1) {
-              //background-color: #264571;
-              background-color: #047CC3;
+              background-color: #287ec6;
             }
             &:nth-child(2) {
-              //background-color: #203f6c;
-              background-color: #0076BA;
+              background-color: #2c77bc;
             }
             &:nth-child(3) {
-              //background-color: #193a66;
-              background-color: #006EB2;
+              background-color: #2f70b1;
             }
             &:nth-child(4) {
-              //background-color: #133461;
-              background-color: #0968A9;
+              background-color: #3369a7;
             }
             &:nth-child(5) {
-              //background-color: #0d2e5c;
-              background-color: #0462A1;
+              background-color: #37629d;
             }
             &:nth-child(6) {
-              //background-color: #0d2e5c;
-              background-color: #00558A;
+              background-color: #305587;
             }
             &:hover {
               background-color: $create-button-bg-hover-color;
