@@ -35,11 +35,11 @@
     (catch Exception e (timbre/error "set mapping error:" (pr-str e)))))
 
 
-(defn load-samples [conn elastic]
+(defn load-samples [db-conn elastic]
   (timbre/info "Elastic load samples")
   (try
     (let [conn (get-connection elastic)
-          samples (db-req/search-samples (:db elastic))
+          samples (db-req/search-samples db-conn)
           samples (map prepare-sample samples)
           samples-groups (partition-all elastic-consts/elastic-bulk-samples-count samples)]
       (timbre/info "Elastic load samples total:" (count samples))

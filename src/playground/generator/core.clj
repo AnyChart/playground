@@ -227,13 +227,12 @@
                                              :samples-count (count samples)})]
     (timbre/info "Insert samples: " (count samples))
     (when (seq samples)
-      (elastic/remove-branch elastic (:name @repo) (:name branch))
       (let [ids (db-req/add-samples! db version-id samples)]
-        (elastic/add-branch elastic samples (:name @repo) (:name branch))
         ;;  set views
         (doseq [sample samples]
           (db-req/update-sample-views-from-canonical-visits! db {:url     (:url sample)
                                                                  :repo-id (:id @repo)}))
+        (elastic/update-branch db elastic (:name @repo) (:name branch) version-id)
         (redis/generate-previews redis ids)
         ;; if repo is templates-repo, then update templates
         (when (:templates @repo)

@@ -272,8 +272,14 @@
 
 (def group-samples (sql {:name sql-group-samples}))
 
+;;======================================================================================================================
+;; For Elastic
+;;======================================================================================================================
 (def search-samples (sql {:name   sql-search-samples
                           :row-fn parse-sample}))
+
+(def elastic-samples-version (sql {:name   sql-elastic-samples-version
+                                   :row-fn parse-sample}))
 
 ;;======================================================================================================================
 ;; Visits and likes

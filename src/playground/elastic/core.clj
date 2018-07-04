@@ -9,7 +9,8 @@
             [clojure.java.jdbc :as jdbc]
             [instaparse.core :as insta]
             [clojure.string :as string]
-            [com.stuartsierra.component :as component]))
+            [com.stuartsierra.component :as component]
+            [playground.db.request :as db-req]))
 
 
 ;; =====================================================================================================================
@@ -112,9 +113,9 @@
     (catch Exception e (timbre/error "Elastic remove branch error:" (pr-str e)))))
 
 
-(defn add-branch [{conn :conn conf :conf} samples repo-name version-name]
+(defn add-branch [{conn :conn conf :conf} samples repo-name version-name version-id]
   (timbre/info "Add branch:" repo-name version-name)
-  (let [samples (map #(prepare-sample % repo-name version-name) samples)
+  (let [samples (map #(prepare-sample % repo-name version-name version-id) samples)
         samples-list (bulk-samples samples conf)]
     (try
       (let [data (s/request conn {:url    "/_bulk"
@@ -123,6 +124,12 @@
         data
         nil)
       (catch Exception e (timbre/error "Elastic add branch error:" (pr-str e))))))
+
+
+(defn update-branch [db elastic repo-name version-name version-id]
+  (remove-branch elastic repo-name version-name)
+  (let [samples (db-req/elastic-samples-version db {:version-id version-id})]
+    (add-branch elastic samples repo-name version-name version-id)))
 
 
 ;; =====================================================================================================================
