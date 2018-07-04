@@ -181,3 +181,29 @@ FROM samples
   WHERE samples.id NOT IN (SELECT sample_id FROM templates) AND
         ((samples.latest AND samples.version_id IS NULL) OR
           samples.version_id IS NOT NULL);
+
+
+--name: sql-elastic-samples-version
+SELECT
+  samples.id,
+  samples.name,
+  samples.views,
+  samples.likes,
+  samples.create_date,
+  samples.url,
+  samples.version,
+  samples.version_id,
+  samples.tags,
+  samples.description,
+  samples.short_description,
+  samples.preview,
+  samples.latest,
+  versions.name as version_name,
+  repos.name as repo_name,
+  users.fullname
+FROM samples
+  LEFT JOIN versions ON samples.version_id = versions.id
+  LEFT JOIN repos ON versions.repo_id = repos.id
+  LEFT JOIN users ON samples.owner_id = users.id
+WHERE samples.id NOT IN (SELECT sample_id FROM templates) AND
+      samples.version_id = :version_id;
