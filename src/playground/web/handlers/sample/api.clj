@@ -52,9 +52,9 @@
                        :owner-id (-> request :session :user :id))]
     (let [id (db-req/add-sample! (get-db request) sample-saved)
           sample-with-id (assoc sample-saved :id id)]
-      (elastic/add-sample (get-elastic request) (assoc sample-with-id
-                                                  :fullname (-> request :session :user :fullname)
-                                                  :create-date (Date.)))
+      ;(elastic/add-sample (get-elastic request) (assoc sample-with-id
+      ;                                            :fullname (-> request :session :user :fullname)
+      ;                                            :create-date (Date.)))
       (db-req/update-version-user-samples-latest! (get-db request) {:latest  true
                                                                     :url     hash
                                                                     :version 0})
@@ -98,9 +98,9 @@
                                                                                                     :repo-id (:repo-id sample)})
                                            id))
             sample-with-id (assoc sample-saved :id id)]
-        (elastic/replace-sample (get-elastic request) (assoc sample-with-id
-                                                        :fullname (-> request :session :user :fullname)
-                                                        :create-date (Date.)))
+        ;(elastic/replace-sample (get-elastic request) (assoc sample-with-id
+        ;                                                :fullname (-> request :session :user :fullname)
+        ;                                                :create-date (Date.)))
         (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [id])
         (future (db-req/update-tags-mw! (get-db request)))
         (response {:status   :ok
