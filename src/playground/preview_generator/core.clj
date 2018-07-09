@@ -78,7 +78,7 @@
           ;                                           (-> generator :conf :generator)
           ;                                           (-> generator :conf :images-dir)
           ;                                           %) samples))
-          result (doall (cp/pmap 4
+          result (doall (cp/pmap phantom-embed/drivers-count
                                  #(phantom-embed/generate-image (sample-prep/prepare-sample %) generator)
                                  samples))
           good-results (filter (complement :error) result)

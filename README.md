@@ -37,6 +37,8 @@ sudo apt-get install postgresql postgresql-contrib
 sudo apt-get install redis-server
 sudo apt-get install phantomjs
 sudo apt-get install pngquant
+# elasticsearch
+# logstash
 ```
 
 ## External Resources

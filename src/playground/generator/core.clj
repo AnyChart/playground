@@ -232,7 +232,7 @@
         (doseq [sample samples]
           (db-req/update-sample-views-from-canonical-visits! db {:url     (:url sample)
                                                                  :repo-id (:id @repo)}))
-        (elastic/update-branch db elastic (:name @repo) (:name branch) version-id)
+        ;(elastic/update-branch db elastic (:name @repo) (:name branch) version-id)
         (redis/generate-previews redis ids)
         ;; if repo is templates-repo, then update templates
         (when (:templates @repo)

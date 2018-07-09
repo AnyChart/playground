@@ -10,7 +10,8 @@
             [instaparse.core :as insta]
             [clojure.string :as string]
             [com.stuartsierra.component :as component]
-            [playground.db.request :as db-req]))
+            [playground.db.request :as db-req]
+            [playground.utils.utils :as utils]))
 
 
 ;; =====================================================================================================================
@@ -21,7 +22,7 @@
   (start [this]
     (timbre/info "ElasticSearch component start")
     (let [comp (assoc this :conn (s/client {:hosts [(:host conf)]}))]
-      (elastic-init/init (assoc comp :db db :conf conf))
+      ;(elastic-init/init (assoc comp :db db :conf conf))
       comp))
   (stop [this]
     (timbre/info "ElasticSearch component stop")
@@ -52,14 +53,14 @@
     (catch Exception e (timbre/error "Elastic sample-by-id error:" e))))
 
 
-(defn remove-sample-by-id [id conf]
-  (try
-    (let [conn (get-connection conf)
-          data (s/request conn {:url    [(:index conf) (:type conf) :_delete_by_query]
-                                :method :post
-                                :body   {:query {:bool {:filter [{:term {:id id}}]}}}})]
-      data)
-    (catch Exception e (timbre/error "Elastic remove-sample-by-id error:" (pr-str e)))))
+;(defn remove-sample-by-id [id conf]
+;  (try
+;    (let [conn (get-connection conf)
+;          data (s/request conn {:url    [(:index conf) (:type conf) :_delete_by_query]
+;                                :method :post
+;                                :body   {:query {:bool {:filter [{:term {:id id}}]}}}})]
+;      data)
+;    (catch Exception e (timbre/error "Elastic remove-sample-by-id error:" (pr-str e)))))
 
 
 (defn sample-by-url [url conf]
@@ -206,7 +207,7 @@
 
 (defn make-result [samples total size offset]
   (let [total (min total elastic-consts/elastic-max-result-window)]
-    {:samples  samples
+    {:samples  (map #(assoc % :full-url (utils/sample-url %)) samples)
      :total    total
      :end      (<= (- total offset) size)
      :max-page (get-max-page total size)}))

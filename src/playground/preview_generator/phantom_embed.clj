@@ -24,6 +24,7 @@
 (def image-width 620)
 (def image-height 300)
 
+(def drivers-count 2)
 
 (defn create-driver []
   (let [caps (DesiredCapabilities.)
@@ -38,7 +39,7 @@
 
 
 (defn create-drivers []
-  [(create-driver) (create-driver) (create-driver) (create-driver)])
+  (into [] (repeatedly drivers-count create-driver)))
 
 
 (defn setup-queue [drivers]
