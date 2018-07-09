@@ -55,7 +55,8 @@
 
                  ;; git
                  ;[im.chit/gita "0.2.5"]
-                 [org.eclipse.jgit/org.eclipse.jgit "4.11.0.201803080745-r"]
+                 ;; https://mvnrepository.com/artifact/org.eclipse.jgit/org.eclipse.jgit
+                 [org.eclipse.jgit/org.eclipse.jgit "5.0.1.201806211838-r"]
                  ;[clj-jgit "0.8.9"]
                  ;[ilevd/clj-jgit "0.8.8"]
 
