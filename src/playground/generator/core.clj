@@ -244,6 +244,7 @@
       (info "Delete old versions for" (:name branch) ": " (pr-str (map #(select-keys % [:id :name]) old-versions)))
       (doseq [version old-versions]
         (remove-branch db version)))
+    (elastic/remove-branch elastic (:name @repo) (:name branch))
     (db-req/show-version! db {:repo-id (:id @repo) :id version-id})))
 
 

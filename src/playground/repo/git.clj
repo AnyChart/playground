@@ -126,13 +126,29 @@
     (.call fetch-command)))
 
 
+(declare full-branch-name->branch-name)
+
+(defn delete-tags [repo]
+  (let [git (:git @repo)
+        tags (map
+               (fn [o] (full-branch-name->branch-name (.getName o)))
+               (.call (.tagList git)))
+        delete-tag-command (.tagDelete git)]
+    (.setTags delete-tag-command (into-array tags))
+    (println tags)
+    (when (seq tags)
+      (.call delete-tag-command))))
+
+
 (defn fetch [repo]
   (case (:type @repo)
     :ssh (do
            (fetch-ssh (:git @repo) (-> @repo :ssh :secret-key) (-> @repo :ssh :public-key) (-> @repo :ssh :passphrase))
+           ;(delete-tags repo)
            (fetch-tags-ssh (:git @repo) (-> @repo :ssh :secret-key) (-> @repo :ssh :public-key) (-> @repo :ssh :passphrase)))
     :https (do
              (fetch-http (:git @repo) (-> @repo :https :login) (-> @repo :https :password))
+             ;(delete-tags repo)
              (fetch-tags-http (:git @repo) (-> @repo :https :login) (-> @repo :https :password)))))
 
 
