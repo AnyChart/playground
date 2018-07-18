@@ -28,7 +28,7 @@ html {
 
     header {
       height: 58px;
-      border-bottom: 1px solid #b6d4e0;
+      border-bottom: 1px solid $settings-border-color;
       box-sizing: content-box;
 
       div.header-box {
@@ -46,7 +46,7 @@ html {
           .logo-img {
             height: 58px;
             width: 56px;
-            background-color: $intro-bg-color;
+            background-color: $nav-bg-color;
             display: inline-block;
             cursor: pointer;
             position: relative;
@@ -177,24 +177,21 @@ html {
                 padding: 4px 30px 4px 10px;
                 background-color: white;
                 outline: none;
-                //border: 1px solid #19a1ce;
-                border: 1px solid #b6d4e0;
-                //border: 1px solid #80a9bd;
-                color: #b6d4e0;
+                border: 1px solid $settings-border-color;
+                color: $settings-border-color;
                 &::placeholder {
-                  color: #b6d4e0;
+                  color: $settings-border-color;
                 }
                 &:focus {
-                  color: #333333;
-                  border: 1px solid #80a9bd;
+                  color: $text-color;
+                  border: 1px solid $intro-bg-color;
                   & + .glyphicon-search {
-                    color: #80a9bd;
+                    color: $intro-bg-color;
                   }
                 }
               }
               .glyphicon {
-                color: #b6d4e0;
-                //font-size: 13px;
+                color: $settings-border-color;
                 position: absolute;
                 right: 0;
                 padding: 10px;
@@ -220,7 +217,6 @@ html {
                 }
               }
             }
-
           }
         }
 
@@ -250,19 +246,23 @@ html {
           }
           & > li.dropdown > button {
             &:active, &:focus, &.active {
-              background-color: #c2eaf7;
+              background-color: $editor-nav-bg-color;
+              color: white;
+              div.icon {
+                background-color: white;
+              }
             }
           }
-          & > li.open > button {
-            background-color: #c2eaf7;
+          /*& > li.open > button {
+            background-color: $editor-nav-bg-color;
             color: #0e5f89;
             div.icon {
               background-color: #0e5f89;
             }
-          }
+          }*/
           ul {
             padding: 15px 0;
-            border-color: #95bfd3;
+            border-color: $settings-border-color;
             button, a {
               font-size: 13px;
               font-weight: 600;
@@ -277,7 +277,7 @@ html {
               }
             }
             .divider {
-              background-color: #95bfd3;
+              background-color: $settings-border-color;
             }
           }
         }
@@ -391,20 +391,20 @@ html {
       //border-bottom: 1px solid #95bfd3;
       .editor-label-name {
         font-size: 12px;
-        color: #80a9bd;
+        color: $footer-caption-color;
         margin-left: 20px;
         margin-top: 10px;
         display: inline-block;
       }
       // Copy and other editors buttons
       .editor-label {
-        background-color: rgba(236, 242, 244, 0.8);
+        background-color: rgba(246, 246, 246, 0.8);
         position: absolute;
         top: 11px;
         z-index: 100;
         font-size: 11px;
         //letter-spacing: 1.2px;
-        color: #80a9bd;
+        color: $footer-caption-color;
         display: flex;
         cursor: pointer;
         text-transform: uppercase;
@@ -417,9 +417,9 @@ html {
         }
         &:hover, &:focus {
           text-decoration: none;
-          color: #008ebe;
+          color: $intro-bg-color;
           div.icon {
-            background-color: #008ebe;
+            background-color: $intro-bg-color;
           }
         }
         div.icon {
@@ -485,14 +485,13 @@ html {
     border-right: none;
   }
   .CodeMirror-linenumber {
-    //color: #80a9bd;
-    color: #adc6d2;
+    color: $settings-border-color;
   }
 }
 
 .divider_vertical {
   width: 1px;
-  background-color: #95bfd3;
+  background-color: $settings-border-color;
   z-index: 10;
   &.dragged {
     background-color: #627e8b;
@@ -504,7 +503,7 @@ html {
 
 .divider_horizontal {
   height: 1px;
-  background-color: #95bfd3;
+  background-color: $settings-border-color;
   z-index: 10;
   &.dragged {
     background-color: #627e8b;
@@ -548,7 +547,7 @@ html {
   width: 598px;
   margin-left: -299px;
   z-index: 1000;
-  border: 1px solid #95bfd3;
+  border: 1px solid $settings-border-color;
   box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
   font-size: 13px;
   background-color: white;
@@ -556,7 +555,7 @@ html {
   .nav {
     font-size: 13px;
     &.nav-tabs {
-      border-bottom: 1px solid #95bfd3;
+      border-bottom: 1px solid $settings-border-color;
       margin: 0;
       padding: 15px 15px 0;
       li {
@@ -565,14 +564,14 @@ html {
     }
     li > a {
       text-transform: uppercase;
-      color: #19a1ce;
+      color: $intro-bg-color;
       border-radius: 0;
       border: none;
       padding: 7px 10px;
       margin-right: 30px;
       font-weight: 600;
       &:hover, &:focus {
-        background-color: #c2eaf7;
+        background-color: $header-menu-bg-hover-color;
         border: none;
       }
       span.glyphicon-warning-sign {
@@ -586,14 +585,14 @@ html {
     }
     li.active a {
       color: white;
-      background-color: #19a1ce;
+      background-color: $leftmenu-bg-color;
       border: none;
     }
     // second sub menu (embed window)
     &.sub-tabs {
       padding-top: 12px;
       li a {
-        color: #19a1ce;
+        color: $intro-bg-color;
         text-transform: none;
         span {
           border-bottom: 1px dotted;
@@ -603,8 +602,8 @@ html {
         }
       }
       li.active a {
-        background-color: #c2eaf7;
-        color: #19a1ce;
+        background-color: $header-menu-bg-hover-color;
+        color: $intro-bg-color;
         span {
           border-bottom: none;
         }
@@ -633,7 +632,7 @@ html {
 
   input, textarea, select {
     border-radius: 0;
-    border-color: #9bc3d6;
+    border-color: $settings-border-color;
     box-shadow: none !important;
     font-size: 12px;
     resize: none;
@@ -647,7 +646,7 @@ html {
     &:before {
       content: '?';
       color: white;
-      background-color: #95bfd3;
+      background-color: $tag-bg-color;
       border-radius: 3px;
       width: 12px;
       padding-top: 1px;
@@ -661,7 +660,7 @@ html {
       text-align: center;
     }
     &:hover:before {
-      background-color: #008ebe;
+      background-color: $intro-bg-color;
     }
   }
 
@@ -685,12 +684,12 @@ html {
 
     .tags-box {
       padding: 10px 10px 0;
-      border: 1px solid #9bc3d6;
+      border: 1px solid $settings-border-color;
       .tag {
         //cursor: pointer;
         font-size: 12px;
         display: inline-block;
-        background-color: #95bfd3;
+        background-color: $tag-bg-color;
         margin: 0 8px 10px 0;
         color: white;
         padding: 2px 10px;
@@ -735,7 +734,7 @@ html {
           }
           .in-box {
             border-radius: 5px;
-            background-color: #95bfd3;
+            background-color: $tag-bg-color;
             //padding: 1px 5px 1px 8px;
             padding: 1px 5px 1px 6px;
             //display: flex;
@@ -763,7 +762,6 @@ html {
                 padding: 1px 2px;
                 &:focus {
                   background-color: white;
-                  //color: #19a1ce;
                   color: $text-color;
                 }
               }
@@ -774,7 +772,7 @@ html {
             margin-left: 10px;
             margin-right: 10px;
             font-size: 15px;
-            color: #95bfd3;
+            color: $tag-bg-color;
             position: absolute;
             left: -4px;
             top: 3px;
@@ -794,9 +792,9 @@ html {
           &:hover,
           &:focus-within {
             text-decoration: none;
-            background-color: #19a1ce;
+            background-color: $intro-bg-color;
             .in-box {
-              background-color: #19a1ce;
+              background-color: $intro-bg-color;
             }
             span.glyphicon-align-justify {
               color: white;
@@ -969,17 +967,17 @@ a.ac-btn {
 }
 
 .add-btn {
-  background-color: #19a1ce;
+  background-color: $intro-bg-color;
 
   &:active {
-    background-color: #1796bf;
+    background-color: $intro-bg-color-active;
   }
 }
 
 .remove-btn {
   background-color: $red-color;
   &:active {
-    background-color: #cf4861;
+    background-color: $red-color-active;
   }
 }
 
@@ -1090,7 +1088,7 @@ a.ac-btn {
   top: 0;
   left: 0;
   height: 100%;
-  background-color: #0082CC;
+  background-color: $leftmenu-bg-color;
   z-index: 100;
   .close {
     height: 20px;
@@ -1118,7 +1116,7 @@ a.ac-btn {
     padding-left: 70px;
     cursor: pointer;
     &:hover, &:focus {
-      background-color: #0172B0;
+      background-color: $leftmenu-bg-hover-color;
       text-decoration: none;
     }
   }

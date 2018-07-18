@@ -5,9 +5,9 @@
 	 width="185.75px" height="186px" viewBox="13.125 170.078 185.75 186" enable-background="new 13.125 170.078 185.75 186"
 	 xml:space="preserve">
 <g>
-	<rect x="154.314" y="170.078" fill="#159FCE" width="44.561" height="44.562"/>
-	<rect x="13.125" y="170.078" fill="#159FCE" width="110.625" height="185.75"/>
-	<rect x="154.314" y="240.799" fill="#159FCE" width="44.561" height="44.561"/>
-	<rect x="154.314" y="311.518" fill="#159FCE" width="44.561" height="44.561"/>
+	<rect x="154.314" y="170.078" fill="#2485d0" width="44.561" height="44.562"/>
+	<rect x="13.125" y="170.078" fill="#2485d0" width="110.625" height="185.75"/>
+	<rect x="154.314" y="240.799" fill="#2485d0" width="44.561" height="44.561"/>
+	<rect x="154.314" y="311.518" fill="#2485d0" width="44.561" height="44.561"/>
 </g>
 </svg>
