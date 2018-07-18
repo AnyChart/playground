@@ -148,7 +148,8 @@ html {
         background-color: $intro-bg-color;
         color: $intro-color;
         background-image: url('/shapes.png');
-        background-position: center;
+        //background-position: center;
+        background-position: calc(50% + 240px) 130%;
         .text {
           padding: 0 40px;
           .description {
