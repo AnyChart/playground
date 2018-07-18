@@ -255,6 +255,12 @@ html {
         /* height is dynamic, and will expand... */
         height: 100%;
         /* ...as content is added (won't scroll) */
+
+        h1 {
+          font-size: 18px;
+          color: $red-color;
+          margin-top: 40px;
+        }
       }
 
       footer {

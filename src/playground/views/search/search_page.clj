@@ -26,7 +26,7 @@
     (page/head {:title       (search-page-utils/title q page)
                 :description "AnyChart Playground search page"})
     [:body page/body-tag-manager
-     [:div.wrapper.tag-page
+     [:div.wrapper
 
       (page/nav (:templates data)
                 (:user data)
