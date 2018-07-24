@@ -85,9 +85,9 @@ html {
               //border: 1px solid #1796bf;
               outline: none;
               border: none;
-              color: #8eafe0;
+              color: #93b4e7;
               &::placeholder {
-                color: #8eafe0;
+                color: #93b4e7;
               }
               &:focus {
                 background-color: $search-box-bg-hover-color;
@@ -95,7 +95,7 @@ html {
               }
             }
             .glyphicon {
-              color: #8eafe0;
+              color: #93b4e7;
               //font-size: 13px;
               position: absolute;
               right: 0;
