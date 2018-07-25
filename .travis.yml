@@ -1,7 +1,7 @@
 language: clojure
 script:
 - lein sass4clj once
-- lein cljsbuild once prod prod-site
+- lein cljsbuild once prod prod-site prod-admin
 - lein minify-assets
 - lein uberjar
 sudo: false

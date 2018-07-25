@@ -1,6 +1,5 @@
 (ns playground.tips.events
   (:require [re-frame.core :as rf]
-            [playground.utils :as utils]
             [playground.tips.tips-data :as tips-data]))
 
 

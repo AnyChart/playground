@@ -14,10 +14,12 @@ playground.iml
 /data/
 resources/public/js/playground.js
 resources/public/js/site.js
+resources/public/js/admin.js
 resources/public/js/codemirror.min.js
 resources/public/js/clipboard-splitter-sortable.min.js
 resources/public/css/editor.css
 resources/public/css/main.css
+resources/public/css/admin.css
 src-css/.sass-cache
 .sass-cache
 resources/public/chartopedia/images

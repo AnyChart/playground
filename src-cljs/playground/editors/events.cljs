@@ -1,7 +1,6 @@
 (ns playground.editors.events
   (:require [re-frame.core :as rf]
             [playground.editors.js :as editors-js]
-            [playground.utils :as js-utils]
             [playground.utils.utils :as utils]
             [ajax.core :refer [GET POST]]))
 
@@ -133,7 +132,7 @@
 (rf/reg-event-db
   :data-error
   (fn [db [_ error]]
-    (js-utils/log "Data error!" error)
+    (println "Data error!" error)
     (js/alert "Data error!")
     db))
 

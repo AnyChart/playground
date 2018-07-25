@@ -72,6 +72,7 @@
                  [reagent "0.8.0"]
                  [re-frame "0.10.5"]
                  [re-com "2.1.0"]
+                 [rum "0.11.2"]
                  [alandipert/storage-atom "2.0.1"]
                  ; [cljs-http "0.1.42"]
                  [cljs-ajax "0.7.3"]
@@ -113,6 +114,7 @@
                         :target "resources/public/js/clipboard-splitter-sortable.min.js"}]]
   :profiles {:dev {:jvm-opts     ["-Dlocal=true"]
                    :dependencies [[re-frisk "0.5.4"]]}}
+
   :cljsbuild {:builds [
                        ;; editor
                        {:id           "dev"
@@ -123,16 +125,13 @@
                                        :preloads      [re-frisk.preload]}}
                        {:id           "prod"
                         :source-paths ["src-cljs" "src-cljc"]
-                        :compiler     {
-                                       ;:output-dir "resources/public/js"
-                                       :output-to       "resources/public/js/playground.js"
+                        :compiler     {:output-to       "resources/public/js/playground.js"
                                        :optimizations   :advanced
                                        :pretty-print    false
                                        :pseudo-names    false
                                        :externs         ["codemirror_externs.js"]
-                                       :closure-defines {"goog.DEBUG" false}
-                                       ;:source-map "resources/public/js/playground.js.map"
-                                       }}
+                                       :closure-defines {"goog.DEBUG" false}}}
+
                        ;; site
                        {:id           "dev-site"
                         :source-paths ["src-site-cljs" "src-cljc"]
@@ -145,4 +144,19 @@
                                        :optimizations   :advanced
                                        :pretty-print    false
                                        :pseudo-names    false
-                                       :closure-defines {"goog.DEBUG" false}}}]})
+                                       :closure-defines {"goog.DEBUG" false}}}
+
+                       ;; admin panel
+                       {:id           "dev-admin"
+                        :source-paths ["src-admin-cljs" "src-site-cljs" "src-cljc"]
+                        :compiler     {:output-to     "resources/public/js/admin.js"
+                                       :optimizations :whitespace
+                                       :pretty-print  true}}
+                       {:id           "prod-admin"
+                        :source-paths ["src-admin-cljs" "src-site-cljs" "src-cljc"]
+                        :compiler     {:output-to       "resources/public/js/admin.js"
+                                       :optimizations   :advanced
+                                       :pretty-print    false
+                                       :pseudo-names    false
+                                       :closure-defines {"goog.DEBUG" false}}}
+                       ]})

@@ -1,6 +1,5 @@
 (ns playground.export-window.views
   (:require [re-frame.core :as rf]
-            [playground.utils :as utils]
             [reagent.core :as reagent]))
 
 (defn embed-editor []

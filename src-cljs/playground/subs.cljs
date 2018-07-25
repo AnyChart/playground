@@ -3,8 +3,7 @@
             [re-frame.core :as rf]
             [clojure.string :as string]
             [playground.utils.utils :as common-utils]
-            [playground.web.auth-base :as auth-base]
-            [playground.utils.utils :as utils]))
+            [playground.web.auth-base :as auth-base]))
 
 
 (defn- makrup-type->str [type]

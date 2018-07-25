@@ -32,6 +32,7 @@
             [playground.web.handlers.sitemap-handler :as sitemap-handler]
             [playground.web.handlers.generator-handlers :as generator-handlers]
             [playground.web.handlers.search-handlers :as search-handlers]
+            [playground.web.handlers.admin-handlers :as admin-handlers]
             [playground.data.config :as c]))
 
 
@@ -58,6 +59,10 @@
                            mw/all-tags-anychart-filter-middleware
                            mw/all-tags-middleware
                            mw/base-page-middleware))
+
+           (GET "/_admin_" [] (-> admin-handlers/page mw/base-page-middleware))
+           (POST "/_admin_/versions" [] admin-handlers/versions)
+           (POST "/_admin_/delete" [] admin-handlers/delete-version)
 
            (GET "/sitemap.xml" [] (-> sitemap-handler/sitemap-page
                                       mw/repos-middleware

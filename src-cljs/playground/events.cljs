@@ -2,7 +2,6 @@
   (:require-macros [hiccups.core :as h])
   (:require [reagent.core :as reagent :refer [atom]]
             [re-frame.core :as rf]
-            [playground.utils :as js-utils]
             [ajax.core :refer [GET POST]]
     ;[accountant.core :as accountant]
             [playground.editors.js :as editors-js]
@@ -10,7 +9,6 @@
             [alandipert.storage-atom :refer [local-storage]]
             [playground.views.iframe :as iframe-view]
             [hiccups.runtime :as hiccupsrt]
-            [playground.utils.utils :as utils]
             [playground.settings-window.javascript-tab.version-detect :as version-detect]
             [playground.settings-window.javascript-tab.events :refer [detect-version-interceptor]]))
 
@@ -34,7 +32,7 @@
       ; (swap! ls assoc :hidden-types [])
       ; (utils/log (clj->js @ls))
       (when-not (-> data :sample :version-id)
-        (.replaceState (.-history js/window) nil nil (utils/sample-url-with-version (:sample data))))
+        (.replaceState (.-history js/window) nil nil (common-utils/sample-url-with-version (:sample data))))
       (let [view (or (:view data) (:view @ls) :right)]
         {:db         {:editors        {:editors-height (editors-js/editors-height)
                                        :view           view
@@ -158,7 +156,7 @@
 (rf/reg-event-db
   :save-error
   (fn [db [_ error]]
-    (js-utils/log "Save error!" error)
+    (println "Save error!" error)
     (js/alert "Save error!")
     db))
 
@@ -169,7 +167,7 @@
 (rf/reg-event-db
   :fork
   (fn [db _]
-    (js-utils/log "Fork")
+    (println "Fork")
     (when (= :standalone (-> db :editors :view))
       (rf/dispatch [:view/editor]))
     (POST "/fork"
@@ -199,7 +197,7 @@
 (rf/reg-event-db
   :fork-error
   (fn [db [_ error]]
-    (js-utils/log "Fork error!" error)
+    (println "Fork error!" error)
     (js/alert "Fork error!")
     db))
 
@@ -225,7 +223,7 @@
 (rf/reg-event-db
   :search-hints-request-error
   (fn [db [_ error]]
-    (js-utils/log "Search hints request error" error)
+    (println "Search hints request error" error)
     db))
 
 

@@ -7,7 +7,6 @@
             [playground.tips.views :as tips]
             [playground.sidemenu.views :as sidemenu]
             [playground.search.views :as search]
-            [playground.utils :as utils]
             [playground.utils.utils :as utils-main]
             [playground.data.consts :as consts]
             [playground.modal-window.views :as modal-view]))

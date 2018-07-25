@@ -3,7 +3,6 @@
             [re-frame.core :as rf]
             [playground.subs]
             [playground.events]
-            [playground.utils :as utils]
             [playground.views :as views]
             [playground.js]
             [cognitect.transit :as t]

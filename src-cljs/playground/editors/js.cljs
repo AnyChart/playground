@@ -1,6 +1,5 @@
 (ns playground.editors.js
-  (:require [re-frame.core :as rf]
-            [playground.utils :as utils]))
+  (:require [re-frame.core :as rf]))
 
 
 (defn create-editor [type value mode]
