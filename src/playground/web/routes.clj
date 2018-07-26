@@ -17,8 +17,6 @@
             [playground.web.helpers :refer :all]
     ;; pages
             [playground.views.page-404 :as view-404]
-            [playground.utils.utils :as utils]
-
     ;; web handlers
             [playground.web.handlers.landing-handlers :as landing-handlers]
             [playground.web.handlers.sample.pages :as sample-handlers]
@@ -63,6 +61,7 @@
            (GET "/_admin_" [] (-> admin-handlers/page mw/base-page-middleware))
            (POST "/_admin_/versions" [] admin-handlers/versions)
            (POST "/_admin_/delete" [] admin-handlers/delete-version)
+           (POST "/_admin_/rebuild" [] admin-handlers/rebuild-version)
 
            (GET "/sitemap.xml" [] (-> sitemap-handler/sitemap-page
                                       mw/repos-middleware

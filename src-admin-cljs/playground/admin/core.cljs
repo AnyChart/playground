@@ -14,74 +14,94 @@
                   :version  nil}))
 
 
-(defn get-project-by-name [project-name]
-  (first (filter #(= project-name (:name %)) (:projects @state))))
-
-
 (defn update-versions []
   (POST "/_admin_/versions"
-        {:params        {:project-id (-> @state :project :id)}
-         :handler       #(swap! state assoc :versions %)
+        {:params        {:project (-> @state :project)}
+         :handler       #(do
+                           (println %)
+                           (swap! state assoc :versions %)
+                           (swap! state assoc :version (first %)))
          :error-handler #(println %)}))
 
 
 (defn change-project [project]
   (println "change-project:" project)
-  (swap! state assoc :project (get-project-by-name project))
+  (swap! state assoc :project project)
   (update-versions))
 
 
-(defn change-version [version]
+(defn delete-version []
+  (POST "/_admin_/delete"
+        {:params        {:project (-> @state :project)
+                         :version (-> @state :version)}
+         :handler       #(do
+                           (println %)
+                           (js/alert "Delete version!")
+                           (update-versions))
+         :error-handler #(do
+                           (println %)
+                           (js/alert "Error occured, see console output!"))}))
 
-  )
+
+(defn rebuild-version []
+  (POST "/_admin_/rebuild"
+        {:params        {:project (-> @state :project)
+                         :version (-> @state :version)}
+         :handler       #(do
+                           (println %)
+                           (js/alert "Start rebuilding!")
+                           (update-versions))
+         :error-handler #(do
+                           (println %)
+                           (js/alert "Error occured, see console output!"))}))
+
+
+(defn change-version [version]
+  (swap! state assoc :version version))
 
 
 (rum/defc project-select < rum/reactive []
-  [:div
-   [:h5 "Version management panel"]
+  [:div.admin-panel
    [:form
-    [:div.form-group
+    [:div.form-group.input-group
      [:label {:for "project-select"} "Select project"]
      [:br]
-     [:select.custom-select#project-select {:on-change #(change-project (-> % .-target .-value))}
+     [:select.form-control.custom-select#project-select {:on-change #(change-project (-> % .-target .-value))}
       (for [repo (:projects (rum/react state))]
-        [:option {:key   (:name repo)
-                  :value (:name repo)} (:name repo)])]
+        [:option {:key   repo
+                  :value repo} repo])]
      [:a.btn.btn-success {:role "button"
-                          :href (str "/" (:name (:project (rum/react state))) "/_update_")} "Update versions"]    ]
-
-    [:label {:for "version-select"} "Select version"]
-    [:br]
-    [:select.custom-select#version-select {:on-change #(change-version (-> % .-target .-value))}
-     (for [version (:versions (rum/react state))]
-       [:option {:key   (:name version)
-                 :value (:name version)} (:name version)])]
-    [:button.btn.btn-danger "Delete"]
-    [:button.btn.btn-primary "Rebuild"]
-
-    [:br]
-    [:div.alert.alert-primary
-     "This action is used to update AnyChart develop versions in PG editor."
+                          :href (str "/" (:project (rum/react state)) "/_update_")} "Update versions"]]
+    [:div.input-group
+     [:label {:for "version-select"} "Select version"]
      [:br]
+     [:select.form-control.custom-select#version-select {:value     (or (:version (rum/react state)) "")
+                                                         :on-change #(change-version (-> % .-target .-value))
+                                                         }
+      (for [version (:versions (rum/react state))]
+        [:option {:key   version
+                  :value version} version])]
+     [:button.btn.btn-danger {:type     "button"
+                              :on-click delete-version} "Delete"]
+     [:button.btn.btn-primary {:type     "button"
+                               :on-click rebuild-version} "Rebuild"]]
+
+    [:br]
+    [:div.alert.alert-info
+     "This action is used to update AnyChart develop versions in PG editor."
+     [:br] [:br]
      [:a.btn.btn-success {:role "button"
                           :href "/_update_anychart_versions_"} "Update AnyChart versions"]]
     [:a.btn.btn-link {:role "button"
-                      :href "/tags/index"} "Show tags stat" ]
-
-    ]
-   ])
-
-
-(rum/defc main-comp []
-  [:div "asdf"])
+                      :href "/tags/index"} "Show tags stat"]]])
 
 
 (defn ^:export init [data]
   (let [data (t/read (t/reader :json) data)
-        repos (:repos data)]
-    (reset! state {:projects (:repos data)
+        repos (map :name (:repos data))]
+    (reset! state {:projects repos
                    :project  (first repos)})
     (update-versions)
-    (println data)
+    (println repos)
     (rum/mount (project-select)
                (.getElementById js/document "main-container"))))

@@ -9,6 +9,7 @@
             [playground.generator.data-sets :as data-sets]
             [playground.generator.utils :refer [copy-dir]]
             [playground.db.request :as db-req]
+            [playground.db.actions :as db-actions]
             [playground.elastic.core :as elastic]
             [playground.notification.core :as notifier]
             [playground.redis.core :as redis]
@@ -33,8 +34,9 @@
 (defn message-handler [generator]
   (fn [{:keys [message attemp]}]
     (timbre/info "Redis message: " message)
-    (update-repository-by-repo-name generator (:db generator) message)
-    (db-req/update-tags-mw! (:db generator))
+    (let [{repo :repo version :version :as gen-params} message]
+      (update-repository-by-repo-name generator (:db generator) repo gen-params)
+      (db-req/update-tags-mw! (:db generator)))
     {:status :success}))
 
 
@@ -131,7 +133,7 @@
                                              :owner-id  (:id owner)})]
           (swap! repo assoc :id repo-id))))
 
-    (update-repository-by-repo-name generator db (:name @repo))
+    (update-repository-by-repo-name generator db (:name @repo) {})
 
     (info (str "Repository \"" (:name @repo) "\" - OK"))
     {:name (:name @repo)}
@@ -169,25 +171,6 @@
 ;; =====================================================================================================================
 ;; Remove branches
 ;; =====================================================================================================================
-;; TODO: test behaviour, if it works well? make func/macros for transaction retry
-(defn remove-branch
-  ([db branch retry]
-   (info "Remove (previous) branch:" retry (:name branch))
-   (if (pos? retry)
-     (try
-       (jdbc/with-db-transaction [conn (:db-spec db) {:isolation :serializable}]
-                                 (db-req/delete-version-visits! conn {:version-id (:id branch)})
-                                 (db-req/delete-samples! conn {:version-id (:id branch)})
-                                 (db-req/delete-version! conn {:id (:id branch)}))
-       (catch Exception e
-         (timbre/error "REMOVE BRANCH ERROR:" e)
-         (remove-branch db branch (dec retry))))
-     (do
-       (timbre/info "REMOVE BRANCH retry exceeded")
-       (throw (Exception. (str "REMOVE BRANCH " (:name branch) " ERROR"))))))
-  ([db branch] (remove-branch db branch 100)))
-
-
 (defn need-remove-branch? [db-branch actual-branches]
   (every? #(not= (:name db-branch) (:name %)) actual-branches))
 
@@ -243,7 +226,7 @@
                                      (not= (:id %) version-id)) versions)]
       (info "Delete old versions for" (:name branch) ": " (pr-str (map #(select-keys % [:id :name]) old-versions)))
       (doseq [version old-versions]
-        (remove-branch db version)))
+        (db-actions/remove-branch db version)))
     (elastic/remove-branch elastic (:name @repo) (:name branch))
     (db-req/show-version! db {:repo-id (:id @repo) :id version-id})))
 
@@ -292,7 +275,7 @@
 (defn names [branches] (map :name branches))
 
 
-(defn update-repository [generator db repo]
+(defn update-repository [generator db repo gen-params]
   (let [queue-index (swap! (:queue-index (:conf generator)) inc)]
     (try
       (info "update repo: " (:git @repo))
@@ -321,7 +304,7 @@
         ;; delete old branches
         (doseq [branch removed-branches]
           (elastic/remove-branch (-> generator :elastic) (:name @repo) (:name branch))
-          (remove-branch db branch)
+          (db-actions/remove-branch db branch)
           (remove-previews (:name @repo) (:name branch) (-> generator :conf :images-dir)))
 
         ;; update branches
@@ -357,8 +340,8 @@
             (notifier/complete-building-with-errors (:notifier generator) (:name @repo) [] [] [] queue-index e))))))
 
 
-(defn update-repository-by-repo-name [generator db repo-name]
-  (update-repository generator db (get-repo-by-name generator repo-name)))
+(defn update-repository-by-repo-name [generator db repo-name gen-params]
+  (update-repository generator db (get-repo-by-name generator repo-name) gen-params))
 
 
 ;(defn parse-templates [generator templates-config]

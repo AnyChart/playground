@@ -14,7 +14,7 @@
       [:div.content
        [:div.container-fluid.content-container
 
-        [:form {:action "/signin" :method "POST"}
+        [:form.signup-form {:action "/signin" :method "POST"}
          [:div.form-group
           [:label {:for "exampleInputEmail1"} "Username or email"]
           [:input#exampleInputEmail1.form-control
