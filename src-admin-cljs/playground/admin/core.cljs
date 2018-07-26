@@ -66,7 +66,8 @@
     [:div.form-group.input-group
      [:label {:for "project-select"} "Select project"]
      [:br]
-     [:select.form-control.custom-select#project-select {:on-change #(change-project (-> % .-target .-value))}
+     [:select.form-control.custom-select#project-select {:value     (or (:project (rum/react state)) "")
+                                                         :on-change #(change-project (-> % .-target .-value))}
       (for [repo (:projects (rum/react state))]
         [:option {:key   repo
                   :value repo} repo])]
@@ -76,8 +77,7 @@
      [:label {:for "version-select"} "Select version"]
      [:br]
      [:select.form-control.custom-select#version-select {:value     (or (:version (rum/react state)) "")
-                                                         :on-change #(change-version (-> % .-target .-value))
-                                                         }
+                                                         :on-change #(change-version (-> % .-target .-value))}
       (for [version (:versions (rum/react state))]
         [:option {:key   version
                   :value version} version])]
