@@ -28,7 +28,7 @@
                  [org.apache.commons/commons-lang3 "3.7"]
                  [enlive "1.1.6"]
                  [org.jsoup/jsoup "1.11.3"]
-                 [selmer "1.11.7"]
+                 [selmer "1.11.8"]
                  [clj-time "0.14.4"]
                  [me.raynes/fs "1.4.6"]
                  [camel-snake-kebab "0.4.0"]
@@ -40,14 +40,14 @@
                  ;; db
                  [mpg "1.3.0"]
                  ;[org.postgresql/postgresql "9.4.1207"]
-                 [org.postgresql/postgresql "42.2.2"]
+                 [org.postgresql/postgresql "42.2.4"]
                  [clojure.jdbc/clojure.jdbc-c3p0 "0.3.3"]
                  [yesql "0.5.3"]
                  ;[org.clojure/java.jdbc "0.6.1"]
-                 [org.clojure/java.jdbc "0.7.6"]
+                 [org.clojure/java.jdbc "0.7.7"]
                  [mysql/mysql-connector-java "6.0.6"]
                  [com.taoensso/carmine "2.18.1"]
-                 [cc.qbits/spandex "0.6.2"]
+                 [cc.qbits/spandex "0.6.4"]
 
                  ;; crypto
                  [buddy "2.0.0"]
@@ -69,13 +69,13 @@
 
                  ;; front-end
                  [org.clojure/clojurescript "1.9.908"]
-                 [reagent "0.8.0"]
+                 [reagent "0.8.1"]
                  [re-frame "0.10.5"]
                  [re-com "2.1.0"]
                  [rum "0.11.2"]
                  [alandipert/storage-atom "2.0.1"]
                  ; [cljs-http "0.1.42"]
-                 [cljs-ajax "0.7.3"]
+                 [cljs-ajax "0.7.4"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
                  [hiccups "0.3.0"]
                  [secretary "1.2.3"]

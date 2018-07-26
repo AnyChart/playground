@@ -1,11 +1,12 @@
 (ns playground.views.tag.tags-page
   (:require [playground.views.common :as page]
             [hiccup.page :as hiccup-page]
-            [playground.data.tags :as tags-data]))
+            [playground.data.tags :as tags-data]
+            [clojure.string :as string]))
 
 
 ;(defn divide-tags-by-blocks [tags]
-;  (let [sorted-tags (sort-by clojure.string/lower-case compare tags)
+;  (let [sorted-tags (sort-by string/lower-case compare tags)
 ;        blocks-tags (sort (group-by first sorted-tags))]
 ;    (prn blocks-tags)
 ;    (for [[letter tags] blocks-tags]
@@ -19,7 +20,7 @@
 ;                (str tag)]])]])))
 
 (defn divide-tags-by-blocks [tags]
-  (let [sorted-tags (sort-by clojure.string/lower-case compare tags)
+  (let [sorted-tags (sort-by string/lower-case compare tags)
         blocks-tags (flatten (sort (group-by (fn [tag]
                                                (if (<= (int \0) (int (first tag)) (int \9))
                                                  \0

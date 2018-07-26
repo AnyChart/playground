@@ -5,16 +5,17 @@
             [playground.preview-generator.download :as download]
             [selmer.parser :refer [render-file]]
             [taoensso.timbre :as timbre :refer [info]]
-            [playground.utils.utils :as utils])
+            [playground.utils.utils :as utils]
+            [clojure.string :as string])
   (:import [org.imgscalr Scalr Scalr$Method Scalr$Mode]
            [java.awt.image BufferedImageOp BufferedImage]
            [javax.imageio ImageIO]))
 
 
 (defn- fix-code [code]
-  (when code (clojure.string/replace code
-                                     (clojure.string/re-quote-replacement ".animation(true")
-                                     ".animation(false")))
+  (when code (string/replace code
+                             (string/re-quote-replacement ".animation(true")
+                             ".animation(false")))
 
 
 (defn generate-img [phantom-engine phantom-generator images-folder sample]

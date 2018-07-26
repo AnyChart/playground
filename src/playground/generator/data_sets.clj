@@ -10,17 +10,21 @@
            (jdk.nashorn.api.scripting ScriptUtils)
            (javax.script ScriptEngineManager)))
 
+
 (defn eval-some-javascript [s]
   (-> (ScriptEngineManager.)
       (.getEngineByMimeType "application/javascript")
       (.eval s)))
 
+
 (defn parse-js-data-set [s]
   (eval-some-javascript (str "window = {};" s "JSON.stringify(window.anydata.datasets.pop());")))
 
+
 (defn relative-path [full-url url]
-  (let [parts (clojure.string/split full-url #"/")]
+  (let [parts (string/split full-url #"/")]
     (str (string/join "/" (drop-last parts)) (subs url 1))))
+
 
 (defn full-url [full-url url]
   (cond
@@ -29,10 +33,12 @@
     (.startsWith url "//") (str "http://" url)
     (.startsWith url "./") (relative-path full-url url)))
 
+
 (defn get-data [url]
   (try
     (:body (http/get url))
     (catch Exception _ nil)))
+
 
 (defn parse-data-set [db data-source data-set]
   (let [data-set-url (:data data-set)
@@ -53,6 +59,7 @@
                  :url            full-data-set-url
                  :data           (get-data full-data-set-url)}]
     (db-req/add-data-set<! db (update db-data :tags json/generate-string))))
+
 
 (defn parse-data-source [db data-sources]
   (timbre/info data-sources db)

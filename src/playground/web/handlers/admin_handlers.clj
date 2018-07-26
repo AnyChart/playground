@@ -26,7 +26,7 @@
         version (-> request :params :version)
         repo (db-req/repo-by-name (get-db request) {:name project})
         branch (db-req/version-by-name (get-db request) {:repo-id (:id repo)
-                                                         :name version})]
+                                                         :name    version})]
     (timbre/info "Delete version request: " project version)
     (db-actions/remove-branch (get-db request) branch)
     (web-utils/response {:status :ok})))
@@ -37,11 +37,11 @@
         version (-> request :params :version)
         repo (db-req/repo-by-name (get-db request) {:name project})
         branch (db-req/version-by-name (get-db request) {:repo-id (:id repo)
-                                                         :name version})]
+                                                         :name    version})]
     (timbre/info "Rebuild version request: " project version)
     (db-actions/remove-branch (get-db request) branch)
     (redis/enqueue (get-redis request)
                    (get-redis-queue request)
-                   {:repo project
+                   {:repo    project
                     :version version})
     (web-utils/response {:status :ok})))
