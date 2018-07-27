@@ -4,41 +4,42 @@ div.border-icon{
   border: 1px solid #99c3e6;
   border-radius: 2px;
   display: inline-block;
-}
-.chart-row {
-  position: absolute;
-  bottom: 16px;
-  left: 18px;
-  letter-spacing: -3px;
-  line-height: 0;
-  font-size: 0;
-  white-space: nowrap;
-  .chart-col {
-    display: inline-block;
-    width: 5px;
-    height: 18px;
-    background: #000;
-    margin: 0 1px;
-    vertical-align: bottom;
-    -webkit-transition: height 0.2s cubic-bezier(0.65, 0.4, 0.29, 1.01);
-    -moz-transition: height 0.2s cubic-bezier(0.65, 0.4, 0.29, 1.01);
-    -ms-transition: height 0.2s cubic-bezier(0.65, 0.4, 0.29, 1.01);
-    -o-transition: height 0.2s cubic-bezier(0.65, 0.4, 0.29, 1.01);
-    transition: height 0.2s cubic-bezier(0.65, 0.4, 0.29, 1.01);
-    &.green {
-      background: #26a957;
-      height: 8px;
-    }
-    &.red {
-      background: #f0402e;
+  .chart-row {
+    position: absolute;
+    bottom: 3px;
+    left: 3px;
+    letter-spacing: -3px;
+    line-height: 0;
+    font-size: 0;
+    white-space: nowrap;
+    .chart-col {
+      display: inline-block;
+      width: 5px;
       height: 18px;
-    }
-    &.orange {
-      background: #ff8207;
-      height: 13px;
+      background: #000;
+      margin: 0 1px;
+      vertical-align: bottom;
+      -webkit-transition: height 0.2s cubic-bezier(0.65, 0.4, 0.29, 1.01);
+      -moz-transition: height 0.2s cubic-bezier(0.65, 0.4, 0.29, 1.01);
+      -ms-transition: height 0.2s cubic-bezier(0.65, 0.4, 0.29, 1.01);
+      -o-transition: height 0.2s cubic-bezier(0.65, 0.4, 0.29, 1.01);
+      transition: height 0.2s cubic-bezier(0.65, 0.4, 0.29, 1.01);
+      &.green {
+        background: #26a957;
+        height: 8px;
+      }
+      &.red {
+        background: #f0402e;
+        height: 18px;
+      }
+      &.orange {
+        background: #ff8207;
+        height: 13px;
+      }
     }
   }
 }
+
 
 .navbar-brand:hover .chart-row .chart-col{
   &.green{

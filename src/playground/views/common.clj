@@ -9,6 +9,9 @@
   (:import (org.apache.commons.lang3 StringEscapeUtils)))
 
 
+;; =====================================================================================================================
+;; Resources
+;; =====================================================================================================================
 (def head-tag-manager "<!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -24,6 +27,39 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager (noscript) -->")
 
 
+;; Scripts
+(defn site-script [] [:script {:src (str "/js/site.js?v=" (c/commit))}])
+
+(defn jquery-script [] [:script {:src "/jquery/jquery.min.js"}])
+
+;(defn bootstrap-script [] [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}])
+(defn bootstrap-script [] [:script {:src "/bootstrap-4.1.3-dist/js/bootstrap.bundle.min.js"}])
+
+
+;; Styles
+(def main-style-link
+  [:link {:rel "stylesheet" :type "text/css" :href (str "/css/main.css?v=" (c/commit))}])
+
+(def main-style (slurp (io/resource "public/css/main.css")))
+
+
+
+(def bootstrap-style-link
+  ;;[:link {:rel "stylesheet" :type "text/css" :href "/bootstrap-3.3.7-dist/css/bootstrap.min.css"}]
+  [:link {:rel "stylesheet" :type "text/css" :href "/bootstrap-4.1.3-dist/css/bootstrap.min.css"}]
+  )
+
+(def bootstrap-style
+  (string/replace
+    ;;(slurp (io/resource "public/bootstrap-3.3.7-dist/css/bootstrap.min.css"))
+    (slurp (io/resource "public/bootstrap-4.1.3-dist/css/bootstrap.min.css"))
+    #"\.\.\/fonts"
+    "/bootstrap-3.3.7-dist/fonts"))
+
+
+;; =====================================================================================================================
+;; Helper functions
+;; =====================================================================================================================
 (defn desc [text]
   (when (seq text)
     (let [text (-> text
@@ -37,14 +73,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                (str res " " part)
                                res))) "" words)]
       (string/trim result))))
-
-
-(def main-style (slurp (io/resource "public/css/main.css")))
-(def bootstrap-style
-  (string/replace
-    (slurp (io/resource "public/bootstrap-3.3.7-dist/css/bootstrap.min.css"))
-    #"\.\.\/fonts"
-    "/bootstrap-3.3.7-dist/fonts"))
 
 
 (defn run-js-fn [fn-name & params]
@@ -73,11 +101,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 (str "t:" tag " ")))))
 
 
+;; =====================================================================================================================
+;; Markup
+;; =====================================================================================================================
 (defn head [data]
   [:head
    [:meta {:charset "UTF-8"}]
-   [:meta {:content "IE=edge" :http-equiv "X-UA-Compatible"}]
-   [:meta {:content "width=device-width, initial-scale=1" :name "viewport"}]
+   ;[:meta {:content "IE=edge" :http-equiv "X-UA-Compatible"}]
+   [:meta {:content "width=device-width, initial-scale=1, shrink-to-fit=no" :name "viewport"}]
 
    [:title (or (:title data) "AnyChart Playground")]
    [:meta {:property "og:title" :content (or (:title data) "AnyChart Playground")}]
@@ -117,102 +148,92 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
    ;[:script {:src "/jquery/jquery.min.js"}]
    ;[:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]
    (if (System/getProperty "local")
-     [:link {:rel "stylesheet" :type "text/css" :href "/bootstrap-3.3.7-dist/css/bootstrap.min.css"}]
+     bootstrap-style-link
      [:style {:type "text/css"} bootstrap-style])
    (if (System/getProperty "local")
-     [:link {:rel "stylesheet" :type "text/css" :href (str "/css/main.css?v=" (c/commit))}]
+     main-style-link
      [:style {:type "text/css"} main-style])
    head-tag-manager])
-
-
-(defn site-script [] [:script {:src (str "/js/site.js?v=" (c/commit))}])
-(defn jquery-script [] [:script {:src "/jquery/jquery.min.js"}])
-(defn bootstrap-script [] [:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}])
 
 
 (defn nav [templates user & [q]]
   [:header
    [:div.container-fluid.content-container.header
-    [:div.row
-     [:div.col-sm-12
-      [:div.navbar-header
-       [:button.navbar-toggle.collapsed {:aria-controls "navbar"
-                                         :aria-expanded "false"
-                                         :data-target   "#navbar"
-                                         :data-toggle   "collapse"
-                                         :type          "button"}
-        [:span.sr-only "Toggle navigation"]
-        [:span.icon-bar]
-        [:span.icon-bar]
-        [:span.icon-bar]]
-       [:a.navbar-brand
-        {:href "/" :title "Playground Home"}
-        [:div.border-icon]
-        [:div.chart-row
-         [:span.chart-col.green]
-         [:span.chart-col.orange]
-         [:span.chart-col.red]]
-        [:div.brand-label "AnyChart " [:b "Playground"]]]]
+    [:nav.navbar.navbar-expand-sm
 
-      ;; left navbar
-      [:div#navbar.navbar-collapse.collapse
-       [:ul.nav.navbar-nav
+     ;[:button.navbar-toggle.collapsed {:aria-controls "navbar"
+     ;                                  :aria-expanded "false"
+     ;                                  :data-target   "#navbar"
+     ;                                  :data-toggle   "collapse"
+     ;                                  :type          "button"}
+     ; [:span.sr-only "Toggle navigation"]
+     ; [:span.icon-bar]
+     ; [:span.icon-bar]
+     ; [:span.icon-bar]]
+     ;
 
-        [:li [:a {:href "/chart-types" :title "Playground Chart Types"} "Chart Types"]]
-        [:li [:a {:href "/tags" :title "Playground Tags"} "Tags"]]
-        ;[:li [:a {:href "/datasets" :title "Playground Data Sets"} "Data Sets"]]
+     [:a.navbar-brand
+      {:href "/" :title "Playground Home"}
+      [:div.border-icon
+       [:div.chart-row
+        [:span.chart-col.green]
+        [:span.chart-col.orange]
+        [:span.chart-col.red]]]
+      [:div.brand-label "AnyChart " [:b "Playground"]]]
 
-        [:li.dropdown
-         [:a.dropdown-toggle {:href          "#"
-                              :title         "Playground Support Submenu"
-                              :data-toggle   "dropdown"
-                              :role          "button"
-                              :aria-haspopup "true"
-                              :aria-expanded "false"} "Support"
-          [:span.caret]]
+     ;; left navbar
+     [:div#navbar.navbar-collapse                           ;.collapse
+      [:ul.navbar-nav.mr-auto
+       [:li.nav-item [:a.nav-link {:href "/chart-types" :title "Playground Chart Types"} "Chart Types"]]
+       [:li.nav-item [:a.nav-link {:href "/tags" :title "Playground Tags"} "Tags"]]
+       ;[:li [:a {:href "/datasets" :title "Playground Data Sets"} "Data Sets"]]
+       [:li.nav-item.dropdown
+        [:a.nav-link.dropdown-toggle {:href          "#"
+                                      :id            "supportDropdown"
+                                      :title         "Playground Support Submenu"
+                                      :data-toggle   "dropdown"
+                                      :role          "button"
+                                      :aria-haspopup "true"
+                                      :aria-expanded "false"} "Support"]
+        [:div.dropdown-menu {:aria-labelledby "supportDropdown"}
+         [:a.dropdown-item {:href "/support" :title "Playground Support"} "Support"]
+         [:a.dropdown-item {:href "/roadmap" :title "Playground Roadmap"} "Roadmap"]
+         [:a.dropdown-item {:href "/version-history" :title "Playground Version History"} "Version History"]]]
+       ;[:li [:a {:href "/pricing" :title "Playground Pricing"} "Pricing"]]
+       [:li.nav-item [:a.nav-link {:href "/about" :title "About Playground"} "About"]]
+       ]
 
-         [:ul.dropdown-menu
-          [:li [:a {:href "/support" :title "Playground Support"} "Support"]]
-          [:li [:a {:href "/roadmap" :title "Playground Roadmap"} "Roadmap"]]
-          [:li [:a {:href "/version-history" :title "Playground Version History"} "Version History"]]]]
-        ;[:li [:a {:href "/pricing" :title "Playground Pricing"} "Pricing"]]
-        [:li [:a {:href "/about" :title "About Playground"} "About"]]
-        ]
+      ;; right navbar
+      [:ul.navbar-nav.navbar-right
+       [:li.search-box
+        [:input#search-input.search {:type        "text"
+                                     :placeholder "Search"
+                                     :value       (or q "")}]
+        [:span#search-input-icon.glyphicon.glyphicon-search]
+        [:div#search-results-box.results {:style "display:none;"}
+         [:div#search-results]]]
 
-       ;; right navbar
-       [:ul.nav.navbar-nav.navbar-right
+       [:li.nav-item.dropdown
+        [:a.nav-link.dropdown-toggle {:aria-expanded "false"
+                             :aria-haspopup "true"
+                             :role          "button"
+                             :data-toggle   "dropdown"
+                             :href          "#"} "Create"]
+        [:div.dropdown-menu
+         (for [template templates]
+           [:a.dropdown-item {:href  (str "/new?template=" (:url template))
+                              :title (str "Create " (:name template))}
+            [:img {:src (str "/icons/" (utils/name->url (:name template)) ".svg")
+                   :alt (str "Create " (:name template) " button icon")}]
+            (:name template)])
+         [:div.dropdown-divider]
+         [:a.dropdown-item {:href "/new" :title "Create from scratch"}
+          [:img {:src (str "/icons/from-scratch.svg")
+                 :alt "Create from scratch button icon"}]
+          "From scratch"]]]
+       ]
 
-        [:li.search-box
-         [:input#search-input.search {:type        "text"
-                                      :placeholder "Search"
-                                      :value       (or q "")}]
-         [:span#search-input-icon.glyphicon.glyphicon-search]
-         [:div#search-results-box.results {:style "display:none;"}
-          [:div#search-results]]]
-
-        [:li.dropdown
-         [:a.dropdown-toggle {:aria-expanded "false"
-                              :aria-haspopup "true"
-                              :role          "button"
-                              :data-toggle   "dropdown"
-                              :href          "#"} "Create"
-          [:span.caret]]
-         [:ul.dropdown-menu
-          (for [template templates]
-            [:li
-             [:a {:href  (str "/new?template=" (:url template))
-                  :title (str "Create " (:name template))}
-              [:img {:src (str "/icons/" (utils/name->url (:name template)) ".svg")
-                     :alt (str "Create " (:name template) " button icon")}]
-              (:name template)]])
-          [:li.divider {:role "separator"}]
-          [:li
-           [:a {:href  "/new"
-                :title "Create from scratch"}
-            [:img {:src (str "/icons/from-scratch.svg")
-                   :alt "Create from scratch button icon"}]
-            "From scratch"]]]]
-        ]]]]]])
+      ]]]])
 
 
 (defn create-box [templates]
