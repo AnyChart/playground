@@ -88,6 +88,7 @@ html {
               display: inline-block;
               margin-right: 20px;
               height: 34px;
+              position: relative;
               input.search {
                 margin-top: 5px;
                 padding: 4px 30px 4px 10px;
@@ -104,10 +105,11 @@ html {
                   color: white;
                 }
               }
-              .glyphicon {
+              #search-input-icon {
                 color: #93b4e7;
                 //font-size: 13px;
                 position: absolute;
+                top: 2px;
                 right: 0;
                 padding: 10px;
                 //pointer-events: none;
@@ -163,7 +165,7 @@ html {
         //background-position: center;
         background-position: calc(50% + 235px) 130%;
         .text {
-          padding: 0 40px;
+          padding: 17px 40px 0px;
           .description {
             font-size: 18px;
             a {

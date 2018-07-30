@@ -1,4 +1,4 @@
-.tabs{
+.tabs {
   display: inline-block;
   a {
     display: inline-block;
@@ -11,7 +11,7 @@
     span {
       border-bottom: 1px dotted;
     }
-    &:hover, &:focus{
+    &:hover, &:focus {
       text-decoration: none;
       background-color: $header-menu-bg-hover-color;
       span {
@@ -22,27 +22,30 @@
       color: white;
       background-color: $tab-active-bg-color;
       text-decoration: none;
-      span{
+      span {
         border: none;
       }
     }
   }
 }
 
-.chart-type-container{
+.chart-type-container {
   /*display: flex;
   flex-wrap: wrap;
   justify-content: space-between;*/
+
   padding-bottom: 60px;
-  .fake-chart-block{
+
+  .fake-chart-block {
     width: 165px;
     display: inline-block;
   }
-  .chart-type-block{
+  div.chart-type-block {
     //width: 165px;
     //height: 165px;
     display: inline-block;
     margin: 10px 0;
+    min-width: 190px;
     a.chart {
       display: block;
       border: 1px solid #DDDDDD;
@@ -52,7 +55,7 @@
       //width: 165px;
       //height: 165px;
       color: $intro-bg-color;
-      box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+      box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 
       @include transition(150ms, ease);
       @include transform(scale(1));
@@ -61,7 +64,7 @@
         @include transition(150ms, ease);
         @include transform(scale(1.1));
       }
-      span{
+      span {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;

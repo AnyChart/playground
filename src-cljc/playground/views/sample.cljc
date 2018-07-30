@@ -90,7 +90,8 @@
                   :href   (utils/url sample)
                   :title  (str "Views: " (:views sample))}
         [:span {:class "views-count"} (:views sample)]
-        [:span.glyphicon.glyphicon-eye-open.sample-icon {:aria-hidden "true"}]]
+        ;[:span.glyphicon.glyphicon-eye-open.sample-icon {:aria-hidden "true"}]
+        [:i.far.fa-eye]]
        [:span.likes {:title (str "Likes: " (:likes sample))}
         [:span {:class "views-count"} (:likes sample)]
         [:span.glyphicon.glyphicon-heart.sample-icon {:aria-hidden "true"}]]]

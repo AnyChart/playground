@@ -2,21 +2,24 @@
 
 
 (defn prev-button [class page url is-visible]
-  [:a.prev-button.btn.btn-default {:class class
-                                   :style (str "visibility: " (if is-visible "visible" "hidden") ";")
-                                   :href  (if is-visible (str url page) "#")
-                                   :title (when is-visible (str "Prev page, " page))}
-   [:span.glyphicon.glyphicon-arrow-left {:aria-hidden true}]
+  [:a.prev-button {:class class
+                   :style (str "visibility: " (if is-visible "visible" "hidden") ";")
+                   :href  (if is-visible (str url page) "#")
+                   :title (when is-visible (str "Prev page, " page))}
+   ;[:span.glyphicon.glyphicon-arrow-left {:aria-hidden true}]
+   [:i.fas.fa-arrow-left]
    " Prev"])
 
 
 (defn next-button [class page url is-visible]
-  [:a.next-button.btn.btn-default {:class class
-                                   :style (str "visibility: " (if is-visible "visible" "hidden") ";")
-                                   :href  (if is-visible (str url (-> page inc inc)) "#")
-                                   :title (when is-visible (str "Next page, " (-> page inc inc)))}
+  [:a.next-button {:class class
+                   :role  "button"
+                   :style (str "visibility: " (if is-visible "visible" "hidden") ";")
+                   :href  (if is-visible (str url (-> page inc inc)) "#")
+                   :title (when is-visible (str "Next page, " (-> page inc inc)))}
    "Next "
-   [:span.glyphicon.glyphicon-arrow-right {:aria-hidden true}]])
+   ;[:span.glyphicon.glyphicon-arrow-right {:aria-hidden true}]
+   [:i.fas.fa-arrow-right]])
 
 
 (defn buttons [prev-id next-id page end url]
@@ -53,12 +56,12 @@
      (for [key (range (count result-list))
            :let [i (get result-list key)]]
        (if i
-         [:li {:class (if (= i page) "active")}
-          [:a {:href (str url (inc i))}
+         [:li.page-item {:class (if (= i page) "active")}
+          [:a.page-link {:href (str url (inc i))}
            (inc i)
            [:span {:class "sr-only"}]]]
-         [:li
-          [:a.dots {:href "#" :rel "nofollow"}
+         [:li.page-item
+          [:a.page-link.dots {:href "#" :rel "nofollow"}
            [:span {:aria-hidden true} "..."]]]))]))
 
 

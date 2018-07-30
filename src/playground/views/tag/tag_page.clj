@@ -23,6 +23,7 @@
                                 (str "/tags/" (tags-data/original-name->id-name tag) "?page=")
                                 class))
 
+
 (defn page [{page            :page
              tag             :tag
              tag-data        :tag-data
@@ -50,7 +51,7 @@
         (when (seq (:description tag-data))
           [:p.tag-description (:description tag-data)])
         (when (seq (:description tag-data))
-          [:h2 "Samples"])
+          [:h2.popular-label.samples-label "Samples"])
 
         (pagination page max-page end tag "top")
         [:div#tag-samples.row.samples-container

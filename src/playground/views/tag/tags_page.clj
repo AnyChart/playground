@@ -35,8 +35,15 @@
                               (str letter-tag)]))))
 
 (defn tags-height [tags]
-  (let [c (count tags)]
-    (int (* 1.02 (/ (+ (* 37 27) (* 18 c)) 4)))))
+  (let [tags-count (count tags)
+        title-height 37
+        title-count 27
+        tags-height 19
+        k 1.02
+        num-of-cols 4]
+    (int (* k (/ (+ (* title-height title-count)
+                    (* tags-height tags-count))
+                 num-of-cols)))))
 
 
 (defn page [data]

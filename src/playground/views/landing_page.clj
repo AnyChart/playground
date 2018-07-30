@@ -38,11 +38,10 @@
        [:div.container-fluid.content-container
         [:div.row
          [:div.col-sm-12
-          [:div
-           [:div.text
-            [:h1 "AnyChart "
-             [:b "Playground"]]
-            [:p.description "The ultimate charts playground. Create, modify, browse, learn and share."]]]]]]]
+          [:div.text
+           [:h1 "AnyChart "
+            [:b "Playground"]]
+           [:p.description "The ultimate charts playground. Create, modify, browse, learn and share."]]]]]]
 
       [:div.create-box
        [:div.container-fluid.content-container

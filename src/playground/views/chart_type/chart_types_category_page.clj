@@ -1,7 +1,9 @@
 (ns playground.views.chart-type.chart-types-category-page
-  (:require [hiccup.page :as hiccup-page]
+  (:require [playground.views.chart-type.common :as chart-type-common]
             [playground.views.common :as page]
+            [hiccup.page :as hiccup-page]
             [clojure.string :as string]))
+
 
 (defn page [data category]
   (hiccup-page/html5
@@ -26,14 +28,8 @@
 
         [:div.row.chart-type-container
          (for [chart (:charts category)]
-           [:div.col-md-15.col-sm-3.col-xs-4.col-xxs.col-xxxs.text-center.chart-type-block
-            [:a.chart
-             {:title (:name chart)
-              :href  (str "/chart-types/" (:id chart))}
-             [:div.chart-img
-              [:img {:alt (str "Chart type " (:name chart) " image")
-                     :src (:img chart)}]]
-             [:span (:name chart)]]])]
+           (chart-type-common/chart-type-block chart))
+         (repeat 5 [:div.col {:style "min-width: 190px;"}])]
 
         ]]
 

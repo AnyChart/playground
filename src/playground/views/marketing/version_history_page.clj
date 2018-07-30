@@ -31,19 +31,19 @@
 
          [:div.row
           [:div.col-md-4
-           [:p [:span.glyphicon.glyphicon-ok] "Fork Samples"]
+           [:p [:i.fas.fa-check.icon-ok] "Fork Samples"]
            [:ul
             [:li "Any sample can now be forked and saved."]]]
           [:div.col-md-4
-           [:p [:span.glyphicon.glyphicon-ok] "\"View Only\" mode"]
+           [:p [:i.fas.fa-check.icon-ok]  "\"View Only\" mode"]
            [:ul
             [:li "\"View only\" mode to show the description, files used, and tags."]]]
           [:div.col-md-4
-           [:p [:span.glyphicon.glyphicon-ok] "Brand New Editor"]
+           [:p [:i.fas.fa-check.icon-ok]  "Brand New Editor"]
            [:ul
             [:li "Ability to modify JavaScript, HTML and CSS code."]]]
           [:div.col-md-4
-           [:p [:span.glyphicon.glyphicon-ok] "Embedding"]
+           [:p [:i.fas.fa-check.icon-ok] "Embedding"]
            [:ul
             [:li "Ability to embed charts from Playground and use on your website."]]]]]
         ]]

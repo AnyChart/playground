@@ -144,6 +144,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
    [:link {:rel "stylesheet" :type "text/css" :href "https://cdn.anychart.com/fonts/2.7.2/anychart.css"}]
    [:link {:rel "stylesheet" :type "text/css" :href "https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&amp;subset=greek"}]
+   [:link {:crossorigin "anonymous"
+           :integrity   "sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+           :href        "https://use.fontawesome.com/releases/v5.2.0/css/all.css"
+           :rel         "stylesheet"}]
+
 
    ;[:script {:src "/jquery/jquery.min.js"}]
    ;[:script {:src "/bootstrap-3.3.7-dist/js/bootstrap.min.js"}]
@@ -209,16 +214,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         [:input#search-input.search {:type        "text"
                                      :placeholder "Search"
                                      :value       (or q "")}]
-        [:span#search-input-icon.glyphicon.glyphicon-search]
+        ;[:span#search-input-icon.glyphicon.glyphicon-search]
+        [:span#search-input-icon.fas.fa-search]
         [:div#search-results-box.results {:style "display:none;"}
          [:div#search-results]]]
 
        [:li.nav-item.dropdown
         [:a.nav-link.dropdown-toggle {:aria-expanded "false"
-                             :aria-haspopup "true"
-                             :role          "button"
-                             :data-toggle   "dropdown"
-                             :href          "#"} "Create"]
+                                      :aria-haspopup "true"
+                                      :role          "button"
+                                      :data-toggle   "dropdown"
+                                      :href          "#"} "Create"]
         [:div.dropdown-menu
          (for [template templates]
            [:a.dropdown-item {:href  (str "/new?template=" (:url template))

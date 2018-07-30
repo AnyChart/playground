@@ -1,5 +1,6 @@
 (ns playground.views.chart-type.chart-types-page
-  (:require [hiccup.page :as hiccup-page]
+  (:require [playground.views.chart-type.common :as chart-type-common]
+            [hiccup.page :as hiccup-page]
             [playground.views.common :as page]))
 
 
@@ -58,19 +59,9 @@
           [:span.glyphicon.glyphicon-search]]]
 
         [:div.row.chart-type-container
-         ;; Disable pagination
-         ;let [current-charts (nth (partition chart-count chart-count [] chart-types) page)]
          (for [chart chart-types]
-           [:div.col-md-15.col-sm-3.col-xs-4.col-xxs.col-xxxs.text-center.chart-type-block
-            ;{:style (str "display: " (if (some (partial = chart) current-charts)
-            ;                           "block;" "none;"))}
-            [:a.chart
-             {:title (:name chart)
-              :href  (str "/chart-types/" (:id chart))}
-             [:div.chart-img
-              [:img {:alt (str "Chart type " (:name chart) " image")
-                     :src (:img chart)}]]
-             [:span (:name chart)]]])]
+           (chart-type-common/chart-type-block chart))
+         (repeat 5 [:div.col {:style "min-width: 190px;"}])]
 
         ;; Disable pagination
         ;[:div.prev-next-buttons

@@ -5,10 +5,12 @@ html body .roadmap-page {
     p {
       position: relative;
       margin: 6px 0 6px 28px;
-      span.glyphicon.glyphicon-ok {
+      .icon-ok {
         color: $intro-bg-color;
         position: absolute;
+        top: 3px;
         left: -28px;
+        font-size: 15px;
       }
     }
     ul + p {
@@ -91,10 +93,9 @@ html body .roadmap-page {
 
     .line-container {
       padding-left: 30px;
-      margin-left: 5px;
       position: relative;
       border-left: 1px solid #99c1d4;
-      margin-bottom: 30px;
+      margin: 30px 0 40px 5px ;
 
       &:before {
         border-radius: 100%;
