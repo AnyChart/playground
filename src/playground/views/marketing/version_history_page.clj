@@ -36,11 +36,11 @@
            [:ul
             [:li "Any sample can now be forked and saved."]]]
           [:div.col-md-4
-           [:p [:i.fas.fa-check.icon-ok]  "\"View Only\" mode"]
+           [:p [:i.fas.fa-check.icon-ok] "\"View Only\" mode"]
            [:ul
             [:li "\"View only\" mode to show the description, files used, and tags."]]]
           [:div.col-md-4
-           [:p [:i.fas.fa-check.icon-ok]  "Brand New Editor"]
+           [:p [:i.fas.fa-check.icon-ok] "Brand New Editor"]
            [:ul
             [:li "Ability to modify JavaScript, HTML and CSS code."]]]
           [:div.col-md-4

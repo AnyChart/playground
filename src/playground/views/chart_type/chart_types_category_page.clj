@@ -26,10 +26,7 @@
           [:h1.name.popular-label (:name category)]
           [:p.description (string/join "\n" (:description category))]]]
 
-        [:div.row.chart-type-container
-         (for [chart (:charts category)]
-           (chart-type-common/chart-type-block chart))
-         (repeat 5 [:div.col {:style "min-width: 190px;"}])]
+        (chart-type-common/chart-types-block (:charts category))
 
         ]]
 

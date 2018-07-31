@@ -59,7 +59,7 @@
 
 
 (defn sample-landing [sample]
-  [:div.col-lg-4.col-md-4.col-sm-6.col-xs-12
+  [:div.col                                                 ;col-lg-4.col-md-6.col-sm-6.col-xs-12
    [:div.sample-box
     [:div.iframe-height-scaling
      ;{:style (when (s/blank? (:short-description sample)) "padding-bottom: 46px; margin-bottom: 88px;")}
@@ -85,7 +85,10 @@
              :title  (:short-description sample)}
          (:short-description sample)]])
      [:div.bottom-info
-      [:p.likes-and-views
+      [:div.author-and-date "By "
+       [:span {:title (title sample)} (:fullname sample)] ", "
+       [:span {:title (full-date (:create-date sample))} (date (:create-date sample))]]
+      [:div.likes-and-views.ml-auto
        [:a.views {:target "_blank"
                   :href   (utils/url sample)
                   :title  (str "Views: " (:views sample))}
@@ -94,7 +97,4 @@
         [:i.far.fa-eye]]
        [:span.likes {:title (str "Likes: " (:likes sample))}
         [:span {:class "views-count"} (:likes sample)]
-        [:span.glyphicon.glyphicon-heart.sample-icon {:aria-hidden "true"}]]]
-      [:p.author-and-date "By "
-       [:span {:title (title sample)} (:fullname sample)] ", "
-       [:span {:title (full-date (:create-date sample))} (date (:create-date sample))]]]]]])
+        [:span.glyphicon.glyphicon-heart.sample-icon {:aria-hidden "true"}]]]]]]])

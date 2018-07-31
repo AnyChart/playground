@@ -43,7 +43,7 @@
             [:b "Playground"]]
            [:p.description "The ultimate charts playground. Create, modify, browse, learn and share."]]]]]]
 
-      [:div.create-box
+      [:div.create-box.d-lg-block
        [:div.container-fluid.content-container
         [:div.row
          [:div.col-sm-12

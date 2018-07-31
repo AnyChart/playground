@@ -104,6 +104,38 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 ;; =====================================================================================================================
 ;; Markup
 ;; =====================================================================================================================
+(defn left-menu []
+  [:div#leftmenu.leftmenu.hide-outside.d-md-none {:style "visibility: hidden;"}
+   [:span.glyphicon-remove.glyphicon.close]
+   [:i#leftmenu-close.fas.fa-times]
+   ;; [:div#leftmenu-bg]
+   [:ul
+    [:li [:a {:href  "/chart-types"
+              :title "Playground Chart Types"} "Chart Types"]]
+    [:li [:a {:href  "/tags"
+              :title "Playground Tags"} "Tags"]]
+    ;[:li [:a {:href  "/datasets"
+    ;          :title "Playground Data Sets"} "Data Sets"]]
+    [:li.dropdown
+     [:a.dropdown-toggle {:data-toggle   "collapse"
+                          :data-target   "#submenu1"
+                          :aria-expanded false
+                          :title         "Playground Support Submenu"} "Support"
+      [:span.caret]]
+     [:ul.collapse {:id   "submenu1"
+                    :role "menu"}
+      [:li [:a {:href  "/support"
+                :title "Playground Support"} "Support"]]
+      [:li [:a {:href  "/roadmap"
+                :title "Playground Roadmap"} "Roadmap"]]
+      [:li [:a {:href  "/version-history"
+                :title "Playground Version History"} "Version History"]]]]
+    ;[:li [:a {:href  "/pricing"
+    ;          :title "Playground Pricing"} "Pricing"]]
+    [:li [:a {:href  "/about"
+              :title "About Playground"} "About"]]]])
+
+
 (defn head [data]
   [:head
    [:meta {:charset "UTF-8"}]
@@ -163,6 +195,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 (defn nav [templates user & [q]]
   [:header
+   (left-menu)
    [:div.container-fluid.content-container.header
     [:nav.navbar.navbar-expand-sm
 
@@ -177,6 +210,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
      ; [:span.icon-bar]]
      ;
 
+     [:div#bars-switcher.bars-switcher.d-md-none
+      [:i.fas.fa-bars]]
+
      [:a.navbar-brand
       {:href "/" :title "Playground Home"}
       [:div.border-icon
@@ -184,11 +220,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         [:span.chart-col.green]
         [:span.chart-col.orange]
         [:span.chart-col.red]]]
-      [:div.brand-label "AnyChart " [:b "Playground"]]]
+      [:div.brand-label "AnyChart " [:b.hidden-extra-mobile "Playground"]]]
 
      ;; left navbar
-     [:div#navbar.navbar-collapse                           ;.collapse
-      [:ul.navbar-nav.mr-auto
+     [:div.menu-line
+      [:ul.navbar-nav.navbar-left.d-md-flex
        [:li.nav-item [:a.nav-link {:href "/chart-types" :title "Playground Chart Types"} "Chart Types"]]
        [:li.nav-item [:a.nav-link {:href "/tags" :title "Playground Tags"} "Tags"]]
        ;[:li [:a {:href "/datasets" :title "Playground Data Sets"} "Data Sets"]]
@@ -209,15 +245,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
        ]
 
       ;; right navbar
-      [:ul.navbar-nav.navbar-right
-       [:li.search-box
-        [:input#search-input.search {:type        "text"
-                                     :placeholder "Search"
-                                     :value       (or q "")}]
-        ;[:span#search-input-icon.glyphicon.glyphicon-search]
-        [:span#search-input-icon.fas.fa-search]
-        [:div#search-results-box.results {:style "display:none;"}
-         [:div#search-results]]]
+      [:ul.navbar-nav.navbar-right.ml-auto
+
+       ;[:li.search-box
+       ; [:input#search-input.search {:type        "text"
+       ;                              :placeholder "Search"
+       ;                              :value       (or q "")}]
+       ; [:span#search-input-icon.fas.fa-search]
+       ; [:div#search-results-box.results {:style "display:none;"}
+       ;  [:div#search-results]]]
 
        [:li.nav-item.dropdown
         [:a.nav-link.dropdown-toggle {:aria-expanded "false"

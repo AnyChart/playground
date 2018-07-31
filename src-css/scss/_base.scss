@@ -37,13 +37,30 @@ html {
         color: white;
         height: 58px;
         background-color: $nav-bg-color;
+
         nav.navbar {
           padding: 0;
+
+          .menu-line {
+            display: flex;
+            flex-grow: 1;
+            margin-top: 8px;
+          }
+
+          .bars-switcher {
+            //display: none;
+            margin-right: 20px;
+            cursor: pointer;
+            font-size: 23px;
+            padding: 10px;
+          }
+
           .navbar-brand {
             color: white;
             font-size: 17px;
             padding: 10px 0;
             margin-top: 4px;
+            display: flex;
             img {
               margin-right: 22px;
             }
@@ -56,7 +73,6 @@ html {
             div.brand-label {
               margin-left: 10px;
               margin-top: 2px;
-              float: right;
             }
           }
 
@@ -83,6 +99,9 @@ html {
             }
           }
 
+          .navbar-left {
+            display: none;
+          }
           ul.navbar-nav.navbar-right {
             .search-box {
               display: inline-block;
@@ -143,6 +162,8 @@ html {
             }
             div.dropdown-menu {
               padding: 13px 0;
+              position: absolute;
+              left: -100px;
               a.dropdown-item {
                 padding: 3px 20px 3px 15px;
                 img {
@@ -183,6 +204,7 @@ html {
 
       .create-box {
         position: relative;
+        display: none;
         &:before {
           top: 0;
           left: 0;
@@ -358,5 +380,13 @@ html {
         }
       }
     }
+  }
+}
+
+
+
+.hidden-extra-mobile{
+  @media (max-width: 430px) {
+    display: none;
   }
 }

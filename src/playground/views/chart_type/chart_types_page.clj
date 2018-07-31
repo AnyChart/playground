@@ -58,10 +58,7 @@
          [:div.search
           [:span.glyphicon.glyphicon-search]]]
 
-        [:div.row.chart-type-container
-         (for [chart chart-types]
-           (chart-type-common/chart-type-block chart))
-         (repeat 5 [:div.col {:style "min-width: 190px;"}])]
+        (chart-type-common/chart-types-block chart-types)
 
         ;; Disable pagination
         ;[:div.prev-next-buttons

@@ -1077,48 +1077,7 @@ a.ac-btn {
   }
 }
 
-//======================================================================================================================
-//  Left menu view
-//======================================================================================================================
-.leftmenu {
-  position: absolute;
-  width: 246px;
-  top: 0;
-  left: 0;
-  height: 100%;
-  background-color: $leftmenu-bg-color;
-  z-index: 100;
-  .close {
-    height: 20px;
-    width: 20px;
-    color: white;
-    opacity: 0.9;
-    margin: 20px 30px;
-  }
-  & > ul {
-    margin-top: 80px;
-  }
-  ul {
-    padding: 0;
-    li ul li a {
-      padding-left: 85px
-    }
-  }
-  a {
-    display: block;
-    color: white;
-    width: 100%;
-    font-size: 17px;
-    height: 48px;
-    line-height: 48px;
-    padding-left: 70px;
-    cursor: pointer;
-    &:hover, &:focus {
-      background-color: $leftmenu-bg-hover-color;
-      text-decoration: none;
-    }
-  }
-}
+
 
 .ac-modal {
   position: fixed;
