@@ -63,28 +63,29 @@
 (rum/defc project-select < rum/reactive []
   [:div.admin-panel
    [:form
-    [:div.form-group.input-group
-     [:label {:for "project-select"} "Select project"]
-     [:br]
-     [:select.form-control.custom-select#project-select {:value     (or (:project (rum/react state)) "")
-                                                         :on-change #(change-project (-> % .-target .-value))}
+
+    [:b [:label {:for "project-select"} "Select project"]]
+    [:div.form-row
+     [:select.form-control#project-select {:value     (or (:project (rum/react state)) "")
+                                           :on-change #(change-project (-> % .-target .-value))}
       (for [repo (:projects (rum/react state))]
         [:option {:key   repo
                   :value repo} repo])]
      [:a.btn.btn-success {:role "button"
                           :href (str "/" (:project (rum/react state)) "/_update_")} "Update versions"]]
-    [:div.input-group
-     [:label {:for "version-select"} "Select version"]
-     [:br]
-     [:select.form-control.custom-select#version-select {:value     (or (:version (rum/react state)) "")
-                                                         :on-change #(change-version (-> % .-target .-value))}
-      (for [version (:versions (rum/react state))]
-        [:option {:key   version
-                  :value version} version])]
-     [:button.btn.btn-danger {:type     "button"
-                              :on-click delete-version} "Delete"]
-     [:button.btn.btn-primary {:type     "button"
-                               :on-click rebuild-version} "Rebuild"]]
+    [:br]
+    [:div.form-group
+     [:b [:label {:for "version-select"} "Select version"]]
+     [:div.form-row
+      [:select.form-control#version-select {:value     (or (:version (rum/react state)) "")
+                                            :on-change #(change-version (-> % .-target .-value))}
+       (for [version (:versions (rum/react state))]
+         [:option {:key   version
+                   :value version} version])]
+      [:button.btn.btn-danger {:type     "button"
+                               :on-click delete-version} "Delete"]
+      [:button.btn.btn-primary {:type     "button"
+                                :on-click rebuild-version} "Rebuild"]]]
 
     [:br]
     [:div.alert.alert-info

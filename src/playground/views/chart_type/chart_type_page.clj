@@ -43,11 +43,11 @@
        [:div.container-fluid.content-container
 
         [:div.row.info
-         [:div.col-md-6.column1
+         [:div.col-lg-6.column1
           [:h1 [:b (:name chart-type)]]
           [:div.description (string/trim (:description chart-type))]]
 
-         [:div.col-md-6.column2
+         [:div.col-lg-6.column2
           (when (seq relations)
             [:div
              [:h2 "Similar Charts"]

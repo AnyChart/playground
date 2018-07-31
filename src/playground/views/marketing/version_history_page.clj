@@ -2,6 +2,7 @@
   (:require [hiccup.page :as hiccup-page]
             [playground.views.common :as page]))
 
+
 (defn page [{:keys [page] :as data}]
   (hiccup-page/html5
     {:lang "en"}
