@@ -27,7 +27,10 @@
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title       (landing/title page)
-                :description "The ultimate charts playground. Create, modify, browse, learn and share. AnyChart Playground is an online tool for testing and showcasing user-created HTML, CSS and JavaScript code snippets. This playground is used by AnyChart Team to store and showcase samples from AnyChart Documentation, AnyChart API Reference, and AnyChart Chartopedia."})
+                :description (str "The ultimate charts playground. Create, modify, browse, learn and share. "
+                                  "AnyChart Playground is an online tool for testing and showcasing user-created HTML, "
+                                  "CSS and JavaScript code snippets. This playground is used by AnyChart Team to store "
+                                  "and showcase samples from AnyChart Documentation, AnyChart API Reference, and AnyChart Chartopedia.")})
     [:body
      page/body-tag-manager
      [:div.wrapper.landing-page
@@ -44,7 +47,7 @@
            [:p.description "The ultimate charts playground. Create, modify, browse, learn and share."]]]]]]
 
       [:div.create-box.d-lg-block
-       [:div.container-fluid.content-container
+       [:div.container-fluid                                ;.content-container
         [:div.row
          [:div.col-sm-12
           (page/create-box (:templates data))]]]]
@@ -54,7 +57,7 @@
 
         [:p.popular-label "Popular " [:b "samples"]]
         (pagination page max-page end "top")
-        [:div#popular-samples.row.samples-container
+        [:div#popular-samples.samples-container.row.justify-content-center
          (for [sample samples]
            (sample-view/sample-landing sample))]
 

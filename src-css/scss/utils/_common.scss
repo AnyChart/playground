@@ -72,6 +72,15 @@ a {
 //======================================================================================================================
 //  Left menu view
 //======================================================================================================================
+#leftmenu-bg {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: $leftmenu-right-bg-color;
+  z-index: 99;;
+  visibility: hidden;
+}
+
 .leftmenu {
   position: fixed;
   width: 246px;
@@ -80,11 +89,6 @@ a {
   height: 100%;
   background-color: $leftmenu-bg-color;
   z-index: 100;
-  #leftmenu-bg {
-    width: 100%;
-    height: 100%;
-    background-color: #e5f3ff;
-  }
 
   #leftmenu-close {
     font-size: 30px;
@@ -93,7 +97,7 @@ a {
     width: 20px;
     color: white;
     opacity: 0.9;
-    margin: 16px 24px;
+    margin: 14px 25px;
   }
   & > ul {
     margin-top: 80px;

@@ -45,6 +45,7 @@ html {
             display: flex;
             flex-grow: 1;
             margin-top: 8px;
+            margin-left: 20px;
           }
 
           .bars-switcher {
@@ -184,9 +185,10 @@ html {
         color: $intro-color;
         background-image: url('/shapes.png');
         //background-position: center;
-        background-position: calc(50% + 235px) 130%;
+        //background-position: calc(50% + 235px) 130%;
+        background-position: calc(50% + 135px) 130%;
         .text {
-          padding: 17px 40px 0px;
+          padding: 17px 0 0 40px;
           .description {
             font-size: 18px;
             a {
@@ -199,6 +201,18 @@ html {
         }
         h1 {
           font-size: 50px;
+        }
+
+        @media (max-width: 600px) {
+           .text {
+             padding: 14px 0 0 15px;
+           }
+           h1 {
+             font-size: 40px;
+           }
+           .text .description {
+             font-size: 16px;
+           }
         }
       }
 
@@ -306,12 +320,16 @@ html {
         width: 100%;
         background-color: $footer-color;
         display: table-row;
+        .footer-block {
+          margin-bottom: 40px;
+        }
         b {
           line-height: 20px;
         }
         a {
           color: $text-color;
           line-height: 20px;
+          white-space: nowrap;
         }
         .content-container {
           margin-top: 23px;
@@ -332,19 +350,20 @@ html {
 
 .footer-bottom-box {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  margin: 70px 0 50px;
+  margin: 22px 0 42px;
   .copyright {
     color: $copyright-color;
     font-size: 11px;
+    padding: 10px 15px;
     a {
       color: $copyright-color;
     }
   }
   .footer-inner {
     display: inline-block;
-    margin: 0 15px 0 0;
     a.soc-network {
       display: inline-block;
       &:hover, &:focus {

@@ -73,7 +73,7 @@
   [:div#prev-next-buttons.prev-next-buttons {:class class}
    (prev-button prev-class page url (pos? page))
 
-   [:div.pagination-box
+   [:div.pagination-box.d-none.d-sm-block
     (when (pos? max-page)
       (pagination-markup page max-page url))]
 

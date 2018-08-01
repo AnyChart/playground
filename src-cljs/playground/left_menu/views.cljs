@@ -1,4 +1,4 @@
-(ns playground.sidemenu.views
+(ns playground.left-menu.views
   (:require [re-frame.core :as rf]))
 
 

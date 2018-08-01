@@ -68,8 +68,8 @@
 }
 
 .content-container {
-  max-width: 972px;
-  //max-width: 1200px;
+  //max-width: 972px;
+  max-width: 1150px;
   margin: 0 auto;
   width: 100%;
 }
@@ -89,7 +89,8 @@
   margin-bottom: 25px;
   background-color: white;
   min-height: 272px;
-  min-width: 280px;
+  //min-width: 280px;
+  width: 294px;
   position: relative;
   box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
 

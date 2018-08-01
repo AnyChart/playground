@@ -59,7 +59,7 @@
 
 
 (defn sample-landing [sample]
-  [:div.col                                                 ;col-lg-4.col-md-6.col-sm-6.col-xs-12
+  [:div.col-auto                                                 ;col-lg-4.col-md-6.col-sm-6.col-xs-12
    [:div.sample-box
     [:div.iframe-height-scaling
      ;{:style (when (s/blank? (:short-description sample)) "padding-bottom: 46px; margin-bottom: 88px;")}

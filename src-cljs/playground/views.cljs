@@ -5,7 +5,7 @@
             [playground.export-window.views :as export-window]
             [playground.editors.views :as editors]
             [playground.tips.views :as tips]
-            [playground.sidemenu.views :as sidemenu]
+            [playground.left-menu.views :as sidemenu]
             [playground.search.views :as search]
             [playground.utils.utils :as utils-main]
             [playground.data.consts :as consts]

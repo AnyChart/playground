@@ -8,13 +8,17 @@
 
 
 (defn show-leftmenu []
-  (let [menu (dom/getElement "leftmenu")]
-    (style/setStyle menu "visibility" "visible")))
+  (let [menu (dom/getElement "leftmenu")
+        menu-bg (dom/getElement "leftmenu-bg")]
+    (style/setStyle menu "visibility" "visible")
+    (style/setStyle menu-bg "visibility" "visible")))
 
 
 (defn hide-leftmenu []
-  (let [menu (dom/getElement "leftmenu")]
-    (style/setStyle menu "visibility" "hidden")))
+  (let [menu (dom/getElement "leftmenu")
+        menu-bg (dom/getElement "leftmenu-bg")]
+    (style/setStyle menu "visibility" "hidden")
+    (style/setStyle menu-bg "visibility" "hidden")))
 
 
 (defn toggle-menu []
@@ -26,9 +30,11 @@
 
 (defn init []
  (let [switcher (dom/getElement "bars-switcher")
-       close-button (dom/getElement "leftmenu-close")]
+       close-button (dom/getElement "leftmenu-close")
+       menu-bg (dom/getElement "leftmenu-bg")]
    (event/listen switcher "click" #(show-leftmenu))
-   (event/listen close-button "click" #(hide-leftmenu))))
+   (event/listen close-button "click" #(hide-leftmenu))
+   (event/listen menu-bg "click" #(hide-leftmenu))))
 
 
 (init)
