@@ -19,6 +19,7 @@
 ;          [:li [:a {:href (str "/tags/" tag)}
 ;                (str tag)]])]])))
 
+
 (defn divide-tags-by-blocks [tags]
   (let [sorted-tags (sort-by string/lower-case compare tags)
         blocks-tags (flatten (sort (group-by (fn [tag]
@@ -34,16 +35,33 @@
                                   :href  (str "/tags/" (tags-data/original-name->id-name letter-tag))}
                               (str letter-tag)]))))
 
-(defn tags-height [tags]
+
+(defn tags-height [tags cols-num]
   (let [tags-count (count tags)
         title-height 37
         title-count 27
         tags-height 19
-        k 1.02
-        num-of-cols 4]
+        k (if (= cols-num 1) 1 1.02)]
     (int (* k (/ (+ (* title-height title-count)
                     (* tags-height tags-count))
-                 num-of-cols)))))
+                 cols-num)))))
+
+
+(defn tags-style
+  "Dynamically resize tags box height"
+  [tags]
+  (let [h1 (tags-height tags 1)
+        h2 (tags-height tags 2)
+        h3 (tags-height tags 3)
+        h4 (tags-height tags 4)
+        h5 (tags-height tags 5)]
+    (format
+      ".flex-content { height: %spx;}
+       @media (min-width: 500px) { .flex-content { height: %spx;} }
+       @media (min-width: 750px) { .flex-content { height: %spx;} }
+       @media (min-width: 1000px) { .flex-content { height: %spx;} }
+       @media (min-width: 1200px) { .flex-content { height: %spx;} }"
+      h1 h2 h3 h4 h5)))
 
 
 (defn page [data]
@@ -52,6 +70,7 @@
     (page/head {:title       "Tags | AnyChart Playground"
                 :description "Each sample in the Playground has a set of tags attached. Click links below to proceed to the selection of samples with a given tag."})
     [:body page/body-tag-manager
+     [:style (tags-style (:all-tags data))]
      [:div.wrapper.tags-page
 
       (page/nav (:templates data) (:user data))
@@ -90,8 +109,9 @@
 
         [:div.tags-box
          [:div.row
-          [:div.col-sm-12.flex-content {:style (str "height: " (tags-height (concat (:all-tags data))) "px")}
-           (divide-tags-by-blocks (map :name (concat (:all-tags data))))]]]]]
+          [:div.col-sm-12.flex-content
+           ;{:style (str "height: " (tags-height (:all-tags data) 1) "px")}
+           (divide-tags-by-blocks (map :name (:all-tags data)))]]]]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
      (page/jquery-script)

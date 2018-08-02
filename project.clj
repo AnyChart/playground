@@ -8,16 +8,9 @@
   :source-paths ["src" "src-cljc"]
   :java-source-paths ["src-java"]
   :dependencies [[org.clojure/clojure "1.9.0-alpha16"]
-
                  [org.immutant/web "2.1.10"]
-                 ;[org.immutant/caching "2.1.5"]
-                 ;[org.immutant/messaging "2.1.5"]
-                 ;[org.immutant/scheduling "2.1.5"]
-                 ;[org.immutant/transactions "2.1.5"]
-
                  [com.stuartsierra/component "0.3.2"]
                  [ring-middleware-format "0.7.2"]
-                 ;[ring "1.6.0"]
                  [toml "0.1.3"]
                  [cheshire "5.8.0"]
                  [compojure "1.6.1"]
@@ -26,24 +19,24 @@
                  [version-clj "0.1.2"]
                  [com.cognitect/transit-clj "0.8.309"]
                  [org.apache.commons/commons-lang3 "3.7"]
-                 [enlive "1.1.6"]
-                 [org.jsoup/jsoup "1.11.3"]
-                 [selmer "1.11.8"]
                  [clj-time "0.14.4"]
                  [me.raynes/fs "1.4.6"]
                  [camel-snake-kebab "0.4.0"]
-                 [hiccup "1.0.5"]
                  [net.sf.jtidy/jtidy "r938"]
                  [instaparse "1.4.9"]
                  [com.rpl/specter "1.1.1"]
 
+                 ;; html, css
+                 [selmer "1.11.8"]
+                 [enlive "1.1.6"]
+                 [org.jsoup/jsoup "1.11.3"]
+                 [hiccup "1.0.5"]
+
                  ;; db
                  [mpg "1.3.0"]
-                 ;[org.postgresql/postgresql "9.4.1207"]
                  [org.postgresql/postgresql "42.2.4"]
                  [clojure.jdbc/clojure.jdbc-c3p0 "0.3.3"]
                  [yesql "0.5.3"]
-                 ;[org.clojure/java.jdbc "0.6.1"]
                  [org.clojure/java.jdbc "0.7.7"]
                  [mysql/mysql-connector-java "6.0.6"]
                  [com.taoensso/carmine "2.18.1"]
@@ -56,7 +49,7 @@
                  ;; git
                  ;[im.chit/gita "0.2.5"]
                  ;; https://mvnrepository.com/artifact/org.eclipse.jgit/org.eclipse.jgit
-                 [org.eclipse.jgit/org.eclipse.jgit "4.8.0.201706111038-r"]
+                 [org.eclipse.jgit/org.eclipse.jgit "4.8.0.201706111038-r"] ;; bug-free version
                  ;[clj-jgit "0.8.9"]
                  ;[ilevd/clj-jgit "0.8.8"]
 
@@ -74,7 +67,6 @@
                  [re-com "2.1.0"]
                  [rum "0.11.2"]
                  [alandipert/storage-atom "2.0.1"]
-                 ; [cljs-http "0.1.42"]
                  [cljs-ajax "0.7.4"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
                  [hiccups "0.3.0"]
