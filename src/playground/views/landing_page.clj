@@ -47,7 +47,7 @@
            [:p.description "The ultimate charts playground. Create, modify, browse, learn and share."]]]]]]
 
       [:div.create-box.d-lg-block
-       [:div.container-fluid                                ;.content-container
+       [:div.container-fluid.content-container
         [:div.row
          [:div.col-sm-12
           (page/create-box (:templates data))]]]]
@@ -57,9 +57,11 @@
 
         [:p.popular-label "Popular " [:b "samples"]]
         (pagination page max-page end "top")
-        [:div#popular-samples.samples-container.row.justify-content-center
+        [:div#popular-samples.samples-container.row.justify-content-between
          (for [sample samples]
-           (sample-view/sample-landing sample))]
+           (sample-view/sample-landing sample))
+         (repeat 10 [:div.col [:div.sample-box-fake]])
+         ]
 
         (pagination page max-page end "bottom")
 

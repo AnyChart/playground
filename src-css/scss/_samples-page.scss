@@ -67,12 +67,6 @@
   }
 }
 
-.content-container {
-  //max-width: 972px;
-  max-width: 1150px;
-  margin: 0 auto;
-  width: 100%;
-}
 
 .popular-label{
   color: $red-color;
@@ -81,6 +75,9 @@
   margin: 40px 0 10px;
 }
 
+.sample-box-fake {
+  min-width: 294px;
+}
 
 .sample-box {
   border: 1px solid #DDDDDD;
@@ -90,7 +87,7 @@
   background-color: white;
   min-height: 272px;
   //min-width: 280px;
-  width: 294px;
+  min-width: 294px;
   position: relative;
   box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
 

@@ -403,6 +403,33 @@ html {
 }
 
 
+.content-container {
+  //max-width: 972px;
+  //max-width: 1150px;
+  max-width: 1180px;
+
+  /*@media (min-width: 800px) {
+    max-width: 800px;
+  }
+
+  @media (min-width: 1200px) {
+    max-width: 1200px;
+  }
+
+  @media (min-width: 1311px) {
+    max-width: 1311px;
+  }
+
+  @media (min-width: 1635px) {
+    max-width: 1635px;
+  }*/
+
+  margin: 0 auto;
+  width: 100%;
+
+
+}
+
 
 .hidden-extra-mobile{
   @media (max-width: 430px) {

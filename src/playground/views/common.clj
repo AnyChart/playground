@@ -201,7 +201,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   [:header
    (left-menu-bg)
    (left-menu)
-   [:div.container-fluid.header                             ;.content-container
+   [:div.container-fluid.header.content-container
     [:nav.navbar.navbar-expand-sm
 
      ;[:button.navbar-toggle.collapsed {:aria-controls "navbar"
