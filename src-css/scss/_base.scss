@@ -236,7 +236,7 @@ html {
           display: block;
           content: "";
           height: 96px;
-          background-color: #37629d;
+          background-color: #305587;
           position: absolute;
           z-index: 1;
         }
@@ -256,6 +256,7 @@ html {
             display: flex;
             position: relative;
             background-color: #264571;
+            transition: background-color 100ms linear;
             cursor: pointer;
             font-size: 15px;
             img {
