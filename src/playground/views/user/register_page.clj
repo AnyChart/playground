@@ -2,11 +2,15 @@
   (:require [playground.views.common :as page]
             [hiccup.page :as hiccup-page]))
 
+
 (defn page [data]
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title "Registration | AnyChart Playground"})
-    [:body page/body-tag-manager
+
+    [:body
+     page/body-tag-manager
+
      [:div.wrapper
 
       (page/nav (:templates data) (:user data))
@@ -31,11 +35,10 @@
           [:label {:for "exampleInputPassword1"} "Password"]
           [:input#exampleInputPassword1.form-control
            {:placeholder "Password" :type "password" :name "password"}]]
-         [:button.btn.btn-default {:type "submit"} "Sign up"]]
-        ]]
+         [:button.btn.btn-default {:type "submit"} "Sign up"]]]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
-     (page/jquery-script)
-     (page/bootstrap-script)
-     (page/site-script)
-     ]))
+
+     page/jquery-script
+     page/bootstrap-script
+     page/site-script]))

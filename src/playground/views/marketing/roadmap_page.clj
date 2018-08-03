@@ -2,12 +2,15 @@
   (:require [hiccup.page :as hiccup-page]
             [playground.views.common :as page]))
 
+
 (defn page [{:keys [page] :as data}]
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title       "Roadmap | AnyChart Playground"
                 :description "AnyChart Playground is one of the favourite projects of AnyChart team. This is a tool we use daily and we have big plans to make Playground even better. The list below is an approximate Playground roadmap and it is subject to change."})
-    [:body page/body-tag-manager
+    [:body
+     page/body-tag-manager
+
      [:div.wrapper.roadmap-page
 
       (page/nav (:templates data) (:user data))
@@ -53,7 +56,6 @@
          ]]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
-     (page/jquery-script)
-     (page/bootstrap-script)
-     (page/site-script)
-     ]))
+     page/jquery-script
+     page/bootstrap-script
+     page/site-script]))

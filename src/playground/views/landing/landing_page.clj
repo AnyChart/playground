@@ -1,4 +1,4 @@
-(ns playground.views.landing-page
+(ns playground.views.landing.landing-page
   (:require [playground.views.sample :as sample-view]
             [playground.views.common :as page]
             [hiccup.page :as hiccup-page]
@@ -33,6 +33,7 @@
                                   "and showcase samples from AnyChart Documentation, AnyChart API Reference, and AnyChart Chartopedia.")})
     [:body
      page/body-tag-manager
+
      [:div.wrapper.landing-page
 
       (page/nav (:templates data) (:user data))
@@ -75,7 +76,7 @@
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
 
-     (page/jquery-script)
-     (page/bootstrap-script)
-     (page/site-script)
+     page/jquery-script
+     page/bootstrap-script
+     page/site-script
      [:script (page/run-js-fn "playground.site.pages.landing_page.startLanding" page max-page end)]]))

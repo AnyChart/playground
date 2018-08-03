@@ -9,7 +9,9 @@
     {:lang "en"}
     (page/head {:title       "Tags Statistics | AnyChart Playground"
                 :description "Tags Statisitics"})
-    [:body page/body-tag-manager
+    [:body
+     page/body-tag-manager
+
      [:div.wrapper.tags-stat-page
 
       (page/nav (:templates data) (:user data))
@@ -33,7 +35,6 @@
         ]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
-     (page/jquery-script)
-     (page/bootstrap-script)
-     (page/site-script)
-     ]))
+     page/jquery-script
+     page/bootstrap-script
+     page/site-script]))

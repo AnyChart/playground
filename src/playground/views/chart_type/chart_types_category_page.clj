@@ -10,7 +10,9 @@
     {:lang "en"}
     (page/head {:title       (str (:name category) " | Chart Type Categories | AnyChart Playground")
                 :description (page/desc (:description category))})
-    [:body page/body-tag-manager
+    [:body
+     page/body-tag-manager
+
      [:div.wrapper.chart-types-category-page
 
       (page/nav (:templates data) (:user data))
@@ -26,12 +28,10 @@
           [:h1.name.popular-label (:name category)]
           [:p.description (string/join "\n" (:description category))]]]
 
-        (chart-type-common/chart-types-block (:charts category))
-
-        ]]
+        (chart-type-common/chart-types-block (:charts category))]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
-     (page/jquery-script)
-     (page/bootstrap-script)
-     (page/site-script)
-     ]))
+
+     page/jquery-script
+     page/bootstrap-script
+     page/site-script]))

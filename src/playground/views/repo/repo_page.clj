@@ -11,7 +11,9 @@
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title (str (:title repo) " | AnyChart Playground")})
-    [:body page/body-tag-manager
+    [:body
+     page/body-tag-manager
+
      [:div.wrapper
 
       (page/nav (:templates data)
@@ -27,7 +29,6 @@
                   (str "Branch " (:name version))]])]]]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
-     (page/jquery-script)
-     (page/bootstrap-script)
-     (page/site-script)
-     ]))
+     page/jquery-script
+     page/bootstrap-script
+     page/site-script]))

@@ -11,7 +11,9 @@
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title "AnyChart Playground"})
-    [:body page/body-tag-manager
+    [:body
+     page/body-tag-manager
+
      [:div.wrapper.standalone-sample-page
 
       ;(page/nav (:templates data) (:user data) sample)
@@ -59,6 +61,6 @@
          ]]]
 
       (page/bottom-footer)]
-     (page/jquery-script)
-     (page/bootstrap-script)
+     page/jquery-script
+     page/bootstrap-script
      ]))

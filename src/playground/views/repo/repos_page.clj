@@ -7,7 +7,9 @@
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title "Projects | AnyChart Playground"})
-    [:body page/body-tag-manager
+    [:body
+     page/body-tag-manager
+
      [:div.wrapper
 
       (page/nav (:templates data) (:user data))
@@ -21,7 +23,6 @@
                   (str (:title repo))]])]]]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
-     (page/jquery-script)
-     (page/bootstrap-script)
-     (page/site-script)
-     ]))
+     page/jquery-script
+     page/bootstrap-script
+     page/site-script]))

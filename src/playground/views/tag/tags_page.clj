@@ -69,7 +69,9 @@
     {:lang "en"}
     (page/head {:title       "Tags | AnyChart Playground"
                 :description "Each sample in the Playground has a set of tags attached. Click links below to proceed to the selection of samples with a given tag."})
-    [:body page/body-tag-manager
+    [:body
+     page/body-tag-manager
+
      [:style (tags-style (:all-tags data))]
      [:div.wrapper.tags-page
 
@@ -114,7 +116,6 @@
            (divide-tags-by-blocks (map :name (:all-tags data)))]]]]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
-     (page/jquery-script)
-     (page/bootstrap-script)
-     (page/site-script)
-     ]))
+     page/jquery-script
+     page/bootstrap-script
+     page/site-script]))

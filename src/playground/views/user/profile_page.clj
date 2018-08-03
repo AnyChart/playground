@@ -2,11 +2,14 @@
   (:require [playground.views.common :as page]
             [hiccup.page :as hiccup-page]))
 
+
 (defn page [{:keys [user] :as data}]
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title "Profile | AnyChart Playground"})
-    [:body page/body-tag-manager
+    [:body
+     page/body-tag-manager
+
      [:div.wrapper
 
       (page/nav (:templates data) (:user data))
@@ -25,7 +28,6 @@
         [:p [:b "Permissions: "] (:permissions user)]]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
-     (page/jquery-script)
-     (page/bootstrap-script)
-     (page/site-script)
-     ]))
+     page/jquery-script
+     page/bootstrap-script
+     page/site-script]))

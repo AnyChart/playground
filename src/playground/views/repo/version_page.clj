@@ -31,7 +31,9 @@
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title (version-page-utils/title (:name version) page (-> data :repo :title))})
-    [:body page/body-tag-manager
+    [:body
+     page/body-tag-manager
+
      [:div.wrapper
 
       (page/nav (:templates data)
@@ -51,9 +53,9 @@
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
 
-     (page/jquery-script)
-     (page/bootstrap-script)
-     (page/site-script)
+     page/jquery-script
+     page/bootstrap-script
+     page/site-script
      [:script (page/run-js-fn "playground.site.pages.version_page.startVersionPage"
                               page
                               max-page

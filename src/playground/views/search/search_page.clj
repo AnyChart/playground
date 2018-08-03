@@ -25,7 +25,9 @@
     {:lang "en"}
     (page/head {:title       (search-page-utils/title q page)
                 :description "AnyChart Playground search page"})
-    [:body page/body-tag-manager
+    [:body
+     page/body-tag-manager
+
      [:div.wrapper
 
       (page/nav (:templates data)
@@ -46,8 +48,7 @@
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
 
-     (page/jquery-script)
-     (page/bootstrap-script)
-     (page/site-script)
-     [:script (page/run-js-fn "playground.site.pages.search_page.startSearchPage" page max-page end total q)]
-     ]))
+     page/jquery-script
+     page/bootstrap-script
+     page/site-script
+     [:script (page/run-js-fn "playground.site.pages.search_page.startSearchPage" page max-page end total q)]]))

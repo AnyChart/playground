@@ -110,7 +110,6 @@
      [:script {:type "text/javascript"} "window.HIDE_SHARING_BUTTONS = true;"]
      page/head-tag-manager]
 
-
     [:body
      ;; styles
      [:link {:href (str "/css/editor.css?v=" (c/commit)) :rel "stylesheet"}]

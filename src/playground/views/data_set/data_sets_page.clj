@@ -4,11 +4,14 @@
             [playground.site.pages.datasets-page-utils :as datasets-page-utils]
             [playground.views.prev-next-buttons :as prev-next-buttons]))
 
+
 (def ^:const datasets-count 6)
+
 
 (defn is-end [all-datasets page]
   (let [pages (int (Math/ceil (/ all-datasets datasets-count)))]
     (>= page (dec pages))))
+
 
 (defn page-datasets [page data]
   (let [blocks (partition datasets-count datasets-count [] (:all-data-sets data))]
@@ -21,7 +24,9 @@
     {:lang "en"}
     (page/head {:title       (datasets-page-utils/title page)
                 :description "The place where all your data visualization dreams come true"})
-    [:body page/body-tag-manager
+    [:body
+     page/body-tag-manager
+
      [:div.wrapper.datasets-page
 
       (page/nav (:templates data) (:user data))
@@ -90,7 +95,8 @@
         ]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
-     (page/jquery-script)
-     (page/bootstrap-script)
-     (page/site-script)
+
+     page/jquery-script
+     page/bootstrap-script
+     page/site-script
      [:script (page/run-js-fn "playground.site.pages.datasets_page.startDatasetsPage" end page)]]))

@@ -4,6 +4,7 @@
             [cheshire.core :as json]
             [clojure.string :as string]))
 
+
 (defn get-data [data-set]
   (let [data (:data data-set)
         lines (string/split-lines data)
@@ -13,18 +14,22 @@
         ]
     (str data (if (> (count lines) max-lines) "\n..." ""))))
 
+
 (defn get-code [data-set]
   (str "anychart.data.loadJsonFile('" (:url data-set) "', function(data) {
     // write your code here
 );
 "))
 
+
 (defn page [{:keys [page data-set] :as data}]
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title       (str (:title data-set) " | Data Sets | AnyChart Playground")
                 :description (page/desc (:description data-set))})
-    [:body page/body-tag-manager
+    [:body
+     page/body-tag-manager
+
      [:div.wrapper.dataset-page
 
       (page/nav (:templates data) (:user data))
@@ -83,7 +88,6 @@
            mode: 'javascript'
         });
      "]
-     (page/jquery-script)
-     (page/bootstrap-script)
-     (page/site-script)
-     ]))
+     page/jquery-script
+     page/bootstrap-script
+     page/site-script]))

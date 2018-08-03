@@ -10,7 +10,9 @@
     {:lang "en"}
     (page/head {:title       "Chart Type Categories | AnyChart Playground"
                 :description "Browse all available AnyChart Chart types by the way chart is used or by name. Click links below to proceed to study materials, samples selection, guides to similar chart types and other useful information."})
-    [:body page/body-tag-manager
+    [:body
+     page/body-tag-manager
+
      [:div.wrapper.chart-types-categories-page
 
       (page/nav (:templates data) (:user data))
@@ -67,7 +69,6 @@
          ]]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
-     (page/jquery-script)
-     (page/bootstrap-script)
-     (page/site-script)
-     ]))
+     page/jquery-script
+     page/bootstrap-script
+     page/site-script]))

@@ -8,7 +8,7 @@
     [playground.web.handlers.constants :refer :all]
     [playground.web.utils :as web-utils :refer [response]]
     ;; views
-    [playground.views.landing-page :as landing-view]))
+    [playground.views.landing.landing-page :as landing-view]))
 
 
 ;; =====================================================================================================================

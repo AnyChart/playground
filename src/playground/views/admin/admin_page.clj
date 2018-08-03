@@ -22,8 +22,7 @@
              :integrity   "sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
              :href        "https://use.fontawesome.com/releases/v5.1.1/css/all.css",
              :rel         "stylesheet"}]
-     [:link {:href "/css/admin.css" :rel "stylesheet"}]
-     ]
+     [:link {:href "/css/admin.css" :rel "stylesheet"}]]
 
     [:body
      [:div#main-container]
@@ -38,10 +37,7 @@
      [:script {:src (str "/js/admin.js?v=" (c/commit)) :type "text/javascript"}]
      [:script {:type "text/javascript"}
       (page/run-js-fn "playground.admin.core.init" (web-utils/pack data))]
-     ]
-
-    )
-  )
+     ]))
 
 
 (defn page [data]
@@ -49,7 +45,9 @@
     {:lang "en"}
     (page/head {:title       "Admin panel | AnyChart Playground"
                 :description "Admin panel"})
-    [:body page/body-tag-manager
+    [:body
+     page/body-tag-manager
+
      [:div.wrapper.tags-stat-page
 
       (page/nav (:templates data) (:user data))
@@ -58,17 +56,14 @@
        [:div.container-fluid.content-container
 
         [:p.popular-label [:b "Admin"] " panel"]
-        [:div#main-container]
-        ]]
+        [:div#main-container]]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
 
-     (page/jquery-script)
-     (page/bootstrap-script)
+     page/jquery-script
+     page/bootstrap-script
      ;(page/site-script)
      [:script {:src (str "/js/admin.js?v=" (c/commit)) :type "text/javascript"}]
      [:script {:type "text/javascript"}
       (page/run-js-fn "playground.admin.core.init" (web-utils/pack data))]
-     [:link {:href "/css/admin.css" :rel "stylesheet"}]
-
-     ]))
+     [:link {:href "/css/admin.css" :rel "stylesheet"}]]))

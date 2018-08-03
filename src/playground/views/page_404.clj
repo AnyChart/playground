@@ -8,7 +8,9 @@
     {:lang "en"}
     (page/head {:title       "404 error | AnyChart Playground"
                 :description "Page not found"})
-    [:body page/body-tag-manager
+    [:body
+     page/body-tag-manager
+
      [:div.wrapper.page-404
 
       (page/nav (:templates data) (:user data))
@@ -26,12 +28,10 @@
             We apologize for any inconvenience."]]]]]]]
 
       [:div.content
-       [:div.container-fluid.content-container
-
-        ]]
+       [:div.container-fluid.content-container]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
-     (page/jquery-script)
-     (page/bootstrap-script)
-     (page/site-script)
-     ]))
+
+     page/jquery-script
+     page/bootstrap-script
+     page/site-script]))

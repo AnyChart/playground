@@ -34,7 +34,8 @@
     {:lang "en"}
     (page/head {:title       (chart-type-page-utils/title (:name chart-type) page)
                 :description (page/desc (:description chart-type))})
-    [:body page/body-tag-manager
+    [:body
+     page/body-tag-manager
      [:div.wrapper.chart-type-page
 
       (page/nav (:templates data) (:user data))
@@ -81,14 +82,13 @@
         ;(pagination page max-page end chart-type "top")
         [:div#tag-samples.row.samples-container
          (sample-view/samples samples)]
-
-        (pagination page max-page end chart-type "bottom")
-        ]]
+        (pagination page max-page end chart-type "bottom")]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
-     (page/jquery-script)
-     (page/bootstrap-script)
-     (page/site-script)
+
+     page/jquery-script
+     page/bootstrap-script
+     page/site-script
      [:script (page/run-js-fn "playground.site.pages.chart_type_page.startChartTypePage"
                               page
                               max-page

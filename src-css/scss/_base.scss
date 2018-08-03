@@ -36,7 +36,16 @@ html {
 
         color: white;
         height: 58px;
-        background-color: $nav-bg-color;
+        //background-color: $nav-bg-color;
+
+        .search-container {
+          background-color: #305587;
+        }
+
+        .navbar-container {
+          background-color: $nav-bg-color;
+          height: 58px;
+        }
 
         nav.navbar {
           padding: 0;

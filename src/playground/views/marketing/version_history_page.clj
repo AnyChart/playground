@@ -8,7 +8,9 @@
     {:lang "en"}
     (page/head {:title       "Version History | AnyChart Playground"
                 :description "AnyChart Playground evolves along with AnyChart Charts, check out what went through on this page and see what we are planning."})
-    [:body page/body-tag-manager
+    [:body
+     page/body-tag-manager
+
      [:div.wrapper.version-history-page.roadmap-page
 
       (page/nav (:templates data) (:user data))
@@ -49,7 +51,7 @@
             [:li "Ability to embed charts from Playground and use on your website."]]]]]
         ]]
       (page/footer (:repos data) (:tags data) (:data-sets data))]
-     (page/jquery-script)
-     (page/bootstrap-script)
-     (page/site-script)
-     ]))
+
+     page/jquery-script
+     page/bootstrap-script
+     page/site-script]))

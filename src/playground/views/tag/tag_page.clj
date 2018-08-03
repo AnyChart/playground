@@ -36,7 +36,9 @@
     {:lang "en"}
     (page/head {:title       (tag-page-utils/title tag page)
                 :description (page/desc (:description tag-data))})
-    [:body page/body-tag-manager
+    [:body
+     page/body-tag-manager
+
      [:div.wrapper.tag-page
 
       (page/nav (:templates data)
@@ -62,7 +64,7 @@
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
 
-     (page/jquery-script)
-     (page/bootstrap-script)
-     (page/site-script)
+     page/jquery-script
+     page/bootstrap-script
+     page/site-script
      [:script (page/run-js-fn "playground.site.pages.tag_page.startTagPage" page max-page end tag)]]))

@@ -2,12 +2,15 @@
   (:require [hiccup.page :as hiccup-page]
             [playground.views.common :as page]))
 
+
 (defn page [{:keys [page] :as data}]
   (hiccup-page/html5
     {:lang "en"}
     (page/head {:title       "About | AnyChart Playground"
                 :description "AnyChart Playground is an online tool for testing and showcasing user-created HTML, CSS and JavaScript code snippets."})
-    [:body page/body-tag-manager
+    [:body
+     page/body-tag-manager
+
      [:div.wrapper.about-page
 
       (page/nav (:templates data) (:user data))
@@ -35,7 +38,7 @@
          " library or you just want to create and share any other HTML, CSS and JavaScript code snippet."]]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
-     (page/jquery-script)
-     (page/bootstrap-script)
-     (page/site-script)
-     ]))
+
+     page/jquery-script
+     page/bootstrap-script
+     page/site-script]))
