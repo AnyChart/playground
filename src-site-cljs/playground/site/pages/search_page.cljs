@@ -8,7 +8,8 @@
             [ajax.core :refer [GET POST]]
             [goog.dom :as dom]
             [playground.site.pages.tag-page-utils :as tag-page-utils]
-            [playground.data.tags :as tags-data]))
+            [playground.data.tags :as tags-data]
+            [clojure.string :as string]))
 
 
 ;;======================================================================================================================
@@ -29,7 +30,7 @@
 (defn on-search-samples-load [data]
   (dom/removeChildren (dom/getElement "search-samples"))
   (set! (.-innerHTML (.getElementById js/document "search-samples"))
-        (apply str (map #(-> % sample-view/sample-landing h/html) (:samples data))))
+        (string/join (map #(h/html %) (sample-view/samples (:samples data)))))
   (reset! *is-end (:end data))
   (.pushState (.-history js/window) nil nil (str "?q=" @*q "&page=" (inc @*page)))
   (change-title (tag-page-utils/title @*q @*page))

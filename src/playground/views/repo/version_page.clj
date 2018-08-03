@@ -45,8 +45,7 @@
         (pagination page max-page end repo version "top")
 
         [:div#version-samples.row.samples-container
-         (for [sample samples]
-           (sample-view/sample-landing sample))]
+         (sample-view/samples samples)]
 
         (pagination page max-page end repo version "bottom")]]
 

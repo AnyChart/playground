@@ -7,7 +7,8 @@
             [playground.site.utils :as utils]
             [ajax.core :refer [GET POST]]
             [goog.dom :as dom]
-            [playground.site.pages.chart-type-page-utils :as chart-type-page-utils]))
+            [playground.site.pages.chart-type-page-utils :as chart-type-page-utils]
+            [clojure.string :as string]))
 
 ;;======================================================================================================================
 ;; Chart type tags page
@@ -26,7 +27,7 @@
 (defn on-tag-samples-load [data]
   (dom/removeChildren (dom/getElement "tag-samples"))
   (set! (.-innerHTML (.getElementById js/document "tag-samples"))
-        (apply str (map #(-> % sample-view/sample-landing h/html) (:samples data))))
+        (string/join (map #(h/html %) (sample-view/samples (:samples data)))))
   (reset! *is-end (:end data))
   (.pushState (.-history js/window) nil nil (str "?page=" (inc @*page)))
   (change-title (chart-type-page-utils/title @*chart-type-name @*page))

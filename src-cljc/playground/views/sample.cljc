@@ -58,7 +58,17 @@
     (name-sample sample)))
 
 
-(defn sample-landing [sample]
+(defn fake-samples
+  "Need for flexbox, so last samples on last row don't scale to all raw space,
+  i.e. to prevent this:
+  [_]  [_]  [_]
+  [_]  [_]  [_]
+  [____]  [___]"
+  []
+  (repeat 5 [:div.col [:div.sample-box-fake]]))
+
+
+(defn sample-view [sample]
   [:div.col                                                 ;col-lg-4.col-md-6.col-sm-6.col-xs-12
    [:div.sample-box
     [:div.iframe-height-scaling
@@ -98,3 +108,8 @@
        [:span.likes {:title (str "Likes: " (:likes sample))}
         [:span {:class "views-count"} (:likes sample)]
         [:span.glyphicon.glyphicon-heart.sample-icon {:aria-hidden "true"}]]]]]]])
+
+
+(defn samples [samples]
+  (concat (map sample-view samples)
+          (fake-samples)))

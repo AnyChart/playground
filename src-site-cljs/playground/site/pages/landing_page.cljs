@@ -7,7 +7,8 @@
             [playground.site.utils :as utils]
             [ajax.core :refer [GET POST]]
             [goog.dom :as dom]
-            [playground.site.pages.landing-page-utils :as landing-page-utils]))
+            [playground.site.pages.landing-page-utils :as landing-page-utils]
+            [clojure.string :as string]))
 
 ;;======================================================================================================================
 ;; Landing page
@@ -25,7 +26,7 @@
 (defn on-popular-samples-load [data]
   (dom/removeChildren (dom/getElement "popular-samples"))
   (set! (.-innerHTML (.getElementById js/document "popular-samples"))
-        (apply str (map #(-> % sample-view/sample-landing h/html) (:samples data))))
+        (string/join (map #(h/html %) (sample-view/samples (:samples data)))))
   (reset! *is-end (:end data))
   (.pushState (.-history js/window) nil nil (str "?page=" (inc @*page)))
   (change-title (landing-page-utils/title @*page))

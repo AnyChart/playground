@@ -7,7 +7,8 @@
             [playground.site.utils :as utils]
             [ajax.core :refer [GET POST]]
             [goog.dom :as dom]
-            [playground.site.pages.version-page-utils :as version-page-utils]))
+            [playground.site.pages.version-page-utils :as version-page-utils]
+            [clojure.string :as string]))
 
 ;;======================================================================================================================
 ;; Version page
@@ -27,7 +28,7 @@
 (defn on-version-samples-load [data]
   (dom/removeChildren (dom/getElement "version-samples"))
   (set! (.-innerHTML (.getElementById js/document "version-samples"))
-        (apply str (map #(-> % sample-view/sample-landing h/html) (:samples data))))
+        (string/join (map #(h/html %) (sample-view/samples (:samples data)))))
   (reset! *is-end (:end data))
   (.pushState (.-history js/window) nil nil (str "?page=" (inc @*page)))
   (change-title (version-page-utils/title @*version-name @*page @*repo-title))

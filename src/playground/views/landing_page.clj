@@ -57,11 +57,9 @@
 
         [:p.popular-label "Popular " [:b "samples"]]
         (pagination page max-page end "top")
+
         [:div#popular-samples.samples-container.row.justify-content-between
-         (for [sample samples]
-           (sample-view/sample-landing sample))
-         (repeat 10 [:div.col [:div.sample-box-fake]])
-         ]
+         (sample-view/samples samples)]
 
         (pagination page max-page end "bottom")
 
