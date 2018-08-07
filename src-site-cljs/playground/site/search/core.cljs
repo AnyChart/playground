@@ -8,6 +8,17 @@
             [clojure.string :as string]))
 
 
+(def search-bar-id "search-bar")
+(def search-bar-open-icon-id "search-bar-open-icon")
+
+(def search-input-id "search-input")
+(def search-input-icon-id "search-input-icon")
+(def search-close-icon-id "search-close-icon")
+
+(def search-results-id "search-results")
+(def search-results-box-id "search-results-box")
+
+
 (def *hints (atom []))
 
 
@@ -19,7 +30,7 @@
 
 
 (defn hide-hints []
-  (style/setElementShown (dom/getElement "search-results-box") false))
+  (style/setElementShown (dom/getElement search-results-box-id) false))
 
 
 (defn show-hints [q]
@@ -29,13 +40,21 @@
                                @*hints))]
     (if (seq hints)
       (do
-        (style/setElementShown (dom/getElement "search-results-box") true)
-        (dom/removeChildren (dom/getElement "search-results"))
-        (set! (.-innerHTML (.getElementById js/document "search-results"))
+        (style/setElementShown (dom/getElement search-results-box-id) true)
+        (dom/removeChildren (dom/getElement search-results-id))
+        (set! (.-innerHTML (.getElementById js/document search-results-id))
               (if (pos? (count hints))
                 (apply str (map #(-> % hint-view h/html) hints))
                 "Nothing found")))
       (hide-hints))))
+
+
+(defn show-search-bar []
+  (style/setElementShown (dom/getElement search-bar-id) true))
+
+
+(defn hide-search-bar []
+  (style/setElementShown (dom/getElement search-bar-id) false))
 
 
 (defn make-search-request [q]
@@ -45,7 +64,7 @@
 
 
 (defn init []
-  (let [input (dom/getElement "search-input")]
+  (let [input (dom/getElement search-input-id)]
     (event/listen input "keydown" (fn [e]
                                     (let [q (string/trim (-> e .-target .-value))]
                                       (when (and (= (.-keyCode e) 13)
@@ -62,10 +81,22 @@
                                     (.stopPropagation e)
                                     (when (pos? (count q))
                                       (show-hints q)))))
-    (event/listen (dom/getElement "search-input-icon") "click" (fn [e]
-                                                                 (let [q (string/trim (.-value input))]
-                                                                   (when (seq q)
-                                                                     (make-search-request q))))))
+
+    (event/listen (dom/getElement search-input-icon-id) "click" (fn [e]
+                                                                  (let [q (string/trim (.-value input))]
+                                                                    (when (seq q)
+                                                                      (make-search-request q))))))
+
+  (event/listen (dom/getElement search-bar-open-icon-id) "click" (fn [e]
+                                                                   (.stopPropagation e)
+                                                                   (show-search-bar)
+                                                                   (.focus (dom/getElement search-input-id))
+                                                                   ))
+
+  (event/listen (dom/getElement search-close-icon-id) "click" (fn [e]
+                                                                (.stopPropagation e)
+                                                                (hide-search-bar)))
+
   (GET "/search-hints"
        {:handler       #(let [hints (sort (map :name %))]
                           (reset! *hints hints))
@@ -76,4 +107,4 @@
                                       (hide-hints)))))
 
 
-;(init)
+(init)

@@ -8,7 +8,7 @@
   [:header
    (left-menu-comp/left-menu-bg)
    (left-menu-comp/left-menu)
-   ;(search-bar-comp/search-bar)
+   (search-bar-comp/search-bar q)
 
    [:div.navbar-container
 
@@ -70,6 +70,7 @@
         ; [:span#search-input-icon.fas.fa-search]
         ; [:div#search-results-box.results {:style "display:none;"}
         ;  [:div#search-results]]]
+        [:i#search-bar-open-icon.fas.fa-search]
 
         [:li.nav-item.dropdown
          [:a.nav-link.dropdown-toggle {:aria-expanded "false"

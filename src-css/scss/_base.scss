@@ -70,6 +70,7 @@ html {
             font-size: 17px;
             padding: 10px 0;
             margin-top: 4px;
+            margin-right: 0;
             display: flex;
             img {
               margin-right: 22px;
@@ -111,55 +112,19 @@ html {
 
           .navbar-left {
             display: none;
+            margin-left: 15px;
           }
           ul.navbar-nav.navbar-right {
-            .search-box {
-              display: inline-block;
-              margin-right: 20px;
-              height: 34px;
-              position: relative;
-              input.search {
-                margin-top: 5px;
-                padding: 4px 30px 4px 10px;
-                background-color: $search-box-bg-color;
-                //border: 1px solid #1796bf;
-                outline: none;
-                border: none;
-                color: #93b4e7;
-                &::placeholder {
-                  color: #93b4e7;
-                }
-                &:focus {
-                  background-color: $search-box-bg-hover-color;
-                  color: white;
-                }
+            flex-direction: row;
+
+            #search-bar-open-icon {
+              cursor: pointer;
+              font-size: 14px;
+              margin-right: 27px;
+              @media (max-width: 500px) {
+                margin-right: 0;
               }
-              #search-input-icon {
-                color: #93b4e7;
-                //font-size: 13px;
-                position: absolute;
-                top: 2px;
-                right: 0;
-                padding: 10px;
-                //pointer-events: none;
-                cursor: pointer;
-              }
-              #search-results-box.results {
-                min-width: 200px;
-                padding: 10px;
-                background-color: white;
-                border: 1px solid $main-bg-color;
-                color: #0d2e5c;
-                position: absolute;
-                white-space: nowrap;
-                box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-                .search-result {
-                  white-space: nowrap;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  max-width: 280px;
-                }
-              }
+              padding: 10px 10px 0 10px;
             }
 
             .dropdown {
@@ -442,7 +407,7 @@ html {
 
 
 .hidden-extra-mobile{
-  @media (max-width: 430px) {
+  @media (max-width: 500px) {
     display: none;
   }
 }

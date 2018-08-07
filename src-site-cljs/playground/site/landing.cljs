@@ -37,21 +37,21 @@
 (defn add-prev-event [prev-btn-cls *page load-fn *loading]
   (.forEach (dom/getElementsByClass prev-btn-cls)
             #(event/listen % "click" (fn [e]
-                                        (.preventDefault e)
-                                        (when-not @*loading
-                                          (reset! *loading true)
-                                          (swap! *page dec)
-                                          (load-fn))))))
+                                       (.preventDefault e)
+                                       (when-not @*loading
+                                         (reset! *loading true)
+                                         (swap! *page dec)
+                                         (load-fn))))))
 
 
 (defn add-next-event [next-btn-cls *page load-fn *loading]
   (.forEach (dom/getElementsByClass next-btn-cls)
             #(event/listen % "click" (fn [e]
-                                        (.preventDefault e)
-                                        (when-not @*loading
-                                          (reset! *loading true)
-                                          (swap! *page inc)
-                                          (load-fn))))))
+                                       (.preventDefault e)
+                                       (when-not @*loading
+                                         (reset! *loading true)
+                                         (swap! *page inc)
+                                         (load-fn))))))
 
 
 (defn init-buttons [prev-btn-cls next-btn-cls *page load-fn *loading]
@@ -66,28 +66,28 @@
   (.forEach (dom/getElementsByClass cls)
             (fn [elem]
               (if (pos? @*page)
-               (do
-                 (style/setStyle elem "visibility" "visible")
-                 (.setAttribute elem "href" (str url @*page))
-                 (.setAttribute elem "title" (str "Prev page, " @*page)))
-               (do
-                 (style/setStyle elem "visibility" "hidden")
-                 (.setAttribute elem "href" "#")
-                 (.setAttribute elem "title" ""))))))
+                (do
+                  (style/setStyle elem "visibility" "visible")
+                  (.setAttribute elem "href" (str url @*page))
+                  (.setAttribute elem "title" (str "Prev page, " @*page)))
+                (do
+                  (style/setStyle elem "visibility" "hidden")
+                  (.setAttribute elem "href" "#")
+                  (.setAttribute elem "title" ""))))))
 
 
 (defn set-next-button [cls *page end url]
   (.forEach (dom/getElementsByClass cls)
             (fn [elem]
               (if-not end
-               (do
-                 (style/setStyle elem "visibility" "visible")
-                 (.setAttribute elem "href" (str url (inc (inc @*page))))
-                 (.setAttribute elem "title" (str "Next page, " (inc (inc @*page)))))
-               (do
-                 (style/setStyle elem "visibility" "hidden")
-                 (.setAttribute elem "href" "#")
-                 (.setAttribute elem "title" ""))))))
+                (do
+                  (style/setStyle elem "visibility" "visible")
+                  (.setAttribute elem "href" (str url (inc (inc @*page))))
+                  (.setAttribute elem "title" (str "Next page, " (inc (inc @*page)))))
+                (do
+                  (style/setStyle elem "visibility" "hidden")
+                  (.setAttribute elem "href" "#")
+                  (.setAttribute elem "title" ""))))))
 
 
 (defn update-buttons [prev-btn-cls
@@ -107,18 +107,18 @@
     (let [markup (h/html (prev-next-buttons-common/pagination-markup @*page @*max-page url))
           pagination-boxes (dom/getElementsByClass "pagination-box")]
       (.forEach pagination-boxes
-        (fn [pagination-box]
-          (dom/removeChildren pagination-box)
-          (set! (.-innerHTML pagination-box) markup)
-          (let [buttons (dom/getElementsByTagName TagName/LI pagination-box)]
-            (dotimes [i (.-length buttons)]
-              (let [button (aget buttons i)]
-                (event/listen button "click" #(let [num (.-textContent (.-target %))
-                                                    num (js/parseInt num)]
-                                                (.preventDefault %)
-                                                ;(println "click" num)
-                                                (when (pos? num)
-                                                  (when-not @*loading
-                                                    (reset! *loading true)
-                                                    (reset! *page (dec num))
-                                                    (load-fn)))))))))))))
+                (fn [pagination-box]
+                  (dom/removeChildren pagination-box)
+                  (set! (.-innerHTML pagination-box) markup)
+                  (let [buttons (dom/getElementsByTagName TagName/LI pagination-box)]
+                    (dotimes [i (.-length buttons)]
+                      (let [button (aget buttons i)]
+                        (event/listen button "click" #(let [num (.-textContent (.-target %))
+                                                            num (js/parseInt num)]
+                                                        (.preventDefault %)
+                                                        ;(println "click" num)
+                                                        (when (pos? num)
+                                                          (when-not @*loading
+                                                            (reset! *loading true)
+                                                            (reset! *page (dec num))
+                                                            (load-fn)))))))))))))

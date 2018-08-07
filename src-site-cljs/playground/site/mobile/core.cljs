@@ -29,12 +29,12 @@
 
 
 (defn init []
- (let [switcher (dom/getElement "bars-switcher")
-       close-button (dom/getElement "leftmenu-close")
-       menu-bg (dom/getElement "leftmenu-bg")]
-   (event/listen switcher "click" #(show-leftmenu))
-   (event/listen close-button "click" #(hide-leftmenu))
-   (event/listen menu-bg "click" #(hide-leftmenu))))
+  (let [switcher (dom/getElement "bars-switcher")
+        close-button (dom/getElement "leftmenu-close")
+        menu-bg (dom/getElement "leftmenu-bg")]
+    (event/listen switcher "click" #(show-leftmenu))
+    (event/listen close-button "click" #(hide-leftmenu))
+    (event/listen menu-bg "click" #(hide-leftmenu))))
 
 
 (init)
