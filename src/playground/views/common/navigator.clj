@@ -1,15 +1,14 @@
 (ns playground.views.common.navigator
   (:require [playground.utils.utils :as utils]
-            [playground.views.common.left-menu :as left-menu-comp]))
+            [playground.views.common.left-menu :as left-menu-comp]
+            [playground.views.common.search-bar :as search-bar-comp]))
 
 
 (defn nav [templates user & [q]]
   [:header
    (left-menu-comp/left-menu-bg)
    (left-menu-comp/left-menu)
-
-   ;[:div.search-container
-   ; [:div.container-fluid.search.content-container "Search"]]
+   ;(search-bar-comp/search-bar)
 
    [:div.navbar-container
 

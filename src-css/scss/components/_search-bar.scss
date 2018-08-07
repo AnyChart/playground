@@ -1,0 +1,39 @@
+.search-container {
+  background-color: #305587;
+  height: 58px;
+
+  div.search-area {
+    position: relative;
+    padding-top: 15px;
+    display: flex;
+
+    input {
+      background: none;
+      color: white;
+      border: none;
+      border-bottom: 1px solid #9BC3E4;
+      outline: none;
+      font-weight: bold;
+      font-size: 15px;
+
+      width: 100%;
+
+      &::placeholder {
+        color: white;
+      }
+      &:focus {
+        color: white;
+      }
+    }
+
+    i.icon {
+      // position: absolute;
+      // right: 0;
+      padding: 4px 4px 4px 10px;
+      font-size: 16px;
+      pointer-events: none;
+      cursor: pointer;
+    }
+
+  }
+}

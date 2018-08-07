@@ -1,15 +1,16 @@
 @import "utils/vars";
 
 @import "utils/ie";
-
 @import "utils/mixins";
-
 @import "utils/brand-icon";
 
 
 @import "base";
 
 @import "utils/common";
+
+@import "components/search-bar";
+
 
 @import "landing-page";
 

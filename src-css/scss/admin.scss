@@ -5,6 +5,7 @@ body {
 
     select {
       width: 200px;
+      -webkit-appearance: menulist-button;
     }
 
     select, a, button {
