@@ -91,11 +91,16 @@
                                                                    (.stopPropagation e)
                                                                    (show-search-bar)
                                                                    (.focus (dom/getElement search-input-id))
-                                                                   ))
+                                                                   (style/setStyle (dom/getElement "navbar-container")
+                                                                                   "box-shadow"
+                                                                                   "0 40px 140px #113b6b")))
 
   (event/listen (dom/getElement search-close-icon-id) "click" (fn [e]
                                                                 (.stopPropagation e)
-                                                                (hide-search-bar)))
+                                                                (hide-search-bar)
+                                                                (style/setStyle (dom/getElement "navbar-container")
+                                                                                "box-shadow"
+                                                                                "none")))
 
   (GET "/search-hints"
        {:handler       #(let [hints (sort (map :name %))]

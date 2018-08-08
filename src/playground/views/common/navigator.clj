@@ -10,7 +10,7 @@
    (left-menu-comp/left-menu)
    (search-bar-comp/search-bar q)
 
-   [:div.navbar-container
+   [:div#navbar-container.navbar-container
 
     [:div.container-fluid.content-container
      [:nav.navbar.navbar-expand-sm
