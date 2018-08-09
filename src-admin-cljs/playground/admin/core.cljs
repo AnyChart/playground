@@ -18,14 +18,13 @@
   (POST "/_admin_/versions"
         {:params        {:project (-> @state :project)}
          :handler       #(do
-                           (println %)
+                           ;(println %)
                            (swap! state assoc :versions %)
                            (swap! state assoc :version (first %)))
          :error-handler #(println %)}))
 
 
 (defn change-project [project]
-  (println "change-project:" project)
   (swap! state assoc :project project)
   (update-versions))
 
@@ -35,7 +34,7 @@
         {:params        {:project (-> @state :project)
                          :version (-> @state :version)}
          :handler       #(do
-                           (println %)
+                           ;(println %)
                            (js/alert "Delete version!")
                            (update-versions))
          :error-handler #(do
@@ -48,7 +47,7 @@
         {:params        {:project (-> @state :project)
                          :version (-> @state :version)}
          :handler       #(do
-                           (println %)
+                           ;(println %)
                            (js/alert "Start rebuilding!")
                            (update-versions))
          :error-handler #(do
@@ -82,10 +81,11 @@
        (for [version (:versions (rum/react state))]
          [:option {:key   version
                    :value version} version])]
-      [:button.btn.btn-danger {:type     "button"
+      [:button.btn.btn-primary.rebuild-btn {:type     "button"
+                                :on-click rebuild-version} "Rebuild"]
+      [:button.btn.btn-danger.delete-btn {:type     "button"
                                :on-click delete-version} "Delete"]
-      [:button.btn.btn-primary {:type     "button"
-                                :on-click rebuild-version} "Rebuild"]]]
+      ]]
 
     [:br]
     [:div.alert.alert-info
@@ -103,6 +103,6 @@
     (reset! state {:projects repos
                    :project  (first repos)})
     (update-versions)
-    (println repos)
+    ;(println repos)
     (rum/mount (project-select)
                (.getElementById js/document "main-container"))))

@@ -1,6 +1,6 @@
 body {
 
-  #main-container{
+  #main-container {
     widtH: 500px;
 
     select {
@@ -15,5 +15,10 @@ body {
     .admin-panel {
       margin-bottom: 40px;
     }
+
+    .delete-btn {
+      margin-left: 55px;
+    }
+
   }
 }
