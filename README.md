@@ -40,6 +40,33 @@ sudo apt-get install pngquant
 # elasticsearch
 # logstash
 ```
+### PostgreSQL
+PostgreSQL is used as a main storage.
+
+[Database Scheme](src/sql/scheme_postgre.sql)
+
+### Redis
+Redis is used for communications between generators and Web part of application.
+
+### PhantomJS and pngquant
+PhantomJS is used for generating previews. Pngquant - for images optimizations.
+
+### ElasticSearch
+ElasticSearch is used for samples search.
+
+### Logstash
+To synchronize Elastic with Postgres you need to set up Logstash.
+
+```
+sudo bin/logstash-plugin install logstash-input-jdbc
+
+sudo systemctl start logstash.service  # start 
+sudo systemctl stop logstash.service   # stop
+```
+Config files are available [here](https://github.com/AnyChart/servers-conf/tree/master/playground-server/logstash/conf.d).
+
+
+
 
 ## External Resources
 For now playground uses some of AnyChart resources, later we'll need to rework it to make Playground standalone project.
@@ -60,7 +87,7 @@ For now playground uses some of AnyChart resources, later we'll need to rework i
 
 [Editor API](doc/api.md)
 
-[Database Scheme](src/sql/scheme_postgre.sql)
+
 
 ## License
 If you have any questions regarding licensing - please contact us. <sales@anychart.com>
