@@ -79,10 +79,11 @@
         [:img.image-preview {:src   (utils/sample-image-url sample)
                              :alt   (image-alt sample)
                              :title (image-alt sample)}]]
-       [:iframe.iframe-preview {:src               (utils/sample-iframe-url sample)
-                                :allowfullscreen   "true"
-                                :allowtransparency "true"
-                                :sandbox           "allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"}])]
+       [:div
+        [:iframe.iframe-preview {:src               (utils/sample-iframe-url sample)
+                                 :allowfullscreen   "true"
+                                 :allowtransparency "true"
+                                 :sandbox           "allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"}]])]
     [:div.sample-info
      [:p.name [:a {:target "_blank"
                    :href   (utils/url sample)
