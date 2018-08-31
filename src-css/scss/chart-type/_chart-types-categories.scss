@@ -23,9 +23,11 @@ html body .chart-types-categories-page {
           position: absolute;
           width: 135px;
           display: inline-block;
+          margin-top:10px;
           img {
             width: 135px;
-            height: 135px;
+            height: 110px;
+            padding: 2px;
           }
         }
         .info {
@@ -33,7 +35,7 @@ html body .chart-types-categories-page {
           display: inline-block;
           .name {
             font-weight: bold;
-            margin: 0 0 5px 0;
+            margin: 0 0 7px 0;
             font-size: 15px;
           }
           .description {
@@ -41,6 +43,7 @@ html body .chart-types-categories-page {
             font-size: 12px;
           }
           .learn-more-label {
+            display: inline-block;
             color: $intro-bg-color;
             border: 1px solid $intro-bg-color;
             padding: 5px 11px;

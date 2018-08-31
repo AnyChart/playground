@@ -9,9 +9,11 @@ html body .chart-types-category-page {
       position: absolute;
       width: 135px;
       display: inline-block;
+      margin-top:10px;
       img {
         width: 135px;
-        height: 135px;
+        height: 110px;
+        padding: 2px;
       }
     }
     .info {

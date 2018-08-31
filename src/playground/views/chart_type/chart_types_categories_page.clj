@@ -64,8 +64,9 @@
              [:div.info
               [:p.name.popular-label (:name category)]
               [:p.description (string/join "\n" (:description category))]
-              [:a.learn-more-label {:title (str "Learn more about " (:name category) " category")
-                                    :href  (str "/chart-types/categories/" (:id category))} "Learn more"]]]])
+              [:div
+               [:a.learn-more-label {:title (str "Learn more about " (:name category) " category")
+                                     :href  (str "/chart-types/categories/" (:id category))} "Learn more"]]]]])
          ]]]
 
       (page/footer (:repos data) (:tags data) (:data-sets data))]
