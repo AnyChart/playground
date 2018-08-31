@@ -59,9 +59,9 @@
 ;; Plain HTML
 ;;======================================================================================================================
 (defn scripts [scripts]
-  (clojure.string/join "\n"
-                       (map (fn [script]
-                              (str "<script src=\"" script "\"></script>")) scripts)))
+  (string/join "\n"
+               (map (fn [script]
+                      (str "<script src=\"" script "\"></script>")) scripts)))
 
 
 (defn styles [db]
@@ -81,7 +81,7 @@ function ac_add_style(css){
 \tac_add_to_head(ac_style);
 }
 "
-         (clojure.string/join "\n" styles) "\n"
+         (string/join "\n" styles) "\n"
          "ac_add_style(document.getElementById(\"ac_style_" (-> db :embed :props :id) "\").innerHTML);\n"
          "ac_add_style(\"." (-> db :embed :props :class) "-" (-> db :embed :props :id) "{width:" (-> db :embed :props :width) ";height:" (-> db :embed :props :height) ";}\");"
          "\n})();</script>")))

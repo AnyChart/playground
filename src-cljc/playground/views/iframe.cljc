@@ -22,7 +22,7 @@
 
     (when (seq (:tags sample))
       [:meta {:name    "keywords"
-              :content (clojure.string/join "," (:tags sample))}])
+              :content (string/join "," (:tags sample))}])
 
     [:meta {:name    "description"
             :content "AnyChart - JavaScript Charts designed to be embedded and integrated"}]
