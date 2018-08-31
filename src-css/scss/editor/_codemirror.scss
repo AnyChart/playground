@@ -1,0 +1,16 @@
+.CodeMirror {
+  /* Set height, width, borders, and global font properties here */
+  font-family: monospace;
+  height: 100%;
+  font-size: 12px;
+  word-wrap: break-word;
+  background-color: $main-bg-color;
+  .CodeMirror-gutters {
+    background-color: $main-bg-color;
+    //border-right: 1px solid #95bfd3;
+    border-right: none;
+  }
+  .CodeMirror-linenumber {
+    color: $settings-border-color;
+  }
+}

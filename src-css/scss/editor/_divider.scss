@@ -1,0 +1,31 @@
+.divider_vertical {
+  width: 1px;
+  background-color: $settings-border-color;
+  z-index: 10;
+  &.dragged {
+    background-color: #627e8b;
+  }
+  &:after, &:before {
+    width: 4px;
+  }
+}
+
+.divider_horizontal {
+  height: 1px;
+  background-color: $settings-border-color;
+  z-index: 10;
+  &.dragged {
+    background-color: #627e8b;
+  }
+  &:after, &:before {
+    height: 4px;
+  }
+}
+
+.horizontally_divided.z1 .divider_horizontal, .vertically_divided.z1 .divider_vertical {
+  z-index: 10;
+}
+
+.horizontally_divided.z2 .divider_horizontal, .vertically_divided.z2 .divider_vertical {
+  z-index: 11;
+}

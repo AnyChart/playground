@@ -1,0 +1,53 @@
+.export-window {
+  width: 516px;
+  margin-left: -180px;
+  font-size: 12px;
+
+  // prevent .from-group become vertical on small devices
+  @media (max-width: 767px) {
+    .form-inline {
+      .form-control {
+        display: inline-block;
+        width: auto;
+        vertical-align: middle;
+      }
+      .form-group {
+        display: inline-block;
+        margin-bottom: 0;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  p.intro {
+    margin: 4px 0 16px;
+  }
+  p.sub-intro {
+    margin-bottom: 13px;
+  }
+
+  .form-inline .form-group {
+    margin-right: 15px;
+    input {
+      padding: 6px 8px;
+      font-size: 12px;
+    }
+    &:last-child {
+      margin-right: 0;
+    }
+    label {
+      margin-right: 5px;
+    }
+  }
+
+  .editor-box-embed {
+    height: 80px;
+    margin-bottom: 17px;
+  }
+
+  textarea.embed-iframe {
+    min-height: 110px;
+    margin-bottom: 5px;
+  }
+
+}

@@ -1,0 +1,37 @@
+.tips {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  z-index: 200;
+  // TODO: wait tips design
+  display: none;
+  //display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  .tip {
+    background-color: white;
+    padding: 10px 15px;
+    border: 1px solid #AAAAAA;
+    margin-right: 8px;
+    margin-top: 8px;
+    position: relative;
+    min-width: 300px;
+    pre {
+      max-width: 400px;
+      max-height: 93px;
+    }
+    p {
+      max-width: 400px;
+    }
+    h3 {
+      max-width: 400px;
+      margin-top: 10px;
+    }
+    .tip-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      cursor: pointer;
+    }
+  }
+}
