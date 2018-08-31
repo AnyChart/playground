@@ -15,9 +15,9 @@
                  [cheshire "5.8.0"]
                  [compojure "1.6.1"]
                  [com.taoensso/timbre "4.10.0"]
-                 [clj-http "3.9.0"]
+                 [clj-http "3.9.1"]
                  [version-clj "0.1.2"]
-                 [com.cognitect/transit-clj "0.8.309"]
+                 [com.cognitect/transit-clj "0.8.313"]
                  [org.apache.commons/commons-lang3 "3.7"]
                  [clj-time "0.14.4"]
                  [me.raynes/fs "1.4.6"]
@@ -27,17 +27,17 @@
                  [com.rpl/specter "1.1.1"]
 
                  ;; html, css
-                 [selmer "1.11.8"]
+                 [selmer "1.12.0"]
                  [enlive "1.1.6"]
                  [org.jsoup/jsoup "1.11.3"]
                  [hiccup "1.0.5"]
 
                  ;; db
                  [mpg "1.3.0"]
-                 [org.postgresql/postgresql "42.2.4"]
+                 [org.postgresql/postgresql "42.2.5"]
                  [clojure.jdbc/clojure.jdbc-c3p0 "0.3.3"]
                  [yesql "0.5.3"]
-                 [org.clojure/java.jdbc "0.7.7"]
+                 [org.clojure/java.jdbc "0.7.8"]
                  [mysql/mysql-connector-java "6.0.6"]
                  [com.taoensso/carmine "2.18.1"]
                  [cc.qbits/spandex "0.6.4"]
@@ -80,7 +80,7 @@
                  ;; https://mvnrepository.com/artifact/org.scribe/scribe
                  [org.scribe/scribe "1.3.7"]
                  ;; https://mvnrepository.com/artifact/org.json/json
-                 [org.json/json "20180130"]]
+                 [org.json/json "20180813"]]
   :plugins [[lein-ancient "0.6.10"]
             [lein-cljsbuild "1.1.5"]
             [lein-kibit "0.1.3"]
