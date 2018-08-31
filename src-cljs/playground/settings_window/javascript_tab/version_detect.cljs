@@ -26,6 +26,7 @@
                                 (when (or
                                         (string/includes? script "anychart-bundle.min.js")
                                         (string/includes? script "anychart-base.min.js")
+                                        (string/includes? script "anychart-core.min.js")
                                         (string/includes? script "anychart.min.js")
                                         (string/includes? script "anystock.min.js")
                                         (string/includes? script "anygantt.min.js")
