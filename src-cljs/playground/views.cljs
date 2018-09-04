@@ -56,7 +56,9 @@
           [:span "Settings"]
           [:span.caret]
           (when show-warning
-            [:span.glyphicon.glyphicon-warning-sign])
+            ;[:span.glyphicon.glyphicon-warning-sign.icon-warning]
+            [:i.fas.fa-exclamation-triangle.icon-warning.icon-warning]
+            )
           ]])
 
       [:li.dropdown
@@ -119,10 +121,18 @@
               [:img.icon.download-icon {:src "/icons/editor/download-zip.svg"}]
               "ZIP with files"]]]]
 
-      [search/search-input]
+      ;[search/search-input]
       ]]
 
     [:ul.nav.navbar-nav.navbar-right
+
+     [:li
+      [:span#search-input-icon.glyphicon.glyphicon-search
+       ;{:on-click
+       ;                                                    #(let [q (.-value (dom/getElement "search-input"))]
+       ;                                                       (start-search q))}
+       ]]
+
      [:li.dropdown
       [:button.btn.btn-link.dropdown-toggle {;:data-toggle   "dropdown"
                                              :role          "button"

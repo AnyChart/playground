@@ -9,7 +9,43 @@ html {
     /* for tips hidden scroll */
     overflow: hidden;
 
-    font-family: 'Open Sans', sans-serif;;
+
+    margin: 0;
+
+    // common
+    font-family: 'Open Sans', sans-serif;
+    color: #333;
+    line-height: 1.42857143;
+    input, textarea, select, button {
+      font-family: 'Open Sans', sans-serif;
+      color: #333;
+      background-color: white;
+      padding: 6px 12px;
+      &:Focus {
+        outline: none;
+      }
+    }
+    label {
+      font-weight: bold;
+      display: inline-block;
+      margin-bottom: 5px;
+    }
+    * {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+    *:before,
+    *:after {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+    p {
+      margin: 0 0 10px;
+    }
+
+
 
     .CodeMirror-overlayscroll-horizontal div, .CodeMirror-overlayscroll-vertical div {
       background: #b0d5e6;
@@ -49,6 +85,9 @@ html {
               margin-top: 14px;
               margin-left: 14px;
               position: relative;
+              -webkit-box-sizing: border-box;
+              -moz-box-sizing: border-box;
+              box-sizing: border-box;
             }
           }
           .brand-label {
@@ -59,6 +98,7 @@ html {
             color: $intro-bg-color;
             font-size: 18px;
             margin-left: 13px;
+            text-decoration: none;
             @media (max-width: 920px) {
               display: none;
             }
@@ -152,7 +192,7 @@ html {
               }
             }
 
-            span.glyphicon-warning-sign {
+            span.glyphicon-warning-sign, .icon-warning {
               color: $warning-sign-color;
               margin-top: 2px;
               margin-left: 4px;
@@ -216,7 +256,8 @@ html {
         ul.nav.navbar-nav {
           float: none;
           display: inline-block;
-          margin-top: 11px;
+          margin: 11px 0 0 0;
+          list-style: none;
 
           & > li > button {
             outline: none;
@@ -317,11 +358,18 @@ html {
       background: white;
       padding: 23px 0;
       border-top: 1px solid #e6edf1;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
       .copyright {
         color: $copyright-color;
         font-size: 11px;
         a {
           color: $copyright-color;
+          text-decoration: none;
+          &:hover {
+            text-decoration: underline;
+          }
         }
       }
       .footer-inner {

@@ -17,6 +17,8 @@
       border-bottom: 1px solid $settings-border-color;
       margin: 0;
       padding: 15px 15px 0;
+      display: flex;
+      list-style: none;
       li {
         margin-bottom: 0;
       }
@@ -29,11 +31,13 @@
       padding: 7px 10px;
       margin-right: 30px;
       font-weight: 600;
+      display: block;
+      text-decoration: none;
       &:hover, &:focus {
         background-color: $header-menu-bg-hover-color;
         border: none;
       }
-      span.glyphicon-warning-sign {
+      span.glyphicon-warning-sign, .icon-warning {
         margin-left: 4px;
         color: $warning-sign-color;
         font-size: 15px;
@@ -86,12 +90,13 @@
     }
     .script-input {
       width: 482px;
+      height: 34px;
     }
   }
 
   input, textarea, select {
     border-radius: 0;
-    border-color: $settings-border-color;
+    border: 1px solid $settings-border-color;
     box-shadow: none !important;
     font-size: 12px;
     resize: none;
@@ -128,6 +133,10 @@
     .form-group {
       margin-top: 2px;
       margin-bottom: 21px;
+      label {
+        margin-bottom: 5px;
+        display: block;
+      }
     }
     input {
       width: 260px;
@@ -135,9 +144,11 @@
     }
     #settings-short-desc {
       height: 60px;
+      width: 100%;
     }
     #settings-desc {
       height: 80px;
+      width: 100%;
       resize: vertical;
     }
 
@@ -174,6 +185,8 @@
     }
   }
 
+
+
   .javascript-tab {
     div.scripts-box {
       margin-bottom: 26px;
@@ -188,9 +201,6 @@
           border-radius: 5px;
           position: relative;
           padding-left: 27px;
-          .glyphicon-align-justify {
-            cursor: move;
-          }
           .in-box {
             border-radius: 5px;
             background-color: $tag-bg-color;
@@ -210,6 +220,7 @@
                 padding: 0 3px;
               }
               input.url {
+                color: white;
                 width: 100%;
                 max-width: 482px;
                 overflow: hidden;
@@ -227,7 +238,7 @@
             }
 
           }
-          span.glyphicon-align-justify {
+          span.glyphicon-align-justify, .icon-move {
             margin-left: 10px;
             margin-right: 10px;
             font-size: 15px;
@@ -235,12 +246,13 @@
             position: absolute;
             left: -4px;
             top: 3px;
+            cursor: move;
           }
           span.glyphicon-remove {
             margin-left: 8px;
             cursor: pointer;
           }
-          span.glyphicon-warning-sign {
+          span.glyphicon-warning-sign, .icon-warning {
             position: absolute;
             right: -25px;
             top: 3px;
@@ -255,7 +267,7 @@
             .in-box {
               background-color: $intro-bg-color;
             }
-            span.glyphicon-align-justify {
+            span.glyphicon-align-justify, .icon-move {
               color: white;
             }
           }
@@ -286,8 +298,26 @@
       text-transform: uppercase;
       font-size: 13px;
       font-weight: 600;
+      margin-top: 0;
       &.quick-add {
         margin: 33px 0 15px;
+      }
+    }
+
+    select {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      margin-right: -15px;
+      margin-left: -15px;
+      .col-sm-6 {
+        padding: 0 15px;
       }
     }
   }

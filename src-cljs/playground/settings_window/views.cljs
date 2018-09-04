@@ -22,7 +22,8 @@
            :on-click #(rf/dispatch [:settings/javascript-tab])}
        "JavaScript"
        (when-not correct
-         [:span.glyphicon.glyphicon-warning-sign])]])
+         ;[:span.glyphicon.glyphicon-warning-sign]
+         [:i.fas.fa-exclamation-triangle.icon-warning])]])
 
    (let [correct @(rf/subscribe [:settings.css-tab/correct-tab])]
      [:li {:class (when @(rf/subscribe [:settings/css-tab?]) "active")}
@@ -32,7 +33,8 @@
            :on-click #(rf/dispatch [:settings/css-tab])}
        "CSS"
        (when-not correct
-         [:span.glyphicon.glyphicon-warning-sign])]])
+         ;[:span.glyphicon.glyphicon-warning-sign]
+         [:i.fas.fa-exclamation-triangle.icon-warning])]])
 
    ;; TODO: wait datasests texts
    ;[:li {:class (when @(rf/subscribe [:settings/datasets-tab?]) "active")}

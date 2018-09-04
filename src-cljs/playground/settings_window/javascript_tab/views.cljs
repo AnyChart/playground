@@ -10,7 +10,7 @@
     {:component-did-mount #(let [el (.getElementById js/document "scripts-box")]
                              (.create js/Sortable el (clj->js {:animation 150
                                                                :draggable ".script"
-                                                               :handle    ".glyphicon-align-justify"
+                                                               :handle    ".icon-move"
                                                                :onEnd     (fn [^js/SortableOnEndEvent e]
                                                                             (rf/dispatch [:settings/update-scripts-order
                                                                                           (.-oldIndex e) (.-newIndex e)]))})))
@@ -21,7 +21,8 @@
                                ^{:key (str script "-" idx)}
                                [:div.script
                                 [:span.script-box
-                                 [:span.glyphicon.glyphicon-align-justify]
+                                 ;[:span.glyphicon.glyphicon-align-justify.icon-move]
+                                 [:i.fas.fa-bars.icon-move]
                                  [:div.in-box
                                   [:div.input-height-box {:title warning}
                                    [:span.height-line script]
@@ -37,8 +38,9 @@
                                                                                   (.preventDefault %)
                                                                                   (rf/dispatch [:settings/remove-script script]))}]]
                                  (when warning
-                                   [:span.glyphicon.glyphicon-warning-sign
-                                    {:title warning}])
+                                   ;[:span.glyphicon.glyphicon-warning-sign {:title warning}]
+                                   [:i.fas.fa-exclamation-triangle.icon-warning {:title warning}]
+                                   )
                                  ]
                                 ])]
                             )}))

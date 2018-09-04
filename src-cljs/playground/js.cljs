@@ -1,5 +1,6 @@
 (ns playground.js
   (:require [re-frame.core :as rf]
+            [goog.dom :as dom]
             [goog.events :as events]
             [secretary.core :as secretary :refer-macros [defroute]])
   (:import [goog History]
@@ -7,8 +8,10 @@
 
 
 (defn click-handler [e]
-  (when (zero? (.-length (.closest (js/$ (.-target e)) ".hide-outside")))
-    ;(utils/log "Hide!")
+  ;; if doesn't have parent with ".hide-outside" class
+  ;; when (zero? (.-length (.closest (js/$ (.-target e)) ".hide-outside")))
+  (when-not (dom/getAncestorByClass (.-target e) "hide-outside")
+    ;(println "Hide!")
     (rf/dispatch [:settings/hide])
     (rf/dispatch [:embed/hide])
     (rf/dispatch [:left-menu/close])
@@ -16,6 +19,7 @@
     (rf/dispatch [:create-menu/close])
     (rf/dispatch [:download-menu/close])
     (rf/dispatch [:search/close])))
+
 
 (defn init []
   (.addEventListener js/document "click" click-handler))

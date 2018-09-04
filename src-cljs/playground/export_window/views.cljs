@@ -37,29 +37,33 @@
         [:div.content
          [:p.intro "To embed into a web page, copy and paste one of the code snippets below."]
 
-         [:form.form-inline
+         [:form.form-inline.props-box
 
           [:div.form-group
-           [:label "ID"]
-           [:input.form-control {:style     {:width "74px"}
+           [:label {:for "id-export-prop"} "ID"]
+           [:input.form-control {:id        "id-export-prop"
+                                 :style     {:width "74px"}
                                  :value     @(rf/subscribe [:embed.props/id])
                                  :type      "text"
                                  :on-change #(rf/dispatch [:embed.props/change-id (-> % .-target .-value)])}]]
           [:div.form-group
-           [:label "class"]
-           [:input.form-control {:style     {:width "112px"}
+           [:label {:for "class-export-prop"} "class"]
+           [:input.form-control {:id        "class-export-prop"
+                                 :style     {:width "112px"}
                                  :value     @(rf/subscribe [:embed.props/class])
                                  :type      "text"
                                  :on-change #(rf/dispatch [:embed.props/change-class (-> % .-target .-value)])}]]
           [:div.form-group
-           [:label "width"]
-           [:input.form-control {:style     {:width "57px"}
+           [:label {:for "width-export-prop"} "width"]
+           [:input.form-control {:id        "width-export-prop"
+                                 :style     {:width "57px"}
                                  :value     @(rf/subscribe [:embed.props/width])
                                  :type      "text"
                                  :on-change #(rf/dispatch [:embed.props/change-width (-> % .-target .-value)])}]]
           [:div.form-group
-           [:label "height"]
-           [:input.form-control {:style     {:width "57px"}
+           [:label {:for "height-export-prop"} "height"]
+           [:input.form-control {:id        "height-export-prop"
+                                 :style     {:width "57px"}
                                  :value     @(rf/subscribe [:embed.props/height])
                                  :type      "text"
                                  :on-change #(rf/dispatch [:embed.props/change-height (-> % .-target .-value)])}]]

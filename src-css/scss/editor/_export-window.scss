@@ -22,6 +22,17 @@
   p.intro {
     margin: 4px 0 16px;
   }
+
+  .props-box {
+    display: flex;
+    label {
+      font-weight: bold;
+    }
+    input {
+      box-sizing: border-box;
+    }
+  }
+
   p.sub-intro {
     margin-bottom: 13px;
   }

@@ -111,12 +111,12 @@ a {
   a {
     display: block;
     color: white;
-    width: 100%;
     font-size: 17px;
     height: 48px;
     line-height: 48px;
     padding-left: 30px;
     cursor: pointer;
+    text-decoration: none;
     &:hover, &:focus {
       background-color: $leftmenu-bg-hover-color;
       text-decoration: none;
