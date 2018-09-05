@@ -21,7 +21,6 @@
                                ^{:key (str script "-" idx)}
                                [:div.script
                                 [:span.script-box
-                                 ;[:span.glyphicon.glyphicon-align-justify.icon-move]
                                  [:i.fas.fa-bars.icon-move]
                                  [:div.in-box
                                   [:div.input-height-box {:title warning}
@@ -34,13 +33,11 @@
                                                                   (rf/dispatch [:settings/edit-script (-> % .-target .-value) idx]))
                                                 ;:on-change   #(rf/dispatch [:settings/edit-script (-> % .-target .-value) idx])
                                                 }]]
-                                  [:span.glyphicon.glyphicon-remove {:on-click #(do
-                                                                                  (.preventDefault %)
-                                                                                  (rf/dispatch [:settings/remove-script script]))}]]
+                                  [:i.fas.fa-times.icon-close {:on-click #(do
+                                                                            (.preventDefault %)
+                                                                            (rf/dispatch [:settings/remove-script script]))}]]
                                  (when warning
-                                   ;[:span.glyphicon.glyphicon-warning-sign {:title warning}]
-                                   [:i.fas.fa-exclamation-triangle.icon-warning {:title warning}]
-                                   )
+                                   [:i.fas.fa-exclamation-triangle.icon-warning {:title warning}])
                                  ]
                                 ])]
                             )}))

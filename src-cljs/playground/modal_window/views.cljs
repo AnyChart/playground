@@ -17,8 +17,7 @@
                  :on-click   #(rf/dispatch [:modal/hide])}
         [:span {:aria-hidden "true"} "×"]]
 
-       [:h4.modal-title
-        "WARNING"]]
+       [:h4.modal-title "WARNING"]]
 
       [:div.ac-modal-body
        consts/modal-window-warning]

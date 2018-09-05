@@ -204,8 +204,7 @@
           .in-box {
             border-radius: 5px;
             background-color: $tag-bg-color;
-            //padding: 1px 5px 1px 8px;
-            padding: 1px 5px 1px 6px;
+            padding: 1px 7px 1px 6px;
             //display: flex;
             align-items: baseline;
             .input-height-box {
@@ -248,9 +247,10 @@
             top: 3px;
             cursor: move;
           }
-          span.glyphicon-remove {
+          span.glyphicon-remove, .icon-close {
             margin-left: 8px;
             cursor: pointer;
+            font-size: 14px;
           }
           span.glyphicon-warning-sign, .icon-warning {
             position: absolute;

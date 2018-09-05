@@ -14,3 +14,14 @@
     color: $settings-border-color;
   }
 }
+
+
+.CodeMirror-overlayscroll-horizontal div, .CodeMirror-overlayscroll-vertical div {
+  background: #b0d5e6;
+}
+.CodeMirror-overlayscroll-vertical {
+  width: 8px;
+}
+.CodeMirror-overlayscroll-horizontal {
+  height: 8px;
+}

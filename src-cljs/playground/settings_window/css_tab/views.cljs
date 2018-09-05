@@ -10,7 +10,7 @@
     {:component-did-mount #(let [el (.getElementById js/document "styles-box")]
                              (.create js/Sortable el (clj->js {:animation 150
                                                                :draggable ".script"
-                                                               :handle    ".glyphicon-align-justify"
+                                                               :handle    ".icon-move"
                                                                :onEnd     (fn [e]
                                                                             (rf/dispatch [:settings/update-styles-order
                                                                                           (.-oldIndex e) (.-newIndex e)]))})))
@@ -21,7 +21,7 @@
                                ^{:key (str style "-" idx)}
                                [:div.script
                                 [:span.script-box
-                                 [:span.glyphicon.glyphicon-align-justify]
+                                 [:i.fas.fa-bars.icon-move]
                                  [:div.in-box
                                   [:div.input-height-box {:title warning}
                                    [:span.height-line style]
@@ -33,9 +33,9 @@
                                                                   (rf/dispatch [:settings/edit-style (-> % .-target .-value) idx]))
                                                 ;:on-change   #(rf/dispatch [:settings/edit-style (-> % .-target .-value) idx])
                                                 }]]
-                                  [:span.glyphicon.glyphicon-remove {:on-click #(do
-                                                                                  (.preventDefault %)
-                                                                                  (rf/dispatch [:settings/remove-style style]))}]]
+                                  [:i.fas.fa-times.icon-close {:on-click #(do
+                                                                            (.preventDefault %)
+                                                                            (rf/dispatch [:settings/remove-style style]))}]]
                                  (when warning
                                    [:span.glyphicon.glyphicon-warning-sign
                                     {:title warning}])

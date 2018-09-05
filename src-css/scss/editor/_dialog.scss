@@ -24,6 +24,26 @@
     .ac-modal-header {
       padding-bottom: 10px;
       border-bottom: 1px solid #e5e5e5;
+      .modal-title {
+        font-weight: 500;
+        font-size: 18px;
+        margin: 0;
+      }
+      button.close {
+        -webkit-appearance: none;
+        padding: 0;
+        cursor: pointer;
+        background: 0 0;
+        border: 0;
+        font-size: 22px;
+        float: right;
+        font-weight: 700;
+        color: #CCCCCC;
+        line-height: 18px;
+        &:hover {
+          color: #999999;
+        }
+      }
     }
     .ac-modal-body {
       padding: 10px 0;

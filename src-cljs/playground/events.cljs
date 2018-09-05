@@ -60,7 +60,8 @@
                                                  :height "450px"}}
                       :tips           {:current []
                                        :queue   []}
-                      :left-menu      {:show false}
+                      :left-menu      {:show           false
+                                       :support-expand false}
                       :view-menu      {:show false}
                       :create-menu    {:show false}
                       :download-menu  {:show false}

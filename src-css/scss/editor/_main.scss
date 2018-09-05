@@ -9,53 +9,7 @@ html {
     /* for tips hidden scroll */
     overflow: hidden;
 
-
     margin: 0;
-
-    // common
-    font-family: 'Open Sans', sans-serif;
-    color: #333;
-    line-height: 1.42857143;
-    input, textarea, select, button {
-      font-family: 'Open Sans', sans-serif;
-      color: #333;
-      background-color: white;
-      padding: 6px 12px;
-      &:Focus {
-        outline: none;
-      }
-    }
-    label {
-      font-weight: bold;
-      display: inline-block;
-      margin-bottom: 5px;
-    }
-    * {
-      -webkit-box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      box-sizing: border-box;
-    }
-    *:before,
-    *:after {
-      -webkit-box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      box-sizing: border-box;
-    }
-    p {
-      margin: 0 0 10px;
-    }
-
-
-
-    .CodeMirror-overlayscroll-horizontal div, .CodeMirror-overlayscroll-vertical div {
-      background: #b0d5e6;
-    }
-    .CodeMirror-overlayscroll-vertical {
-      width: 8px;
-    }
-    .CodeMirror-overlayscroll-horizontal {
-      height: 8px;
-    }
 
     header {
       height: 58px;
@@ -196,6 +150,7 @@ html {
               color: $warning-sign-color;
               margin-top: 2px;
               margin-left: 4px;
+              font-size: 15px;
             }
 
             .search-box {
@@ -534,6 +489,14 @@ html {
 //======================================================================================================================
 //  Buttons
 //======================================================================================================================
+.btn {
+  font-size: 14px;
+}
+
+.btn-link {
+  border-color: transparent;
+}
+
 .ac-btn {
   display: inline-block;
   border: none;

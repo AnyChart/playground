@@ -18,3 +18,9 @@
   :left-menu/toggle
   (fn [db _]
     (update-in db [:left-menu :show] not)))
+
+
+(rf/reg-event-db
+  :left-menu/support-toggle
+  (fn [db _]
+    (update-in db [:left-menu :support-expand] not)))
