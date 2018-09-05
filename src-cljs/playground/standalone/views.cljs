@@ -22,7 +22,7 @@
     [:div.container-fluid.content-container.standalone-sample-page
 
      [:div.row
-      [:div.col-sm-5
+      [:div.col-md-5
        [:div.info
         [:h1 (:name sample)]
 
@@ -56,6 +56,6 @@
                [:a.popular-tag-button.script {:title link
                                               :href  link} link]])]])]]
 
-      [:div.col-sm-7
+      [:div.col-md-7
        [:div.iframe-standalone-box
         [iframe-standalone]]]]]))
