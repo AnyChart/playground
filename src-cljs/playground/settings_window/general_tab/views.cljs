@@ -32,7 +32,7 @@
                              (.focus (.getElementById js/document "tags-input")))
                 :class    (when (:selected tag) "selected")}
         [:span (:name tag)]
-        [:span.glyphicon.glyphicon-remove
+        [:i.fas.fa-times.icon-close   ;:span.glyphicon.glyphicon-remove
          {:on-click #(rf/dispatch [:settings/remove-tag (:name tag)])}]])
      [:input.form-control {:id          "tags-input"
                            :placeholder "Add new tag"
