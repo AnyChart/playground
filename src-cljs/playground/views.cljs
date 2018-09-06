@@ -13,7 +13,11 @@
 
 
 (defn navbar []
-  [:header
+  [:header {:class (if @(rf/subscribe [:search/show]) "header-shadow" "")}
+
+   (when @(rf/subscribe [:search/show])
+     [search/search-bar])
+
    [:div.header-box
 
     [:div.logo
@@ -124,48 +128,45 @@
       ;[search/search-input]
       ]]
 
-    [:ul.nav.navbar-nav.navbar-right
+    [:div
+     [:ul.nav.navbar-nav.navbar-right
 
-     [:li
-      [:span#search-input-icon.glyphicon.glyphicon-search
-       ;{:on-click
-       ;                                                    #(let [q (.-value (dom/getElement "search-input"))]
-       ;                                                       (start-search q))}
-       ]]
+      [:i.fas.fa-search.icon-search
+       {:on-click #(rf/dispatch [:search/toggle])}]
 
-     [:li.dropdown
-      [:button.btn.btn-link.dropdown-toggle {;:data-toggle   "dropdown"
-                                             :role          "button"
-                                             :aria-haspopup "true"
-                                             :aria-expanded "false"
-                                             :on-click      #(rf/dispatch [:create-menu/show])} "Create"
-       [:span.caret]]
-      [:ul.dropdown-menu
-       {:style {:display (if @(rf/subscribe [:create-menu/show]) "block" "none")}}
-       (for [template @(rf/subscribe [:templates])]
-         ^{:key (:name template)}
-         [:li
-          [:a {:href  (str "/new?template=" (:url template))
-               :title (str "Create " (:name template))}
-           [:img {:src (str "/icons/" (utils-main/name->url (:name template)) ".svg")
-                  :alt (str "Create " (:name template) " button icon")}]
-           (:name template)]])
-       [:li.divider {:role "separator"}]
-       [:li
-        [:a {:href  "/new"
-             :title "Create from scratch"}
-         [:img {:src (str "/icons/from-scratch.svg")
-                :alt "Create from scratch button icon"}]
-         "From scratch"]]]
-      ]
+      [:li.dropdown
+       [:button.btn.btn-link.dropdown-toggle {;:data-toggle   "dropdown"
+                                              :role          "button"
+                                              :aria-haspopup "true"
+                                              :aria-expanded "false"
+                                              :on-click      #(rf/dispatch [:create-menu/show])} "Create"
+        [:span.caret]]
+       [:ul.dropdown-menu
+        {:style {:display (if @(rf/subscribe [:create-menu/show]) "block" "none")}}
+        (for [template @(rf/subscribe [:templates])]
+          ^{:key (:name template)}
+          [:li
+           [:a {:href  (str "/new?template=" (:url template))
+                :title (str "Create " (:name template))}
+            [:img {:src (str "/icons/" (utils-main/name->url (:name template)) ".svg")
+                   :alt (str "Create " (:name template) " button icon")}]
+            (:name template)]])
+        [:li.divider {:role "separator"}]
+        [:li
+         [:a {:href  "/new"
+              :title "Create from scratch"}
+          [:img {:src (str "/icons/from-scratch.svg")
+                 :alt "Create from scratch button icon"}]
+          "From scratch"]]]
+       ]
 
-     ;(if @(rf/subscribe [:can-signin])
-     ;  [:li [:a {:href "/signin"} "Log In"]]
-     ;  [:li [:a {:href "/signout"} "Log Out"]])
-     ;(when @(rf/subscribe [:can-signup])
-     ;  [:li [:a {:href "/signup"} "Sign Up"]])
+      ;(if @(rf/subscribe [:can-signin])
+      ;  [:li [:a {:href "/signin"} "Log In"]]
+      ;  [:li [:a {:href "/signout"} "Log Out"]])
+      ;(when @(rf/subscribe [:can-signup])
+      ;  [:li [:a {:href "/signup"} "Sign Up"]])
 
-     ]]])
+      ]]]])
 
 
 ;(defn send-form []

@@ -12,9 +12,13 @@ html {
     margin: 0;
 
     header {
-      height: 58px;
+      //height: 58px;
       border-bottom: 1px solid $settings-border-color;
       box-sizing: content-box;
+      width: 100%;
+      position: fixed;
+      z-index: 200;
+      top:0;
 
       div.header-box {
         display: flex;
@@ -69,10 +73,9 @@ html {
         }
 
         div.top-menu {
-          position: absolute;
-          width: 100%;
           text-align: center;
           .left-navbar {
+            justify-content: center;
             & > li {
               float: left; // always horizontal, prevent vertical
               @media (max-width: 820px) {
@@ -210,7 +213,7 @@ html {
 
         ul.nav.navbar-nav {
           float: none;
-          display: inline-block;
+          display: flex;
           margin: 11px 0 0 0;
           list-style: none;
 
@@ -298,6 +301,14 @@ html {
             }
           }
         }
+
+        .icon-search {
+          padding: 10px 10px 8px;
+          margin-right: 27px;
+          font-size: 14px;
+          cursor: pointer;
+          color: $intro-bg-color;
+        }
       }
     }
 
@@ -374,7 +385,8 @@ html {
 .column-container {
   display: flex;
   flex-direction: row;
-  overflow-y: scroll;
+  overflow-y: auto;
+  margin-top: 58px;
 
   .editor-container {
     position: relative;

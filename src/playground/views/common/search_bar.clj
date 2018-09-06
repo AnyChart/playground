@@ -7,8 +7,8 @@
 
     [:div.search-area
      [:input#search-input {:value       (or q "")
-                           :placeholder "SEARCH"}
-      [:i#search-input-icon.icon.fas.fa-search]]
+                           :placeholder "SEARCH"}]
+     [:i#search-input-icon.icon.fas.fa-search]
 
      [:i#search-close-icon.icon.fas.fa-times]]
 

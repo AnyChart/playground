@@ -39,6 +39,11 @@
   (fn [db _]
     (assoc-in db [:search :show] false)))
 
+(rf/reg-event-db
+  :search/toggle
+  (fn [db _]
+    (update-in db [:search :show] not)))
+
 
 (rf/reg-event-db
   :search/change-query
@@ -60,7 +65,7 @@
   :search/hide-hints
   (fn [db _]
     (-> db
-        (assoc-in [:search :show] false)
+        (assoc-in [:search :show-hints] false)
         (assoc-in [:search :query-hints] []))))
 
 
@@ -72,5 +77,5 @@
                                                      (string/lower-case (string/trim q))))
                                  (-> db :search :hints)))]
       (-> db
-          (assoc-in [:search :query-hints] hints)
-          (assoc-in [:search :show] (seq hints))))))
+          (assoc-in [:search :show-hints] (seq hints))
+          (assoc-in [:search :query-hints] hints)))))
