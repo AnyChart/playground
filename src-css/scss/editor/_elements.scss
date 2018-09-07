@@ -47,11 +47,10 @@ body {
     margin-left: 2px;
     vertical-align: middle;
     border-top: 4px dashed;
-    border-top: 4px solid\9;
+    border-top: 4px solid;
     border-right: 4px solid transparent;
     border-left: 4px solid transparent;
   }
-
 
   .dropdown {
     position: relative;
@@ -73,10 +72,10 @@ body {
     list-style: none;
     background-color: #fff;
     background-clip: padding-box;
-    border: 1px solid rgba(0,0,0,.15);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+    border: 1px solid rgba(0, 0, 0, .15);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     //border-radius: .25rem;
-    &>li>a {
+    & > li > a {
       display: block;
       padding: 3px 20px;
       clear: both;

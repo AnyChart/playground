@@ -18,7 +18,7 @@ html {
       vertical-align: .155em;
     }
     .dropdown-menu {
-      box-shadow: 0 6px 12px rgba(0,0,0,.175);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
     }
 
     .wrapper {
@@ -179,15 +179,15 @@ html {
         }
 
         @media (max-width: 600px) {
-           .text {
-             padding: 14px 0 0 15px;
-           }
-           h1 {
-             font-size: 40px;
-           }
-           .text .description {
-             font-size: 16px;
-           }
+          .text {
+            padding: 14px 0 0 15px;
+          }
+          h1 {
+            font-size: 40px;
+          }
+          .text .description {
+            font-size: 16px;
+          }
         }
       }
 
@@ -378,7 +378,6 @@ html {
   }
 }
 
-
 .content-container {
   //max-width: 972px;
   //max-width: 1150px;
@@ -403,11 +402,9 @@ html {
   margin: 0 auto;
   width: 100%;
 
-
 }
 
-
-.hidden-extra-mobile{
+.hidden-extra-mobile {
   @media (max-width: 500px) {
     display: none;
   }

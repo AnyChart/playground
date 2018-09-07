@@ -1,47 +1,27 @@
 @import "utils/vars";
-
 @import "utils/ie";
 @import "utils/mixins";
 @import "utils/brand-icon";
-
-
 @import "base";
-
 @import "utils/common";
-
 @import "components/search-bar";
-
-
 @import "landing-page";
-
 @import "samples-page";
-
 @import "repo-page";
-
 @import "standalone-sample-page";
-
 @import "register-page";
-
 @import "dataset/data-sets-page";
 @import "dataset/data-set-page";
-
 @import "marketing/roadmap-page.scss";
 @import "marketing/version-history-page";
 @import "marketing/support-page";
 @import "marketing/about-page";
-
 @import "tags/tags-page";
 @import "tags/tag-page";
 @import "tags/tags-stat-page";
-
 @import "chart-type/chart-types-page";
-
 @import "chart-type/chart-type-page";
-
 @import "chart-type/chart-types-categories";
-
 @import "chart-type/chart-types-category-page";
-
 @import "chart-type/chart-types-common";
-
 @import "page-404";

@@ -1,4 +1,4 @@
-div.border-icon{
+div.border-icon {
   width: 28px;
   height: 28px;
   border: 1px solid #99c3e6;
@@ -40,15 +40,14 @@ div.border-icon{
   }
 }
 
-
-.navbar-brand:hover .chart-row .chart-col{
-  &.green{
+.navbar-brand:hover .chart-row .chart-col {
+  &.green {
     height: 16px;
   }
-  &.orange{
+  &.orange {
     height: 5px;
   }
-  &.red{
+  &.red {
     height: 10px;
   }
 }

@@ -9,7 +9,6 @@ a {
   }
 }
 
-
 .popular-tags-box {
   margin: 18px 0 15px 0;
   .popular-tag-button {
@@ -30,7 +29,6 @@ a {
   }
 }
 
-
 .elements-container {
   margin: 30px 0;
   .toggle-tabs {
@@ -47,10 +45,10 @@ a {
       span {
         border-bottom: 1px dotted;
       }
-      &:hover{
+      &:hover {
         color: #19a1ce;
       }
-      &.active{
+      &.active {
         color: #222222;
         border: 1px solid #83bbcd;
         border-radius: 3px !important;

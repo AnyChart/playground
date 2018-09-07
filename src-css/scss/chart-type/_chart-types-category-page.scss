@@ -1,15 +1,15 @@
 html body .chart-types-category-page {
 
-  .category{
+  .category {
     position: relative;
     margin-top: 40px;
     margin-bottom: 30px;
     min-height: 135px;
-    .img-box{
+    .img-box {
       position: absolute;
       width: 135px;
       display: inline-block;
-      margin-top:10px;
+      margin-top: 10px;
       img {
         width: 135px;
         height: 110px;
@@ -19,16 +19,16 @@ html body .chart-types-category-page {
     .info {
       padding-left: 170px;
       display: inline-block;
-      .name{
+      .name {
         font-weight: bold;
         margin: 0 0 5px 0;
         font-size: 18px;
       }
-      .description{
+      .description {
         margin: 0 0 18px 0;
         font-size: 12px;
       }
-      .learn-more-label{
+      .learn-more-label {
         color: #008ebe;
         border: 1px solid #008ebe;
         padding: 5px 11px;
@@ -38,7 +38,6 @@ html body .chart-types-category-page {
       }
     }
   }
-
 
 }
 

@@ -157,7 +157,7 @@
     [:div.col-sm-6
      [:div.form-group
       [:label {:for "settings-select-map"} "AnyChart Geo Data"
-       [:a.question-small.tooltiped
+       [:span.question-small.tooltiped
         [:span.tooltip-box consts/anychart-geo-title
          [:a {:href   "https://docs.anychart.com/Maps/Maps_List"
               :target "_blank"} "Read more >>"]]]]

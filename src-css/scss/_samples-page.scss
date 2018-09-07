@@ -9,7 +9,7 @@
   height: 30px;
   display: flex;
   justify-content: space-between;
-  .prev-button, .next-button{
+  .prev-button, .next-button {
     background: none;
     border: 1px solid $intro-bg-color;
     -webkit-border-radius: 4px;
@@ -19,28 +19,28 @@
     font-size: 13px;
     text-transform: uppercase;
     padding: 5px 12px;
-    &:hover{
+    &:hover {
       background-color: $intro-bg-color;
       color: white;
       text-decoration: none;
     }
   }
-  .next-button{
+  .next-button {
     float: right;
   }
   .pagination {
     margin: 0;
     li {
-      &:first-child>a {
+      &:first-child > a {
         border-top-left-radius: 4px;
         border-bottom-left-radius: 4px;
       }
-      &:last-child>a {
+      &:last-child > a {
         border-top-right-radius: 4px;
         border-bottom-right-radius: 4px;
       }
       a {
-        color:  $intro-bg-color;
+        color: $intro-bg-color;
         background-color: transparent;
         border: 1px solid;
         border-color: $intro-bg-color;
@@ -67,19 +67,16 @@
   }
 }
 
-
-.popular-label{
+.popular-label {
   color: $red-color;
   font-size: 18px;
   text-transform: uppercase;
   margin: 40px 0 10px;
 }
 
-
 .sample-box-fake {
   min-width: 294px;
 }
-
 
 .sample-box {
   border: 1px solid #DDDDDD;
@@ -91,7 +88,7 @@
   //min-width: 280px;
   min-width: 294px;
   position: relative;
-  box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 
   @include transition(150ms, ease);
   @include transform(scale(1));
@@ -99,7 +96,7 @@
     text-decoration: none;
     @include transition(150ms, ease);
     @include transform(scale(1.08));
-    box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
   }
 
   .iframe-height-scaling {
@@ -128,7 +125,7 @@
     }
   }
 
-  .sample-info{
+  .sample-info {
     position: absolute;
     bottom: 15px;
     left: 0;
@@ -159,7 +156,7 @@
     line-height: 1.5em;
     a {
       color: #222222;
-      &:hover, &:focus{
+      &:hover, &:focus {
         text-decoration: none;
         color: #222222;
       }
@@ -179,16 +176,16 @@
       }
       a {
         color: $sample-author-color;
-        &:hover, &:focus{
+        &:hover, &:focus {
           text-decoration: none;
           color: $sample-author-color;
         }
       }
-      .likes{
+      .likes {
         display: none;
       }
     }
-    .author-and-date{
+    .author-and-date {
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
