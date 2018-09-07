@@ -80,7 +80,7 @@ html {
             & > li {
               float: left; // always horizontal, prevent vertical
               // collapse main menu texts
-              @media (max-width: 580px) {
+              @media (max-width: 640px) {
                 & > button > span:not(.caret) {
                   display: none;
                 }

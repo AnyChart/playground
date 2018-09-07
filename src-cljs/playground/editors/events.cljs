@@ -35,7 +35,11 @@
   (fn [db _]
     (-> db
         (assoc-in [:editors :editors-height] (editors-js/editors-height))
-        (assoc-in [:editors :editors-margin-top] (editors-js/editors-margin-top)))))
+        (assoc-in [:editors :editors-margin-top] (editors-js/editors-margin-top))
+        (update-in [:editors :view] (fn [view]
+                                      (if (< (editors-js/window-width) 600)
+                                        :vertical
+                                        view))))))
 
 
 ;;======================================================================================================================

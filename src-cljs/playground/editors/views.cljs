@@ -245,6 +245,21 @@
                                                  [iframe-result]])}))
 
 
+(defn editors-vertical []
+  (reagent/create-class {:component-did-mount #(do
+                                                 (rf/dispatch [:create-editors])
+                                                 (.init js/splitMe))
+                         :reagent-render      (fn []
+                                                [:div.horizontally_divided {:data-percent 50
+                                                                            :style        {:width "100%" :height "100%"}}
+                                                 [::div.horizontally_divided.z1 {:data-percent 70}
+                                                  [iframe-result]
+                                                  [markup-editor]]
+                                                 [::div.horizontally_divided.z2 {:data-percent 40}
+                                                  [style-editor]
+                                                  [code-editor]]])}))
+
+
 (defn editors []
   [:div.column-container {:style {:height     @(rf/subscribe [:editors/height])
                                   :margin-top @(rf/subscribe [:editors/margin-top])}}
@@ -253,4 +268,5 @@
      :right [editors-right]
      :top [editors-top]
      :bottom [editors-bottom]
+     :vertical [editors-vertical]
      :standalone [standalone-view/view])])
