@@ -1,7 +1,8 @@
 (ns playground.search.views
   (:require [re-frame.core :as rf]
             [goog.dom :as dom]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [reagent.core :as reagent]))
 
 
 (defn hint-view [hint-query]
@@ -53,7 +54,7 @@
    [search-window]])
 
 
-(defn search-bar []
+(defn search-bar-html []
   [:div#search-bar.search-container.hide-outside
    [:div.container-fluid.search.content-container
 
@@ -72,9 +73,7 @@
                            :on-click    #(let [q (string/trim (-> % .-target .-value))]
                                            (.stopPropagation %)
                                            (when (pos? (count q))
-                                             (rf/dispatch [:search/show-hints q])))
-
-                           }]
+                                             (rf/dispatch [:search/show-hints q])))}]
 
      [:i#search-input-icon.icon.fas.fa-search {:on-click
                                                #(let [q (.-value (dom/getElement "search-input"))]
@@ -83,3 +82,8 @@
      [:i#search-close-icon.icon.fas.fa-times {:on-click #(rf/dispatch [:search/close])}]]
 
     [search-window]]])
+
+
+(defn search-bar []
+  (reagent/create-class {:component-did-mount #(.focus (dom/getElement "search-input"))
+                         :reagent-render      (fn [] (search-bar-html))}))
