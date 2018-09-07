@@ -7,9 +7,8 @@
 
 (defn left-menu []
   [:div#leftmenu.leftmenu.hide-outside.d-md-none {:style "visibility: hidden;"}
-   [:span.glyphicon-remove.glyphicon.close]
+   ;[:span.glyphicon-remove.glyphicon.close]
    [:i#leftmenu-close.fas.fa-times]
-   ;; [:div#leftmenu-bg]
    [:ul
     [:li [:a {:href  "/chart-types"
               :title "Playground Chart Types"} "Chart Types"]]

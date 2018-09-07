@@ -5,8 +5,7 @@
 (defn view []
   (when @(rf/subscribe [:left-menu/show])
     [:div.leftmenu.hide-outside
-     [:span.glyphicon-remove.glyphicon.close
-      {:on-click #(rf/dispatch [:left-menu/close])}]
+     [:i#leftmenu-close.fas.fa-times {:on-click #(rf/dispatch [:left-menu/close])}]
      [:ul
       [:li [:a {:href  "/chart-types"
                 :title "Playground Chart Types"} "Chart Types"]]
