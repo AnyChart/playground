@@ -29,9 +29,9 @@ html {
         .logo {
           display: inline-block;
           z-index: 1;
-          @media (max-width: 450px) {
+          /*@media (max-width: 450px) {
             display: none;
-          }
+          }*/
           .logo-img {
             height: 58px;
             width: 56px;
@@ -57,12 +57,13 @@ html {
             font-size: 18px;
             margin-left: 13px;
             text-decoration: none;
-            @media (max-width: 920px) {
+            /*@media (max-width: 920px) {
               display: none;
-            }
+            }*/
             b {
               font-weight: 600;
-              @media (max-width: 1125px) {
+              // collapse "Playground" logo label
+              @media (max-width: 460px) {
                 display: none;
               }
             }
@@ -73,12 +74,13 @@ html {
         }
 
         div.top-menu {
-          text-align: center;
+          //text-align: center;
           .left-navbar {
             justify-content: center;
             & > li {
               float: left; // always horizontal, prevent vertical
-              @media (max-width: 820px) {
+              // collapse main menu texts
+              @media (max-width: 580px) {
                 & > button > span:not(.caret) {
                   display: none;
                 }
@@ -216,6 +218,7 @@ html {
           display: flex;
           margin: 11px 0 0 0;
           list-style: none;
+          padding: 0;
 
           & > li > button {
             outline: none;
@@ -245,39 +248,12 @@ html {
               }
             }
           }
-          /*& > li.open > button {
-            background-color: $editor-nav-bg-color;
-            color: #0e5f89;
-            div.icon {
-              background-color: #0e5f89;
-            }
-          }*/
-          ul {
-            padding: 15px 0;
-            border-color: $settings-border-color;
-            button, a {
-              font-size: 13px;
-              font-weight: 600;
-              color: $intro-bg-color;
-              line-height: 30px;
-              padding: 3px 20px;
-              width: 100%;
-              text-align: left;
-              &:hover {
-                background-color: $header-menu-bg-hover-color;
-                text-decoration: none;
-              }
-            }
-            .divider {
-              background-color: $settings-border-color;
-            }
-          }
         }
 
         ul.nav.navbar-nav.navbar-right {
-          @media (max-width: 550px) {
+          /*@media (max-width: 550px) {
             display: none;
-          }
+          }*/
           .caret {
             margin-left: 10px;
           }
@@ -504,6 +480,7 @@ html {
 
 .btn-link {
   border-color: transparent;
+  border: none;
 }
 
 .ac-btn {

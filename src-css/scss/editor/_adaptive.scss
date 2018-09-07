@@ -1,0 +1,34 @@
+@media (max-width: 1060px) {
+
+  html body {
+
+    header div.header-box {
+      flex-wrap: wrap;
+
+      ul.nav.navbar-nav.left-navbar > li > button {
+        color: white;
+        background-color: $intro-bg-color;
+        &:hover {
+          color: white;
+        }
+        .icon {
+          background-color: white;
+        }
+        &:hover, &:active, &:focus, &.active {
+          div.icon {
+            background-color: white;
+          }
+        }
+      }
+
+    }
+
+    .top-menu {
+      order: 2;
+      width: 100%;
+      background-color: #0082CC;
+      height: 58px;
+    }
+  }
+}
+

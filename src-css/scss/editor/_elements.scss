@@ -55,6 +55,10 @@ body {
   .dropdown {
     position: relative;
   }
+  .dropdown-center {
+    position: static;
+  }
+
   .dropdown-menu {
     position: absolute;
     top: 100%;
@@ -63,7 +67,7 @@ body {
     display: none;
     float: left;
     min-width: 10rem;
-    padding: .5rem 0;
+    padding: 15px 0;
     //margin: .125rem 0 0;
     margin: 0;
     font-size: 1rem;
@@ -72,25 +76,31 @@ body {
     list-style: none;
     background-color: #fff;
     background-clip: padding-box;
-    border: 1px solid rgba(0, 0, 0, .15);
+    border: 1px solid $settings-border-color;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-    //border-radius: .25rem;
-    & > li > a {
+    & > li > a, button {
       display: block;
       padding: 3px 20px;
       clear: both;
-      font-weight: 400;
-      line-height: 1.42857143;
-      color: #333;
+      font-weight: 600;
+      line-height: 30px;
+      color: $intro-bg-color;
       white-space: nowrap;
+      font-size: 13px;
+      width: 100%;
+      text-align: left;
+      &:hover {
+        background-color: $header-menu-bg-hover-color;
+      }
     }
     .divider {
       height: 1px;
       margin: 9px 0;
       overflow: hidden;
-      background-color: #e5e5e5;
+      background-color: $settings-border-color;
     }
   }
+
   .navbar-right .dropdown-menu {
     right: 0;
     left: auto;

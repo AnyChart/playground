@@ -1,10 +1,14 @@
 .settings-window {
   display: block;
-  position: fixed;
-  top: 45px;
-  left: 50%;
+  position: absolute;
+  //top: 45px;
+  //left: 50%;
+  //margin-left: -299px;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+
   width: 598px;
-  margin-left: -299px;
   z-index: 1000;
   border: 1px solid $settings-border-color;
   box-shadow: 0 6px 12px rgba(0, 0, 0, .175);

@@ -22,9 +22,19 @@
       (.-clientHeight (.-body js/document))))
 
 
+(defn window-width []
+  (or (.-innerWidth js/window)
+      (.-clientWidth (.-documentElement js/document))
+      (.-clientWidth (.-body js/document))))
+
+
+(defn editors-margin-top []
+  (if (< (window-width) 1060) 116 58))
+
+
 (defn editors-height []
   (- (window-height)
-     58                                                     ; header height
+     (editors-margin-top)                                   ; header height
      70                                                     ; footer height
      ))
 

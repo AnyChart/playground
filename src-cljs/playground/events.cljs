@@ -34,10 +34,11 @@
       (when-not (-> data :sample :version-id)
         (.replaceState (.-history js/window) nil nil (common-utils/sample-url-with-version (:sample data))))
       (let [view (or (:view data) (:view @ls) :right)]
-        {:db         {:editors        {:editors-height (editors-js/editors-height)
-                                       :view           view
-                                       :code-settings  {:show false}
-                                       :iframe-update  0}
+        {:db         {:editors        {:editors-height     (editors-js/editors-height)
+                                       :editors-margin-top (editors-js/editors-margin-top)
+                                       :view               view
+                                       :code-settings      {:show false}
+                                       :iframe-update      0}
 
                       :sample         (:sample data)
                       :saved-sample   (:sample data)

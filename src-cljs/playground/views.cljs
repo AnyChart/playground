@@ -50,7 +50,7 @@
             [:span "Fork"]]]
 
       (let [show-warning (not @(rf/subscribe [:settings/correct-scripts-styles]))]
-        [:li.dropdown {:title (when show-warning consts/settings-warning)}
+        [:li.dropdown.dropdown-center {:title (when show-warning consts/settings-warning)}
          [:button.btn.btn-link {:on-click #(do
                                              (rf/dispatch [:settings/refresh-tags])
                                              (rf/dispatch [:settings/update-datasets])
@@ -61,16 +61,16 @@
           [:span.caret]
           (when show-warning
             ;[:span.glyphicon.glyphicon-warning-sign.icon-warning]
-            [:i.fas.fa-exclamation-triangle.icon-warning.icon-warning]
-            )
-          ]])
+            [:i.fas.fa-exclamation-triangle.icon-warning.icon-warning])]
+         [settings-window/settings-window]])
 
-      [:li.dropdown
+      [:li.dropdown.dropdown-center
        [:button.btn.btn-link {:on-click #(rf/dispatch [:embed/show])
                               :class    (when @(rf/subscribe [:embed/show]) "active")}
         [:div.icon.icon-embed]
         [:span "Export"]
-        [:span.caret]]]
+        [:span.caret]]
+       [export-window/export-window]]
 
       [:li.dropdown
        [:button.btn.btn-link.dropdown-toggle {:href          "#"
@@ -198,7 +198,5 @@
    [navbar]
    [editors/editors]
    [tips/tips]
-   [settings-window/settings-window]
-   [export-window/export-window]
    [sidemenu/view]
    [modal-view/window]])

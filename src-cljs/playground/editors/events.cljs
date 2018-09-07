@@ -33,7 +33,9 @@
 (rf/reg-event-db
   :resize-window
   (fn [db _]
-    (assoc-in db [:editors :editors-height] (editors-js/editors-height))))
+    (-> db
+        (assoc-in [:editors :editors-height] (editors-js/editors-height))
+        (assoc-in [:editors :editors-margin-top] (editors-js/editors-margin-top)))))
 
 
 ;;======================================================================================================================
