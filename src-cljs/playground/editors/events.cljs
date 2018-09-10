@@ -8,6 +8,8 @@
 ;;======================================================================================================================
 ;; Editors
 ;;======================================================================================================================
+(def max-window-width 650)
+
 (rf/reg-event-fx
   :create-editors
   (fn [{db :db} _]
@@ -33,13 +35,22 @@
 (rf/reg-event-db
   :resize-window
   (fn [db _]
-    (-> db
-        (assoc-in [:editors :editors-height] (editors-js/editors-height))
-        (assoc-in [:editors :editors-margin-top] (editors-js/editors-margin-top))
-        (update-in [:editors :view] (fn [view]
-                                      (if (< (editors-js/window-width) 600)
-                                        :vertical
-                                        view))))))
+    (let [view (-> db :editors :view)
+          previous-resized-view (-> db :editors :previous-resized-view)
+          [new-view new-prev-resized-view] (if (not= view :standalone)
+                                             (cond
+                                               (and (< (editors-js/window-width) max-window-width)
+                                                    (not= view :vertical)) [:vertical view]
+                                               (and (>= (editors-js/window-width) max-window-width)
+                                                    (= view :vertical)
+                                                    previous-resized-view) [previous-resized-view nil]
+                                               :else [view previous-resized-view])
+                                             [view previous-resized-view])]
+      (-> db
+          (assoc-in [:editors :editors-height] (editors-js/editors-height))
+          (assoc-in [:editors :editors-margin-top] (editors-js/editors-margin-top))
+          (assoc-in [:editors :view] new-view)
+          (assoc-in [:editors :previous-resized-view] new-prev-resized-view)))))
 
 
 ;;======================================================================================================================
@@ -77,28 +88,36 @@
   :view/left
   (fn [db _]
     (update-view db :right)
-    (assoc-in db [:editors :view] :left)))
+    (-> db
+        (assoc-in [:editors :view] :left)
+        (assoc-in [:editors :previous-resized-view] nil))))
 
 
 (rf/reg-event-db
   :view/right
   (fn [db _]
     (update-view db :right)
-    (assoc-in db [:editors :view] :right)))
+    (-> db
+        (assoc-in [:editors :view] :right)
+        (assoc-in [:editors :previous-resized-view] nil))))
 
 
 (rf/reg-event-db
   :view/bottom
   (fn [db _]
     (update-view db :bottom)
-    (assoc-in db [:editors :view] :bottom)))
+    (-> db
+        (assoc-in [:editors :view] :bottom)
+        (assoc-in [:editors :previous-resized-view] nil))))
 
 
 (rf/reg-event-db
   :view/top
   (fn [db _]
     (update-view db :top)
-    (assoc-in db [:editors :view] :top)))
+    (-> db
+        (assoc-in [:editors :view] :top)
+        (assoc-in [:editors :previous-resized-view] nil))))
 
 
 (rf/reg-event-fx
@@ -107,7 +126,8 @@
     (let [sample-standalone-url (utils/sample-standalone-url (:sample db))]
       (push-state-if-need sample-standalone-url)
       {:db (-> db
-               (assoc-in [:editors :view] :standalone))})))
+               (assoc-in [:editors :view] :standalone)
+               (assoc-in [:editors :previous-resized-view] nil))})))
 
 
 (rf/reg-event-fx
