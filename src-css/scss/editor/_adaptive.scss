@@ -8,6 +8,7 @@
       ul.nav.navbar-nav.left-navbar > li > button {
         color: white;
         background-color: $intro-bg-color;
+        height: 100%;
         &:hover {
           color: white;
         }
@@ -18,10 +19,17 @@
           div.icon {
             background-color: white;
           }
+          //background-color: white;
         }
       }
 
+      .left-navbar {
+        margin: 0 !important;
+        height: 100%;
+      }
+
     }
+
 
     .top-menu {
       order: 2;
@@ -29,6 +37,17 @@
       background-color: #0082CC;
       height: 58px;
     }
+
+  }
+}
+
+@media (max-width: 700px) {
+  .dropdown-menu-download {
+    right: 0;
+    left: auto !important;
+  }
+  .dropdown-menu-view {
+    left: -50% !important;
   }
 }
 

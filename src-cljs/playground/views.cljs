@@ -82,7 +82,7 @@
         [:div.icon.icon-view]
         [:span "View"]
         [:span.caret]]
-       [:ul.dropdown-menu
+       [:ul.dropdown-menu.dropdown-menu-view
         {:style {:display (if @(rf/subscribe [:view-menu/show]) "block" "none")}}
         [:li [:button.btn.btn-link {:on-click #(rf/dispatch [:view/editor])}
               [:img.icon {:src "/icons/editor/editor.svg"}]
@@ -116,7 +116,7 @@
         [:div.icon.icon-download]
         [:span "Download"]
         [:span.caret]]
-       [:ul.dropdown-menu
+       [:ul.dropdown-menu.dropdown-menu-download
         {:style {:display (if @(rf/subscribe [:download-menu/show]) "block" "none")}}
         [:li [:a {:href @(rf/subscribe [:sample/download-html-url])}
               [:img.icon.download-icon {:src "/icons/editor/download-html.svg"}]
