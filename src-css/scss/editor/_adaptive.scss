@@ -48,6 +48,7 @@
   }
 }
 
+// change dropdown menus positions
 @media (max-width: 700px) {
   .dropdown-menu-download {
     right: 0;
@@ -58,3 +59,25 @@
   }
 }
 
+// padding to settings window on resize
+@media (max-width: 660px) {
+  .settings-window {
+    padding: 0 30px;
+    box-sizing: content-box;
+  }
+}
+
+// padding to export window on resize
+@media (max-width: 580px) {
+  .export-window {
+    padding: 0 30px;
+    box-sizing: content-box;
+  }
+}
+
+// reduce margin fot sub tabs on export window
+@media (max-width: 400px) {
+  .dropdown-window .nav.sub-tabs li a {
+    margin-right: 5px;
+  }
+}

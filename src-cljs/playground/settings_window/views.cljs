@@ -46,7 +46,7 @@
 
 (defn settings-window []
   (when @(rf/subscribe [:settings/show])
-    [:div.settings-window.hide-outside
+    [:div.dropdown-window.settings-window.hide-outside
      [nav-menu]
 
      (when @(rf/subscribe [:settings/general-tab?])

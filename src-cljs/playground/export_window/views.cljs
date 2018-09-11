@@ -20,7 +20,7 @@
 
 (defn export-window []
   (when @(rf/subscribe [:embed/show])
-    [:div.settings-window.export-window.hide-outside
+    [:div.dropdown-window.export-window.hide-outside
 
      [:ul.nav.nav-tabs.settings-tabs
       [:li {:class (when @(rf/subscribe [:embed/embed-tab?]) "active")}
