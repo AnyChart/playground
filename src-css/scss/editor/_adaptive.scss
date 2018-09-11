@@ -15,11 +15,18 @@
         .icon {
           background-color: white;
         }
-        &:hover, &:active, &:focus, &.active {
+        &:hover {
+          color: $header-menu-bg-hover-color;
           div.icon {
-            background-color: white;
+            background-color: $header-menu-bg-hover-color;
           }
-          //background-color: white;
+        }
+        &:active, &:focus, &.active {
+          color: $intro-bg-color;
+          background-color: white;
+          div.icon {
+            background-color: $intro-bg-color;
+          }
         }
       }
 
@@ -30,11 +37,11 @@
 
     }
 
-
     .top-menu {
       order: 2;
       width: 100%;
-      background-color: #0082CC;
+      background-color: $intro-bg-color;
+      border-top: 1px solid $intro-bg-color;
       height: 58px;
     }
 
