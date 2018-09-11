@@ -42,28 +42,24 @@
           [:div.form-group
            [:label {:for "id-export-prop"} "ID"]
            [:input.form-control {:id        "id-export-prop"
-                                 :style     {:width "74px"}
                                  :value     @(rf/subscribe [:embed.props/id])
                                  :type      "text"
                                  :on-change #(rf/dispatch [:embed.props/change-id (-> % .-target .-value)])}]]
           [:div.form-group
            [:label {:for "class-export-prop"} "class"]
            [:input.form-control {:id        "class-export-prop"
-                                 :style     {:width "112px"}
                                  :value     @(rf/subscribe [:embed.props/class])
                                  :type      "text"
                                  :on-change #(rf/dispatch [:embed.props/change-class (-> % .-target .-value)])}]]
           [:div.form-group
            [:label {:for "width-export-prop"} "width"]
            [:input.form-control {:id        "width-export-prop"
-                                 :style     {:width "57px"}
                                  :value     @(rf/subscribe [:embed.props/width])
                                  :type      "text"
                                  :on-change #(rf/dispatch [:embed.props/change-width (-> % .-target .-value)])}]]
           [:div.form-group
            [:label {:for "height-export-prop"} "height"]
            [:input.form-control {:id        "height-export-prop"
-                                 :style     {:width "57px"}
                                  :value     @(rf/subscribe [:embed.props/height])
                                  :type      "text"
                                  :on-change #(rf/dispatch [:embed.props/change-height (-> % .-target .-value)])}]]

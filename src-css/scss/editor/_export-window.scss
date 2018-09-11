@@ -4,7 +4,7 @@
   font-size: 12px;
 
   // prevent .from-group become vertical on small devices
-  @media (max-width: 767px) {
+  /*@media (max-width: 767px) {
     .form-inline {
       .form-control {
         display: inline-block;
@@ -17,7 +17,7 @@
         vertical-align: middle;
       }
     }
-  }
+  }*/
 
   p.intro {
     margin: 4px 0 16px;
@@ -25,6 +25,19 @@
 
   .props-box {
     display: flex;
+    .form-group:nth-child(1) input {
+      width: 74px;
+    }
+    .form-group:nth-child(2) input {
+      width: 112px;
+    }
+    .form-group:nth-child(3) input {
+      width: 57px;
+    }
+    .form-group:nth-child(4) input {
+      width: 57px;
+    }
+
     label {
       font-weight: bold;
     }
