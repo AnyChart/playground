@@ -204,14 +204,16 @@
           border-radius: 5px;
           position: relative;
           padding-left: 27px;
+          max-width: 100%;
           .in-box {
             border-radius: 5px;
             background-color: $tag-bg-color;
             padding: 1px 7px 1px 6px;
-            //display: flex;
-            align-items: baseline;
+            display: flex;
+            align-items: center;
             .input-height-box {
               display: inline-block;
+              min-width: 0;
               .height-line {
                 display: block;
                 height: 0;
