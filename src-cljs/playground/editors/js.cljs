@@ -2,6 +2,9 @@
   (:require [re-frame.core :as rf]))
 
 
+(def max-window-width 650)
+
+
 (defn create-editor [type value mode]
   ;(utils/log "create-editor: " type value mode)
   (let [editor-name (str (name type) "-editor")
@@ -26,6 +29,14 @@
   (or (.-innerWidth js/window)
       (.-clientWidth (.-documentElement js/document))
       (.-clientWidth (.-body js/document))))
+
+
+(defn small-window-width? []
+  (< (window-width) max-window-width))
+
+
+(defn big-window-width? []
+  (>= (window-width) max-window-width))
 
 
 (defn editors-margin-top []

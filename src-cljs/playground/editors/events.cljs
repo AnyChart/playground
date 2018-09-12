@@ -8,8 +8,6 @@
 ;;======================================================================================================================
 ;; Editors
 ;;======================================================================================================================
-(def max-window-width 650)
-
 (rf/reg-event-fx
   :create-editors
   (fn [{db :db} _]
@@ -39,9 +37,9 @@
           previous-resized-view (-> db :editors :previous-resized-view)
           [new-view new-prev-resized-view] (if (not= view :standalone)
                                              (cond
-                                               (and (< (editors-js/window-width) max-window-width)
+                                               (and (editors-js/small-window-width?)
                                                     (not= view :vertical)) [:vertical view]
-                                               (and (>= (editors-js/window-width) max-window-width)
+                                               (and (editors-js/big-window-width?)
                                                     (= view :vertical)
                                                     previous-resized-view) [previous-resized-view nil]
                                                :else [view previous-resized-view])
