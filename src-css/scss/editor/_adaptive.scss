@@ -75,9 +75,31 @@
   }
 }
 
+// export props inputs to vertical column
+@media (max-width: 440px) {
+  .export-window .props-box {
+    flex-wrap: wrap;
+    .form-group:nth-child(n+0) {
+      margin-bottom: 5px;
+      label {
+        width: 40px;
+      }
+      input {
+        width: 115px;
+      }
+    }
+    .form-group:last-child {
+      margin-right: 15px;
+      margin-bottom: 0;
+    }
+  }
+}
+
 // reduce margin fot sub tabs on export window
 @media (max-width: 400px) {
   .dropdown-window .nav.sub-tabs li a {
     margin-right: 5px;
   }
 }
+
+
