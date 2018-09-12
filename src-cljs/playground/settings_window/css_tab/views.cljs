@@ -70,8 +70,8 @@
    [:p.section-label.quick-add ""]
    [version-select/version-select]
 
-   [:div.row
-    [:div.col-sm-6
+   [:div                                                    ;.row
+    [:div                                                   ;.col-sm-6
      [:div.form-group
       [:label {:for "settings-select-bin"} "AnyChart CSS"
        [:span.question-small.tooltiped

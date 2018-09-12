@@ -109,7 +109,8 @@
     resize: none;
   }
   select {
-    width: 183px;
+    width: 100%;
+    max-width: 183px;
   }
 
   .question-small {
