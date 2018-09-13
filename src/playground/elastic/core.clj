@@ -213,6 +213,13 @@
      :max-page (get-max-page total size)}))
 
 
+(defn empty-result []
+  {:samples  []
+   :total    0
+   :end      true
+   :max-page -1})
+
+
 (defn search [{conn :conn conf :conf} q offset size]
   (try
     (let [data (parse q)
@@ -255,7 +262,8 @@
                          (assoc (:_source hit) :score (:_score hit)))
                        (:hits hits))]
       (make-result samples total size offset))
-    (catch Exception e (timbre/error "Elastic top samples error:" (pr-str e)))))
+    (catch Exception e (timbre/error "Elastic top samples error:" (pr-str e))
+                       (empty-result))))
 
 
 ;; =====================================================================================================================
@@ -276,7 +284,7 @@
           total (:total hits)
           samples (map :_source (:hits hits))]
       (make-result samples total size offset))
-    (catch Exception e (timbre/error "Elastic top samples error:" (pr-str e)))))
+    (catch Exception e (timbre/error "Elastic version-samples error:" (pr-str e)))))
 
 
 ;; =====================================================================================================================

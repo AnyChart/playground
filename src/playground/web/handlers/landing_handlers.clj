@@ -24,10 +24,9 @@
         result (elastic/top-samples (get-elastic request)
                                     (* samples-per-landing samples-page)
                                     samples-per-landing)]
-    (when (seq (:samples result))
-      (response (landing-view/page (merge (get-app-data request)
-                                          {:result result
-                                           :page   samples-page}))))))
+    (response (landing-view/page (merge (get-app-data request)
+                                        {:result result
+                                         :page   samples-page})))))
 
 
 ;; =====================================================================================================================
