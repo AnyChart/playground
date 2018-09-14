@@ -27,7 +27,7 @@
                  [com.rpl/specter "1.1.1"]
 
                  ;; html, css
-                 [selmer "1.12.0"]
+                 [selmer "1.12.1"]
                  [enlive "1.1.6"]
                  [org.jsoup/jsoup "1.11.3"]
                  [hiccup "1.0.5"]
@@ -63,7 +63,7 @@
                  ;; front-end
                  [org.clojure/clojurescript "1.9.908"]
                  [reagent "0.8.1"]
-                 [re-frame "0.10.5"]
+                 [re-frame "0.10.6"]
                  [re-com "2.1.0"]
                  [rum "0.11.2"]
                  [alandipert/storage-atom "2.0.1"]
