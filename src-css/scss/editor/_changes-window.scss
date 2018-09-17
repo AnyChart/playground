@@ -1,0 +1,55 @@
+.changes-window {
+  position: absolute;
+  right: 40px;
+  margin-top: 20px;
+  font-size: 12px;
+
+  border: 1px solid red;
+  border-radius: 3px;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(15, 122, 154, 0.5);
+  padding: 10px 10px 10px 35px;
+
+  .icon-warning {
+    color: $red-color;
+    position: absolute;
+    left: -25px;
+    top: 1px;
+    font-size: 14px;
+  }
+
+  .title {
+    position: relative;
+    text-transform: uppercase;
+    color: $red-color;
+    font-size: 12px;
+  }
+
+  .text {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 200px;
+    font-size: 12px;
+  }
+
+  ul {
+    margin: 0 0 10px 0;
+  }
+
+  a {
+    font-size: 12px;
+    display: block;
+    cursor: pointer;
+    &.apply-button {
+      color: green;
+      margin-bottom: 5px;
+    }
+    &.discard-button {
+      color: $red-color;
+    }
+    .icon-ok, .icon-close {
+      width: 15px;
+    }
+  }
+
+}

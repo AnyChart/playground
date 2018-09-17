@@ -6,11 +6,12 @@
     ;[accountant.core :as accountant]
             [playground.editors.js :as editors-js]
             [playground.utils.utils :as common-utils]
-            [alandipert.storage-atom :refer [local-storage]]
+            [alandipert.storage-atom :refer [local-storage session-storage]]
             [playground.views.iframe :as iframe-view]
             [hiccups.runtime :as hiccupsrt]
             [playground.settings-window.javascript-tab.version-detect :as version-detect]
-            [playground.settings-window.javascript-tab.events :refer [detect-version-interceptor]]))
+            [playground.settings-window.javascript-tab.events :refer [detect-version-interceptor]]
+            [playground.interceptors :refer [session-storage-sample-interceptor]]))
 
 
 ;;======================================================================================================================
@@ -23,7 +24,8 @@
     (let [default-prefs {:hidden-tips  []
                          :hidden-types []
                          :view         :right}
-          ls (local-storage (atom default-prefs) :prefs)]
+          ls (local-storage (atom default-prefs) :prefs)
+          ss (session-storage (atom {:sample (:sample data)}) :prefs)]
       ;; add default props
       (when (not= (merge default-prefs @ls) @ls)
         (reset! ls (merge default-prefs @ls)))
@@ -37,46 +39,48 @@
             view (if (editors-js/small-window-width?)
                    :vertical
                    previous-resized-view)]
-        {:db         {:editors        {:editors-height        (editors-js/editors-height)
-                                       :editors-margin-top    (editors-js/editors-margin-top)
-                                       :view                  view
-                                       :previous-resized-view previous-resized-view
-                                       :code-settings         {:show false}
-                                       :iframe-update         0}
+        {:db         {:editors         {:editors-height        (editors-js/editors-height)
+                                        :editors-margin-top    (editors-js/editors-margin-top)
+                                        :view                  view
+                                        :previous-resized-view previous-resized-view
+                                        :code-settings         {:show false}
+                                        :iframe-update         0}
 
-                      :sample         (:sample data)
-                      :saved-sample   (:sample data)
-                      :templates      (:templates data)
-                      :user           (:user data)
-                      :datasets       (:datasets data)
-                      :versions-names (:versions-names data)
+                      :sample          (:sample data)
+                      :saved-sample    (:sample data)
+                      :templates       (:templates data)
+                      :user            (:user data)
+                      :datasets        (:datasets data)
+                      :versions-names  (:versions-names data)
 
-                      :settings       {:show             false
-                                       :tab              :javascript
-                                       :selected-version (or (:version (version-detect/detect-version (:scripts (:sample data))))
-                                                             "latest")
-                                       :general-tab      {:tags (map (fn [tag] {:name tag :selected false}) (-> data :sample :tags))}}
-                      :embed          {:show    (:embed-show data)
-                                       :tab     :embed
-                                       :sub-tab :html
-                                       :props   {:id     (common-utils/embed-name (-> data :sample))
-                                                 :class  "anychart-embed"
-                                                 :width  "600px"
-                                                 :height "450px"}}
-                      :tips           {:current []
-                                       :queue   []}
-                      :left-menu      {:show           false
-                                       :support-expand false}
-                      :view-menu      {:show false}
-                      :create-menu    {:show false}
-                      :download-menu  {:show false}
-                      :modal          {:show false}
-                      :search         {:show        false
-                                       :hints       []
-                                       :query-hints []}
-                      :local-storage  ls}
+                      :settings        {:show             false
+                                        :tab              :javascript
+                                        :selected-version (or (:version (version-detect/detect-version (:scripts (:sample data))))
+                                                              "latest")
+                                        :general-tab      {:tags (map (fn [tag] {:name tag :selected false}) (-> data :sample :tags))}}
+                      :embed           {:show    (:embed-show data)
+                                        :tab     :embed
+                                        :sub-tab :html
+                                        :props   {:id     (common-utils/embed-name (-> data :sample))
+                                                  :class  "anychart-embed"
+                                                  :width  "600px"
+                                                  :height "450px"}}
+                      :tips            {:current []
+                                        :queue   []}
+                      :left-menu       {:show           false
+                                        :support-expand false}
+                      :view-menu       {:show false}
+                      :create-menu     {:show false}
+                      :download-menu   {:show false}
+                      :modal           {:show false}
+                      :search          {:show        false
+                                        :hints       []
+                                        :query-hints []}
+                      :local-storage   ls
+                      :session-storage ss}
          :dispatch-n [[:settings.external-resources/init-version]
-                      [:search-hints-request]]}))))
+                      [:search-hints-request]
+                      [:changes-window/check-visibility]]}))))
 
 
 (rf/reg-event-fx
@@ -93,6 +97,7 @@
 
 (rf/reg-event-db
   :change-code
+  [session-storage-sample-interceptor]
   (fn [db [_ type code]]
     (assoc-in db [:sample type] code)))
 

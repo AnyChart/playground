@@ -1,6 +1,7 @@
 (ns playground.settings-window.general-tab.events
   (:require [re-frame.core :as rf]
             [playground.data.tags :as tags-data]
+            [playground.interceptors :refer [session-storage-sample-interceptor]]
             [playground.utils.utils :as common-utils]))
 
 
@@ -9,24 +10,28 @@
 ;;======================================================================================================================
 (rf/reg-event-db
   :settings/change-name
+  [session-storage-sample-interceptor]
   (fn [db [_ name]]
     (assoc-in db [:sample :name] name)))
 
 
 (rf/reg-event-db
   :settings/change-short-desc
+  [session-storage-sample-interceptor]
   (fn [db [_ value]]
     (assoc-in db [:sample :short-description] (common-utils/strip-tags value))))
 
 
 (rf/reg-event-db
   :settings/change-desc
+  [session-storage-sample-interceptor]
   (fn [db [_ value]]
     (assoc-in db [:sample :description] (common-utils/strip-scripts value))))
 
 
 (rf/reg-event-db
   :settings/refresh-tags
+  [session-storage-sample-interceptor]
   (fn [db _]
     (let [tags-by-code (tags-data/get-tags-by-code (-> db :sample :code))
           deleted-tags (-> db :sample :deleted-tags)
@@ -71,6 +76,7 @@
 
 (rf/reg-event-db
   :settings/remove-tag
+  [session-storage-sample-interceptor]
   (fn [db [_ value]]
     (-> db
         (update-in [:sample :tags] #(remove (partial = value) %))
@@ -84,6 +90,7 @@
 
 (rf/reg-event-db
   :settings/add-tag
+  [session-storage-sample-interceptor]
   (fn [db [_ value]]
     (if (every? (partial not= value) (-> db :sample :tags))
       (-> db

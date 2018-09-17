@@ -2,14 +2,15 @@
   (:require [clojure.string :as string]
             [playground.utils.utils :as common-utils]
             [re-frame.core :as rf]
-            [playground.settings-window.javascript-tab.version-detect :as version-detect]))
+            [playground.settings-window.javascript-tab.version-detect :as version-detect]
+            [playground.interceptors :refer [session-storage-sample-interceptor]]))
 
 
 ;;======================================================================================================================
 ;; Add/remove js
 ;;======================================================================================================================
 (def detect-version-interceptor
-  (re-frame.core/->interceptor
+  (rf/->interceptor
     :id :detect-version-interceptor
     :after (fn [context]
              (let [scripts (-> context :effects :db :sample :scripts)
@@ -29,7 +30,8 @@
 
 (rf/reg-event-db
   :settings/add-script
-  [detect-version-interceptor]
+  [detect-version-interceptor
+   session-storage-sample-interceptor]
   (fn [db [_ value]]
     (if (every? #(not= % value) (-> db :sample :scripts))
       (-> db
@@ -40,7 +42,8 @@
 
 (rf/reg-event-db
   :settings/remove-script
-  [detect-version-interceptor]
+  [detect-version-interceptor
+   session-storage-sample-interceptor]
   (fn [db [_ value]]
     (-> db
         (update-in [:sample :scripts] (fn [scripts] (remove #(= value %) scripts)))
@@ -49,7 +52,8 @@
 
 (rf/reg-event-db
   :settings.external-resources/add-js-by-type
-  [detect-version-interceptor]
+  [detect-version-interceptor
+   session-storage-sample-interceptor]
   (fn [db [_ type]]
     (let [url (-> db :settings :external-resources type :url)]
       (-> db
@@ -64,7 +68,8 @@
 
 (rf/reg-event-db
   :settings.external-resources/remove-js-by-type
-  [detect-version-interceptor]
+  [detect-version-interceptor
+   session-storage-sample-interceptor]
   (fn [db [_ type]]
     (let [url (-> db :settings :external-resources type :url)]
       (-> db
@@ -74,7 +79,8 @@
 
 (rf/reg-event-db
   :settings/edit-script
-  [detect-version-interceptor]
+  [detect-version-interceptor
+   session-storage-sample-interceptor]
   (fn [db [_ val index]]
     (-> db
         (update-in [:sample :scripts] (fn [scripts]
@@ -84,7 +90,8 @@
 
 (rf/reg-event-db
   :settings/update-scripts-order
-  [detect-version-interceptor]
+  [detect-version-interceptor
+   session-storage-sample-interceptor]
   (fn [db [_ old-index new-index]]
     (-> db
         (update-in [:sample :scripts] #(common-utils/reorder-list % old-index new-index)))))

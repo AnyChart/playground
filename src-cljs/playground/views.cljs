@@ -9,7 +9,8 @@
             [playground.search.views :as search]
             [playground.utils.utils :as utils-main]
             [playground.data.consts :as consts]
-            [playground.modal-window.views :as modal-view]))
+            [playground.modal-window.views :as modal-view]
+            [playground.changes-window.views :as changes-window]))
 
 
 (defn navbar []
@@ -166,7 +167,9 @@
       ;(when @(rf/subscribe [:can-signup])
       ;  [:li [:a {:href "/signup"} "Sign Up"]])
 
-      ]]]])
+      ]]]
+   [changes-window/changes-window]
+   ])
 
 
 ;(defn send-form []

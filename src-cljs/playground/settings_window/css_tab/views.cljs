@@ -37,8 +37,7 @@
                                                                             (.preventDefault %)
                                                                             (rf/dispatch [:settings/remove-style style]))}]]
                                  (when warning
-                                   [:span.glyphicon.glyphicon-warning-sign
-                                    {:title warning}])
+                                   [:i.fas.fa-exclamation-triangle.icon-warning {:title warning}])
                                  ]
                                 ])]
                             )}))

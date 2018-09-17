@@ -5,7 +5,9 @@
             [playground.settings-window.external-resources.parser :as parser]
             [playground.tips.tips-data :as tips-data]
             [playground.settings-window.javascript-tab.version-detect :as version-detect]
-            [playground.settings-window.javascript-tab.events :refer [detect-version-interceptor]]))
+            [playground.settings-window.javascript-tab.events :refer [detect-version-interceptor]]
+            [playground.interceptors :refer [session-storage-sample-interceptor]]
+            [clojure.walk :as walk]))
 
 
 ;;======================================================================================================================
@@ -14,7 +16,7 @@
 (rf/reg-event-db
   :settings.external-resources/on-modules-json-get
   (fn [db [_ data]]
-    (let [data (clojure.walk/keywordize-keys data)
+    (let [data (walk/keywordize-keys data)
           data (parser/data data (-> db :settings :selected-version))]
       (-> db
           (assoc-in [:settings :external-resources :loading] false)
@@ -60,7 +62,8 @@
 
 (rf/reg-event-fx
   :settings.external-resources/change-version
-  [detect-version-interceptor]
+  [detect-version-interceptor
+   session-storage-sample-interceptor]
   (fn [{db :db} [_ version]]
     {:db         (-> db
                      (assoc-in [:settings :selected-version] version)
@@ -84,12 +87,14 @@
           res (get-resource-by-url url binaries)]
       (assoc-in db [:settings :external-resources :binary] res))))
 
+
 (rf/reg-event-db
   :settings.external-resources/themes-select
   (fn [db [_ url]]
     (let [themes (-> db :settings :external-resources :data :themes)
           res (get-resource-by-url url themes)]
       (assoc-in db [:settings :external-resources :theme] res))))
+
 
 (rf/reg-event-db
   :settings.external-resources/locales-select
@@ -98,12 +103,14 @@
           res (get-resource-by-url url locales)]
       (assoc-in db [:settings :external-resources :locale] res))))
 
+
 (rf/reg-event-db
   :settings.external-resources/maps-select
   (fn [db [_ url]]
     (let [maps (-> db :settings :external-resources :data :geodata :maps)
           res (get-resource-by-url url maps)]
       (assoc-in db [:settings :external-resources :map] res))))
+
 
 (rf/reg-event-db
   :settings.external-resources/css-select

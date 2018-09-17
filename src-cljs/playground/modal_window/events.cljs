@@ -19,7 +19,7 @@
 
 
 (def show-modal-warning
-  (re-frame.core/->interceptor
+  (rf/->interceptor
     :id :show-modal-warning
     :after (fn [context]
              (let [styles (-> context :effects :db :settings :css-tab :styles)
