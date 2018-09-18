@@ -22,8 +22,9 @@
                    correct-styles (version-detect/to-correct-styles styles detected-version)]
                ;(println :detecte-version-interceptor detected-version)
                (-> context
-                   (assoc-in [:effects :db :settings :detected-version] detected-version)
-                   (assoc-in [:effects :db :settings :detected-version-index] detected-version-index)
+                   ;; add detected version just for debbuging
+                   ;(assoc-in [:effects :db :settings :detected-version] detected-version)
+                   ;(assoc-in [:effects :db :settings :detected-version-index] detected-version-index)
                    (assoc-in [:effects :db :settings :javascript-tab :scripts] correct-scripts)
                    (assoc-in [:effects :db :settings :css-tab :styles] correct-styles))))))
 

@@ -80,7 +80,8 @@
                        (assoc-in [:changes-window :show] false))
        :dispatch-n [[:update-code (:code session-storage-sample)]
                     [:update-markup (:markup session-storage-sample)]
-                    [:update-style (:style session-storage-sample)]]})))
+                    [:update-style (:style session-storage-sample)]
+                    [:update-select-version]]})))
 
 
 (rf/reg-event-db

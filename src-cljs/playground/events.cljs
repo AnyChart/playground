@@ -55,8 +55,7 @@
 
                       :settings        {:show             false
                                         :tab              :javascript
-                                        :selected-version (or (:version (version-detect/detect-version (:scripts (:sample data))))
-                                                              "latest")
+                                        :selected-version nil
                                         :general-tab      {:tags (map (fn [tag] {:name tag :selected false}) (-> data :sample :tags))}}
                       :embed           {:show    (:embed-show data)
                                         :tab     :embed
@@ -81,7 +80,8 @@
                                         :query-hints []}
                       :local-storage   ls
                       :session-storage ss}
-         :dispatch-n [[:settings.external-resources/init-version]
+         :dispatch-n [[:update-select-version]
+                      [:settings.external-resources/init-version]
                       [:search-hints-request]
                       [:changes-window/check-visibility]]}))))
 
@@ -239,6 +239,14 @@
   (fn [db [_ error]]
     (println "Search hints request error" error)
     db))
+
+
+(rf/reg-event-db
+  :update-select-version
+  (fn [db _]
+    (-> db (assoc-in [:settings :selected-version]
+                     (or (:version (version-detect/detect-version (-> db :sample :scripts)))
+                         "latest")))))
 
 
 ;;======================================================================================================================

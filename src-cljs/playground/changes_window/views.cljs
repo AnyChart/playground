@@ -19,7 +19,7 @@
    [:div "Changes:"]
    [:ul
     (for [change @(rf/subscribe [:changes-window/changes])]
-      [:li change])]
+      ^{:key change} [:li change])]
 
    [:a.apply-button {:on-click #(rf/dispatch [:changes-window/apply-changes])}
     [:i.fas.fa-check.icon-ok] "Apply changes"]

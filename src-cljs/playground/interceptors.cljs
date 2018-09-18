@@ -14,5 +14,6 @@
                  (do
                    (swap! (-> context :effects :db :session-storage)
                           (fn [ss] (assoc-in ss [:sample] new-sample)))
+                   ;; hide changes window warning on new changes (rewriting)
                    (assoc-in context [:effects :db :changes-window :show] false))
                  context)))))
