@@ -180,24 +180,12 @@
 
 
 ;;======================================================================================================================
-;; Change editors code/style/markup
+;; Change editors code/style/markup (presumably from sample data)
 ;;======================================================================================================================
 (rf/reg-event-fx
   :update-code
   (fn [{db :db} [_ s]]
     {:update-code [db s]}))
-
-
-(rf/reg-event-fx
-  :update-markup
-  (fn [{db :db} [_ s]]
-    {:update-markup [db s]}))
-
-
-(rf/reg-event-fx
-  :update-style
-  (fn [{db :db} [_ s]]
-    {:update-style [db s]}))
 
 
 (rf/reg-fx
@@ -208,12 +196,24 @@
         (.setValue (.getDoc cm) s)))))
 
 
+(rf/reg-event-fx
+  :update-markup
+  (fn [{db :db} [_ s]]
+    {:update-markup [db s]}))
+
+
 (rf/reg-fx
   :update-markup
   (fn [[db s]]
     (let [cm (-> db :editors :markup :editor)]
       (when (not= (.getValue cm) s)
         (.setValue (.getDoc cm) s)))))
+
+
+(rf/reg-event-fx
+  :update-style
+  (fn [{db :db} [_ s]]
+    {:update-style [db s]}))
 
 
 (rf/reg-fx

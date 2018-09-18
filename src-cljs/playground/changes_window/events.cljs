@@ -64,20 +64,23 @@
 
           show-changes-window (and (some? session-storage-sample)
                                    (not= sample session-storage-sample))
-          diffs (get-diffs session-storage-sample sample)
-          ]
+          diffs (get-diffs session-storage-sample sample)]
       (-> db
           (assoc-in [:changes-window :show] show-changes-window)
           (assoc-in [:changes-window :changes] diffs)))))
 
 
-(rf/reg-event-db
+(rf/reg-event-fx
   :changes-window/apply-changes
   [detect-version-interceptor]
-  (fn [db _]
-    (-> db
-        (assoc-in [:sample] (-> db :session-storage deref :sample))
-        (assoc-in [:changes-window :show] false))))
+  (fn [{db :db} _]
+    (let [session-storage-sample (-> db :session-storage deref :sample)]
+      {:db         (-> db
+                       (assoc-in [:sample] session-storage-sample)
+                       (assoc-in [:changes-window :show] false))
+       :dispatch-n [[:update-code (:code session-storage-sample)]
+                    [:update-markup (:markup session-storage-sample)]
+                    [:update-style (:style session-storage-sample)]]})))
 
 
 (rf/reg-event-db

@@ -10,7 +10,9 @@
     :after (fn [context]
              (let [old-sample (-> context :coeffects :db :sample)
                    new-sample (-> context :effects :db :sample)]
-               (when (not= old-sample new-sample)
-                 (swap! (-> context :effects :db :session-storage)
-                        (fn [ss] (assoc-in ss [:sample] new-sample))))
-               context))))
+               (if (not= old-sample new-sample)
+                 (do
+                   (swap! (-> context :effects :db :session-storage)
+                          (fn [ss] (assoc-in ss [:sample] new-sample)))
+                   (assoc-in context [:effects :db :changes-window :show] false))
+                 context)))))
