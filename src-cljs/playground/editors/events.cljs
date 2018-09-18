@@ -30,6 +30,7 @@
                          (js/Clipboard. "#code-editor-copy"
                                         (clj->js {:text (fn [] (.getValue code-editor))}))))})))
 
+
 (rf/reg-event-db
   :resize-window
   (fn [db _]
@@ -186,10 +187,12 @@
   (fn [{db :db} [_ s]]
     {:update-code [db s]}))
 
+
 (rf/reg-event-fx
   :update-markup
   (fn [{db :db} [_ s]]
     {:update-markup [db s]}))
+
 
 (rf/reg-event-fx
   :update-style
@@ -204,12 +207,14 @@
       (when (not= (.getValue cm) s)
         (.setValue (.getDoc cm) s)))))
 
+
 (rf/reg-fx
   :update-markup
   (fn [[db s]]
     (let [cm (-> db :editors :markup :editor)]
       (when (not= (.getValue cm) s)
         (.setValue (.getDoc cm) s)))))
+
 
 (rf/reg-fx
   :update-style
@@ -227,10 +232,12 @@
   (fn [db [_ width]]
     (assoc-in db [:editors :code :show-copy-button] (> width 140))))
 
+
 (rf/reg-event-db
   :editors/style-width-change
   (fn [db [_ width]]
     (assoc-in db [:editors :style :show-copy-button] (> width 140))))
+
 
 (rf/reg-event-db
   :editors/markup-width-change

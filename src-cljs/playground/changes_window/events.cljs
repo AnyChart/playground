@@ -4,6 +4,13 @@
             [playground.settings-window.javascript-tab.events :refer [detect-version-interceptor]]))
 
 
+(rf/reg-event-db
+  :changes-window/expand
+  (fn [db _]
+    (-> db
+        (assoc-in [:changes-window :expand] true))))
+
+
 (def keyword-names {:description       "Description"
                     :create-date       "Creation Date"
 

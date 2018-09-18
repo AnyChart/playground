@@ -73,6 +73,9 @@
                       :create-menu     {:show false}
                       :download-menu   {:show false}
                       :modal           {:show false}
+                      :changes-window  {:show    false
+                                        :changes []
+                                        :expand  false}
                       :search          {:show        false
                                         :hints       []
                                         :query-hints []}

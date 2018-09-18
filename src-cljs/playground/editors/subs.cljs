@@ -7,6 +7,7 @@
 (rf/reg-sub :editors/height
             (fn [db _] (-> db :editors :editors-height)))
 
+
 (rf/reg-sub :editors/margin-top
             (fn [db _] (-> db :editors :editors-margin-top)))
 
