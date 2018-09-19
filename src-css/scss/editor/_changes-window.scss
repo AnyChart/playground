@@ -43,9 +43,15 @@
     &.apply-button {
       color: green;
       margin-bottom: 5px;
+      &:hover {
+        color: #006700
+      }
     }
     &.discard-button {
       color: $red-color;
+      &:hover {
+        color: $red-color-cnages-active
+      }
     }
     .icon-ok, .icon-close {
       width: 15px;
@@ -55,6 +61,9 @@
   &.collapsed {
     padding: 5px 10px 5px 35px;
     cursor: pointer;
+    &:hover .title, &:hover .title .icon-warning {
+      color: $red-color-cnages-active;
+    }
   }
 
 }

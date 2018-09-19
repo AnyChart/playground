@@ -22,10 +22,15 @@
       ^{:key change} [:li change])]
 
    [:a.apply-button {:on-click #(rf/dispatch [:changes-window/apply-changes])}
-    [:i.fas.fa-check.icon-ok] "Apply changes"]
+    [:i.fas.fa-check.icon-ok] "Apply Changes"]
+
+   ;[:button.ac-btn.add-btn "Apply Changes"]
 
    [:a.discard-button {:on-click #(rf/dispatch [:changes-window/discard-changes])}
-    [:i.fas.fa-times.icon-close] "Discard changes"]])
+    [:i.fas.fa-times.icon-close] "Discard Changes"]
+
+   ;[:button.ac-btn.remove-btn "Discard Changes"]
+   ])
 
 
 (defn changes-window []
