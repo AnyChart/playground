@@ -5,6 +5,7 @@
             [playground.events]
             [playground.views :as views]
             [playground.js]
+            [playground.editors.tern :as tern]
             [cognitect.transit :as t]
     ;[accountant.core :as accountant]
             ))
@@ -30,4 +31,5 @@
         data (t/read r data)]
     ;(utils/log "Data: " data)
     (init data)
-    (mount-html)))
+    (mount-html)
+    (tern/init-tern (constantly nil))))

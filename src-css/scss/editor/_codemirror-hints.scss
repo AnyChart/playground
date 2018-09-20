@@ -1,0 +1,203 @@
+/*.CodeMirror-Tern-completion {
+   padding-left: 12px;
+   position: relative;
+ }
+
+ .CodeMirror-Tern-completion:before {
+   position: absolute;
+   left: 0;
+   bottom: 0;
+   border-radius: 50%;
+   font-weight: bold;
+   height: 13px;
+   width: 13px;
+   font-size: 11px;
+   line-height: 14px;
+   text-align: center;
+   color: white;
+   -moz-box-sizing: border-box;
+   -webkit-box-sizing: border-box;
+   box-sizing: border-box;
+ }
+
+ .CodeMirror-Tern-completion-unknown:before {
+   content: '?';
+   background: #4bb;
+ }
+
+ .CodeMirror-Tern-completion-object:before {
+   content: 'O';
+   background: #77c;
+ }
+
+ .CodeMirror-Tern-completion-fn:before {
+   content: 'F';
+   background: #7c7;
+ }
+
+ .CodeMirror-Tern-completion-array:before {
+   content: 'A';
+   background: #c66;
+ }
+
+ .CodeMirror-Tern-completion-number:before {
+   content: '1';
+   background: #999;
+ }
+
+ .CodeMirror-Tern-completion-string:before {
+   content: 'S';
+   background: #999;
+ }
+
+ .CodeMirror-Tern-completion-bool:before {
+   content: 'B';
+   background: #999;
+ }
+
+ .CodeMirror-Tern-completion-guess {
+   color: #999;
+ }*/
+.CodeMirror-hints {
+  z-index: 3000;
+}
+
+.CodeMirror-Tern-tooltip {
+  border: 1px solid silver;
+  border-radius: 3px;
+  color: #444;
+  padding: 2px 5px;
+  padding-right: 15px;
+  font-size: 90%;
+  font-family: monospace;
+  background-color: white;
+  white-space: pre-wrap;
+  max-width: 50em;
+  max-height: 30em;
+  overflow-y: auto;
+  position: absolute;
+  z-index: 2000;
+  -webkit-box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
+  -moz-box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
+  box-shadow: 2px 3px 5px rgba(0, 0, 0, .2);
+  transition: opacity 1s;
+  -moz-transition: opacity 1s;
+  -webkit-transition: opacity 1s;
+  -o-transition: opacity 1s;
+  -ms-transition: opacity 1s;
+}
+
+.CodeMirror-Tern-tooltip-boxclose {
+  position: absolute;
+  top: 0;
+  right: 3px;
+  color: red;
+}
+
+.CodeMirror-Tern-tooltip-boxclose:hover {
+  background-color: yellow;
+}
+
+.CodeMirror-Tern-tooltip-boxclose:before {
+  content: '×';
+  cursor: pointer;
+  font-weight: bold;
+  font-size: larger;
+}
+
+.CodeMirror-Tern-tooltip-link {
+  font-size: smaller;
+  color: blue;
+}
+
+
+
+.CodeMirror-Tern-hint-doc {
+  max-width: 35em;
+}
+
+.CodeMirror-Tern-fhint-guess {
+  opacity: .7;
+}
+
+.CodeMirror-Tern-fname {
+  color: black;
+}
+
+.CodeMirror-Tern-farg {
+  color: #70a;
+}
+
+.CodeMirror-Tern-farg-current {
+  color: #70a;
+  font-weight: bold;
+  font-size: larger;
+  text-decoration: underline;
+}
+
+.CodeMirror-Tern-farg-current-description {
+  font-style: italic;
+  margin-top: 2px;
+  color: black;
+}
+
+.CodeMirror-Tern-farg-current-name {
+  font-weight: bold;
+}
+
+.CodeMirror-Tern-type {
+  color: #07c;
+  font-size: smaller;
+}
+
+.CodeMirror-Tern-jsdoc-tag {
+  color: #B93A38;
+  text-transform: lowercase;
+  font-size: smaller;
+  font-weight: 600;
+}
+
+.CodeMirror-Tern-jsdoc-param-wrapper { /*background-color: #FFFFE3; padding:3px;*/
+}
+
+.CodeMirror-Tern-jsdoc-tag-param-child {
+  display: inline-block;
+  width: 0px;
+}
+
+.CodeMirror-Tern-jsdoc-param-optionalWrapper {
+  font-style: italic;
+}
+
+.CodeMirror-Tern-jsdoc-param-optionalBracket {
+  color: grey;
+  font-weight: bold;
+}
+
+.CodeMirror-Tern-jsdoc-param-name {
+  color: #70a;
+  font-weight: bold;
+}
+
+.CodeMirror-Tern-jsdoc-param-defaultValue {
+  color: grey;
+}
+
+.CodeMirror-Tern-jsdoc-param-description {
+  color: black;
+}
+
+.CodeMirror-Tern-typeHeader-simple {
+  /*font-size: smaller;*/
+  font-weight: bold;
+  display: block;
+  font-style: italic;
+  margin-bottom: 3px;
+  color: grey;
+}
+
+.CodeMirror-Tern-typeHeader {
+  display: block;
+  font-style: italic;
+  margin-bottom: 3px;
+}

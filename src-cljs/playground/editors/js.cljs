@@ -1,5 +1,6 @@
 (ns playground.editors.js
-  (:require [re-frame.core :as rf]))
+  (:require [re-frame.core :as rf]
+            [playground.editors.tern :as tern]))
 
 
 (def max-window-width 650)
@@ -12,7 +13,23 @@
                           (clj->js {:value          value
                                     :lineNumbers    true
                                     :mode           {:name mode}
-                                    :scrollbarStyle "overlay"}))]
+                                    :scrollbarStyle "overlay"
+                                    ;:extraKeys      {"Ctrl-Space" "autocomplete"}
+                                    :extraKeys      {"Ctrl-Space" #(when @tern/server
+                                                                     (.complete @tern/server %))}
+                                    }))]
+
+    ;;  editor.on("cursorActivity", function(cm) { server.updateArgHints(cm); });
+    (.on cm "cursorActivity" (fn [cm]
+                               (when @tern/server
+                                 (js/updateArgHints @tern/server cm))))
+
+    (.on cm "keyup" (fn [cm e]
+                      (when (and
+                              @tern/server
+                              (= (or (.-which e) (.-keyCode e)) 190)) ;;  "." character
+                        (.complete @tern/server cm))))
+
     (.on cm "change" (fn [cm change]
                        (rf/dispatch [:change-code type (.getValue cm)])))
     (rf/dispatch [:change-code type (.getValue cm)])

@@ -4,6 +4,12 @@ CodeMirror.getValue = function(){}
 CodeMirror.getDoc = function(){}
 CodeMirror.getDoc.prototype.setValue = function(code){}
 
+CodeMirror.TernServer = function(props){}
+CodeMirror.TernServer.prototype.complete = function(cm){}
+CodeMirror.TernServer.prototype.updateArgHints = function(cm){}
+var completionTip = function(){}
+var updateArgHints = function(){}
+
 var Clipboard = function(elem, settings) {}
 
 var splitMe = {}
