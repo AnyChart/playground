@@ -13,7 +13,7 @@
                                                           :name              "result-iframe"
                                                           :class             "iframe-result"
                                                           :sandbox           "allow-scripts allow-pointer-lock allow-same-origin allow-popups allow-modals allow-forms"
-                                                          :allowTransparency "true"
+                                                          :allowtransparency "true"
                                                           :allowFullScreen   "true"}])}))
 
 
