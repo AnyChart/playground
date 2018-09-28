@@ -3,9 +3,9 @@
 
 (def server (atom nil))
 
-(def defs-url ["/codemirror/defs/anychart.json"
+(def defs-url ["/codemirror/defs/browser.json"
                "/codemirror/defs/ecma5.json"
-               "/codemirror/defs/browser.json"])
+               "/codemirror/defs/anychart.json"])
 (def defs (atom []))
 
 
