@@ -5,7 +5,10 @@
 
 (def defs-url ["/codemirror/defs/browser.json"
                "/codemirror/defs/ecma5.json"
-               "/codemirror/defs/anychart.json"])
+               "/codemirror/defs/anychart.json"
+               ;; For TernJS testing
+               ;; "/codemirror/defs/my.json"
+               ])
 (def defs (atom []))
 
 

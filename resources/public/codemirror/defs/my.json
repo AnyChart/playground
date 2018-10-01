@@ -1,0 +1,47 @@
+{
+  "!name": "my",
+  "my": {
+    "myfunc" : {
+      "!type" : "fn(data: +my.charts.Pie|+my.charts.Area) -> +my.charts.Pie|+my.charts.Area",
+      "!doc" : "Creates and returns a Pie or Area."
+    },
+    "myfunc2" : {
+      "!type" : "fn() -> string|number",
+      "!doc" : "Creates and returns a Pie or Area."
+    },
+    "myfunc3" : {
+      "!type" : "fn(data: {field: +my.charts.Pie|+my.charts.Area}) -> string|number",
+      "!doc" : "Creates and returns a Pie or Area."
+    },
+    "charts": {
+      "Pie": {
+        "!doc": "Pie chart class.",
+        "prototype": {
+          "toHtmlTable": {
+            "!type": "fn(opt_title?: string, opt_asString?: bool) -> Element|string",
+            "!url": "https://api.anychart.com/8.3.0/anychart.core.Chart#toHtmlTable",
+            "!doc": "Creates and returns a chart as HTML table."
+          },
+          "getPngBase64String": {
+            "!type": "fn(onSuccessOrOptions: fn()|+Object, opt_onError?: fn(), opt_width?: number, opt_height?: number, opt_quality?: number)",
+            "!url": "https://api.anychart.com/8.3.0/anychart.core.Chart#getPngBase64String",
+            "!doc": "Returns PNG as base64 string."
+          }
+        }
+      },
+      "Area": {
+        "!doc": "Area chart class.",
+        "prototype": {
+          "toHtmlTable": {
+            "!type": "fn(opt_title?: string, opt_asString?: bool) -> Element|string",
+            "!doc": "Creates and returns a chart as HTML table."
+          },
+          "getPngBase64String": {
+            "!type": "fn(onSuccessOrOptions: fn()|+Object, opt_onError?: fn(), opt_width?: number, opt_height?: number, opt_quality?: number)",
+            "!doc": "Returns PNG as base64 string."
+          }
+        }
+      }
+    }
+  }
+}
