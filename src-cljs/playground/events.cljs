@@ -43,9 +43,10 @@
                                         :editors-margin-top    (editors-js/editors-margin-top)
                                         :view                  view
                                         :previous-resized-view previous-resized-view
-                                        :code-settings         {:show false}
-                                        :iframe-update         0}
+                                        :iframe-update         0
 
+                                        :code                  {:settings-menu {:show false}
+                                                                :autocomplete  true}}
                       :sample          (:sample data)
                       :saved-sample    (:sample data)
                       :templates       (:templates data)

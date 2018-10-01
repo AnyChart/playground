@@ -55,10 +55,6 @@
                 scripts-data)))
 
 
-(rf/reg-sub :editors.code-settings/show
-            (fn [db _] (-> db :editors :code-settings :show)))
-
-
 (rf/reg-sub :editors/iframe-hider-show
             (fn [db _]
               (or (-> db :settings :show)
@@ -72,6 +68,21 @@
 (rf/reg-sub :editors/iframe-update
             (fn [db _]
               (-> db :editors :iframe-update)))
+
+
+; ======================================================================================================================
+;; Code editor top line control
+;;======================================================================================================================
+(rf/reg-sub :editors.code.settings-menu/show
+            (fn [db _] (-> db :editors :code :settings-menu :show)))
+
+
+(rf/reg-sub :editors.code/autocomplete
+            (fn [db _] (-> db :editors :code :autocomplete)))
+
+
+(rf/reg-sub :editors.code/show-autocomplete-checkbox
+            (fn [db _] (-> db :editors :code :show-autocomplete-checkbox)))
 
 
 ; ======================================================================================================================

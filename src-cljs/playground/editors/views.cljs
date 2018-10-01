@@ -42,17 +42,26 @@
   [:div.editor-container
    [:div.top-line
     [:span.editor-label-name "JavaScript"]
+
+    (when @(rf/subscribe [:editors.code/show-autocomplete-checkbox])
+      [:div.autocomplete-box
+       [:input {:type      "checkbox"
+                :id        "autocomplete-checkbox"
+                :checked   @(rf/subscribe [:editors.code/autocomplete])
+                :on-change #(rf/dispatch [:editors.code.autocomplete/toggle])}]
+       [:label {:for "autocomplete-checkbox"} "Autocomplete"]])
+
     (when @(rf/subscribe [:editors/show-code-copy-button])
       [:a#code-editor-copy.editor-label.editor-label-copy
        [:span "copy"]
        [:div.icon.icon-copy]])
     ;; TODO: wait js button design
     ;[:a.editor-label.editor-label-gear {:id       "code-editor-settings-button"
-    ;                                    :on-click #(rf/dispatch [:editors.code-settings/show])}
+    ;                                    :on-click #(rf/dispatch [:editors.code.settings-menu/show])}
     ; [:span "javascript"]
     ; [:div.icon.icon-settings]]
     ]
-   (when @(rf/subscribe [:editors.code-settings/show])
+   (when @(rf/subscribe [:editors.code.settings-menu/show])
      [:div#code-context-menu.code-context-menu
       [:h4 "Added resources"]
       [:div

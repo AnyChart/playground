@@ -1,5 +1,6 @@
 (ns playground.editors.js
   (:require [re-frame.core :as rf]
+            [re-frame.db :as rfdb]
             [playground.editors.tern :as tern]))
 
 
@@ -27,7 +28,9 @@
     (.on cm "keyup" (fn [cm e]
                       (when (and
                               @tern/server
-                              (= (or (.-which e) (.-keyCode e)) 190)) ;;  "." character
+                              (= (or (.-which e) (.-keyCode e)) 190) ;;  "." character
+                              ;; TODO: consider to make it in re-frame events flow
+                              (-> @rfdb/app-db :editors :code :autocomplete))
                         (.complete @tern/server cm))))
 
     (.on cm "change" (fn [cm change]
@@ -90,6 +93,6 @@
                                     btn
                                     (not (.contains code-menu (.-target e)))
                                     (not (.contains btn (.-target e))))
-                           (rf/dispatch [:editors.code-settings/hide]))))))
+                           (rf/dispatch [:editors.code.settings-menu/hide]))))))
 
 (init)

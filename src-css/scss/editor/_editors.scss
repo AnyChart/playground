@@ -1,0 +1,116 @@
+.column-container {
+  display: flex;
+  flex-direction: row;
+  overflow-y: auto;
+  margin-top: 58px;
+
+  .editor-container {
+    position: relative;
+    background-color: $main-bg-color;
+
+    .top-line {
+      width: 100%;
+      height: 35px;
+      background-color: $main-bg-color;
+      user-select: none;
+      //border-bottom: 1px solid #95bfd3;
+
+      .editor-label-name {
+        font-size: 12px;
+        color: $footer-caption-color;
+        margin-left: 20px;
+        margin-top: 10px;
+        display: inline-block;
+      }
+
+      .autocomplete-box {
+        display: flex;
+        position: absolute;
+        right: 80px;
+        top: 10px;
+        input {
+          color: $footer-caption-color;
+        }
+        label {
+          font-size: 12px;
+          font-weight: normal;
+          color: $footer-caption-color;
+        }
+      }
+
+      // Copy and other editors buttons
+      .editor-label {
+        background-color: rgba(246, 246, 246, 0.8);
+        position: absolute;
+        top: 11px;
+        z-index: 100;
+        font-size: 11px;
+        //letter-spacing: 1.2px;
+        color: $footer-caption-color;
+        display: flex;
+        cursor: pointer;
+        text-transform: uppercase;
+        user-select: none;
+        &.editor-label-gear {
+          right: 77px;
+        }
+        &.editor-label-copy {
+          right: 15px;
+        }
+        &:hover, &:focus {
+          text-decoration: none;
+          color: $intro-bg-color;
+          div.icon {
+            background-color: $intro-bg-color;
+          }
+        }
+        div.icon {
+          height: 14px;
+          width: 14px;
+          display: inline-block;
+          background-color: #80a9bd;
+          -webkit-mask-size: contain;
+          mask-size: contain;
+          margin-left: 5px;
+          &.icon-copy {
+            mask-image: url(/icons/editor/copy.svg);
+            mask-size: 14px 14px;
+            -webkit-mask-image: url(/icons/editor/copy.svg);
+            -webkit-mask-size: 14px 14px;
+          }
+          &.icon-settings {
+            mask-image: url(/icons/editor/settings.svg);
+            mask-size: 14px 14px;
+            -webkit-mask-image: url(/icons/editor/settings.svg);
+            -webkit-mask-size: 15px 15px;
+            width: 15px;
+            height: 15px;
+          }
+        }
+      }
+    }
+
+    .editor-box {
+      width: 100%;
+      height: calc(100% - 35px);
+    }
+
+    // Code context menu
+    .code-context-menu {
+      background-color: white;
+      padding: 15px;
+      position: absolute;
+      top: 40px;
+      right: 20px;
+      z-index: 101;
+      box-shadow: 0 0 5px rgba(57, 70, 78, .15), 0 20px 55px -8px rgba(57, 70, 78, .25);
+      .code-context-menu-close-icon {
+        cursor: pointer;
+      }
+      select {
+        max-width: 200px;
+      }
+    }
+
+  }
+}

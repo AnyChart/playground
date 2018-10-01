@@ -166,17 +166,23 @@
 ;; Code context menu
 ;;======================================================================================================================
 (rf/reg-event-db
-  :editors.code-settings/show
+  :editors.code.settings-menu/show
   (fn [db _]
-    (update-in db [:editors :code-settings :show] not)))
+    (update-in db [:editors :code :settings-menu :show] not)))
 
 
 (rf/reg-event-db
-  :editors.code-settings/hide
+  :editors.code.settings-menu/hide
   (fn [db _]
     ;TODO: eliminate dispatch in event handler
     (rf/dispatch [:tips/add-from-queue])
-    (assoc-in db [:editors :code-settings :show] false)))
+    (assoc-in db [:editors :code :settings-menu :show] false)))
+
+
+(rf/reg-event-db
+  :editors.code.autocomplete/toggle
+  (fn [db _]
+    (update-in db [:editors :code :autocomplete] not)))
 
 
 ;;======================================================================================================================
@@ -230,7 +236,9 @@
 (rf/reg-event-db
   :editors/code-width-change
   (fn [db [_ width]]
-    (assoc-in db [:editors :code :show-copy-button] (> width 140))))
+    (-> db
+        (assoc-in [:editors :code :show-copy-button] (> width 140))
+        (assoc-in [:editors :code :show-autocomplete-checkbox] (> width 280)))))
 
 
 (rf/reg-event-db
