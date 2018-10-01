@@ -12,7 +12,7 @@
 
 
 (def keyword-names {:description       "Description"
-                    :create-date       "Creation Date"
+                    ;:create-date       "Creation Date"
 
                     :tags              "Tags"
                     ;:repo-id 2
@@ -52,18 +52,27 @@
     diffs-names))
 
 
+(defn same-samples
+  "A user can load another sample in current tab, or switch to another revision.
+  If so, we don't need to restore changes from another modified sample"
+  [sample session-sample]
+  (and (= (:id sample)
+          (:id session-sample))))
+
+
 (rf/reg-event-db
   :changes-window/check-visibility
   [detect-version-interceptor]
   (fn [db _]
-    (let [session-storage-sample (-> db :session-storage deref :sample)
-          session-storage-sample (select-keys session-storage-sample (keys keyword-names))
+    (let [session-storage-sample-all (-> db :session-storage deref :sample)
+          session-storage-sample (select-keys session-storage-sample-all (keys keyword-names))
 
-          sample (-> db :sample)
-          sample (select-keys sample (keys keyword-names))
+          sample-all (-> db :sample)
+          sample (select-keys sample-all (keys keyword-names))
 
           show-changes-window (and (some? session-storage-sample)
-                                   (not= sample session-storage-sample))
+                                   (not= sample session-storage-sample)
+                                   (same-samples sample-all session-storage-sample-all))
           diffs (get-diffs session-storage-sample sample)]
       (-> db
           (assoc-in [:changes-window :show] show-changes-window)
