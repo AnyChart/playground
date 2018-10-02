@@ -23,18 +23,50 @@
         display: inline-block;
       }
 
-      .autocomplete-box {
+      label.autocomplete-box {
         display: flex;
         position: absolute;
         right: 80px;
         top: 10px;
+        font-size: 12px;
+        font-weight: normal;
+        cursor: pointer;
+        color: $footer-caption-color;
         input {
-          color: $footer-caption-color;
+          opacity: 0;
+          width: 0;
+          display: none;
         }
-        label {
-          font-size: 12px;
-          font-weight: normal;
-          color: $footer-caption-color;
+        span::before {
+          position: absolute;
+          content: "";
+          display: inline-block;
+          height: 12px;
+          width: 12px;
+          border: 1px solid;
+          margin-top: 2px;
+          left: -16px;
+          border-radius: 0px;
+        }
+        span::after {
+          position: absolute;
+          content: "";
+          display: inline-block;
+          height: 6px;
+          width: 8px;
+          border-left: 2px solid;
+          border-bottom: 2px solid;
+          transform: rotate(-45deg);
+          left: -14px;
+          top: 4px;
+        }
+        /*Hide the checkmark by default*/
+        input[type="checkbox"] + span::after {
+          content: none;
+        }
+        /*Unhide the checkmark on the checked state*/
+        input[type="checkbox"]:checked + span::after {
+          content: "";
         }
       }
 

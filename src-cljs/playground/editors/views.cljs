@@ -44,12 +44,12 @@
     [:span.editor-label-name "JavaScript"]
 
     (when @(rf/subscribe [:editors.code/show-autocomplete-checkbox])
-      [:div.autocomplete-box
+      [:label.autocomplete-box
        [:input {:type      "checkbox"
-                :id        "autocomplete-checkbox"
                 :checked   @(rf/subscribe [:editors.code/autocomplete])
                 :on-change #(rf/dispatch [:editors.code.autocomplete/toggle])}]
-       [:label {:for "autocomplete-checkbox"} "Autocomplete"]])
+       [:span]
+       "Autocomplete"])
 
     (when @(rf/subscribe [:editors/show-code-copy-button])
       [:a#code-editor-copy.editor-label.editor-label-copy
