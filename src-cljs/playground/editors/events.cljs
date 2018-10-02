@@ -13,7 +13,7 @@
   (fn [{db :db} _]
     (let [markup-editor (editors-js/create-editor :markup (-> db :sample :markup) "text/html")
           style-editor (editors-js/create-editor :style (-> db :sample :style) "css")
-          code-editor (editors-js/create-editor :code (-> db :sample :code) "javascript")]
+          code-editor (editors-js/create-js-editor :code (-> db :sample :code) "javascript")]
       {:db (-> db
                ;; editors
                (assoc-in [:editors :markup :editor] markup-editor)

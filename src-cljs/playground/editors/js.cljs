@@ -14,16 +14,39 @@
                           (clj->js {:value          value
                                     :lineNumbers    true
                                     :mode           {:name mode}
+                                    :scrollbarStyle "overlay"}))]
+    (.on cm "change" (fn [cm change]
+                       (rf/dispatch [:change-code type (.getValue cm)])))
+    (rf/dispatch [:change-code type (.getValue cm)])
+    cm))
+
+
+(defn create-js-editor [type value mode]
+  ;(utils/log "create-editor: " type value mode)
+  (let [editor-name (str (name type) "-editor")
+        key-map {"Ctrl-Space" #(when @tern/server (.complete @tern/server %))
+                 "Ctrl-O"     #(when @tern/server (.showDocs @tern/server %))
+                 "Ctrl-I"     #(when @tern/server (.showType @tern/server %))
+                 "Alt-."      #(when @tern/server (.jumpToDef @tern/server %))
+                 "Alt-,"      #(when @tern/server (.jumpBack @tern/server %))
+                 "Ctrl-Q"     #(when @tern/server (.rename @tern/server %))}
+
+        cm (js/CodeMirror (.getElementById js/document editor-name)
+                          (clj->js {:value          value
+                                    :lineNumbers    true
+                                    :mode           {:name mode}
                                     :scrollbarStyle "overlay"
                                     ;:extraKeys      {"Ctrl-Space" "autocomplete"}
-                                    :extraKeys      {"Ctrl-Space" #(when @tern/server
-                                                                     (.complete @tern/server %))}
-                                    }))]
+                                    :extraKeys      key-map}))]
 
     ;;  editor.on("cursorActivity", function(cm) { server.updateArgHints(cm); });
     ;(.on cm "cursorActivity" (fn [cm]
     ;                           (when @tern/server
     ;                             (js/updateArgHints @tern/server cm))))
+
+    (.on cm "cursorActivity" (fn [cm]
+                               (when @tern/server
+                                 (.updateArgHints @tern/server cm))))
 
     (.on cm "keyup" (fn [cm e]
                       (when (and

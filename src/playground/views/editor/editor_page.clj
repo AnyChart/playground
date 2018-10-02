@@ -97,7 +97,15 @@
      ; codemirror
      [:link {:href "/codemirror/lib/codemirror.min.css" :rel "stylesheet"}]
      [:link {:href "/codemirror/addon/scroll/simplescrollbars.css" :rel "stylesheet"}]
+
      [:script {:src "/js/codemirror.min.js"}]
+     ;; include next files:
+     ;[:script {:src "/codemirror/lib/codemirror.js"}]
+     ;[:script {:src "/codemirror/addon/scroll/simplescrollbars.js"}]
+     ;[:script {:src "/codemirror/mode/javascript/javascript.js"}]
+     ;[:script {:src "/codemirror/mode/css/css.js"}]
+     ;[:script {:src "/codemirror/mode/xml/xml.js"}]
+     ;[:script {:src "/codemirror/mode/htmlmixed/htmlmixed.js"}]
 
      [:link {:href "/codemirror/addon/dialog/dialog.css" :rel "stylesheet"}]
      [:link {:href "/codemirror/addon/hint/show-hint.css" :rel "stylesheet"}]
