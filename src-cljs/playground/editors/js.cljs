@@ -21,9 +21,9 @@
                                     }))]
 
     ;;  editor.on("cursorActivity", function(cm) { server.updateArgHints(cm); });
-    (.on cm "cursorActivity" (fn [cm]
-                               (when @tern/server
-                                 (js/updateArgHints @tern/server cm))))
+    ;(.on cm "cursorActivity" (fn [cm]
+    ;                           (when @tern/server
+    ;                             (js/updateArgHints @tern/server cm))))
 
     (.on cm "keyup" (fn [cm e]
                       (when (and
@@ -35,6 +35,7 @@
 
     (.on cm "change" (fn [cm change]
                        (rf/dispatch [:change-code type (.getValue cm)])))
+
     (rf/dispatch [:change-code type (.getValue cm)])
     cm))
 
