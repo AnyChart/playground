@@ -95,7 +95,7 @@
              :rel         "stylesheet"}]
 
      ; codemirror
-     [:link {:href "/codemirror/lib/codemirror.min.css" :rel "stylesheet"}]
+     [:link {:href "/codemirror/lib/codemirror.css" :rel "stylesheet"}]
      [:link {:href "/codemirror/addon/scroll/simplescrollbars.css" :rel "stylesheet"}]
 
      [:script {:src "/js/codemirror.min.js"}]
