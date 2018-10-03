@@ -43,7 +43,7 @@ sudo apt-get install pngquant
 ### PostgreSQL
 PostgreSQL is used as a main storage.
 
-[Database Scheme](src/sql/scheme_postgre.sql)
+[Database Schema](src/sql/schema_postgre.sql)
 
 ### Redis
 Redis is used for communications between generators and Web part of application.
