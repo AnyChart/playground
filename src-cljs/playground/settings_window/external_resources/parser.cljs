@@ -11,7 +11,7 @@
 
 
 (defn get-modules-url [version-url]
-  (str "https://cdn.anychart.com/releases/" version-url "/js/modules.json"))
+  (str "https://cdn.anychart.com/releases/" version-url "/resources.json"))
 
 
 (defn v8? [version]
@@ -76,7 +76,7 @@
 
 
 (defn compose-modules [data version]
-  (let [modules (remove (fn [[url-name data]] (:internal data)) (:modules data))
+  (let [modules (remove (fn [[url-name data]] (:internal data)) (:modules (:modules data)))
         modules (map (fn [[url-name data]]
                        {:name          (or (:name data) (str "Unnamed module with ID: " (name url-name)))
                         :description   (:desc data)
