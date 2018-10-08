@@ -63,8 +63,8 @@
              (for [link (:pgLinks chart-type)]
                [:div [:a {:href link} link]])]
             [:div.note "Read more information in our documentation:"
-             (for [[k v] (:docsLinks chart-type)]
-               [:div [:a {:href v} k]])]]]]
+             (for [{:keys [name link]} (:docsLinks chart-type)]
+               [:div [:a {:href link} name]])]]]]
          ]
 
         ;[:iframe.clear-iFrame
