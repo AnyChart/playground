@@ -12,6 +12,7 @@ CodeMirror.TernServer.prototype.jumpToDef = function(cm){}
 CodeMirror.TernServer.prototype.jumpBack = function(cm){}
 CodeMirror.TernServer.prototype.rename = function(cm){}
 CodeMirror.TernServer.prototype.updateArgHints = function(cm){}
+CodeMirror.TernServer.prototype.request = function(cm, query, c, pos){}
 var completionTip = function(){}
 var updateArgHints = function(){}
 

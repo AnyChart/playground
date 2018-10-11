@@ -1,9 +1,90 @@
 (ns playground.editors.js
   (:require [re-frame.core :as rf]
             [re-frame.db :as rfdb]
-            [playground.editors.tern :as tern]))
+            [playground.editors.tern :as tern]
+            [clojure.string :as string]
+            [ajax.core :refer [GET POST]]))
 
 
+;; =====================================================================================================================
+;; get AnyChart API methods info from code string
+;; =====================================================================================================================
+(defn re-seq-index
+  ([re s i]
+   (let [match-data (re-find re s)
+         match-idx (.search s re)
+         match-str (if (coll? match-data) (first match-data) match-data)
+         post-match (subs s (+ match-idx (count match-str)))]
+     (when match-data
+       (lazy-seq (cons {:data  match-data
+                        :index (+ i match-idx)}
+                       (when (seq post-match)
+                         (re-seq-index re
+                                       post-match
+                                       (+ i match-idx (count match-str)))))))))
+  ([re s] (re-seq-index re s 0)))
+
+
+(defn make-tern-request [cm pos callback]
+  (.request @tern/server
+            cm
+            "type"
+            (fn [error js-data]
+              (if error
+                (do
+                  (println "get AnyChart Tern type error: ")
+                  (.log js/console error)
+                  (callback {}))
+                (let [data (js->clj js-data :keywordize-keys true)]
+                  ;(.log js/console "Found:")
+                  ;(.log js/console js-data)
+                  ;(.log js/console (:url data))
+                  (callback data))))
+            pos))
+
+
+(defn get-docs-articles [results]
+  (let [urls (->> results
+                  (map :url)
+                  (filter #(and (some? %)
+                                (string/includes? % "anychart")))
+                  (map #(last (string/split % #"/")))
+                  distinct)]
+    (.log js/console (pr-str urls))
+    (POST
+      ;; "http://localhost:8080/links"
+      "http://docs.anychart.stg/links"
+      {:params        {:api-methods urls
+                       :version     "develop"
+                       :project     "docs"
+                       :url         "samples/quick_start_pie"}
+       :format        :json
+       :handler       #(prn %)
+       :error-handler #(println "Error " %)})))
+
+
+(defn getAnyChartDefs [cm]
+  (let [data (.getValue cm)
+        re #"\.[a-zA-Z_0-9]+\("
+        indicies (re-seq-index re data)
+        results (atom [])]
+    (doseq [method-call indicies]
+      ;(.log js/console (clj->js i))
+      (let [index (:index method-call)]
+        ;data (.getAnyChartDefs @tern/server cm (inc index))
+        (make-tern-request cm (inc index)
+                           (fn [data]
+                             (let [full-data (merge method-call data)]
+                               (swap! results conj full-data)
+                               (when (= (count indicies)
+                                        (count @results))
+                                 (.log js/console (pr-str (map identity @results)))
+                                 (get-docs-articles @results)))))))))
+
+
+;; =====================================================================================================================
+;; Editors creation
+;; =====================================================================================================================
 (def max-window-width 650)
 
 
@@ -35,7 +116,10 @@
                  "Ctrl-I"     #(when (tern-enabled) (.showType @tern/server %))
                  "Alt-."      #(when (tern-enabled) (.jumpToDef @tern/server %))
                  "Alt-,"      #(when (tern-enabled) (.jumpBack @tern/server %))
-                 "Ctrl-Q"     #(when (tern-enabled) (.rename @tern/server %))}
+                 "Ctrl-Q"     #(when (tern-enabled) (.rename @tern/server %))
+                 ; "Ctrl-B"     #(when (tern-enabled) (.getAnyChartDefs @tern/server %))
+                 "Ctrl-M"     #(when (tern-enabled) (time (getAnyChartDefs %)))
+                 }
 
         cm (js/CodeMirror (.getElementById js/document editor-name)
                           (clj->js {:value          value
