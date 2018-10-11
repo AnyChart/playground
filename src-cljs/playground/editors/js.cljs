@@ -179,7 +179,7 @@
 (defn editors-height []
   (- (window-height)
      (editors-margin-top)                                   ; header height
-     70                                                     ; footer height
+     ;; 70                                                     ; footer height
      ))
 
 

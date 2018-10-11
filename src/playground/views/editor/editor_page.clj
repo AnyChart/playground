@@ -156,7 +156,7 @@
 
      [:div#main-container]
 
-     (page/bottom-footer)
+     ;(page/bottom-footer)
 
      [:script {:src (str "/js/playground.js?v=" (c/commit)) :type "text/javascript"}]
      [:script {:type "text/javascript"}

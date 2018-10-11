@@ -10,7 +10,8 @@
             [playground.utils.utils :as utils-main]
             [playground.data.consts :as consts]
             [playground.modal-window.views :as modal-view]
-            [playground.changes-window.views :as changes-window]))
+            [playground.changes-window.views :as changes-window]
+            [playground.left-panel.views :as left-panel]))
 
 
 (defn navbar []
@@ -200,6 +201,7 @@
    ;[send-form]
    [navbar]
    [editors/editors]
+   [left-panel/view]
    [tips/tips]
    [sidemenu/view]
    [modal-view/window]])

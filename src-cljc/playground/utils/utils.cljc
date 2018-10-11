@@ -1,5 +1,21 @@
 (ns playground.utils.utils
-  (:require [clojure.string :as string]))
+  (:require [clojure.string :as string]
+    #?(:cljs
+       [cljs-time.coerce :as c]
+       :clj
+            [clj-time.coerce :as c])
+    #?(:clj
+            [clj-time.format :as f]
+       :cljs
+       [cljs-time.format :as f])
+    #?(:clj
+            [clj-time.core :as t]
+       :cljs [cljs-time.core :as t])))
+
+
+(defn year []
+  #?(:clj  (t/year (t/now))
+     :cljs (t/year (t/now))))
 
 
 (defn released-version? [version-key]
