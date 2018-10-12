@@ -4,6 +4,30 @@
             [playground.utils.utils :as utils]
             [ajax.core :refer [GET POST]]))
 
+;;======================================================================================================================
+;; Tern
+;;======================================================================================================================
+(rf/reg-event-db
+  :tern/on-get-anychart-defs
+  (fn [db [_ data]]
+    (-> db
+        (assoc-in [:left-panel :docs] data))))
+
+
+(rf/reg-fx
+  :tern/get-anychart-defs
+  (fn [[code-editor sample version]]
+    (editors-js/get-anychart-defs code-editor sample version)))
+
+
+(rf/reg-event-fx
+  :tern/udpate-anychart-defs
+  (fn [{db :db} _]
+    (let [code-editor (-> db :editors :code :editor)
+          sample (-> db :sample)
+          selected-version (-> db :settings :selected-version)]
+      {:tern/get-anychart-defs [code-editor sample selected-version]})))
+
 
 ;;======================================================================================================================
 ;; Editors

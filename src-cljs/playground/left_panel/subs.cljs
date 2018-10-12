@@ -10,3 +10,8 @@
 (rf/reg-sub :left-panel/docs-tab?
             (fn [db _]
               (= (-> db :left-panel :tab) :docs)))
+
+
+(rf/reg-sub :left-panel/docs
+            (fn [db _]
+              (-> db :left-panel :docs)))

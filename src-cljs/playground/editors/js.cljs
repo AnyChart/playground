@@ -43,7 +43,7 @@
             pos))
 
 
-(defn get-docs-articles [results]
+(defn get-docs-articles [results sample version]
   (let [urls (->> results
                   (map :url)
                   (filter #(and (some? %)
@@ -54,16 +54,18 @@
     (POST
       ;; "http://localhost:8080/links"
       "http://docs.anychart.stg/links"
-      {:params        {:api-methods urls
-                       :version     "develop"
-                       :project     "docs"
-                       :url         "samples/quick_start_pie"}
-       :format        :json
-       :handler       #(prn %)
-       :error-handler #(println "Error " %)})))
+      {:params          {:api-methods urls
+                         :version     version
+                         :project     (:repo-name sample)
+                         :url         (:url sample)}
+       :format          :json
+       :response-format :json
+       :keywords?       true
+       :handler         #(rf/dispatch [:tern/on-get-anychart-defs %])
+       :error-handler   #(println "Error " %)})))
 
 
-(defn getAnyChartDefs [cm]
+(defn get-anychart-defs [cm sample version]
   (let [data (.getValue cm)
         re #"\.[a-zA-Z_0-9]+\("
         indicies (re-seq-index re data)
@@ -79,7 +81,7 @@
                                (when (= (count indicies)
                                         (count @results))
                                  (.log js/console (pr-str (map identity @results)))
-                                 (get-docs-articles @results)))))))))
+                                 (get-docs-articles @results sample version)))))))))
 
 
 ;; =====================================================================================================================
@@ -118,7 +120,8 @@
                  "Alt-,"      #(when (tern-enabled) (.jumpBack @tern/server %))
                  "Ctrl-Q"     #(when (tern-enabled) (.rename @tern/server %))
                  ; "Ctrl-B"     #(when (tern-enabled) (.getAnyChartDefs @tern/server %))
-                 "Ctrl-M"     #(when (tern-enabled) (time (getAnyChartDefs %)))
+                 ;"Ctrl-M"     #(when (tern-enabled) (time (get-anychart-defs % {})))
+                 "Ctrl-M"     #(when (tern-enabled) (rf/dispatch [:tern/udpate-anychart-defs]))
                  }
 
         cm (js/CodeMirror (.getElementById js/document editor-name)

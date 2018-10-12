@@ -1,5 +1,6 @@
 (ns playground.editors.tern
-  (:require [ajax.core :refer [GET POST]]))
+  (:require [ajax.core :refer [GET POST]]
+            [re-frame.core :as rf]))
 
 (def server (atom nil))
 
@@ -12,7 +13,7 @@
 (def defs (atom []))
 
 
-(defn init-tern [f]
+(defn init-tern []
   ;(println "Init Tern defs")
   (let [loaded (atom 0)]
     (doseq [url defs-url]
@@ -34,6 +35,6 @@
                                   ;      (fn [cm] (js/updateArgHints @server cm)))
                                   ;(.log js/console "Server:")
                                   ;(.log js/console @server)
-                                  (f)))
+                                  (rf/dispatch [:tern/udpate-anychart-defs])))
             :error-handler   #(println %)}))))
 

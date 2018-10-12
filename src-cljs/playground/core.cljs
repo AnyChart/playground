@@ -32,4 +32,4 @@
     ;(utils/log "Data: " data)
     (init data)
     (mount-html)
-    (tern/init-tern (constantly nil))))
+    (tern/init-tern)))

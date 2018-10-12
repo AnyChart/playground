@@ -53,10 +53,30 @@
 
 
 (defn documentation-tab []
-  [:div.docs-tab
-   "Documentation"
-   ]
-  )
+  (let [{:keys [articles-docs articles-api articles-pg]} @(rf/subscribe [:left-panel/docs])]
+    [:div.docs-tab-container
+     [:div.docs-tab
+      (for [link articles-docs]
+        ^{:key (:url link)} [:div.link.link-docs
+                             [:a {:href   (str "https://docs.anychart.com/" (:url link))
+                                  :target "_blank"
+                                  :title  (:title link)}
+                              (:title link)]])
+
+      (for [link articles-pg]
+        ^{:key (:url link)} [:div.link.link-docs
+                             [:a {:href   (str "https://docs.anychart.com/" (:url link))
+                                  :target "_blank"
+                                  :title  (:title link)}
+                              (:title link)]])
+
+      (for [link articles-api]
+        ^{:key (:url link)} [:div.link
+                             [:a {:href   (str "https://docs.anychart.com/" (:url link))
+                                  :target "_blank"
+                                  :title  (:title link)}
+                              (:title link)]])
+      ]]))
 
 
 (defn bottom-footer []

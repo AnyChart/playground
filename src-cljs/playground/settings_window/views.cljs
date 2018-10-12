@@ -9,10 +9,11 @@
 
 (defn nav-menu []
   [:ul.nav.nav-tabs.settings-tabs
-   [:li {:class (when @(rf/subscribe [:settings/general-tab?]) "active")}
-    [:a {:href     "javascript:;"
-         :role     "button"
-         :on-click #(rf/dispatch [:settings/general-tab])} "General"]]
+
+   ;[:li {:class (when @(rf/subscribe [:settings/general-tab?]) "active")}
+   ; [:a {:href     "javascript:;"
+   ;      :role     "button"
+   ;      :on-click #(rf/dispatch [:settings/general-tab])} "General"]]
 
    (let [correct @(rf/subscribe [:settings.javascript-tab/correct-tab])]
      [:li {:class (when @(rf/subscribe [:settings/javascript-tab?]) "active")}

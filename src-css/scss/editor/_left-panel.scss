@@ -4,7 +4,7 @@
   top: 0;
   left: 0;
   bottom: 0;
-  margin-top: 58px;
+  padding-top: 58px;
   width: 220px;
   //height: 100%;
   border-right: 1px solid $settings-border-color;;
@@ -94,13 +94,38 @@
     }
   }
 
-  .docs-tab {
-    padding: 5px;
+  .docs-tab-container {
+    height: 100%;
+    padding-bottom: 110px;
+    .docs-tab {
+      padding: 5px;
+      overflow-y: auto;
+      height: 100%;
+
+      .link {
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin: 5px;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+      .link-docs {
+        font-weight: 600;
+      }
+
+    }
   }
+
+
 
   .footer-bottom-box {
     display: block;
-    padding-top: 15px;
+    padding: 5px 0;
+    border: none;
+    height: auto;
     .footer-inner {
       text-align: center;
       width: 100%;
