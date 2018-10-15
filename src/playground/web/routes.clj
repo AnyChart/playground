@@ -177,7 +177,7 @@
            (GET "/new/download" [] (-> sample-handlers/show-sample-download mw/check-template-middleware auth/check-anonymous-middleware))
 
 
-           (POST "/run" [] sample-api/run)
+           ; (POST "/run" [] sample-api/run)
            (POST "/save" [] sample-api/save)
            (POST "/fork" [] sample-api/fork)
            (POST "/export" [] (-> sample-api/export auth/check-anonymous-middleware))

@@ -89,10 +89,14 @@
    (sql-versions params {:connection (:conn db)}))"
   [opts]
   (let [fn-name (:name opts)
-        opts (dissoc opts :name)]
+        return-whole-row (:return-whole-row opts)
+        opts (dissoc opts :name :return-whole-row)]
     (if (ends-with? fn-name "<!")
       `(fn [db# & [params#]]
-         (:id (~fn-name (dash->underscore (pg-params params# db#)) (merge {:connection (or (:conn db#) db#)} ~opts))))
+         (~(if return-whole-row
+             underscore->dash
+             :id)
+           (~fn-name (dash->underscore (pg-params params# db#)) (merge {:connection (or (:conn db#) db#)} ~opts))))
       `(fn [db# & [params#]]
          (~fn-name (dash->underscore (pg-params params# db#)) (merge {:connection (or (:conn db#) db#)} ~opts))))))
 
@@ -187,7 +191,8 @@
 (def url-exist (sql {:name          sql-url-exist
                      :result-set-fn first}))
 
-(def add-sample<! (sql {:name sql-add-sample<!}))
+(def add-sample<! (sql {:name             sql-add-sample<!
+                        :return-whole-row true}))
 
 (def samples (sql {:name   sql-samples
                    :row-fn underscore->dash}))

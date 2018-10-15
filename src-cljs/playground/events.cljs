@@ -6,7 +6,7 @@
     ;[accountant.core :as accountant]
             [playground.editors.js :as editors-js]
             [playground.utils.utils :as common-utils]
-            [alandipert.storage-atom :refer [local-storage session-storage]]
+            [alandipert.storage-atom :refer [local-storage session-storage] :as storage-atom]
             [playground.views.iframe :as iframe-view]
             [hiccups.runtime :as hiccupsrt]
             [playground.settings-window.javascript-tab.version-detect :as version-detect]
@@ -25,7 +25,7 @@
                          :hidden-types []
                          :view         :right}
           ls (local-storage (atom default-prefs) :prefs)
-          ss (session-storage (atom {:sample (:sample data)}) :prefs)]
+          ss (session-storage (atom {:sample (:sample data)}) (-> data :sample :id))]
       ;; add default props
       (when (not= (merge default-prefs @ls) @ls)
         (reset! ls (merge default-prefs @ls)))
@@ -92,12 +92,16 @@
   :re-init
   (fn [{db :db} [_ sample]]
     {:db         (-> db
-                     (assoc-in [:sample] sample))
+                     (assoc-in [:sample] sample)
+                     (assoc-in [:changes-window :expand] false)
+                     (assoc-in [:session-storage]
+                               (session-storage (atom {:sample sample}) (:id sample))))
      :dispatch-n [[:sync-saved-sample]
                   [:run]
                   [:update-code (:code sample)]
                   [:update-markup (:markup sample)]
-                  [:update-style (:style sample)]]}))
+                  [:update-style (:style sample)]
+                  [:changes-window/check-visibility]]}))
 
 
 (rf/reg-event-db
@@ -154,17 +158,21 @@
 
 (rf/reg-event-fx
   :save-response
-  (fn [{db :db} [_ data]]
+  [session-storage-sample-interceptor]
+  (fn [{db :db} [_ {sample :sample :as data}]]
     (if (= :ok (:status data))
-      {:db         (-> db
-                       (assoc-in [:sample :version-id] nil)
-                       (assoc-in [:sample :new] false)
-                       (assoc-in [:sample :url] (:hash data))
-                       (assoc-in [:sample :version] (:version data))
-                       (assoc-in [:sample :owner-id] (:owner-id data)))
-       :dispatch-n [[:run]
-                    [:sync-saved-sample]]
-       :update-url data}
+      (do
+        ;; remove changes for base sample
+        (storage-atom/remove-session-storage! (-> db :sample :id))
+        {:db         (-> db
+                         (assoc-in [:sample] sample)
+                         (assoc-in [:sample :new] false)
+                         (assoc-in [:sample :latest] true)
+                         (assoc-in [:session-storage]
+                                   (session-storage (atom {:sample sample}) (:id sample))))
+         :dispatch-n [[:run]
+                      [:sync-saved-sample]]
+         :update-url sample})
       {:db       db
        :dispatch [:save-error "bad status"]})))
 
@@ -195,17 +203,21 @@
 
 (rf/reg-event-fx
   :fork-response
-  (fn [{db :db} [_ data]]
+  [session-storage-sample-interceptor]
+  (fn [{db :db} [_ {sample :sample :as data}]]
+    (storage-atom/remove-session-storage! (-> db :sample :id))
     (if (= :ok (:status data))
-      {:db         (-> db
-                       (assoc-in [:sample :version-id] nil)
-                       (assoc-in [:sample :new] false)
-                       (assoc-in [:sample :url] (:hash data))
-                       (assoc-in [:sample :version] (:version data))
-                       (assoc-in [:sample :owner-id] (:owner-id data)))
-       :dispatch-n [[:run]
-                    [:sync-saved-sample]]
-       :update-url data}
+      (do                                                   ;;
+        ;; (set! (.-location js/window) (str "/" (:hash data)))
+        {:db         (-> db
+                         (assoc-in [:sample] sample)
+                         (assoc-in [:sample :new] false)
+                         (assoc-in [:sample :latest] true)
+                         (assoc-in [:session-storage]
+                                   (session-storage (atom {:sample sample}) (:id sample))))
+         :dispatch-n [[:run]
+                      [:sync-saved-sample]]
+         :update-url sample})
       {:db       db
        :dispatch [:fork-error "bad status"]})))
 
@@ -278,7 +290,7 @@
 ;;======================================================================================================================
 (rf/reg-fx
   :update-url
-  (fn [data]
-    (.pushState (.-history js/window) nil nil (str "/" (:hash data)
-                                                   (when (pos? (:version data))
-                                                     (str "/" (:version data)))))))
+  (fn [sample]
+    (.pushState (.-history js/window) nil nil (str "/" (:url sample)
+                                                   (when (pos? (:version sample))
+                                                     (str "/" (:version sample)))))))

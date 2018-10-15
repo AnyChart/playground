@@ -21,24 +21,23 @@
   (:import (java.util Date)))
 
 
-(defn run [request]
-  (let [code (-> request :params :code)
-        style (-> request :params :style)
-        markup (-> request :params :markup)
-        styles (-> request :params :styles (string/split #","))
-        scripts (-> request :params :scripts (string/split #","))
-        data {:name              "Default name"
-              :tags              []
-              :short-description "Default short desc"
-
-              :scripts           scripts
-              :styles            styles
-
-              :markup            markup
-              :code              code
-              :style             style}]
-    ;(response (render-file "templates/sample.selmer" data))
-    (sample-handlers/show-sample-iframe-by-sample data)))
+;(defn run [request]
+;  (let [code (-> request :params :code)
+;        style (-> request :params :style)
+;        markup (-> request :params :markup)
+;        styles (-> request :params :styles (string/split #","))
+;        scripts (-> request :params :scripts (string/split #","))
+;        data {:name              "Default name"
+;              :tags              []
+;              :short-description "Default short desc"
+;
+;              :scripts           scripts
+;              :styles            styles
+;
+;              :markup            markup
+;              :code              code
+;              :style             style}]
+;    (sample-handlers/show-sample-iframe-by-sample data)))
 
 
 (defn fork [request]
@@ -49,21 +48,20 @@
         sample-saved (assoc sample
                        :url hash
                        :version 0
-                       :owner-id (-> request :session :user :id))]
-    (let [id (db-req/add-sample! (get-db request) sample-saved)
-          sample-with-id (assoc sample-saved :id id)]
-      ;(elastic/add-sample (get-elastic request) (assoc sample-with-id
-      ;                                            :fullname (-> request :session :user :fullname)
-      ;                                            :create-date (Date.)))
-      (db-req/update-version-user-samples-latest! (get-db request) {:latest  true
-                                                                    :url     hash
-                                                                    :version 0})
-      (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [id]))
+                       :owner-id (-> request :session :user :id))
+        sample-saved (db-req/add-sample! (get-db request) sample-saved)
+        sample-saved (db-req/add-full-url sample-saved)
+        id (:id sample-saved)]
+    ;(elastic/add-sample (get-elastic request) (assoc sample-with-id
+    ;                                            :fullname (-> request :session :user :fullname)
+    ;                                            :create-date (Date.)))
+    (db-req/update-version-user-samples-latest! (get-db request) {:latest  true
+                                                                  :url     hash
+                                                                  :version 0})
+    (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [id])
     (future (db-req/update-tags-mw! (get-db request)))
-    (response {:status   :ok
-               :hash     hash
-               :version  0
-               :owner-id (:id (get-user request))})))
+    (response {:status :ok
+               :sample sample-saved})))
 
 
 (defn save [request]
@@ -82,31 +80,29 @@
             sample-saved (assoc sample :version new-version
                                        :owner-id (-> request :session :user :id))
             ;id (db-req/add-sample! (get-db request) sample*)
-            id (jdbc/with-db-transaction [conn (:db-spec (get-db request))]
-                                         (let [id (db-req/add-sample! conn sample-saved)]
-                                           ;(db-req/copy-visits! conn {:new-sample-id id
-                                           ;                           :old-sample-id (:id db-sample)})
-                                           ;(db-req/set-sample-views! conn {:id    id
-                                           ;                                :views (:views db-sample)})
-                                           (db-req/update-all-user-samples-latest! conn {:latest  false
-                                                                                         :url     hash
-                                                                                         :version new-version})
-                                           (db-req/update-version-user-samples-latest! conn {:latest  true
-                                                                                             :url     hash
-                                                                                             :version new-version})
-                                           (db-req/update-sample-views-from-canonical-visits! conn {:url     hash
-                                                                                                    :repo-id (:repo-id sample)})
-                                           id))
-            sample-with-id (assoc sample-saved :id id)]
+            sample-saved (jdbc/with-db-transaction [conn (:db-spec (get-db request))]
+                                                   (let [sample-saved (db-req/add-sample! conn sample-saved)]
+                                                     ;(db-req/copy-visits! conn {:new-sample-id id
+                                                     ;                           :old-sample-id (:id db-sample)})
+                                                     ;(db-req/set-sample-views! conn {:id    id
+                                                     ;                                :views (:views db-sample)})
+                                                     (db-req/update-all-user-samples-latest! conn {:latest  false
+                                                                                                   :url     hash
+                                                                                                   :version new-version})
+                                                     (db-req/update-version-user-samples-latest! conn {:latest  true
+                                                                                                       :url     hash
+                                                                                                       :version new-version})
+                                                     (db-req/update-sample-views-from-canonical-visits! conn {:url     hash
+                                                                                                              :repo-id (:repo-id sample)})
+                                                     sample-saved))
+            id (:id sample-saved)]
         ;(elastic/replace-sample (get-elastic request) (assoc sample-with-id
         ;                                                :fullname (-> request :session :user :fullname)
         ;                                                :create-date (Date.)))
         (redis/enqueue (get-redis request) (-> (get-redis request) :config :preview-queue) [id])
         (future (db-req/update-tags-mw! (get-db request)))
-        (response {:status   :ok
-                   :hash     hash
-                   :version  new-version
-                   :owner-id (:id (get-user request))}))
+        (response {:status :ok
+                   :sample sample-saved}))
       (fork request))))
 
 
