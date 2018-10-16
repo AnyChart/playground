@@ -437,6 +437,11 @@ function completionTip(data, activeArg) {
       var link = elt("a", null, "[more]");
       link.target = "_blank";
       link.href = data.url;
+      // without this, clicking on link sometimes doesn't work
+      link.addEventListener("mousedown", function(event) {
+            event.stopPropagation();
+            event.preventDefault();
+      });
       tip.appendChild(link);
     }
     if (data.origin) {
