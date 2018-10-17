@@ -161,7 +161,7 @@
     (if (s/valid? ::sample-spec/sample sample)
       (if (-> request :session :user)
         (let [res (fork (assoc-in request [:params :sample] sample))
-              hash (-> res :body :hash)]
+              hash (-> res :body :sample :url)]
           (redirect (str "/" hash "?export")))
         (response "Error: no session user"))
       (response "Error: bad sample arguments!"))))
