@@ -13,62 +13,40 @@ html {
 
     header {
       //height: 58px;
-      border-bottom: 1px solid $settings-border-color;
       box-sizing: content-box;
       width: 100%;
       position: fixed;
       z-index: 200;
       top: 0;
+      //border-bottom: 1px solid $settings-border-color;
+      //box-shadow: 0 0px 12px rgba(0,0,0,0.175);
+      box-shadow: 0 0px 8px #acd0ec;
 
       .header-box {
         display: flex;
         justify-content: space-between;
         background-color: white;
         margin: 0 !important;
+        height: 100%;
 
-        .logo {
-          display: inline-block;
-          z-index: 1;
-          /*@media (max-width: 450px) {
-            display: none;
-          }*/
-          .logo-img {
-            height: 58px;
-            width: 56px;
-            background-color: $nav-bg-color;
-            display: inline-block;
-            cursor: pointer;
-            position: relative;
-            .border-icon {
-              margin-top: 14px;
-              margin-left: 14px;
-              position: relative;
-              -webkit-box-sizing: border-box;
-              -moz-box-sizing: border-box;
-              box-sizing: border-box;
-            }
+        .navbar-brand {
+          display: flex;
+          font-size: 17px;
+          padding: 14px 0;
+          margin: 0 0 0 14px;
+          height: 58px;
+          .border-icon {
+            //border-color: $intro-bg-color;
+            border-color: #70b2e4;
           }
           .brand-label {
-            float: right;
-            margin-top: 16px;
-          }
-          .logo-label {
-            color: $intro-bg-color;
-            font-size: 18px;
-            margin-left: 13px;
-            text-decoration: none;
-            /*@media (max-width: 920px) {
-              display: none;
-            }*/
+            margin-left: 10px;
+            margin-top: 2px;
             b {
               font-weight: 600;
-              // collapse "Playground" logo label
               @media (max-width: 460px) {
                 display: none;
               }
-            }
-            &:hover, &:focus {
-              text-decoration: none;
             }
           }
         }
