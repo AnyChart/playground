@@ -108,8 +108,13 @@
     " All rights reserved."]])
 
 
-(defn view []
-  [:div.left-panel.general-tab.content
+(defn left-panel-view []
+  [:div.left-panel.general-tab.content {:style {;:height     @(rf/subscribe [:editors/height])
+                                                :margin-top @(rf/subscribe [:editors/margin-top])}}
+
+   [:div.collapse-button {:title    "Collapse panel"
+                          :on-click #(rf/dispatch [:left-panel/collapse])}
+    [:i.fas.fa-arrow-left]]
 
    (let [show-general @(rf/subscribe [:left-panel/general-tab?])]
      (list
@@ -128,3 +133,35 @@
          ^{:key "tab"} [documentation-tab])))
 
    [bottom-footer]])
+
+
+(defn left-panel-collapsed []
+  [:div.left-panel-collapsed {:on-click #(rf/dispatch [:left-panel/expand])}
+   [:div
+    [:i.fas.fa-info-circle.icon-info]]
+   [:div.footer-inner
+    [:a.soc-network
+     {:title  "AnyChart Facebook"
+      :target "_blank"
+      :rel    "nofollow"
+      :href   "https://www.facebook.com/AnyCharts"}
+     [:span.soc-network-icon.fb [:i.sn-mini-icon.ac.ac-facebook]]]
+    [:a.soc-network
+     {:title  "AnyChart Twitter"
+      :target "_blank"
+      :rel    "nofollow"
+      :href   "https://twitter.com/AnyChart"}
+     [:span.soc-network-icon.tw [:i.sn-mini-icon.ac.ac-twitter]]]
+    [:a.soc-network
+     {:title  "AnyChart LinkedIn"
+      :target "_blank"
+      :rel    "nofollow"
+      :href   "https://www.linkedin.com/company/386660"}
+     [:span.soc-network-icon.in [:i.sn-mini-icon.ac.ac-linkedin]]]]
+   ])
+
+
+(defn view []
+  (if @(rf/subscribe [:left-panel/collapsed])
+    [left-panel-collapsed]
+    [left-panel-view]))

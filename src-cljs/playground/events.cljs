@@ -67,7 +67,8 @@
                                                   :height "450px"}}
                       :tips            {:current []
                                         :queue   []}
-                      :left-panel      {:tab :docs}
+                      :left-panel      {:tab       :docs
+                                        :collapsed false}
                       :left-menu       {:show           false
                                         :support-expand false}
                       :view-menu       {:show false}

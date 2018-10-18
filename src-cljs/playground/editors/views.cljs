@@ -270,8 +270,9 @@
 
 
 (defn editors []
-  [:div.column-container {:style {:height     @(rf/subscribe [:editors/height])
-                                  :margin-top @(rf/subscribe [:editors/margin-top])}}
+  [:div.column-container {:style {:height      @(rf/subscribe [:editors/height])
+                                  :margin-left @(rf/subscribe [:editors/margin-left])
+                                  :margin-top  @(rf/subscribe [:editors/margin-top])}}
    (case @(rf/subscribe [:editors/view])
      :left [editors-left]
      :right [editors-right]

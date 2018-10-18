@@ -4,12 +4,24 @@
   top: 0;
   left: 0;
   bottom: 0;
-  padding-top: 58px;
+  margin-top: 58px;
   width: 235px;
   //height: 100%;
   border-right: 1px solid $settings-border-color;;
   //padding: 5px;
   font-size: 12px;
+
+  .collapse-button {
+    text-align: center;
+    cursor: pointer;
+    i {
+      padding: 7px;
+      color: $settings-border-color
+    }
+    &:hover {
+      background-color: $header-menu-bg-hover-color;
+    }
+  }
 
   .accordion {
     padding: 5px;
@@ -103,7 +115,7 @@
       height: 100%;
 
       .link {
-        max-width: 200px;
+        max-width: 215px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -131,6 +143,31 @@
     }
     .copyright {
       text-align: center;
+    }
+  }
+
+}
+
+.left-panel-collapsed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  margin-top: 58px;
+  width: 30px;
+  border-right: 1px solid $settings-border-color;
+  font-size: 12px;
+  cursor: pointer;
+  .icon-info {
+    font-size: 23px;
+    padding: 3px;
+    color: $settings-border-color
+  }
+  .footer-inner {
+    position: absolute;
+    bottom: 2px;
+    .soc-network-icon {
+      margin: 3px 2px;
     }
   }
 

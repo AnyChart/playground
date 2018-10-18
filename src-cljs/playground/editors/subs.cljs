@@ -12,6 +12,12 @@
             (fn [db _] (-> db :editors :editors-margin-top)))
 
 
+(rf/reg-sub :editors/margin-left
+            (fn [_ _] (rf/subscribe [:left-panel/collapsed]))
+            (fn [collapsed _]
+              (if collapsed 30 235)))
+
+
 (rf/reg-sub :editors/view
             (fn [db _] (-> db :editors :view)))
 
