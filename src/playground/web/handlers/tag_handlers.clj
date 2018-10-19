@@ -13,7 +13,8 @@
     ;; data
     [playground.data.tags :as tags-data]
     ;; consts
-    [playground.web.handlers.constants :refer :all]))
+    [playground.web.handlers.constants :refer :all]
+    [taoensso.timbre :as timbre]))
 
 
 (defn tags-page [request]
@@ -22,22 +23,25 @@
 
 (defn tag-page [request]
   (let [tag-dashed-id (-> request :route-params :*)
-        tag (db-req/tag-name-by-id (get-db request) {:tag tag-dashed-id})
         page (get-pagination request)
-        ;samples (db-req/samples-by-tag (get-db request) {:count  (inc samples-per-page)
-        ;                                                 :offset (* samples-per-page page)
-        ;                                                 :tag    tag-dashed-id})
-        result (elastic/tag-samples (get-elastic request)
-                                    tag
-                                    (* samples-per-page page)
-                                    samples-per-page)
-        samples (:samples result)]
-    (when (and tag (seq samples))
-      (tag-view/page (merge {:result   result
-                             :page     page
-                             :tag      tag
-                             :tag-data (tags-data/get-tag-data tag)}
-                            (get-app-data request))))))
+        tag (db-req/tag-name-by-id (get-db request) {:tag tag-dashed-id})]
+    (if tag
+      (let [
+            ;samples (db-req/samples-by-tag (get-db request) {:count  (inc samples-per-page)
+            ;                                                 :offset (* samples-per-page page)
+            ;                                                 :tag    tag-dashed-id})
+            result (elastic/tag-samples (get-elastic request)
+                                        tag
+                                        (* samples-per-page page)
+                                        samples-per-page)
+            samples (:samples result)]
+        (when (seq samples)
+          (tag-view/page (merge {:result   result
+                                 :page     page
+                                 :tag      tag
+                                 :tag-data (tags-data/get-tag-data tag)}
+                                (get-app-data request)))))
+      (timbre/error "Tag page: tag name by id did not found:" (pr-str tag-dashed-id)))))
 
 
 (defn tag-stat-page [request]

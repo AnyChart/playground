@@ -306,4 +306,4 @@
           total (:total hits)
           samples (map :_source (:hits hits))]
       (make-result samples total size offset))
-    (catch Exception e (timbre/error "Elastic tag samples error:" tag offset size (pr-str e)))))
+    (catch Exception e (timbre/error "Elastic tag samples error:" (pr-str tag) offset size (pr-str e)))))
