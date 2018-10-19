@@ -79,28 +79,34 @@
       ]]))
 
 
+(defn inner-footer []
+  [:div.footer-inner
+   [:a.soc-network
+    {:title    "AnyChart Facebook"
+     :target   "_blank"
+     :rel      "nofollow"
+     :on-click #(.stopPropagation %)
+     :href     "https://www.facebook.com/AnyCharts"}
+    [:span.soc-network-icon.fb [:i.sn-mini-icon.ac.ac-facebook]]]
+   [:a.soc-network
+    {:title    "AnyChart Twitter"
+     :target   "_blank"
+     :rel      "nofollow"
+     :on-click #(.stopPropagation %)
+     :href     "https://twitter.com/AnyChart"}
+    [:span.soc-network-icon.tw [:i.sn-mini-icon.ac.ac-twitter]]]
+   [:a.soc-network
+    {:title    "AnyChart LinkedIn"
+     :target   "_blank"
+     :rel      "nofollow"
+     :on-click #(.stopPropagation %)
+     :href     "https://www.linkedin.com/company/386660"}
+    [:span.soc-network-icon.in [:i.sn-mini-icon.ac.ac-linkedin]]]])
+
+
 (defn bottom-footer []
   [:div.footer-bottom-box
-   [:div.footer-inner
-    [:a.soc-network
-     {:title  "AnyChart Facebook"
-      :target "_blank"
-      :rel    "nofollow"
-      :href   "https://www.facebook.com/AnyCharts"}
-     [:span.soc-network-icon.fb [:i.sn-mini-icon.ac.ac-facebook]]]
-    [:a.soc-network
-     {:title  "AnyChart Twitter"
-      :target "_blank"
-      :rel    "nofollow"
-      :href   "https://twitter.com/AnyChart"}
-     [:span.soc-network-icon.tw [:i.sn-mini-icon.ac.ac-twitter]]]
-    [:a.soc-network
-     {:title  "AnyChart LinkedIn"
-      :target "_blank"
-      :rel    "nofollow"
-      :href   "https://www.linkedin.com/company/386660"}
-     [:span.soc-network-icon.in [:i.sn-mini-icon.ac.ac-linkedin]]]]
-
+   [inner-footer]
    [:div.copyright (str "\u00A9 " (utils/year) " ")
     [:a {:href   "https://www.anychart.com"
          :rel    "nofollow"
@@ -139,26 +145,7 @@
   [:div.left-panel-collapsed {:on-click #(rf/dispatch [:left-panel/expand])}
    [:div
     [:i.fas.fa-info-circle.icon-info]]
-   [:div.footer-inner
-    [:a.soc-network
-     {:title  "AnyChart Facebook"
-      :target "_blank"
-      :rel    "nofollow"
-      :href   "https://www.facebook.com/AnyCharts"}
-     [:span.soc-network-icon.fb [:i.sn-mini-icon.ac.ac-facebook]]]
-    [:a.soc-network
-     {:title  "AnyChart Twitter"
-      :target "_blank"
-      :rel    "nofollow"
-      :href   "https://twitter.com/AnyChart"}
-     [:span.soc-network-icon.tw [:i.sn-mini-icon.ac.ac-twitter]]]
-    [:a.soc-network
-     {:title  "AnyChart LinkedIn"
-      :target "_blank"
-      :rel    "nofollow"
-      :href   "https://www.linkedin.com/company/386660"}
-     [:span.soc-network-icon.in [:i.sn-mini-icon.ac.ac-linkedin]]]]
-   ])
+   [inner-footer]])
 
 
 (defn view []
