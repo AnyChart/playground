@@ -239,7 +239,7 @@
                        (:hits hits))]
       (timbre/info "Search:" q ", total:" total ", max Score:" (:max_score hits))
       (make-result samples total size offset))
-    (catch Exception e (timbre/error "Search error:" (pr-str e)))))
+    (catch Exception e (timbre/error "Search error:" q offset size (pr-str e)))))
 
 
 ;; =====================================================================================================================
@@ -262,7 +262,7 @@
                          (assoc (:_source hit) :score (:_score hit)))
                        (:hits hits))]
       (make-result samples total size offset))
-    (catch Exception e (timbre/error "Elastic top samples error:" (pr-str e))
+    (catch Exception e (timbre/error "Elastic top samples error:" offset size (pr-str e))
                        (empty-result))))
 
 
@@ -284,7 +284,7 @@
           total (:total hits)
           samples (map :_source (:hits hits))]
       (make-result samples total size offset))
-    (catch Exception e (timbre/error "Elastic version-samples error:" (pr-str e)))))
+    (catch Exception e (timbre/error "Elastic version-samples error:" version-id offset size (pr-str e)))))
 
 
 ;; =====================================================================================================================
@@ -306,4 +306,4 @@
           total (:total hits)
           samples (map :_source (:hits hits))]
       (make-result samples total size offset))
-    (catch Exception e (timbre/error "Elastic tag samples error:" (pr-str e)))))
+    (catch Exception e (timbre/error "Elastic tag samples error:" tag offset size (pr-str e)))))
