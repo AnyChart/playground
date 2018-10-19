@@ -237,7 +237,7 @@
           samples (map (fn [hit]
                          (assoc (:_source hit) :score (:_score hit)))
                        (:hits hits))]
-      (timbre/info "Search:" q ", total:" total ", max Score:" (:max_score hits))
+      (timbre/info "Search:" (pr-str q) ", total:" total ", max Score:" (:max_score hits))
       (make-result samples total size offset))
     (catch Exception e (timbre/error "Search error:" q offset size (pr-str e)))))
 
