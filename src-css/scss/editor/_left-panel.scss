@@ -58,6 +58,16 @@
         display: block;
       }
     }
+
+    .read-more-button {
+      color: $intro-bg-color;
+      cursor: pointer;
+      font-weight: 600;
+      &:hover {
+        color: $nav-bg-color;
+      }
+    }
+
     input {
       width: 100%;
       height: 32px;

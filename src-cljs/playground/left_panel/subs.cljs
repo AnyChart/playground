@@ -31,3 +31,10 @@
                 {:articles-api  (map #(update % :title title-fn) (:articles-api docs))
                  :articles-docs (map #(update % :title title-fn) (:articles-docs docs))
                  :articles-pg   (map #(update % :title title-fn) (:articles-pg docs))})))
+
+
+(rf/reg-sub :left-panel.docs/show-read-more-button?
+            (fn [db _]
+              (let [repo-sample (-> db :sample :version-id)
+                    has-desc (-> db :sample :description not-empty)]
+                (and repo-sample has-desc))))

@@ -14,15 +14,20 @@
     [:label {:for "settings-short-desc"} "Short Description"]
     [:textarea.form-control {:id        "settings-short-desc"
                              :value     @(rf/subscribe [:sample/stripped-short-description])
-                             :on-change #(rf/dispatch [:settings/change-short-desc (-> % .-target .-value)])}]]
-   [:div.form-group
-    [:label {:for "settings-desc"} "Description"]
-    (if @(rf/subscribe [:user-sample?])
-      [:textarea.form-control {:id        "settings-desc"
-                               :style     {:max-height @(rf/subscribe [:settings.general-tab/description-height])}
-                               :value     @(rf/subscribe [:sample/description])
-                               :on-change #(rf/dispatch [:settings/change-desc (-> % .-target .-value)])}]
-      [:div {:dangerouslySetInnerHTML {:__html @(rf/subscribe [:sample/description])}}])]
+                             :on-change #(rf/dispatch [:settings/change-short-desc (-> % .-target .-value)])}]
+    (when @(rf/subscribe [:left-panel.docs/show-read-more-button?])
+      [:div.read-more-button {:on-click #(rf/dispatch [:view/standalone])}
+       "Read more"])]
+
+   (when @(rf/subscribe [:user-sample?])
+     [:div.form-group
+      [:div [:label {:for "settings-desc"} "Description"]
+       [:textarea.form-control {:id        "settings-desc"
+                                :style     {:max-height @(rf/subscribe [:settings.general-tab/description-height])}
+                                :value     @(rf/subscribe [:sample/description])
+                                :on-change #(rf/dispatch [:settings/change-desc (-> % .-target .-value)])}]]
+      ;; [:div {:dangerouslySetInnerHTML {:__html @(rf/subscribe [:sample/description])}}]
+      ])
    [:div.form-group
     [:label "Tags"]
     [:div.tags-box
