@@ -5,7 +5,8 @@
             [clojure.java.io :refer [file]]
             [toml.core :as toml]
             [playground.data.tags :as tags-data])
-  (:import (org.jsoup Jsoup)))
+  (:import (org.jsoup Jsoup)
+           (org.jsoup.nodes Document$OutputSettings)))
 
 
 (defn- ^String trim-newline-left [^CharSequence s]
@@ -52,6 +53,8 @@
 
 (defn parse-html-sample [s]
   (let [page (Jsoup/parse s)
+        ;; makes html() preserve linebreaks and spacing
+        _ (.outputSettings page (.prettyPrint (Document$OutputSettings.) false))
 
         scripts (some->> (.select page "script[src]")
                          (map (fn [script] (.attr script "src"))))
@@ -59,8 +62,8 @@
         code (.select page "script:not([src])")
         code (if code (.html code) "")
 
-        markup (.select page "body > :not(script)")
-        markup (string/join "\n" markup)
+        _ (.remove (.select page "body script"))
+        markup (.html (.body page))
 
         style (.select page "style")
         style (string/join "\n" (map #(.html %) style))
