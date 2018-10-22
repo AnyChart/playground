@@ -28,6 +28,8 @@ The frontend is written on ClojureScript and consists of:
 * Editor
 
 The editor is a single page application built with Reagent and re-frame.
+It uses [CodeMirror](https://codemirror.net/) as a code editor and [Tern](http://ternjs.net/) as a 
+code-analysis engine for JavaScript.
 
 
 
