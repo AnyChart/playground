@@ -112,6 +112,18 @@
     (assoc-in db [:sample type] code)))
 
 
+(rf/reg-event-db
+  :change-code-code
+  [session-storage-sample-interceptor]
+  (fn [db [_ code]]
+    (when-let [timer (-> db :left-panel :docs :timer)]
+      (js/clearTimeout timer))
+    (-> db
+        (assoc-in [:sample :code] code)
+        (assoc-in [:left-panel :docs :timer]
+                  (js/setTimeout #(rf/dispatch [:tern/udpate-anychart-defs]) 1000)))))
+
+
 (rf/reg-fx
   :update-iframe
   (fn [sample]

@@ -80,7 +80,7 @@
                                (swap! results conj full-data)
                                (when (= (count indicies)
                                         (count @results))
-                                 (.log js/console (pr-str (map identity @results)))
+                                 ; (.log js/console (pr-str (map identity @results)))
                                  (get-docs-articles @results sample version)))))))))
 
 
@@ -100,7 +100,7 @@
                                     :scrollbarStyle "overlay"}))]
     (.on cm "change" (fn [cm change]
                        (rf/dispatch [:change-code type (.getValue cm)])))
-    (rf/dispatch [:change-code type (.getValue cm)])
+    ;(rf/dispatch [:change-code type (.getValue cm)])
     cm))
 
 
@@ -149,9 +149,9 @@
                         (.complete @tern/server cm))))
 
     (.on cm "change" (fn [cm change]
-                       (rf/dispatch [:change-code type (.getValue cm)])))
+                       (rf/dispatch [:change-code-code (.getValue cm)])))
 
-    (rf/dispatch [:change-code type (.getValue cm)])
+    ;(rf/dispatch [:change-code-code (.getValue cm)])
     cm))
 
 
