@@ -3,8 +3,7 @@
   :url "https://playground.anychart.com/"
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
-  :main playground.core
-  :aot :all
+  :main ^:aot playground.core
   :uberjar-name "pg-standalone.jar"
   :source-paths ["src" "src-cljc"]
   :java-source-paths ["src-java"]
