@@ -5,13 +5,17 @@
 (rf/reg-event-db
   :left-panel/collapse
   (fn [db _]
-    (assoc-in db [:left-panel :collapsed] true)))
+    (-> db
+        (assoc-in [:left-panel :collapsed] true)
+        (assoc-in [:left-panel :previous-resized-collapsed] true))))
 
 
 (rf/reg-event-db
   :left-panel/expand
   (fn [db _]
-    (assoc-in db [:left-panel :collapsed] false)))
+    (-> db
+        (assoc-in [:left-panel :collapsed] false)
+        (assoc-in [:left-panel :previous-resized-collapsed] false))))
 
 
 (rf/reg-event-db

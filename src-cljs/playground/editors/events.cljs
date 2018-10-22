@@ -60,20 +60,33 @@
   (fn [db _]
     (let [view (-> db :editors :view)
           previous-resized-view (-> db :editors :previous-resized-view)
-          [new-view new-prev-resized-view] (if (not= view :standalone)
-                                             (cond
-                                               (and (editors-js/small-window-width?)
-                                                    (not= view :vertical)) [:vertical view]
-                                               (and (editors-js/big-window-width?)
-                                                    (= view :vertical)
-                                                    previous-resized-view) [previous-resized-view nil]
-                                               :else [view previous-resized-view])
-                                             [view previous-resized-view])]
+          lp-collapsed (-> db :left-panel :collapsed)
+          lp-previous-collapsed (-> db :left-panel :previous-resized-collapsed)
+
+          [new-view
+           new-prev-resized-view
+           new-lp-collapsed
+           new-lp-previous-collapsed] (if (not= view :standalone)
+                                        (cond
+                                          (and (editors-js/small-window-width?)
+                                               (not= view :vertical))
+                                          [:vertical view true lp-previous-collapsed]
+
+                                          (and (editors-js/big-window-width?)
+                                               (= view :vertical)
+                                               previous-resized-view)
+                                          [previous-resized-view nil lp-previous-collapsed lp-previous-collapsed]
+
+                                          :else [view previous-resized-view lp-collapsed lp-previous-collapsed])
+                                        [view previous-resized-view lp-collapsed lp-previous-collapsed])]
+      (prn :left-panel new-lp-collapsed new-lp-previous-collapsed)
       (-> db
           (assoc-in [:editors :editors-height] (editors-js/editors-height))
           (assoc-in [:editors :editors-margin-top] (editors-js/editors-margin-top))
           (assoc-in [:editors :view] new-view)
-          (assoc-in [:editors :previous-resized-view] new-prev-resized-view)))))
+          (assoc-in [:editors :previous-resized-view] new-prev-resized-view)
+          (assoc-in [:left-panel :collapsed] new-lp-collapsed)
+          (assoc-in [:left-panel :previous-resized-collapsed] new-lp-previous-collapsed)))))
 
 
 ;;======================================================================================================================

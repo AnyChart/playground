@@ -147,7 +147,9 @@
 
 
 (defn left-panel-collapsed []
-  [:div.left-panel-collapsed {:on-click #(rf/dispatch [:left-panel/expand])}
+  [:div.left-panel-collapsed {:style    {;:height     @(rf/subscribe [:editors/height])
+                                         :margin-top @(rf/subscribe [:editors/margin-top])}
+                              :on-click #(rf/dispatch [:left-panel/expand])}
    [:div
     [:i.fas.fa-info-circle.icon-info]]
    [inner-footer]])
