@@ -79,7 +79,7 @@
 
                                           :else [view previous-resized-view lp-collapsed lp-previous-collapsed])
                                         [view previous-resized-view lp-collapsed lp-previous-collapsed])]
-      (prn :left-panel new-lp-collapsed new-lp-previous-collapsed)
+      ; (prn :left-panel new-lp-collapsed new-lp-previous-collapsed)
       (-> db
           (assoc-in [:editors :editors-height] (editors-js/editors-height))
           (assoc-in [:editors :editors-margin-top] (editors-js/editors-margin-top))

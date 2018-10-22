@@ -32,8 +32,8 @@
             (fn [error js-data]
               (if error
                 (do
-                  (println "get AnyChart Tern type error: ")
-                  (.log js/console error)
+                  ; (println "get AnyChart Tern type error: ")
+                  ; (.log js/console error)
                   (callback {}))
                 (let [data (js->clj js-data :keywordize-keys true)]
                   ;(.log js/console "Found:")
@@ -50,7 +50,7 @@
                                 (string/includes? % "anychart")))
                   (map #(last (string/split % #"/")))
                   distinct)]
-    (.log js/console (pr-str urls))
+    ; (.log js/console (pr-str urls))
     (POST
       ;; "http://localhost:8080/links"
       "http://docs.anychart.stg/links"
