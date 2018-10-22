@@ -3,11 +3,14 @@
   :url "https://playground.anychart.com/"
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
-  :main ^:aot playground.core
+  :main playground.core
+  :aot :all
   :uberjar-name "pg-standalone.jar"
   :source-paths ["src" "src-cljc"]
   :java-source-paths ["src-java"]
   :dependencies [[org.clojure/clojure "1.9.0"]
+                 ;; to fix "reader-error does not exist, compiling:(edn.clj:9:1)"
+                 [org.clojure/tools.reader "1.2.2"]
                  [org.immutant/web "2.1.10"]
                  [com.stuartsierra/component "0.3.2"]
                  [ring-middleware-format "0.7.2"]
