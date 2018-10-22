@@ -7,19 +7,19 @@
   :uberjar-name "pg-standalone.jar"
   :source-paths ["src" "src-cljc"]
   :java-source-paths ["src-java"]
-  :dependencies [[org.clojure/clojure "1.9.0-alpha16"]
+  :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.immutant/web "2.1.10"]
                  [com.stuartsierra/component "0.3.2"]
                  [ring-middleware-format "0.7.2"]
                  [toml "0.1.3"]
-                 [cheshire "5.8.0"]
+                 [cheshire "5.8.1"]
                  [compojure "1.6.1"]
                  [com.taoensso/timbre "4.10.0"]
                  [clj-http "3.9.1"]
                  [version-clj "0.1.2"]
                  [com.cognitect/transit-clj "0.8.313"]
                  [org.apache.commons/commons-lang3 "3.7"]
-                 [clj-time "0.14.4"]
+                 [clj-time "0.15.0"]
                  [me.raynes/fs "1.4.6"]
                  [camel-snake-kebab "0.4.0"]
                  [net.sf.jtidy/jtidy "r938"]
@@ -27,7 +27,7 @@
                  [com.rpl/specter "1.1.1"]
 
                  ;; html, css
-                 [selmer "1.12.1"]
+                 [selmer "1.12.2"]
                  [enlive "1.1.6"]
                  [org.jsoup/jsoup "1.11.3"]
                  [hiccup "1.0.5"]
@@ -38,8 +38,8 @@
                  [clojure.jdbc/clojure.jdbc-c3p0 "0.3.3"]
                  [yesql "0.5.3"]
                  [org.clojure/java.jdbc "0.7.8"]
-                 [mysql/mysql-connector-java "6.0.6"]
-                 [com.taoensso/carmine "2.18.1"]
+                 [mysql/mysql-connector-java "8.0.13"]
+                 [com.taoensso/carmine "2.19.1"]
                  [cc.qbits/spandex "0.6.4"]
 
                  ;; crypto
@@ -61,13 +61,13 @@
                  [com.climate/claypoole "1.1.4"]
 
                  ;; front-end
-                 [org.clojure/clojurescript "1.9.908"]
+                 [org.clojure/clojurescript "1.10.339"]
                  [reagent "0.8.1"]
                  [re-frame "0.10.6"]
                  [re-com "2.1.0"]
                  [rum "0.11.2"]
                  [alandipert/storage-atom "2.0.1"]
-                 [cljs-ajax "0.7.4"]
+                 [cljs-ajax "0.7.5"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
                  [hiccups "0.3.0"]
                  [secretary "1.2.3"]
