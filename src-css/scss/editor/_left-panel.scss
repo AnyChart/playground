@@ -49,6 +49,7 @@
   }
 
   .general-tab {
+    overflow-y: auto;
     padding: 5px;
     .form-group {
       margin-top: 2px;
@@ -116,28 +117,21 @@
     }
   }
 
-  .docs-tab-container {
-    height: 100%;
-    padding-bottom: 110px;
-    .docs-tab {
-      padding: 5px;
-      overflow-y: auto;
-      height: 100%;
-
-      .link {
-        max-width: 215px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        margin: 5px;
-        &:hover {
-          text-decoration: underline;
-        }
+  .docs-tab {
+    overflow-y: auto;
+    padding: 5px;
+    .link {
+      max-width: 215px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin: 5px;
+      &:hover {
+        text-decoration: underline;
       }
-      .link-docs {
-        font-weight: 600;
-      }
-
+    }
+    .link-docs {
+      font-weight: 600;
     }
   }
 

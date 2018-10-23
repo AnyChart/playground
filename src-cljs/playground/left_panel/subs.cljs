@@ -18,6 +18,13 @@
               (= (-> db :left-panel :tab) :docs)))
 
 
+(rf/reg-sub :left-panel/max-tab-height
+            (fn [_ _]
+              (rf/subscribe [:editors/height]))
+            (fn [editors-height _]
+              (- editors-height 145)))
+
+
 (rf/reg-sub :left-panel/docs
             (fn [db _]
               (let [docs (-> db :left-panel :docs)

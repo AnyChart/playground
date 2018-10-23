@@ -22,7 +22,7 @@
 
    [:div.header-box
 
-    [:a.navbar-brand {:href "/"
+    [:a.navbar-brand {:href  "/"
                       :title "Playground Home"}
      [:div.border-icon
       [:div.chart-row
