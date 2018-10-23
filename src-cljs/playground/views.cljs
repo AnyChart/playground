@@ -22,13 +22,14 @@
 
    [:div.header-box
 
-    [:div.navbar-brand
+    [:a.navbar-brand {:href "/"
+                      :title "Playground Home"}
      [:div.border-icon
       [:div.chart-row
        [:span.chart-col.green]
        [:span.chart-col.orange]
        [:span.chart-col.red]]]
-     [:div.brand-label [:a.logo-label {:href "/"} "AnyChart " [:b "Playground"]]]]
+     [:div.brand-label "AnyChart " [:b "Playground"]]]
 
     [:div.top-menu
      [:ul.nav.navbar-nav.left-navbar

@@ -32,9 +32,10 @@ html {
         .navbar-brand {
           display: flex;
           font-size: 17px;
-          padding: 14px 0;
-          margin: 0 0 0 14px;
-          height: 58px;
+          padding: 8px 0;
+          margin: 7px 0 7px 14px;
+          height: 28px;
+          box-sizing: content-box;
           .border-icon {
             //border-color: $intro-bg-color;
             border-color: #70b2e4;
