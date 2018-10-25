@@ -27,7 +27,7 @@
           sample (-> db :sample)
           selected-version (-> db :settings :selected-version)
           url (if (= (-> db :config :prefix) :prod)
-                "https://docs.anychart.prod/links"
+                "https://docs.anychart.com/links"
                 "http://docs.anychart.stg/links")]
       {:tern/get-anychart-defs [code-editor url sample selected-version]})))
 
