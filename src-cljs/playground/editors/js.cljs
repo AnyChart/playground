@@ -43,7 +43,7 @@
             pos))
 
 
-(defn get-docs-articles [results sample version]
+(defn get-docs-articles [url results sample version]
   (let [urls (->> results
                   (map :url)
                   (filter #(and (some? %)
@@ -51,21 +51,20 @@
                   (map #(last (string/split % #"/")))
                   distinct)]
     ; (.log js/console (pr-str urls))
-    (POST
-      ;; "http://localhost:8080/links"
-      "http://docs.anychart.stg/links"
-      {:params          {:api-methods urls
-                         :version     version
-                         :project     (:repo-name sample)
-                         :url         (:url sample)}
-       :format          :json
-       :response-format :json
-       :keywords?       true
-       :handler         #(rf/dispatch [:tern/on-get-anychart-defs %])
-       :error-handler   #(println "Error " %)})))
+    (POST url
+          {:params          {:api-methods urls
+                             ; :version     version
+                             :version     "v8"
+                             :project     (:repo-name sample)
+                             :url         (:url sample)}
+           :format          :json
+           :response-format :json
+           :keywords?       true
+           :handler         #(rf/dispatch [:tern/on-get-anychart-defs %])
+           :error-handler   #(println "Error " %)})))
 
 
-(defn get-anychart-defs [cm sample version]
+(defn get-anychart-defs [cm url sample version]
   (let [data (.getValue cm)
         re #"\.[a-zA-Z_0-9]+\("
         indicies (re-seq-index re data)
@@ -81,7 +80,7 @@
                                (when (= (count indicies)
                                         (count @results))
                                  ; (.log js/console (pr-str (map identity @results)))
-                                 (get-docs-articles @results sample version)))))))))
+                                 (get-docs-articles url @results sample version)))))))))
 
 
 ;; =====================================================================================================================

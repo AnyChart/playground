@@ -19,6 +19,8 @@
 ;; Config getters
 (defn prefix [] (-> data :common :prefix))
 
+(defn domain [] (-> data :common :domain))
+
 (defn commit [] (:commit data))
 
 (defn repos-for-versions [] (-> data :editor :repos-for-versions))

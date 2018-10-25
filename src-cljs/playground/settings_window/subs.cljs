@@ -28,7 +28,11 @@
 (rf/reg-sub :settings/tags (fn [db _] (-> db :settings :general-tab :tags)))
 
 
-(rf/reg-sub :settings/versions-names (fn [db _] (concat ["latest" "Release Candidate"] (-> db :versions-names))))
+(rf/reg-sub
+  :settings/versions-names
+  (fn [db _]
+    (concat ["latest" "Release Candidate"]
+            (-> db :config :versions-names))))
 
 
 (rf/reg-sub

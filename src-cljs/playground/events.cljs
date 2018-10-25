@@ -51,8 +51,9 @@
                       :saved-sample    (:sample data)
                       :templates       (:templates data)
                       :user            (:user data)
-                      :datasets        (:datasets data)
-                      :versions-names  (:versions-names data)
+
+                      :datasets        (-> data :config :datasets)
+                      :config          (:config data)       ;; {:prefix .., :versions-names .., :datasets ... }
 
                       :settings        {:show             false
                                         :tab              :javascript

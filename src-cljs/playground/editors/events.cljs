@@ -16,8 +16,8 @@
 
 (rf/reg-fx
   :tern/get-anychart-defs
-  (fn [[code-editor sample version]]
-    (editors-js/get-anychart-defs code-editor sample version)))
+  (fn [[code-editor url sample version]]
+    (editors-js/get-anychart-defs code-editor url sample version)))
 
 
 (rf/reg-event-fx
@@ -25,8 +25,11 @@
   (fn [{db :db} _]
     (let [code-editor (-> db :editors :code :editor)
           sample (-> db :sample)
-          selected-version (-> db :settings :selected-version)]
-      {:tern/get-anychart-defs [code-editor sample selected-version]})))
+          selected-version (-> db :settings :selected-version)
+          url (if (= (-> db :config :prefix) :prod)
+                "https://docs.anychart.prod/links"
+                "http://docs.anychart.stg/links")]
+      {:tern/get-anychart-defs [code-editor url sample selected-version]})))
 
 
 ;;======================================================================================================================

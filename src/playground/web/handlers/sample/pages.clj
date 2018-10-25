@@ -42,13 +42,15 @@
                                 (utils/full-canonical-url-standalone sample)
                                 (utils/full-canonical-url sample))
                :sample        sample
-               :data          (web-utils/pack {:sample         sample
-                                               :templates      templates
-                                               :datasets       (map #(dissoc % :data) data-sets)
-                                               :user           (get-safe-user request)
-                                               :view           editor-view
-                                               :embed-show     embed-show
-                                               :versions-names versions-names})}]
+               :data          (web-utils/pack {:sample     sample
+                                               :templates  templates
+                                               :user       (get-safe-user request)
+                                               :view       editor-view
+                                               :embed-show embed-show
+                                               :config     {:prefix         (keyword (c/prefix))
+                                                            :domain         (c/domain)
+                                                            :versions-names versions-names
+                                                            :datasets       (map #(dissoc % :data) data-sets)}})}]
      ;; when not "new" sample
      (when (:id sample)
        (try
