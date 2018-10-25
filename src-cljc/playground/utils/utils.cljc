@@ -19,19 +19,17 @@
 
 
 (defn released-version? [version-key]
-  (re-matches #"^\d+\.\d+\.\d+$" version-key))
+  (or (re-matches #"^\d+\.\d+\.\d+$" version-key)
+      (re-matches #"^v\d+$" version-key)))
 
 
-(defn filter-released-versions [versions]
-  (filter released-version? versions))
+(defn released-or-8-version? [s]
+  (or (re-matches #"^8\.\d+\.\d+$" s)
+      (re-matches #"^v\d+$" s)))
 
 
-(defn released-8-version? [s]
-  (re-matches #"^8\.\d+\.\d+$" s))
-
-
-(defn filter-8-released-versions [versions]
-  (filter released-8-version? versions))
+(defn filter-released-or-8-versions [versions]
+  (filter released-or-8-version? versions))
 
 
 (defn replace-urls [version-name scripts]
