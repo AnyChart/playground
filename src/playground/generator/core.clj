@@ -264,15 +264,18 @@
     update-branches))
 
 
-(defn need-update-branch [branch]
-  (or (utils/released-version? (:name branch))
+(defn need-update-branch [branch repo gen-params]
+  (or (and (= (:name @repo) (:repo gen-params))
+           (= (:name branch) (:version gen-params)))
+      (utils/released-version? (:name branch))
       (= (:name branch) "develop")
       (= (:name branch) "master")
       (string/includes? (:message branch) "#pg")
       (string/includes? (:message branch) "#all")))
 
 
-(defn names [branches] (map :name branches))
+(defn names [branches]
+  (doall (map :name branches)))
 
 
 (defn update-repository [generator db repo gen-params]
@@ -288,7 +291,7 @@
                               branch-list)
             db-branches (db-req/versions db {:repo-id (:id @repo)})
             changed-branches (changed-branches actual-branches db-branches)
-            updated-branches (filter need-update-branch changed-branches)
+            updated-branches (filter #(need-update-branch % repo gen-params) changed-branches)
             removed-branches (branches-for-remove actual-branches db-branches)]
         (info "Branch list: " (pr-str (names branch-list)))
         (info "Actual branches: " (pr-str (names actual-branches)))
@@ -296,6 +299,8 @@
         (info "Changed branches: " (pr-str (names changed-branches)))
         (info "Updated branches: " (pr-str (names updated-branches)))
         (info "Removed branches: " (pr-str (names removed-branches)))
+        (db-req/repo-update-actual-versions! db {:id       (:id @repo)
+                                                 :versions (utils/sort-versions (names actual-branches))})
         (notifier/start-build (:notifier generator)
                               (:name @repo)
                               (names changed-branches)

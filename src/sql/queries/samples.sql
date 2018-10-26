@@ -88,7 +88,7 @@ ORDER BY version DESC;
 -- INSERT INTO samples (name, description, short_description, tags, export, scripts, local_scripts, styles, code_type, code, style_type, style, markup_type, markup) VALUES :values;
 
 -- name: sql-delete-samples!
-DELETE FROM samples WHERE version_id = :version_id;
+DELETE FROM samples WHERE version_id IS NOT NULL AND version_id = :version_id;
 
 
 

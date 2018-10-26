@@ -1,5 +1,6 @@
 (ns playground.utils.utils
   (:require [clojure.string :as string]
+            [version-clj.core :as version-clj]
     #?(:cljs
        [cljs-time.coerce :as c]
        :clj
@@ -30,6 +31,11 @@
 
 (defn filter-released-or-8-versions [versions]
   (filter released-or-8-version? versions))
+
+
+(defn sort-versions [versions]
+  (sort (comp - #(version-clj/version-compare %1 %2))
+        versions))
 
 
 (defn replace-urls [version-name scripts]

@@ -29,7 +29,8 @@ CREATE TABLE repos (
   title VARCHAR(100),
   templates BOOLEAN,
   owner_id BIGINT REFERENCES users(id),
-  create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  actual_versions VARCHAR(256)[] -- for admin panel - to display all versions
 );
 
 

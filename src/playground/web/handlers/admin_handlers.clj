@@ -17,8 +17,9 @@
 ;; API
 (defn versions [request]
   (let [project (-> request :params :project)
-        versions (db-req/versions-by-repo-name (get-db request) {:name project})]
-    versions))
+        ; versions (db-req/versions-by-repo-name (get-db request) {:name project})
+        repo (db-req/repo-by-name (get-db request) {:name project})]
+    (->> repo :actual-versions (into '()) reverse)))
 
 
 (defn delete-version [request]
@@ -28,7 +29,8 @@
         branch (db-req/version-by-name (get-db request) {:repo-id (:id repo)
                                                          :name    version})]
     (timbre/info "Delete version request: " project version)
-    (db-actions/remove-branch (get-db request) branch)
+    (when branch
+      (db-actions/remove-branch (get-db request) branch))
     (web-utils/response {:status :ok})))
 
 
@@ -39,7 +41,8 @@
         branch (db-req/version-by-name (get-db request) {:repo-id (:id repo)
                                                          :name    version})]
     (timbre/info "Rebuild version request: " project version)
-    (db-actions/remove-branch (get-db request) branch)
+    (when branch
+      (db-actions/remove-branch (get-db request) branch))
     (redis/enqueue (get-redis request)
                    (get-redis-queue request)
                    {:repo    project
