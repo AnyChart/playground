@@ -3,20 +3,6 @@
             [playground.data.consts :as consts]))
 
 
-(defn url-to-version [url]
-  (case url
-    "v8" "latest"
-    "rc" "Release Candidate"
-    url))
-
-
-(defn version-to-url [version]
-  (case version
-    "latest" "v8"
-    "Release Candidate" "rc"
-    version))
-
-
 (defn script-version [script]
   (last (re-find #"^https?://cdn.anychart.com/(releases|js|css|themes)/([^/]+)/.*$" script)))
 
@@ -37,11 +23,11 @@
         result (first bundles)]
     (when result
       {:index   (:index result)
-       :version (url-to-version (script-version (:script result)))})))
+       :version (script-version (:script result))})))
 
 
 (defn correct-script? [script detected-version]
-  (let [current-version (url-to-version (script-version script))]
+  (let [current-version (script-version script)]
     (or (nil? current-version)
         (= current-version detected-version))))
 
@@ -64,10 +50,9 @@
 
 
 (defn replace-version [version script]
-  (let [version (version-to-url version)]
-    (string/replace script #"^https?://cdn.anychart.com/(releases|js|css|themes)/([^/]+)/.*$"
-                    (fn [[s type old-version]]
-                      (string/replace-first s (re-pattern old-version) version)))))
+  (string/replace script #"^https?://cdn.anychart.com/(releases|js|css|themes)/([^/]+)/.*$"
+                  (fn [[s type old-version]]
+                    (string/replace-first s (re-pattern old-version) version))))
 
 
 (defn replace-version-scripts [version scripts]

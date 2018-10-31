@@ -46,7 +46,7 @@
 (rf/reg-fx
   :settings.external-resources/parse-modules-json
   (fn [version]
-    (let [url (parser/get-modules-url (parser/get-version-url version))]
+    (let [url (parser/get-modules-url version)]
       (GET url
            {:handler       #(rf/dispatch [:settings.external-resources/on-modules-json-get %1])
             :error-handler #(rf/dispatch [:settings.external-resources/on-modules-json-error %1])}))))

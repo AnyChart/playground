@@ -3,13 +3,6 @@
             [camel-snake-kebab.core :as kebab]))
 
 
-(defn get-version-url [version]
-  (case version
-    "latest" "v8"
-    "Release Candidate" "rc"
-    version))
-
-
 (defn get-modules-url [version-url]
   (str "https://cdn.anychart.com/releases/" version-url "/resources.json"))
 
@@ -27,7 +20,7 @@
         themes (map (fn [[url-name data]]
                       {:url         (cond
                                       (v7? version) (str "https://cdn.anychart.com/themes/" version "/" (name url-name) ".js")
-                                      :else (str "https://cdn.anychart.com/releases/" (get-version-url version) "/themes/" (name url-name) ".js"))
+                                      :else (str "https://cdn.anychart.com/releases/" version "/themes/" (name url-name) ".js"))
                        :name        (:name data)
                        :icon        (:icon data)
                        :description (:desc data)
@@ -48,7 +41,7 @@
                           :js   (name js-name)
                           :url  (cond
                                   (v7? version) (str "https://cdn.anychart.com/locale/1.0.0/" (name js-name) ".js")
-                                  :else (str "https://cdn.anychart.com/releases/" (get-version-url version) "/locales/" (name js-name) ".js"))}))
+                                  :else (str "https://cdn.anychart.com/releases/" version "/locales/" (name js-name) ".js"))}))
                      locales)]
     (sort-by :name locales)))
 
@@ -66,7 +59,7 @@
                                         :url  (cond
                                                 (v7? version) (str "https://cdn.anychart.com/geodata/1.2.0/"
                                                                    (name type-name) "/" (name js) "/" (name js) ".js")
-                                                :else (str "https://cdn.anychart.com/releases/" (get-version-url version) "/geodata/"
+                                                :else (str "https://cdn.anychart.com/releases/" version "/geodata/"
                                                            (name type-name) "/" (name js) "/" (name js) ".js"))}))
                                 (sort-by :name))})
                  geodata)
@@ -82,7 +75,7 @@
                         :description   (:desc data)
                         :url           (cond
                                          (v7? version) (str "https://cdn.anychart.com/js/" version "/" (name url-name) ".min.js")
-                                         :else (str "https://cdn.anychart.com/releases/" (get-version-url version) "/js/" (name url-name) ".min.js"))
+                                         :else (str "https://cdn.anychart.com/releases/" version "/js/" (name url-name) ".min.js"))
                         :example       "TODO: modules examples"
                         :internal-type (:type data)})
                      modules)
@@ -118,11 +111,11 @@
 (defn compose-css [version]
   (let [css [{:url  (cond
                       (v7? version) (str "https://cdn.anychart.com/css/" version "/anychart-ui.min.css")
-                      :else (str "https://cdn.anychart.com/releases/" (get-version-url version) "/css/anychart-ui.min.css"))
+                      :else (str "https://cdn.anychart.com/releases/" version "/css/anychart-ui.min.css"))
               :name "AnyChart UI"}
              {:url  (cond
                       (v7? version) (str "https://cdn.anychart.com/css/" version "/anychart-font.min.css")
-                      :else (str "https://cdn.anychart.com/releases/" (get-version-url version) "/fonts/css/anychart-font.min.css"))
+                      :else (str "https://cdn.anychart.com/releases/" version "/fonts/css/anychart-font.min.css"))
               :name "AnyChart Font"}]]
     css))
 

@@ -31,8 +31,7 @@
 (rf/reg-sub
   :settings/versions-names
   (fn [db _]
-    (concat ["latest" "Release Candidate"]
-            (-> db :config :versions-names))))
+    (-> db :config :versions-names)))
 
 
 (rf/reg-sub
