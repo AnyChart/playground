@@ -1,7 +1,6 @@
 (ns playground.web.middleware
   (:require [playground.db.request :as db-req]
             [playground.web.helpers :refer :all]
-            [version-clj.core :as version-clj :refer [version-compare]]
             [playground.web.auth :as auth]
             [playground.data.tags :as data-tags]
             [playground.web.utils :as web-utils]))

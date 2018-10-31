@@ -6,7 +6,6 @@
             [camel-snake-kebab.core :as kebab]
             [camel-snake-kebab.extras :as kebab-extra]
             [playground.utils.utils :as utils]
-            [version-clj.core :as version-clj]
             [clojure.java.jdbc :as jdbc]
             [mpg.core :as mpg]))
 
@@ -139,21 +138,23 @@
 (def versions (sql {:name          sql-versions
                     :row-fn        underscore->dash
                     :result-set-fn (fn [versions]
-                                     (sort (comp - #(version-clj/version-compare (:name %1) (:name %2))) versions))}))
+                                     (utils/sort-versions :name versions))}))
 
 
 (def versions-by-repo-name (sql {:name          sql-versions-by-repo-name
                                  :row-fn        underscore->dash
                                  :result-set-fn (fn [versions]
-                                                  (sort (comp - #(version-clj/version-compare %1 %2))
-                                                        (map :name versions)))}))
+                                                  (->> versions
+                                                       (map :name)
+                                                       utils/sort-versions))}))
 
 
 (def versions-by-repos-names (sql {:name          sql-versions-by-repos-names
                                    :row-fn        underscore->dash
                                    :result-set-fn (fn [versions]
-                                                    (sort (comp - #(version-clj/version-compare %1 %2))
-                                                          (map :name versions)))}))
+                                                    (->> versions
+                                                         (map :name)
+                                                         utils/sort-versions))}))
 
 
 (def versions-repos (sql {:name   sql-versions-repos
@@ -172,8 +173,7 @@
 
 (defn last-version [db data]
   (let [versions (versions db data)
-        last-version (first (sort (comp - #(version-clj/version-compare (:name %1) (:name %2)))
-                                  versions))]
+        last-version (first (utils/sort-versions :name versions))]
     last-version))
 
 ;; =====================================================================================================================

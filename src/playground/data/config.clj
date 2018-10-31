@@ -1,7 +1,7 @@
 (ns playground.data.config
   (:require [cheshire.core :as json]
             [clj-http.client :as http]
-            [version-clj.core :as version-clj]))
+            [playground.utils.utils :as utils]))
 
 
 ;; Declarations
@@ -43,5 +43,6 @@
 
 
 (defn add-anychart-versions [versions]
-  (sort (comp - #(version-clj/version-compare %1 %2))
-        (distinct (concat versions @*anychart-versions))))
+  (-> (concat versions @*anychart-versions)
+      distinct
+      utils/sort-versions))

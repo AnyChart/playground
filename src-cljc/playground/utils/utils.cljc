@@ -1,6 +1,6 @@
 (ns playground.utils.utils
   (:require [clojure.string :as string]
-            [version-clj.core :as version-clj]
+            [version-clj.core :as version-clj :refer [version-compare]]
     #?(:cljs
        [cljs-time.coerce :as c]
        :clj
@@ -33,9 +33,16 @@
   (filter released-or-8-version? versions))
 
 
-(defn sort-versions [versions]
-  (sort (comp - #(version-clj/version-compare %1 %2))
-        versions))
+(defn sort-versions
+  ([key versions]
+   (let [replace-fn (fn [version]
+                      ;; v8 -> 8.999.999
+                      (string/replace version #"^v(\d+)" "$1.999.999"))
+         compare-fn (fn [v1 v2]
+                      (version-compare (replace-fn v2) (replace-fn v1)))]
+     (sort-by key compare-fn versions)))
+  ([versions]
+   (sort-versions identity versions)))
 
 
 (defn replace-urls [version-name scripts]
