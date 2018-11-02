@@ -9,7 +9,7 @@
   :java-source-paths ["src-java"]
   :dependencies [[org.clojure/clojure "1.9.0"]
                  ;; to fix "reader-error does not exist, compiling:(edn.clj:9:1)"
-                 [org.clojure/tools.reader "1.2.2"]
+                 [org.clojure/tools.reader "1.3.2"]
                  [org.immutant/web "2.1.10"]
                  [com.stuartsierra/component "0.3.2"]
                  [ring-middleware-format "0.7.2"]
@@ -21,12 +21,12 @@
                  [version-clj "0.1.2"]
                  [com.cognitect/transit-clj "0.8.313"]
                  [org.apache.commons/commons-lang3 "3.7"]
-                 [clj-time "0.15.0"]
+                 [clj-time "0.15.1"]
                  [me.raynes/fs "1.4.6"]
                  [camel-snake-kebab "0.4.0"]
                  [net.sf.jtidy/jtidy "r938"]
                  [instaparse "1.4.9"]
-                 [com.rpl/specter "1.1.1"]
+                 [com.rpl/specter "1.1.2"]
 
                  ;; html, css
                  [selmer "1.12.2"]
