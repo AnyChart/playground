@@ -9,6 +9,7 @@
   ;(timbre/info "read db" db key)
   (db-req/get-session db {:session key}))
 
+
 (defn write-db [db key data]
   ;(timbre/info "write db" key data)
   (let [user (:user data)]
@@ -18,6 +19,7 @@
 (defn delete-db [db key]
   ;(timbre/info "delete db" key)
   (db-req/delete-session! db {:session key}))
+
 
 ;; session storage
 (deftype DbStore [db]
@@ -34,6 +36,7 @@
   (delete-session [this key]
     (delete-db db key)
     nil))
+
 
 (defn create-storage [db]
   (DbStore. db))
