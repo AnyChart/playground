@@ -4,7 +4,8 @@
             [cheshire.core :as json]
             [playground.data.config :as c]
             [playground.utils.utils :as utils]
-            [clojure.string :as string]))
+            [clojure.string :as string])
+  (:import (org.apache.commons.lang3 StringEscapeUtils)))
 
 
 ;; =====================================================================================================================
@@ -75,7 +76,7 @@
                                                 version        :name
                                                 commit         :commit} queue-index]
   (let [msg (str "[PG " (c/prefix) "] #" queue-index " " (b (str project "/" version))
-                 " \"" commit-message "\" @" author " (" (subs commit 0 7) ") - "
+                 " \"" (StringEscapeUtils/escapeHtml4 commit-message) "\" @" author " (" (subs commit 0 7) ") - "
                  (-> "start" (font "#4183C4")) "\n")]
     (send-message (config notifier) msg)
     (send-release-message (config notifier) version msg)))
@@ -86,7 +87,7 @@
                                                    version        :name
                                                    commit         :commit} queue-index]
   (let [msg (str "[PG " (c/prefix) "] #" queue-index " " (b (str project "/" version))
-                 " \"" commit-message "\" @" author " (" (subs commit 0 7) ") - "
+                 " \"" (StringEscapeUtils/escapeHtml4 commit-message) "\" @" author " (" (subs commit 0 7) ") - "
                  (-> "complete" (font "#36a64f")) "\n")]
     (send-message (config notifier) msg)
     (send-release-message (config notifier) version msg)))
@@ -97,7 +98,7 @@
                                                          version        :name
                                                          commit         :commit} queue-index e]
   (let [msg (str "[PG " (c/prefix) "] #" queue-index " " (b (str project "/" version))
-                 " \"" commit-message "\" @" author " (" (subs commit 0 7) ") - "
+                 " \"" (StringEscapeUtils/escapeHtml4 commit-message) "\" @" author " (" (subs commit 0 7) ") - "
                  (-> "failed" (font "#d00000") b) "\n"
                  (when e
                    (-> (utils/format-exception e) (font "#777777" 11) i)))]
