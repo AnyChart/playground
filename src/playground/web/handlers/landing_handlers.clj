@@ -16,7 +16,7 @@
 ;; =====================================================================================================================
 
 (defn landing-page [request]
-  (let [samples-page (get-pagination request)
+  (let [samples-page (get-pagination request)      
         ;samples (db-req/top-samples (get-db request) {:count  (inc samples-per-landing)
         ;                                              :offset (* samples-per-landing samples-page)})
         ;result {:samples (take samples-per-landing samples)

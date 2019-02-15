@@ -83,6 +83,10 @@ FROM samples
 WHERE version_id IS NULL AND url = :url
 ORDER BY version DESC;
 
+-- name: sql-samples-by-user
+-- SELECT MAX(samples.version) as version, MAX(samples.id) as id , samples.url FROM samples WHERE version_id IS NULL AND owner_id = 3 GROUP BY url;
+-- SELECT samples.* FROM samples INNER JOIN (SELECT MAX(samples.version) as version, MAX(samples.id) as id, samples.url FROM samples WHERE version_id IS NULL AND owner_id=:id GROUP BY url) a ON samples.id = a.id ORDER BY id OFFSET :offset ROWS FETCH NEXT :perpage ROWS ONLY;
+SELECT samples.* FROM samples INNER JOIN (SELECT MAX(samples.version) as version, MAX(samples.id) as id, samples.url FROM samples WHERE version_id IS NULL AND owner_id=:id GROUP BY url) a ON samples.id = a.id;
 
 -- name: sql-add-samples!
 -- INSERT INTO samples (name, description, short_description, tags, export, scripts, local_scripts, styles, code_type, code, style_type, style, markup_type, markup) VALUES :values;

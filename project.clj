@@ -27,6 +27,7 @@
                  [net.sf.jtidy/jtidy "r938"]
                  [instaparse "1.4.9"]
                  [com.rpl/specter "1.1.2"]
+                 [cheshire "5.8.1"]
 
                  ;; html, css
                  [selmer "1.12.2"]

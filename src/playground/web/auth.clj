@@ -18,7 +18,11 @@
                    :message         (str "Not permission for action: " (name action))})))))
 
 (defn default-user [db]
-  {:fullname    "anonymous"
+  {
+   :uid nil
+   :img nil
+   :deleted nil
+   :fullname    "anonymous"
    :username    (web-utils/anonymous-username db)
    :permissions anonymous-perms
    :salt        nil

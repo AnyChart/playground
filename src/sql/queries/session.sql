@@ -1,6 +1,6 @@
 -- name: sql-add-user<!
-INSERT INTO users (username, fullname, email, password, salt, permissions)
-VALUES (:username, :fullname, :email, :password, :salt, :permissions);
+INSERT INTO users (uid, img, deleted, username,  fullname, email, password, salt, permissions)
+VALUES (:uid, :img, :deleted, :username, :fullname, :email, :password, :salt, :permissions);
 
 -- name: sql-get-user-by-username-or-email
 SELECT *
@@ -16,6 +16,11 @@ WHERE username = :username;
 SELECT *
 FROM users
 WHERE email = :email;
+
+-- name: sql-get-user-by-uid
+SELECT *
+FROM users
+WHERE uid = :uid;
 
 -- name: sql-delete-user!
 DELETE FROM users

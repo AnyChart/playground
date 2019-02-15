@@ -7,3 +7,22 @@ form.signup-form {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
+#reg{
+  border: 1px solid #DDDDDD;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+} 
+
+#signup > li:hover > a {
+	color: #ffffff;
+	text-decoration: none;
+}
+
+#signup > li> a {
+	text-decoration: none;
+}
+
+#signup > li:hover {
+	background-color: #007bff;
+	color: #ffffff;
+}

@@ -9,7 +9,6 @@
    (left-menu-comp/left-menu-bg)
    (left-menu-comp/left-menu)
    (search-bar-comp/search-bar q)
-
    [:div#navbar-container.navbar-container
 
     [:div.container-fluid.content-container
@@ -61,7 +60,7 @@
         ]
 
        ;; right navbar
-       [:ul.navbar-nav.navbar-right.ml-auto
+        [:ul.navbar-nav.navbar-right.ml-auto
 
         ;[:li.search-box
         ; [:input#search-input.search {:type        "text"
@@ -70,25 +69,63 @@
         ; [:span#search-input-icon.fas.fa-search]
         ; [:div#search-results-box.results {:style "display:none;"}
         ;  [:div#search-results]]]
-        [:i#search-bar-open-icon.fas.fa-search]
+          [:i#search-bar-open-icon.fas.fa-search]
 
-        [:li.nav-item.dropdown
-         [:a.nav-link.dropdown-toggle {:aria-expanded "false"
-                                       :aria-haspopup "true"
-                                       :role          "button"
-                                       :data-toggle   "dropdown"
-                                       :href          "#"} "Create"]
-         [:div.dropdown-menu
-          (for [template templates]
-            [:a.dropdown-item {:href  (str "/new?template=" (:url template))
-                               :title (str "Create " (:name template))}
-             [:img {:src (str "/icons/" (utils/name->url (:name template)) ".svg")
-                    :alt (str "Create " (:name template) " button icon")}]
-             (:name template)])
-          [:div.dropdown-divider]
-          [:a.dropdown-item {:href "/new" :title "Create from scratch"}
-           [:img {:src (str "/icons/from-scratch.svg")
-                  :alt "Create from scratch button icon"}]
-           "From scratch"]]]
+          [:li.nav-item.dropdown
+            [:a.nav-link.dropdown-toggle {:aria-expanded "false"
+                                          :aria-haspopup "true"
+                                          :role          "button"
+                                          :data-toggle   "dropdown"
+                                          :href          "#"} "Create"]
+            [:div.dropdown-menu
+              (for [template templates]
+                [:a.dropdown-item {:href  (str "/new?template=" (:url template))
+                                  :title (str "Create " (:name template))}
+                [:img {:src (str "/icons/" (utils/name->url (:name template)) ".svg")
+                        :alt (str "Create " (:name template) " button icon")}]
+                (:name template)])
+              [:div.dropdown-divider]
+              [:a.dropdown-item {:href "/new" :title "Create from scratch"}
+              [:img {:src (str "/icons/from-scratch.svg")
+                      :alt "Create from scratch button icon"}]
+              "From scratch"]]]
+          (if (and (some-> user :permissions) (= (some-> user :permissions) 255))
+            [:li.nav-item.dropdown
+                [:a.nav-link.dropdown-toggle {:aria-expanded "false"
+                                              :aria-haspopup "true"
+                                              :role          "button"
+                                              :data-toggle   "dropdown"
+                                              :href          "#"} "SIGN IN"]
+                [:div.dropdown-menu
+                  [:a.dropdown-item {:href "https://accounts.google.com/o/oauth2/auth?access_type=offline&prompt=consent&redirect_uri=http://localhost:8081/sign_google&response_type=code&client_id=713517328581-rc2fikgk9kdsn07vfoohc6qffhauh849.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile" :title "Google sign in"} 
+                    [:img {:src (str "/icons/google.svg")
+                      :alt "Google oAuth"}] "Google"]
+                  [:a.dropdown-item {:href "https://github.com/login/oauth/authorize?client_id=df3026bdfcaeeb79edf1&scope=user&redirect_uri=http://localhost:8081/sign_github" :title "GitHub sign in"} 
+                    [:img {:src (str "/icons/github.svg")
+                      :alt "GitHub oAuth"}] "GitHub"]
+                  
+                ]
+              ]
+
+            
+            
+              ; [:li.nav-item [:a.nav-link {:href "/profile" :title "Profile"} [:i.far.fa-user]]]
+              [:li.nav-item.dropdown
+                [:a.nav-link.dropdown-toggle {:aria-expanded "false"
+                                              :aria-haspopup "true"
+                                              :role          "button"
+                                              :data-toggle   "dropdown"
+                                              :href          "#"} [:img#user {:src (:img user)}]]
+                [:div.dropdown-menu
+                  [:a.dropdown-item {:href "/profile" :title "Profile"} "Your profile"]
+                  [:div.dropdown-divider]
+                  [:a.dropdown-item {:href "/signout" :title "Sing out"} "SING OUT"]
+                ]
+              ]
+              ; [:li.nav-item [:a.nav-link  ]]
+              ; [:li.nav-item [:a.nav-link {:href "/signout" :title "Sing out"} "SINGOUT"]])
+            
+          )
         ]
+
        ]]]]])

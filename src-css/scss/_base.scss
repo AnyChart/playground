@@ -133,6 +133,12 @@ html {
             & > li > a {
               font-size: 14px;
             }
+
+            & > li > a > img{
+              height: 21px;
+              width: 21px;
+              border-radius: 50%
+            }
             div.dropdown-menu {
               padding: 13px 0;
               position: absolute;
@@ -375,6 +381,8 @@ html {
   }
 }
 
+
+
 .content-container {
   //max-width: 972px;
   //max-width: 1150px;
@@ -399,6 +407,10 @@ html {
   margin: 0 auto;
   width: 100%;
 
+}
+
+#user-samples{
+  padding: 2% 5%;
 }
 
 .hidden-extra-mobile {

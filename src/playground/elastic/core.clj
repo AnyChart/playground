@@ -265,6 +265,30 @@
     (catch Exception e (timbre/error "Elastic top samples error:" offset size (pr-str e))
                        (empty-result))))
 
+;; =====================================================================================================================
+;; User samples
+;; =====================================================================================================================
+(defn user-samples [{conn :conn conf :conf} owner_id offset size]
+  (println owner_id)
+  (try
+    (let [data (s/request conn {:url    [(:index conf) (:type conf) :_search]
+                                :method :post
+                                :body   {:size    size
+                                         :from    offset
+                                         :_source {:excludes [:name-kw :tags-kw]}
+                                         :query   {:term {:owner_id 17}}}})
+                                        ;  {:bool {:must [{:term {:owner_id 17}}
+                                        ;                            {:term {:latest true}}]}}
+
+          hits (:hits (:body data))
+          total (:total hits)
+          samples (map (fn [hit]
+                         (assoc (:_source hit) :score (:_score hit)))
+                       (:hits hits))]
+      (make-result samples total size offset))
+    (catch Exception e (timbre/error "Elastic top samples error:" offset size (pr-str e))
+                       (empty-result))))
+
 
 ;; =====================================================================================================================
 ;; Version samples

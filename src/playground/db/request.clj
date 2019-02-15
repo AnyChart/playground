@@ -216,6 +216,9 @@
 (def samples-by-version (sql {:name   sql-samples-by-version
                               :row-fn parse-sample}))
 
+(def samples-by-user (sql {:name  sql-samples-by-user 
+                          :row-fn parse-sample}))
+  
 (def sample-by-url (sql {:name          sql-sample-by-url
                          :result-set-fn first
                          :row-fn        parse-sample}))
@@ -350,6 +353,9 @@
                                 :result-set-fn first}))
 
 (def get-user-by-email (sql {:name          sql-get-user-by-email
+                             :result-set-fn first}))
+
+(def get-user-by-uid (sql {:name          sql-get-user-by-uid
                              :result-set-fn first}))
 
 (def delete-user! (sql {:name sql-delete-user!}))

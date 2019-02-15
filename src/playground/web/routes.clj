@@ -145,12 +145,19 @@
            ;; Session routes
            ;; ==========================================================================================================
            (GET "/profile" [] (-> session-handlers/profile-page
-                                  mw/base-page-middleware))
+                                mw/pagination-page-middleware
+                                mw/base-page-middleware))
 
            (GET "/signin" [] (-> session-handlers/signin-page
                                  (mw/base-page-middleware :signin)))
 
            (GET "/signup" [] (-> session-handlers/signup-page
+                                 (mw/base-page-middleware :signup)))
+
+           (GET "/sign_github" [] (-> session-handlers/signGithub
+                                 (mw/base-page-middleware :signup)))
+
+           (GET "/sign_google" [] (-> session-handlers/signGoogle
                                  (mw/base-page-middleware :signup)))
 
            (POST "/signin" [] (-> session-handlers/signin
