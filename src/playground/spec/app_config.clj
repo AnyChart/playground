@@ -52,28 +52,30 @@
 ;; =====================================================================================================================
 ;; Previews and previews.maxcdn
 ;; =====================================================================================================================
-(s/def :previews/cdn-purge boolean?)
+;; (s/def :previews/cdn-purge boolean?)
 (s/def :previews/cdn-prefix string?)
 (s/def :previews/url-prefix string?)
 (s/def :previews/images-dir string?)
 (s/def :previews/generator string?)
 
-(s/def :maxcdn/alias string?)
-(s/def :maxcdn/key string?)
-(s/def :maxcdn/secret string?)
-(s/def :maxcdn/zone-id integer?)
-(s/def ::maxcdn (s/keys :req-un [:maxcdn/alias
-                                 :maxcdn/key
-                                 :maxcdn/secret
-                                 :maxcdn/zone-id]))
+;; (s/def :maxcdn/alias string?)
+;; (s/def :maxcdn/key string?)
+;; (s/def :maxcdn/secret string?)
+;; (s/def :maxcdn/zone-id integer?)
+;; (s/def ::maxcdn (s/keys :req-un [:maxcdn/alias
+;;                                  :maxcdn/key
+;;                                  :maxcdn/secret
+;;                                  :maxcdn/zone-id]))
 
-(s/def ::previews (s/keys :req-un [:previews/cdn-purge
+(s/def ::previews (s/keys :req-un [
+                                   ;; :previews/cdn-purge
                                    :previews/cdn-prefix
                                    :previews/url-prefix
                                    :previews/images-dir
                                    :previews/phantom-engine
                                    :previews/generator
-                                   ::maxcdn]))
+                                   ;; :maxcdn
+                                ]))
 
 
 ;; =====================================================================================================================

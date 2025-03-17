@@ -11,55 +11,56 @@
             [clojure.string :as string]
             [playground.utils.utils :as utils]
             [playground.preview-generator.download :as download])
-  (:import (com.maxcdn MaxCDN)))
+  ;; (:import (com.maxcdn MaxCDN))
+)
 
 
 ;; =====================================================================================================================
 ;; Purge MaxCDN images cache
 ;; =====================================================================================================================
-(defn purge-files [files generator]
-  (let [maxcdn-conf (-> generator :conf :maxcdn)
-        zone-id (:zone-id maxcdn-conf)
-        api (MaxCDN. (:alias maxcdn-conf) (:key maxcdn-conf) (:secret maxcdn-conf))
-        files-query (string/join "&" (map #(str "file=" %) files))
-        ;; maxcdn query should be less than ~ 21517 char count
-        query (str "/zones/pull.json/" zone-id "/cache?" files-query)]
-    (timbre/info "Query length: " (count query))
-    (try
-      (let [data (.delete api query)
-            code (.code data)
-            error (.error data)
-            error-message (.getErrorMessage data)]
-        (if error
-          (timbre/info "Purge files error: " error-message)
-          (timbre/info "Purge files:" (count files) "ok!")))
-      (catch Exception e
-        (timbre/info "Purge files exception: " e)))))
+;; (defn purge-files [files generator]
+;;   (let [maxcdn-conf (-> generator :conf :maxcdn)
+;;         zone-id (:zone-id maxcdn-conf)
+;;         api (MaxCDN. (:alias maxcdn-conf) (:key maxcdn-conf) (:secret maxcdn-conf))
+;;         files-query (string/join "&" (map #(str "file=" %) files))
+;;         ;; maxcdn query should be less than ~ 21517 char count
+;;         query (str "/zones/pull.json/" zone-id "/cache?" files-query)]
+;;     (timbre/info "Query length: " (count query))
+;;     (try
+;;       (let [data (.delete api query)
+;;             code (.code data)
+;;             error (.error data)
+;;             error-message (.getErrorMessage data)]
+;;         (if error
+;;           (timbre/info "Purge files error: " error-message)
+;;           (timbre/info "Purge files:" (count files) "ok!")))
+;;       (catch Exception e
+;;         (timbre/info "Purge files exception: " e)))))
 
 
-(defn purge-cache [generator samples good-results]
-  (let [
-        ;; we need to purge maxcdn cache only for generated repo samples
-        samples (filter (fn [sample]
-                          (and (:version-id sample)
-                               (some (fn [gen-sample]
-                                       (= (:id gen-sample) (:id sample)))
-                                     good-results)))
-                        samples)
-        ;; images names for purging must be e.g.:
-        ;; /pg/gallery-8.1.0-some-name.png for "com"
-        ;; /stg/gallery-8.1.0-some-name.png for "stg"
-        image-names (map (fn [sample]
-                           (str (-> generator :conf :cdn-prefix)
-                                (utils/image-name sample)))
-                         samples)]
-    (when (seq image-names)
-      ;; TODO: delete test
-      (timbre/info "Purge cache:" (count image-names) (pr-str (take 3 image-names)))
-      ;; maxcdn query should be less than ~21517 char count
-      (let [groups (partition-all 150 image-names)]
-        (doseq [names groups]
-          (purge-files names generator))))))
+;; (defn purge-cache [generator samples good-results]
+;;   (let [
+;;         ;; we need to purge maxcdn cache only for generated repo samples
+;;         samples (filter (fn [sample]
+;;                           (and (:version-id sample)
+;;                                (some (fn [gen-sample]
+;;                                        (= (:id gen-sample) (:id sample)))
+;;                                      good-results)))
+;;                         samples)
+;;         ;; images names for purging must be e.g.:
+;;         ;; /pg/gallery-8.1.0-some-name.png for "com"
+;;         ;; /stg/gallery-8.1.0-some-name.png for "stg"
+;;         image-names (map (fn [sample]
+;;                            (str (-> generator :conf :cdn-prefix)
+;;                                 (utils/image-name sample)))
+;;                          samples)]
+;;     (when (seq image-names)
+;;       ;; TODO: delete test
+;;       (timbre/info "Purge cache:" (count image-names) (pr-str (take 3 image-names)))
+;;       ;; maxcdn query should be less than ~21517 char count
+;;       (let [groups (partition-all 150 image-names)]
+;;         (doseq [names groups]
+;;           (purge-files names generator))))))
 
 
 ;; =====================================================================================================================
@@ -95,8 +96,9 @@
 
       (timbre/info "End generate previews: " (count result-ids) "from" (count ids) " : " (pr-str (take 3 good-results)))
 
-      (when (-> generator :conf :cdn-purge)
-        (purge-cache generator samples good-results)))))
+      ;; (when (-> generator :conf :cdn-purge)
+      ;;   (purge-cache generator samples good-results))
+    )))
 
 
 ;; =====================================================================================================================
