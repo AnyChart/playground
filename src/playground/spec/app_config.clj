@@ -44,29 +44,8 @@
                                 :redis/queue
                                 :redis/preview-queue]))
 
-
-;; =====================================================================================================================
-;; Notifications.slack
-;; =====================================================================================================================
-(s/def :slack/token string?)
-(s/def :slack/channel string?)
-(s/def :slack/username string?)
-(s/def ::slack (s/keys :req-un [:slack/token
-                                :slack/channel
-                                :slack/username]))
-
-(s/def :skype/id string?)
-(s/def :skype/chat-id string?)
-(s/def :skype/release-chat-id string?)
-(s/def :skype/key string?)
-(s/def ::skype (s/keys :req-un [:skype/id
-                                :skype/chat-id
-                                :skype/key
-                                :skype/release-chat-id]))
-
-
-(s/def ::notifications (s/keys :req-un [::slack
-                                        ::skype]))
+;; ToDo Implement notifications
+(s/def ::notifications (s/keys :req-un []))
 
 
 
@@ -172,4 +151,3 @@
                                  ::previews
                                  ::users
                                  ::repositories]))
-

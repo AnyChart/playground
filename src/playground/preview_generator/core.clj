@@ -2,7 +2,6 @@
   (:require [com.stuartsierra.component :as component]
             [taoensso.timbre :as timbre :refer [info error]]
             [me.raynes.fs :as fs]
-            [playground.notification.slack :as slack]
             [playground.redis.core :as redis]
             [playground.preview-generator.phantom :as phantom]
             [playground.preview-generator.phantom-embed :as phantom-embed]

@@ -1,7 +1,6 @@
 (ns playground.notification.core
   (:require [com.stuartsierra.component :as component]
-            [playground.notification.slack :as slack]
-            [playground.notification.skype :as skype]
+            ;; ToDo: Implement Discord webhook notifications with embeds support and config specs
             [playground.data.config :as c]))
 
 
@@ -16,38 +15,41 @@
 
 
 (defn application-start [notifier]
-  (when-not (= (c/prefix) "local")
-    (skype/application-start notifier)))
+  ;; (when-not (= (c/prefix) "local")
+    ;; ToDo: Implement Discord webhook notifications with embeds support and config specs
+  ;; )
+)
 
 
 (defn start-build [notifier project branches updated-branches removed-branches queue-index]
-  (slack/start-build notifier project branches updated-branches removed-branches queue-index)
-  ;(skype/start-build notifier project branches removed-branches queue-index)
-  )
+  ;; ToDo: Implement Discord webhook notifications with embeds support and config specs
+)
 
 
 (defn complete-building [notifier project branches updated-branches removed-branches queue-index]
-  (slack/complete-building notifier project branches updated-branches removed-branches queue-index)
-  ;(skype/complete-building notifier project branches removed-branches queue-index)
-  )
+  ;; ToDo: Implement Discord webhook notifications with embeds support and config specs
+)
 
 
 (defn complete-building-with-errors [notifier project branches updated-branches removed-branches queue-index e]
-  (slack/complete-building-with-errors notifier project branches updated-branches removed-branches queue-index e)
-  ;(skype/complete-building-with-errors notifier project branches removed-branches queue-index e)
-  )
+  ;; ToDo: Implement Discord webhook notifications with embeds support and config specs
+)
 
 
 (defn complete-sync [notifier projects error-projects]
-  (slack/complete-sync notifier projects error-projects))
+  ;; ToDo: Implement Discord webhook notifications with embeds support and config specs
+)
 
 
 (defn start-version-building [notifier project version-name queue-index]
-  (skype/start-version-building notifier project version-name queue-index))
+  ;; ToDo: Implement Discord webhook notifications with embeds support and config specs
+)
 
 
 (defn complete-version-building [notifier project version queue-index]
-  (skype/complete-version-building notifier project version queue-index))
+  ;; ToDo: Implement Discord webhook notifications with embeds support and config specs
+)
 
 (defn complete-version-building-error [notifier project version queue-index e]
-  (skype/complete-version-building-error notifier project version queue-index e))
+  ;; ToDo: Implement Discord webhook notifications with embeds support and config specs
+)

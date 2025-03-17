@@ -27,3 +27,5 @@ resources/public/chartopedia/images
 phantomjsdriver.log
 id_rsa
 .travis/id_rsa
+
+.clj-kondo/
