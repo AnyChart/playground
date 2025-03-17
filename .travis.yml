@@ -23,7 +23,7 @@ addons:
 git:
   submodules: false
 before_install:
-- openssl aes-256-cbc -K $encrypted_500e779cfa6c_key -iv $encrypted_500e779cfa6c_iv -in .travis/id_rsa.enc -out ~\/.ssh/id_rsa -d
+- openssl aes-256-cbc -K $encrypted_500e779cfa6c_key -iv $encrypted_500e779cfa6c_iv -in .travis/id_rsa.enc -out ~/.ssh/id_rsa -d
 - chmod 400 id_rsa
 - mv id_rsa ~/.ssh/id_rsa
 - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
