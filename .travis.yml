@@ -29,7 +29,7 @@ before_install:
 - git submodule update --init --recursive
 - git submodule foreach "(git checkout master; git pull)"
 install:
-- sudo pip install requests --upgrade
+- sudo pip install "requests<2.32.0" --upgrade
 after_success:
 - if [ "$TRAVIS_BRANCH" == "master" ]; then export APP="pg-prod"; fi
 - if [ "$TRAVIS_BRANCH" == "staging" ]; then export APP="pg-stg"; fi
