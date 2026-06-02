@@ -162,7 +162,11 @@
     (timbre/info "Delete repos: " (pr-str (map :name deleted-repos)))
     (doseq [repo deleted-repos]
       (delete-repo db repo))
-    (let [result (map #(check-repository generator db % (get-repo-by-name-fn @% db-repos)) repos)]
+    ;; ACWEB-6: force realization — check-repository must run for every repo
+    ;; (sets :git, triggers startup sync). The notifier is a no-op stub, so the
+    ;; lazy `map` was never realized → check-repository never ran → repos had
+    ;; :git nil and no startup sync. `doall` decouples the sync from the notifier.
+    (let [result (doall (map #(check-repository generator db % (get-repo-by-name-fn @% db-repos)) repos))]
       (notifier/complete-sync notifier
                               (remove :e result)
                               (filter :e result)))))
